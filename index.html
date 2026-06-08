@@ -62,24 +62,28 @@
             gap: 15px;
         }
 
-        /* ලෝගෝ එක සඳහා ස්ථානය */
-        .logo-container {
-            width: 130px;
-            height: 130px;
-            background-color: white;
-            border-radius: 50%;
-            padding: 10px;
-            box-shadow: 0 0 20px var(--light-blue);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+       /* ලෝගෝ එක රඳවන බහාලුම (Container) */
+.logo-container {
+    width: 140px;
+    height: 140px;
+    background-color: white;
+    border-radius: 50%; /* බාහිර කොටුව සම්පූර්ණයෙන්ම රවුම් කරයි */
+    padding: 3px; /* සුදු පාට Border එකක් වගේ ලස්සනට පෙනීමට */
+    box-shadow: 0 0 20px var(--light-blue);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* රවුමෙන් පිටත යන සියලුම කොටස් ඉවත් කරයි */
+    border: 2px solid var(--light-blue);
+}
 
-        .logo-container img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
+/* ලෝගෝ ඉමේජ් එක රවුමට කැපී පෙනෙන කොටස */
+.logo-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* රූපය විකෘති නොවී රවුම ඇතුලතටම සෙට් කරයි */
+    border-radius: 50%; /* ඉමේජ් එකේ සුදු කොන් හතරම රවුමට කපා දමයි */
+}
 
         header h1 {
             font-size: 2.3rem;
