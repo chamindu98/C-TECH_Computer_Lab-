@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C-TECH Computer Lab & Education Institute</title>
+    <style>
+        /* CSS Styling - නවීන සහ වෘත්තීයමය පෙනුමක් සඳහා */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7f6;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* ප්‍රධාන ආකෘතිය (Main Layout Container) */
+        .web-container {
+            width: 100%;
+            max-width: 1000px;
+            background-color: #ffffff;
+            border: 2px solid #2c3e50;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        /* 1. ප්‍රධාන ශීර්ෂය (Header Section) */
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+            border-bottom: 2px solid #2c3e50;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* 2. මෙනු තීරුව (Navigation Bar) */
+        nav {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            background-color: #2c3e50;
+            border-bottom: 2px solid #2c3e50;
+        }
+
+        nav a {
+            color: white;
+            text-align: center;
+            padding: 15px 10px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s;
+            border-right: 1px solid #34495e;
+        }
+
+        nav a:last-child {
+            border-right: none;
+        }
+
+        nav a:hover {
+            background-color: #3498db;
+        }
+
+        /* 3. ප්‍රධාන අන්තර්ගතය සහ පැති තීරුව (Main Body Split) */
+        .main-content {
+            display: grid;
+            grid-template-columns: 3fr 1.2fr;
+        }
+
+        /* වම්පස ශ්‍රේණි කොටස් (Grades Grid) */
+        .grades-section {
+            padding: 25px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            align-content: start;
+        }
+
+        .grade-card {
+            background-color: #ecf0f1;
+            border: 2px solid #bdc3c7;
+            border-radius: 6px;
+            padding: 30px 20px;
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #2c3e50;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .grade-card:hover {
+            background-color: #3498db;
+            color: white;
+            border-color: #2980b9;
+            transform: translateY(-3px);
+        }
+
+        /* දකුණුපස පැති තීරුව (Right Sidebar) */
+        .sidebar {
+            border-left: 2px solid #2c3e50;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-box {
+            padding: 25px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background-color: #fff;
+        }
+
+        .sidebar-box.top {
+            border-bottom: 2px solid #2c3e50;
+            background-color: #fcfcfc;
+        }
+
+        .sidebar-box h3 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+
+        /* Mobile Phone වලට ගැලපෙන ලෙස සකස් කිරීම (Responsive Media Queries) */
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                border-left: none;
+                border-top: 2px solid #2c3e50;
+            }
+            .grades-section {
+                grid-template-columns: 1fr;
+            }
+            nav {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            nav a {
+                border-bottom: 1px solid #34495e;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="web-container">
+
+        <header>
+            <h1>C-TECH Computer Lab & Education Institute</h1>
+            <p>ගුණාත්මක තොරතුරු තාක්ෂණ අධ්‍යාපනය වෙත පියවරක්</p>
+        </header>
+
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#notes">Notes</a>
+            <a href="#papers">Papers</a>
+            <a href="#about">About</a>
+        </nav>
+
+        <div class="main-content">
+            
+            <div class="grades-section">
+                <div class="grade-card">Grade 06</div>
+                <div class="grade-card">Grade 07</div>
+                <div class="grade-card">Grade 08</div>
+                <div class="grade-card">Grade 09</div>
+                <div class="grade-card">Grade 10</div>
+                <div class="grade-card">Grade 11</div>
+            </div>
+
+            <div class="sidebar">
+                <div class="sidebar-box top">
+                    <h3>ප්‍රවෘත්ති / නිවේදන</h3>
+                    <p>අලුත්ම පන්ති විස්තර සහ දැනුම්දීම් මෙතනින් බලාපොරොත්තු වන්න.</p>
+                </div>
+                <div class="sidebar-box">
+                    <h3>අප හා සම්බන්ධ වන්න</h3>
+                    <p>ලියාපදිංචි වීමට සහ ගැටළු සඳහා අමතන්න.</p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
