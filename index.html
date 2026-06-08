@@ -5,87 +5,141 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>C-TECH Computer Lab & Education Institute</title>
     <style>
-        /* CSS Styling - නවීන සහ වෘත්තීයමය පෙනුමක් සඳහා */
+        /* CSS Root වර්ණ - ලෝගෝ එකට අනුව */
+        :root {
+            --primary-blue: #004d80;
+            --light-blue: #00a4e4;
+            --orange: #ff7300;
+            --dark-bg: #0b132b;
+            --card-bg: #1c2541;
+            --text-light: #f4f7f6;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
 
         body {
-            background-color: #f4f7f6;
-            color: #333;
+            /* IT Related Technology Background */
+            background-color: var(--dark-bg);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(0, 164, 228, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(255, 115, 0, 0.1) 0px, transparent 50%),
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+            color: var(--text-light);
             display: flex;
             justify-content: center;
             padding: 20px;
+            min-height: 100vh;
         }
 
-        /* ප්‍රධාන ආකෘතිය (Main Layout Container) */
+        /* ප්‍රධාන ආකෘතිය */
         .web-container {
             width: 100%;
-            max-width: 1000px;
-            background-color: #ffffff;
-            border: 2px solid #2c3e50;
-            border-radius: 8px;
+            max-width: 1100px;
+            background-color: rgba(28, 37, 65, 0.85);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--light-blue);
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 0 30px rgba(0, 164, 228, 0.3);
         }
 
         /* 1. ප්‍රධාන ශීර්ෂය (Header Section) */
         header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
+            background: linear-gradient(135deg, rgba(11,19,43,0.9) 0%, rgba(28,37,65,0.9) 100%);
             text-align: center;
-            padding: 50px 20px;
-            border-bottom: 2px solid #2c3e50;
+            padding: 40px 20px;
+            border-bottom: 2px solid var(--light-blue);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* ලෝගෝ එක සඳහා ස්ථානය */
+        .logo-container {
+            width: 130px;
+            height: 130px;
+            background-color: white;
+            border-radius: 50%;
+            padding: 10px;
+            box-shadow: 0 0 20px var(--light-blue);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
         }
 
         header h1 {
-            font-size: 2.5rem;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-size: 2.3rem;
+            color: #fff;
+            text-shadow: 0 0 10px var(--light-blue);
         }
 
         header p {
             font-size: 1.1rem;
-            opacity: 0.9;
+            color: var(--light-blue);
+            font-weight: 500;
         }
 
-        /* 2. මෙනු තීරුව (Navigation Bar) */
+        /* 2. මෙනු තීරුව (Navigation Tabs) */
         nav {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            background-color: #2c3e50;
-            border-bottom: 2px solid #2c3e50;
+            background-color: #0b132b;
+            border-bottom: 2px solid var(--light-blue);
         }
 
-        nav a {
+        nav button {
+            background: none;
+            border: none;
             color: white;
             text-align: center;
-            padding: 15px 10px;
-            text-decoration: none;
+            padding: 18px 10px;
+            font-size: 1.1rem;
             font-weight: bold;
-            transition: background 0.3s;
-            border-right: 1px solid #34495e;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-right: 1px solid rgba(0, 164, 228, 0.2);
         }
 
-        nav a:last-child {
+        nav button:last-child {
             border-right: none;
         }
 
-        nav a:hover {
-            background-color: #3498db;
+        nav button:hover, nav button.active {
+            background-color: var(--light-blue);
+            color: #0b132b;
+            text-shadow: none;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
         }
 
-        /* 3. ප්‍රධාන අන්තර්ගතය සහ පැති තීරුව (Main Body Split) */
-        .main-content {
+        /* Tab පිටු සඟවා තැබීම සහ පෙන්වීම */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active-tab {
             display: grid;
+        }
+
+        /* 3. ප්‍රධාන අන්තර්ගතය සහ පැති තීරුව */
+        .main-content {
             grid-template-columns: 3fr 1.2fr;
         }
 
-        /* වම්පස ශ්‍රේණි කොටස් (Grades Grid) */
+        /* වම්පස ශ්‍රේණි කොටස් */
         .grades-section {
             padding: 25px;
             display: grid;
@@ -95,31 +149,32 @@
         }
 
         .grade-card {
-            background-color: #ecf0f1;
-            border: 2px solid #bdc3c7;
-            border-radius: 6px;
-            padding: 30px 20px;
+            background: linear-gradient(135deg, #1c2541 0%, #223055 100%);
+            border: 2px solid rgba(0, 164, 228, 0.4);
+            border-radius: 12px;
+            padding: 35px 20px;
             text-align: center;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-weight: bold;
-            color: #2c3e50;
+            color: #fff;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
         .grade-card:hover {
-            background-color: #3498db;
-            color: white;
-            border-color: #2980b9;
-            transform: translateY(-3px);
+            border-color: var(--orange);
+            box-shadow: 0 0 15px rgba(255, 115, 0, 0.6);
+            transform: scale(1.03);
+            color: var(--orange);
         }
 
-        /* දකුණුපස පැති තීරුව (Right Sidebar) */
+        /* දකුණුපස පැති තීරුව (Sidebar) */
         .sidebar {
-            border-left: 2px solid #2c3e50;
+            border-left: 2px solid var(--light-blue);
             display: flex;
             flex-direction: column;
+            background-color: rgba(11, 19, 43, 0.5);
         }
 
         .sidebar-box {
@@ -130,36 +185,82 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            background-color: #fff;
         }
 
         .sidebar-box.top {
-            border-bottom: 2px solid #2c3e50;
-            background-color: #fcfcfc;
+            border-bottom: 2px solid var(--light-blue);
         }
 
         .sidebar-box h3 {
-            color: #1e3c72;
-            margin-bottom: 10px;
+            color: var(--orange);
+            margin-bottom: 12px;
+            font-size: 1.3rem;
+            text-shadow: 0 0 5px rgba(255,115,0,0.3);
         }
 
-        /* Mobile Phone වලට ගැලපෙන ලෙස සකස් කිරීම (Responsive Media Queries) */
+        /* අභ්‍යන්තර පිටු සඳහා පොදු විලාසිතා */
+        .inner-page {
+            padding: 30px;
+            width: 100%;
+        }
+
+        .inner-page h2 {
+            color: var(--light-blue);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--light-blue);
+            padding-bottom: 10px;
+        }
+
+        /* ඩවුන්ලෝඩ් කාඩ් පත් (Download Cards) */
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            width: 100%;
+        }
+
+        .download-card {
+            background-color: var(--card-bg);
+            border-left: 5px solid var(--orange);
+            padding: 20px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .download-btn {
+            background-color: var(--orange);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+
+        .download-btn:hover {
+            background-color: #e06600;
+        }
+
+        /* Mobile Phone සඳහා Layout සකස් කිරීම */
         @media (max-width: 768px) {
             .main-content {
                 grid-template-columns: 1fr;
             }
             .sidebar {
                 border-left: none;
-                border-top: 2px solid #2c3e50;
+                border-top: 2px solid var(--light-blue);
             }
             .grades-section {
                 grid-template-columns: 1fr;
             }
             nav {
                 grid-template-columns: repeat(2, 1fr);
-            }
-            nav a {
-                border-bottom: 1px solid #34495e;
             }
         }
     </style>
@@ -169,19 +270,21 @@
     <div class="web-container">
 
         <header>
+            <div class="logo-container">
+                <img src="logo.png" alt="C-TECH Logo">
+            </div>
             <h1>C-TECH Computer Lab & Education Institute</h1>
-            <p>ගුණාත්මක තොරතුරු තාක්ෂණ අධ්‍යාපනය වෙත පියවරක්</p>
+            <p>පරිගණක විද්‍යාවේ සහ තාක්ෂණයේ විශිෂ්ටතමයා</p>
         </header>
 
         <nav>
-            <a href="#home">Home</a>
-            <a href="#notes">Notes</a>
-            <a href="#papers">Papers</a>
-            <a href="#about">About</a>
+            <button class="tab-btn active" onclick="openTab(event, 'home')">Home</button>
+            <button class="tab-btn" onclick="openTab(event, 'notes')">Notes</button>
+            <button class="tab-btn" onclick="openTab(event, 'papers')">Papers</button>
+            <button class="tab-btn" onclick="openTab(event, 'about')">About</button>
         </nav>
 
-        <div class="main-content">
-            
+        <div id="home" class="tab-content active-tab main-content">
             <div class="grades-section">
                 <div class="grade-card">Grade 06</div>
                 <div class="grade-card">Grade 07</div>
@@ -190,21 +293,78 @@
                 <div class="grade-card">Grade 10</div>
                 <div class="grade-card">Grade 11</div>
             </div>
-
             <div class="sidebar">
                 <div class="sidebar-box top">
                     <h3>ප්‍රවෘත්ති / නිවේදන</h3>
-                    <p>අලුත්ම පන්ති විස්තර සහ දැනුම්දීම් මෙතනින් බලාපොරොත්තු වන්න.</p>
+                    <p>දෙසැම්බර් මාසයේ පැවැත්වෙන විශේෂ තොරතුරු තාක්ෂණ ප්‍රායෝගික පරීක්ෂණ සඳහා ලියාපදිංචිය දැන් ඇරඹුණා!</p>
                 </div>
                 <div class="sidebar-box">
                     <h3>අප හා සම්බන්ධ වන්න</h3>
-                    <p>ලියාපදිංචි වීමට සහ ගැටළු සඳහා අමතන්න.</p>
+                    <p>📞 දුරකථන: 07X-XXXXXXX<br>📍 ස්ථානය: C-TECH Lab</p>
                 </div>
             </div>
+        </div>
 
+        <div id="notes" class="tab-content inner-page">
+            <h2>පාඩම් සටහන් (Notes)</h2>
+            <p>සියලුම ශ්‍රේණි සඳහා වන කෙටි සටහන් සහ නිබන්ධන ළඟදීම මෙතැනින් ලබාගත හැක...</p>
+        </div>
+
+        <div id="papers" class="tab-content inner-page">
+            <h2>ප්‍රශ්න පත්‍ර ලබාගැනීම (Download Papers)</h2>
+            <div class="download-grid">
+                
+                <div class="download-card">
+                    <div>
+                        <h4>Grade 11 - Term Test Paper</h4>
+                        <p style="font-size:0.9rem; opacity:0.7; margin-top:5px;">ICT පළමු වාර පරීක්ෂණය</p>
+                    </div>
+                    <a href="paper11.pdf" download class="download-btn">Download PDF</a>
+                </div>
+
+                <div class="download-card">
+                    <div>
+                        <h4>Grade 10 - Model Paper</h4>
+                        <p style="font-size:0.9rem; opacity:0.7; margin-top:5px;">Operating Systems පාඩම</p>
+                    </div>
+                    <a href="paper10.pdf" download class="download-btn">Download PDF</a>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="about class" class="tab-content inner-page" id="about">
+            <h2>අප ගැන (About Us)</h2>
+            <p>C-TECH Computer Lab & Education Institute යනු දරුවන්ට ප්‍රායෝගික සහ සෛද්ධාන්තික තොරතුරු තාක්ෂණ අධ්‍යාපනය ලබාදෙන ශ්‍රී ලංකාවේ ප්‍රමුඛතම ආයතනයකි.</p>
         </div>
 
     </div>
 
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].className = tabcontent[i].className.replace(" active-tab", "");
+                // Special layout handling for home tab
+                if(tabcontent[i].id === 'home') {
+                    tabcontent[i].style.display = 'none';
+                }
+            }
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            
+            var currentTab = document.getElementById(tabName);
+            if(tabName === 'home') {
+                currentTab.style.display = 'grid';
+            } else {
+                currentTab.style.display = 'block';
+            }
+            currentTab.className += " active-tab";
+            evt.currentTarget.className += " active";
+        }
+    </script>
 </body>
 </html>
