@@ -151,7 +151,12 @@
             gap: 20px;
             align-content: start;
         }
-
+        /* වෙනත් HTML පිටුවකට යන ලින්ක් එක CSS වලින් හැඩගැන්වීම */
+        .grade-page-link {
+            text-decoration: none; /* යටින් වැටෙන ඉර (Underline) ඉවත් කරයි */
+            color: inherit;
+            display: block; /* මුළු කාඩ් එකම ලින්ක් එකක් බවට පත් කරයි */
+        }
         .grade-card {
             background: linear-gradient(135deg, #1c2541 0%, #223055 100%);
             border: 2px solid rgba(0, 164, 228, 0.4);
@@ -290,7 +295,8 @@
 
         <div id="home" class="tab-content active-tab main-content">
             <div class="grades-section">
-                <a href="grade6.html" class="grade-page-link"><div class="grade-card">Grade 06</div></a>
+                <a href="grade6.html" style="text-decoration: none; color: inherit; display: block;">
+                <div class="grade-card">Grade 06</div></a>
                 <div class="grade-card">Grade 07</div>
                 <div class="grade-card">Grade 08</div>
                 <div class="grade-card">Grade 09</div>
