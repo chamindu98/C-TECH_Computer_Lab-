@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade 06 - C-TECH</title>
+    <style>
+        :root {
+            --primary-blue: #004d80;
+            --light-blue: #00a4e4;
+            --orange: #ff7300;
+            --dark-bg: #0b132b;
+            --card-bg: #1c2541;
+            --text-light: #f4f7f6;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body {
+            background-color: var(--dark-bg);
+            background-image: radial-gradient(at 0% 0%, rgba(0, 164, 228, 0.15) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(255, 115, 0, 0.1) 0px, transparent 50%);
+            color: var(--text-light); display: flex; justify-content: center; padding: 20px; min-height: 100vh;
+        }
+        .web-container { width: 100%; max-width: 1100px; background-color: rgba(28, 37, 65, 0.85); backdrop-filter: blur(10px); border: 2px solid var(--light-blue); border-radius: 16px; overflow: hidden; }
+        header { background: linear-gradient(135deg, rgba(11,19,43,0.9) 0%, rgba(28,37,65,0.9) 100%); text-align: center; padding: 30px 20px; border-bottom: 2px solid var(--light-blue); display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .logo-container { width: 90px; height: 90px; background-color: white; border-radius: 50%; padding: 3px; overflow: hidden; border: 2px solid var(--light-blue); }
+        .logo-container img { width: 100%; height: 100%; object-fit: cover; }
+        header h1 { font-size: 1.8rem; }
+        
+        nav { display: grid; grid-template-columns: repeat(4, 1fr); background-color: #0b132b; border-bottom: 2px solid var(--light-blue); }
+        nav a { color: white; text-align: center; padding: 15px 10px; font-weight: bold; text-decoration: none; border-right: 1px solid rgba(0, 164, 228, 0.2); }
+        nav a:hover { background-color: var(--light-blue); color: #0b132b; }
+
+        .inner-page { padding: 30px; }
+        .inner-page h2 { color: var(--light-blue); margin-bottom: 20px; border-bottom: 2px solid var(--light-blue); padding-bottom: 10px; }
+        
+        .term-tabs { display: flex; gap: 10px; margin-bottom: 25px; }
+        .term-btn { background-color: #1c2541; border: 2px solid var(--light-blue); color: white; padding: 12px 24px; font-size: 1rem; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .term-btn:hover, .term-btn.active { background-color: var(--orange); border-color: var(--orange); }
+        
+        .term-content { display: none; background: rgba(11, 19, 43, 0.5); padding: 20px; border-radius: 12px; border: 1px solid rgba(0,164,228,0.2); }
+        .term-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .resource-box { background-color: var(--card-bg); border-top: 4px solid var(--light-blue); padding: 20px; border-radius: 8px; }
+        .resource-box.papers-box { border-top-color: var(--orange); }
+        .resource-box.videos-box { border-top-color: #ff0000; }
+        .resource-box h4 { margin-bottom: 15px; }
+        .resource-list { list-style: none; }
+        .resource-list li { margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+        
+        .action-link { background-color: var(--light-blue); color: #0b132b; padding: 5px 12px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 0.85rem; }
+        .action-link:hover { background-color: var(--orange); color: white; }
+        .video-link { background-color: #ff0000; color: white; }
+
+        .back-btn { margin-top: 20px; background-color: var(--light-blue); color: #0b132b; border: none; padding: 12px 24px; font-weight: bold; border-radius: 5px; cursor: pointer; text-decoration: none; display: inline-block; }
+        @media (max-width: 768px) { .term-tabs { flex-direction: column; } nav { grid-template-columns: repeat(2, 1fr); } }
+    </style>
+</head>
+<body>
+    <div class="web-container">
+        <header>
+            <div class="logo-container"><img src="logo.png" alt="C-TECH Logo"></div>
+            <h1>Grade 06 - තොරතුරු හා සන්නිවේදන තාක්ෂණය</h1>
+        </header>
+
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="#">Notes</a>
+            <a href="#">Papers</a>
+            <a href="#">About</a>
+        </nav>
+
+        <div class="inner-page">
+            <div class="term-tabs">
+                <button class="term-btn active" onclick="openTerm(event, 'term1')">පලමු වාරය (Term 1)</button>
+                <button class="term-btn" onclick="openTerm(event, 'term2')">දෙවන වාරය (Term 2)</button>
+                <button class="term-btn" onclick="openTerm(event, 'term3')">තෙවන වාරය (Term 3)</button>
+            </div>
+
+            <div id="term1" class="term-content" style="display: block;">
+                <div class="term-grid">
+                    <div class="resource-box">
+                        <h4>📚 පාඩම් සටහන් (Notes)</h4>
+                        <ul class="resource-list">
+                            <li><span>1. තොරතුරු ලෝකය</span> <a href="g6_t1_w1.pdf" class="action-link" download>Download</a></li>
+                        </ul>
+                    </div>
+                    <div class="resource-box papers-box">
+                        <h4>📝 ප්‍රශ්න පත්‍ර (Papers)</h4>
+                        <ul class="resource-list">
+                            <li><span>පළමු වාර පරීක්ෂණය</span> <a href="g6_term1.pdf" class="action-link" download>Download</a></li>
+                        </ul>
+                    </div>
+                    <div class="resource-box videos-box">
+                        <h4>🎥 YouTube වීඩියෝ</h4>
+                        <ul class="resource-list">
+                            <li><span>පරිගණකය හැඳින්වීම</span> <a href="https://youtube.com/" target="_blank" class="action-link video-link">Watch</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="term2" class="term-content">
+                <div class="term-grid">
+                    <div class="resource-box"><h4 style="opacity:0.5;">📚 පාඩම් සටහන් නැත</h4></div>
+                    <div class="resource-box papers-box"><h4 style="opacity:0.5;">📝 ප්‍රශ්න පත්‍ර නැත</h4></div>
+                    <div class="resource-box videos-box"><h4 style="opacity:0.5;">🎥 වීඩියෝ නැත</h4></div>
+                </div>
+            </div>
+
+            <div id="term3" class="term-content">
+                <div class="term-grid">
+                    <div class="resource-box"><h4 style="opacity:0.5;">📚 පාඩම් සටහන් නැත</h4></div>
+                    <div class="resource-box papers-box"><h4 style="opacity:0.5;">📝 ප්‍රශ්න පත්‍ර නැත</h4></div>
+                    <div class="resource-box videos-box"><h4 style="opacity:0.5;">🎥 වීඩියෝ නැත</h4></div>
+                </div>
+            </div>
+
+            <a href="index.html" class="back-btn">← ආපසු Home වෙත</a>
+        </div>
+    </div>
+
+    <script>
+        function openTerm(evt, termId) {
+            var i, termcontent, termlinks;
+            termcontent = document.getElementsByClassName("term-content");
+            for (i = 0; i < termcontent.length; i++) { termcontent[i].style.display = "none"; }
+            termlinks = document.getElementsByClassName("term-btn");
+            for (i = 0; i < termlinks.length; i++) { termlinks[i].className = termlinks[i].className.replace(" active", ""); }
+            document.getElementById(termId).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
+</body>
+</html>
