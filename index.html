@@ -407,16 +407,28 @@
         }
     };
 
-    // වෙබ් අඩවිය මුලින්ම ලෝඩ් වෙද්දී ක්‍රියාත්මක වන කොටස
-    window.onload = function() {
-        var hash = window.location.hash.substring(1);
-        if (hash && document.getElementById(hash)) {
-            openTab(null, hash);
+    // වෙබ් අඩවිය මුලින්ම ලෝඩ් වෙද්දී සහ වෙනත් පිටුවක URL හැෂ් එකක් (#) හරහා එද්දී ක්‍රියාත්මක වන කොටස
+window.onload = function() {
+    var hash = window.location.hash.substring(1);
+    
+    // URL එකේ #notes, #papers, #about වගේ හැෂ් එකක් තියෙනවා නම්
+    if (hash && document.getElementById(hash)) {
+        // ප්‍රථමයෙන් click event එකක් simulate කිරීමට අදාළ බටන් එක සොයාගන්න
+        var targetBtn = document.querySelector(`button[onclick*="'${hash}'"]`);
+        
+        // කෘතිමව event එකක් නිර්මාණය කර openTab ෆන්ක්ෂන් එක නිවැරදිව ක්‍රියාත්මක කරවීම
+        if (targetBtn) {
+            var fakeEvent = { currentTarget: targetBtn };
+            openTab(fakeEvent, hash, true);
         } else {
-            openTab(null, 'home', true);
-            history.replaceState({ tab: 'home' }, "", "#home");
+            openTab(null, hash, true);
         }
-    };
+    } else {
+        // හැෂ් එකක් නැත්නම් සාමාන්‍ය පරිදි Home එක පෙන්වන්න
+        openTab(null, 'home', true);
+        history.replaceState({ tab: 'home' }, "", "#home");
+    }
+};
 </script>
 </body>
 </html>
