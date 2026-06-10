@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C-TECH - IT Educational Games</title>
+    <style>
+        :root { --light-blue: #00a4e4; --orange: #ff7300; --dark-bg: #0b132b; --card-bg: #1c2541; --text-light: #f4f7f6; }
+        body { background-color: var(--dark-bg); color: var(--text-light); font-family: 'Segoe UI', sans-serif; padding: 20px; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 900px; background-color: rgba(28, 37, 65, 0.9); border: 2px solid var(--light-blue); border-radius: 16px; padding: 30px; }
+        h2 { color: var(--light-blue); border-bottom: 2px solid var(--light-blue); padding-bottom: 10px; margin-bottom: 25px; }
+        .game-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; }
+        .game-card { background: var(--card-bg); border: 2px solid rgba(0, 164, 228, 0.3); border-radius: 12px; padding: 25px; text-align: center; }
+        .game-card h3 { color: var(--orange); margin-bottom: 15px; }
+        .game-area { background: #0b132b; padding: 15px; border-radius: 8px; margin-top: 15px; min-height: 150px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        input { padding: 8px; border-radius: 5px; border: 1px solid var(--light-blue); background: #1c2541; color: white; text-align: center; margin-bottom: 10px; }
+        button { background: var(--orange); color: white; border: none; padding: 8px 16px; font-weight: bold; border-radius: 4px; cursor: pointer; }
+        .back-link { display: inline-block; margin-top: 25px; color: var(--light-blue); text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🎮 IT අධ්‍යාපනික ක්‍රීඩා (Educational Games)</h2>
+        <div class="game-grid">
+            
+            <div class="game-card">
+                <h3>🔢 ද්විමය සංඛ්‍යා ක්‍රීඩාව (Binary Guess)</h3>
+                <p>දී ඇති ද්විමය (Binary) අගයට අදාළ දශම (Decimal) අගය සොයන්න.</p>
+                <div class="game-area">
+                    <h2 style="border:none; margin:0;" id="binary-code">0101</h2>
+                    <input type="number" id="binary-ans" placeholder="Decimal අගය ලියන්න">
+                    <button onclick="checkBinary()">Check</button>
+                    <p id="binary-msg" style="margin-top:10px; font-weight:bold;"></p>
+                </div>
+            </div>
+
+            <div class="game-card">
+                <h3>⚡ Fast IT Quiz (වේගවත් ප්‍රශ්න විචාරාත්මක ක්‍රීඩාව)</h3>
+                <p>කෙටි ප්‍රශ්න වලට නිවැරදි පිළිතුර තෝරන්න.</p>
+                <div class="game-area">
+                    <p id="game-q" style="margin-bottom:15px; font-weight:bold;">1 KB යනු කොපමණද?</p>
+                    <div style="display:flex; gap:10px;">
+                        <button onclick="checkQuiz(1024)">1024 Bytes</button>
+                        <button onclick="checkQuiz(1000)">1000 Bytes</button>
+                    </div>
+                    <p id="quiz-msg" style="margin-top:10px; font-weight:bold;"></p>
+                </div>
+            </div>
+
+        </div>
+        <a href="index.html" class="back-link">← ආපසු මුල් පිටුවට</a>
+    </div>
+
+    <script>
+        // Game 1 Logic
+        function checkBinary() {
+            let ans = document.getElementById("binary-ans").value;
+            let msg = document.getElementById("binary-msg");
+            if(ans == "5") { msg.style.color = "#2ecc71"; msg.innerText = "නිවැරදියි! 🎉 (0101 = 5)"; }
+            else { msg.style.color = "#e74c3c"; msg.innerText = "නැවත උත්සාහ කරන්න! ❌"; }
+        }
+        // Game 2 Logic
+        function checkQuiz(val) {
+            let msg = document.getElementById("quiz-msg");
+            if(val === 1024) { msg.style.color = "#2ecc71"; msg.innerText = "සුපිරි! නිවැරදියි 🌟"; }
+            else { msg.style.color = "#e74c3c"; msg.innerText = "වැරදියි, නැවත සිතන්න! 🧐"; }
+        }
+    </script>
+</body>
+</html>

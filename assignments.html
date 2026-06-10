@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C-TECH - Assignments</title>
+    <style>
+        :root { --light-blue: #00a4e4; --orange: #ff7300; --dark-bg: #0b132b; --card-bg: #1c2541; --text-light: #f4f7f6; }
+        body { background-color: var(--dark-bg); color: var(--text-light); font-family: 'Segoe UI', sans-serif; padding: 20px; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 800px; background-color: rgba(28, 37, 65, 0.9); border: 2px solid var(--light-blue); border-radius: 16px; padding: 30px; box-shadow: 0 0 20px rgba(0, 164, 228, 0.2); }
+        h2 { color: var(--light-blue); border-bottom: 2px solid var(--light-blue); padding-bottom: 10px; margin-bottom: 20px; }
+        .input-group { margin-bottom: 20px; }
+        input[type="text"] { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--light-blue); background: #0b132b; color: white; font-size: 1rem; }
+        .btn { background-color: var(--orange); color: white; border: none; padding: 12px 24px; font-weight: bold; border-radius: 5px; cursor: pointer; transition: 0.2s; width: 100%; font-size: 1rem; }
+        .btn:hover { background-color: #e06600; }
+        #timer { font-size: 1.5rem; color: var(--orange); font-weight: bold; text-align: center; margin-bottom: 20px; display: none; }
+        .quiz-area { display: none; margin-top: 20px; }
+        .question { background: var(--card-bg); padding: 20px; border-radius: 8px; margin-bottom: 15px; border-left: 5px solid var(--light-blue); }
+        .options label { display: block; margin: 10px 0; cursor: pointer; padding: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; }
+        .options input { margin-right: 10px; }
+        #result-area { display: none; background: #223055; padding: 25px; border-radius: 12px; border: 2px solid var(--orange); margin-top: 20px; }
+        .correct { color: #2ecc71; font-weight: bold; }
+        .wrong { color: #e74c3c; font-weight: bold; }
+        .back-link { display: inline-block; margin-top: 20px; color: var(--light-blue); text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>📝 Online Assignments (පැවරුම්)</h2>
+        
+        <div id="login-section">
+            <div class="input-group">
+                <label style="display:block; margin-bottom:8px;">දරුවාගේ නම (Student Name):</label>
+                <input type="text" id="student-name" placeholder="ඔබේ නම මෙතන ලියන්න...">
+            </div>
+            <button class="btn" onclick="startAssignment()">පැවරුම ආරම්භ කරන්න (Start)</button>
+        </div>
+
+        <div id="timer">කාලය: <span id="time-left">05:00</span></div>
+        
+        <div id="quiz-area" class="quiz-area">
+            <form id="quiz-form">
+                <div class="question">
+                    <p>1. පරිගණකයක මොළය ලෙස හඳුන්වනු ලබන උපාංගය කුමක්ද?</p>
+                    <div class="options">
+                        <label><input type="radio" name="q1" value="RAM"> RAM</label>
+                        <label><input type="radio" name="q1" value="CPU"> CPU</label>
+                        <label><input type="radio" name="q1" value="HDD"> Hard Disk</label>
+                    </div>
+                </div>
+                <div class="question">
+                    <p>2. පහත සඳහන් දෑ අතුරින් ආදාන උපාංගයක් (Input Device) නොවන්නේ කුමක්ද?</p>
+                    <div class="options">
+                        <label><input type="radio" name="q2" value="Keyboard"> Keyboard</label>
+                        <label><input type="radio" name="q2" value="Mouse"> Mouse</label>
+                        <label><input type="radio" name="q2" value="Monitor"> Monitor</label>
+                    </div>
+                </div>
+                
+                <button type="button" class="btn" onclick="submitQuiz()">පිළිතුරු ලබාදෙන්න (Submit)</button>
+            </form>
+        </div>
+
+        <div id="result-area"></div>
+        
+        <br><a href="index.html" class="back-link">← ආපසු මුල් පිටුවට</a>
+    </div>
+
+    <script>
+        let timer, totalSeconds = 300, secondsUsed = 0, name = "";
+        const correctAnswers = { q1: "CPU", q2: "Monitor" };
+
+        function startAssignment() {
+            name = document.getElementById("student-name").value.trim();
+            if(name === "") { alert("කරුණාකර ඔබේ නම ඇතුළත් කරන්න!"); return; }
+            
+            document.getElementById("login-section").style.display = "none";
+            document.getElementById("timer").style.display = "block";
+            document.getElementById("quiz-area").style.display = "block";
+            
+            timer = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            totalSeconds--;
+            secondsUsed++;
+            let mins = Math.floor(totalSeconds / 60);
+            let secs = totalSeconds % 60;
+            document.getElementById("time-left").innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            if(totalSeconds <= 0) { clearInterval(timer); submitQuiz(true); }
+        }
+
+        function submitQuiz(timeOut = false) {
+            clearInterval(timer);
+            if(timeOut) alert("කාලය අවසන් විය!");
+
+            let form = document.getElementById("quiz-form");
+            let score = 0, totalQuestions = 2, htmlSummary = "";
+            let minutes = Math.floor(secondsUsed / 60);
+            let seconds = secondsUsed % 60;
+
+            for(let key in correctAnswers) {
+                let selected = form.elements[key].value;
+                if(selected === correctAnswers[key]) {
+                    score++;
+                    htmlSummary += `<p>ප්‍රශ්නය ${key.substr(1)}: <span class="correct">නිවැරදියි ✔</span></p>`;
+                } else {
+                    htmlSummary += `<p>ප්‍රශ්නය ${key.substr(1)}: <span class="wrong">වැරදියි ❌</span> (නිවැරදි පිළිතුර: ${correctAnswers[key]})</p>`;
+                }
+            }
+
+            document.getElementById("quiz-area").style.display = "none";
+            document.getElementById("timer").style.display = "none";
+            
+            let resultArea = document.getElementById("result-area");
+            resultArea.style.display = "block";
+            resultArea.innerHTML = `
+                <h3>📊 ලැබුණු ප්‍රතිඵල (Results)</h3><br>
+                <p><b>සිසුවාගේ නම:</b> ${name}</p>
+                <p><b>ලබාගත් ලකුණු:</b> ${score} / ${totalQuestions}</p>
+                <p><b>ගතවූ කාලය:</b> ${minutes} මිනිත්තු ${seconds} තත්පර</p><br>
+                <hr style="border:1px solid var(--light-blue);"><br>
+                ${htmlSummary}
+            `;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C-TECH - Tech Updates</title>
+    <style>
+        :root { --light-blue: #00a4e4; --orange: #ff7300; --dark-bg: #0b132b; --card-bg: #1c2541; --text-light: #f4f7f6; }
+        body { background-color: var(--dark-bg); color: var(--text-light); font-family: 'Segoe UI', sans-serif; padding: 20px; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 900px; background-color: rgba(28, 37, 65, 0.9); border: 2px solid var(--light-blue); border-radius: 16px; padding: 30px; }
+        h2 { color: var(--light-blue); border-bottom: 2px solid var(--light-blue); padding-bottom: 10px; margin-bottom: 25px; }
+        .article-grid { display: flex; flex-direction: column; gap: 30px; }
+        .article-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; border: 1px solid rgba(0, 164, 228, 0.2); transition: 0.3s; }
+        .article-card:hover { transform: translateY(-5px); border-color: var(--orange); }
+        .article-img { width: 100%; height: 300px; object-fit: cover; background: #0b132b; }
+        .article-body { padding: 25px; }
+        .article-tag { background: var(--orange); color: white; padding: 4px 10px; font-size: 0.8rem; font-weight: bold; border-radius: 4px; display: inline-block; margin-bottom: 10px; }
+        .article-body h3 { color: #fff; margin-bottom: 12px; font-size: 1.5rem; }
+        .article-body p { opacity: 0.8; line-height: 1.6; font-size: 1.05rem; }
+        .back-link { display: inline-block; margin-top: 25px; color: var(--light-blue); text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🚀 නවතම තාක්ෂණික තොරතුරු (Tech Updates)</h2>
+        <div class="article-grid">
+            
+            <div class="article-card">
+                <img src="https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&w=800&q=80" alt="AI Technology" class="article-img">
+                <div class="article-body">
+                    <span class="article-tag">Artificial Intelligence</span>
+                    <h3>කෘත්‍රිම බුද්ධිය (AI) මඟින් අධ්‍යාපන ලෝකය වෙනස් වන හැටි</h3>
+                    <p>වත්මන් ලෝකයේ වේගයෙන්ම දියුණු වන තාක්ෂණය වන්නේ කෘත්‍රිම බුද්ධියයි (AI). මේ හරහා පාසල් සිසුන්ට තමන්ට ගැළපෙන පරිදි පෞද්ගලිකව ඉගෙන ගැනීමේ හැකියාව (Personalized Learning) ලැබෙන අතර, අනාගතයේදී ගුරුවරුන්ගේ සහයට විශාල කාර්යභාරයක් AI මඟින් සිදුවනු ඇත...</p>
+                </div>
+            </div>
+
+            <div class="article-card">
+                <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80" alt="Quantum Computing" class="article-img">
+                <div class="article-body">
+                    <span class="article-tag">Super Computers</span>
+                    <h3>සුපිරි පරිගණක සහ Quantum Computing කියන්නේ මොකක්ද?</h3>
+                    <p>සාමාන්‍ය අප පාවිච්චි කරන පරිගණක වලට වඩා මිලියන ගුණයක වේගයකින් වැඩ කරන්න පුළුවන් පරිගණක වර්ගයක් තමයි Quantum පරිගණක කියන්නේ. මේවා ක්‍රියා කරන්නේ සාමාන්‍ය පරිගණක වගේ බිට්ස් (Bits - 0 සහ 1) වලින් නෙවෙයි, කියුබිට්ස් (Qubits) වලිනුයි...</p>
+                </div>
+            </div>
+
+        </div>
+        <a href="index.html" class="back-link">← ಆපසු මුල් පිටුවට</a>
+    </div>
+</body>
+</html>
