@@ -372,46 +372,39 @@
 
     <script>
     // ටැබ් එකක් ඕපන් කරන නිවැරදිම ෆන්ක්ෂන් එක
-    function openTab(evt, tabName, isBackAction = false) {
-        var i, tabcontent, tablinks;
-        
-        // 1. ප්‍රථමයෙන්ම සියලුම ටැබ් වල display එක 'none' කර සම්පූර්ණයෙන්ම සඟවන්න (overlapping වැලැක්වීමට)
-        tabcontent = document.getElementsByClassName("tab-content");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-            tabcontent[i].className = tabcontent[i].className.replace(" active-tab", "");
-        }
-        
-        // 2. සියලුම බටන්ස් වල active ගතිය අයින් කරන්න
-        tablinks = document.getElementsByClassName("tab-btn");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-        
-        // 3. දැන් අපිට අවශ්‍ය එක ටැබ් එකක් විතරක් තෝරාගෙන එය පමණක් පෙන්වන්න
-        var currentTab = document.getElementById(tabName);
-        if (currentTab) {
-            if (tabName === 'home') {
-                currentTab.style.display = 'grid'; // Home එක grid layout එකක් නිසා
-            } else {
-                currentTab.style.display = 'block'; // අනිත් පිටු සාමාන්‍ය block නිසා
-            }
-            currentTab.className += " active-tab";
-        }
-        
-        // 4. අදාළ බටන් එක active (Highighted) කරන්න
-        if (evt) {
-            evt.currentTarget.className += " active";
-        } else {
-            var btn = document.querySelector(`button[onclick*="'${tabName}'"]`);
-            if (btn) btn.className += " active";
-        }
+    function openTab(evt, tabName, isInitial = false) {
+    // 1. සියලුම ටැබ් කන්ටෙන්ට් (Sections) හංගන්න
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tab-content");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
 
-        // 5. බ්‍රවුසර් හිස්ට්‍රි එක යාවත්කාලීන කිරීම
-        if (!isBackAction) {
-            history.pushState({ tab: tabName }, "", "#" + tabName);
+    // 2. ප්‍රධාන ටැබ් බාර් එකේ තියෙන සියලුම ලින්ක්ස් වලින් 'active' ක්ලාස් එක අයින් කරන්න
+    tablinks = document.querySelectorAll(".main-tab-bar .tab-btn");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.remove("active");
+    }
+
+    // 3. දැනට අවශ්‍ය සෙක්ෂන් එක විතරක් පෙන්වන්න
+    document.getElementById(tabName).style.display = "block";
+
+    // 4. ක්ලික් කරපු බටන් එකට හෝ හෝම් පේජ් එක ලෝඩ් වෙද්දී මුල්ම බටන් එකට 'active' ක්ලාස් එක (නිල් පාට) ලබාදීම
+    if (evt && evt.currentTarget) {
+        evt.currentTarget.classList.add("active");
+    } else {
+        // බ්‍රවුසර් එක මුලින්ම ලෝඩ් වෙද්දී Home (මුල්ම ලින්ක් එක) නිල් පාට කරන්න
+        var homeBtn = document.querySelector(".main-tab-bar .tab-btn[href='index.html']") || document.querySelector(".main-tab-bar .tab-btn");
+        if (homeBtn) {
+            homeBtn.classList.add("active");
         }
     }
+
+    // URL එක අප්ඩේට් කිරීම (කලින් තිබූ පරිදිම)
+    if (!isInitial) {
+        history.pushState({ tab: tabName }, "", "#" + tabName);
+    }
+}
 
     // බ්‍රවුසර් එකේ Back හෝ Forward බටන් ඔබන කොට ක්‍රියාත්මක වන කොටස
     window.onpopstate = function(event) {
