@@ -245,4 +245,153 @@
         }
 
         .game-area button:active {
+            transform: scale(0.98);
+        }
+
+        /* Quiz බොත්තම් කණ්ඩායම */
+        .btn-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        /* ආපසු යාමේ ලින්ක් එක (Back Link Button) */
+        .back-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: var(--light-blue);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--orange);
+            transform: translateX(-5px);
+        }
+
+        /* --- RESPONSIVE MOBILE VIEW --- */
+        @media screen and (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            .web-container {
+                padding: 15px;
+            }
+
+            header {
+                padding: 20px 10px;
+            }
+
+            header h1 {
+                font-size: 1.6rem;
+            }
+
+            .main-tab-bar {
+                flex-wrap: wrap;
+            }
+
+            .main-tab-bar .tab-btn {
+                flex: unset;
+                width: 50%;
+                padding: 12px 10px;
+                font-size: 0.95rem;
+                border-bottom: 1px solid rgba(0, 164, 228, 0.2);
+            }
+
+            .main-tab-bar .tab-btn:nth-child(2n) {
+                border-right: none;
+            }
+
+            .main-tab-bar .tab-btn:nth-child(3),
+            .main-tab-bar .tab-btn:nth-child(4) {
+                border-bottom: none;
+            }
+            
+            .logo-container {
+                width: 100px;
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="web-container">
+        <header>
+            <div class="logo-container">
+                <img src="logo.png" alt="C-TECH Logo">
+            </div>
+            <h1>C-TECH Computer Lab & Education Institute</h1>
+            <p>පරිගණක විද්‍යාවේ සහ"* තාක්ෂණයේ විශිෂ්ටතමයා</p>
+        </header>
+
+        <nav class="main-tab-bar">
+            <a href="index.html" class="tab-btn">Home</a>
+            <a href="assignments.html" class="tab-btn">Assignments</a>
+            <a href="tech-updates.html" class="tab-btn">Tech Updates</a>
+            <a href="games.html" class="tab-btn active">Games</a>
+        </nav>
+
+        <h2 class="page-title">🎮 IT අධ්‍යාපනික ක්‍රීඩා (Educational Games)</h2>
+        
+        <div class="game-grid">
+            
+            <div class="game-card">
+                <h3>🔢 ද්විමය සංඛ්‍යා ක්‍රීඩාව (Binary Guess)</h3>
+                <p>දී ඇති ද්විමය (Binary) අගයට අදාළ දශම (Decimal) අගය සොයන්න.</p>
+                <div class="game-area">
+                    <h2 id="binary-code">0101</h2>
+                    <input type="number" id="binary-ans" placeholder="Decimal අගය ලියන්න">
+                    <button onclick="checkBinary()">Check</button>
+                    <p id="binary-msg" style="margin-top:12px; font-weight:bold;"></p>
+                </div>
+            </div>
+
+            <div class="game-card">
+                <h3>⚡ Fast IT Quiz (වේගවත් ප්‍රශ්න විචාරාත්මක ක්‍රීඩාව)</h3>
+                <p>කෙටි ප්‍රශ්න වලට නිවැරදි පිළිතුර තෝරන්න.</p>
+                <div class="game-area">
+                    <p id="game-q" style="margin-bottom:20px; font-weight:bold; font-size:1.1rem; color:#fff;">1 KB යනු කොපමණද?</p>
+                    <div class="btn-group">
+                        <button onclick="checkQuiz(1024)">1024 Bytes</button>
+                        <button onclick="checkQuiz(1000)">1000 Bytes</button>
+                    </div>
+                    <p id="quiz-msg" style="margin-top:12px; font-weight:bold;"></p>
+                </div>
+            </div>
+
+        </div>
+
+        <a href="index.html" class="back-link">← ආපසු මුල් පිටුවට</a>
+    </div>
+
+    <script>
+        // Game 1 Logic
+        function checkBinary() {
+            let ans = document.getElementById("binary-ans").value;
+            let msg = document.getElementById("binary-msg");
+            if(ans == "5") { 
+                msg.style.color = "#2ecc71"; 
+                msg.innerText = "නිවැරදියි! 🎉 (0101 = 5)"; 
+            } else { 
+                msg.style.color = "#e74c3c"; 
+                msg.innerText = "නැවත උත්සාහ කරන්න! ❌"; 
+            }
+        }
+        
+        // Game 2 Logic
+        function checkQuiz(val) {
+            let msg = document.getElementById("quiz-msg");
+            if(val === 1024) { 
+                msg.style.color = "#2ecc71"; 
+                msg.innerText = "සුපිරි! නිවැරදියි 🌟"; 
+            } else { 
+                msg.style.color = "#e74c3c"; 
+                msg.innerText = "වැරදියි, නැවත සිතන්න! 🧐"; 
+            }
+        }
+    </script>
+</body>
+</html>
+        .game-area button:active {
             transform: scale
