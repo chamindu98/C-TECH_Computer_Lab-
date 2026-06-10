@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grade 09 - C-TECH</title>
     <style>
+        /* CSS Root වර්ණ (index.html එකට සමානයි) */
         :root {
             --primary-blue: #004d80;
             --light-blue: #00a4e4;
@@ -13,44 +14,175 @@
             --card-bg: #1c2541;
             --text-light: #f4f7f6;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+        }
+        
         body {
             background-color: var(--dark-bg);
-            background-image: radial-gradient(at 0% 0%, rgba(0, 164, 228, 0.15) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(255, 115, 0, 0.1) 0px, transparent 50%);
-            color: var(--text-light); display: flex; justify-content: center; padding: 20px; min-height: 100vh;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(0, 164, 228, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(255, 115, 0, 0.1) 0px, transparent 50%),
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+            color: var(--text-light); 
+            display: flex; 
+            justify-content: center; 
+            padding: 20px; 
+            min-height: 100vh;
         }
-        .web-container { width: 100%; max-width: 1100px; background-color: rgba(28, 37, 65, 0.85); backdrop-filter: blur(10px); border: 2px solid var(--light-blue); border-radius: 16px; overflow: hidden; }
-        header { background: linear-gradient(135deg, rgba(11,19,43,0.9) 0%, rgba(28,37,65,0.9) 100%); text-align: center; padding: 30px 20px; border-bottom: 2px solid var(--light-blue); display: flex; flex-direction: column; align-items: center; gap: 10px; }
-        .logo-container { width: 90px; height: 90px; background-color: white; border-radius: 50%; padding: 3px; overflow: hidden; border: 2px solid var(--light-blue); }
-        .logo-container img { width: 100%; height: 100%; object-fit: cover; }
-        header h1 { font-size: 1.8rem; }
         
-        nav { display: grid; grid-template-columns: repeat(4, 1fr); background-color: #0b132b; border-bottom: 2px solid var(--light-blue); }
-        nav a { color: white; text-align: center; padding: 15px 10px; font-weight: bold; text-decoration: none; border-right: 1px solid rgba(0, 164, 228, 0.2); }
-        nav a:hover { background-color: var(--light-blue); color: #0b132b; }
+        /* ප්‍රධාන බහාලුම */
+        .web-container { 
+            width: 100%; 
+            max-width: 1100px; 
+            background-color: rgba(28, 37, 65, 0.85); 
+            backdrop-filter: blur(10px); 
+            border: 2px solid var(--light-blue); 
+            border-radius: 16px; 
+            overflow: hidden; 
+            box-shadow: 0 0 30px rgba(0, 164, 228, 0.3);
+            padding: 25px;
+        }
+        
+        /* ප්‍රධාන ශීර්ෂය (Header Section - index.html තීම් එකට අනුව) */
+        header { 
+            background: linear-gradient(135deg, rgba(11,19,43,0.9) 0%, rgba(28,37,65,0.9) 100%); 
+            text-align: center; 
+            padding: 30px 20px; 
+            border-bottom: 2px solid var(--light-blue); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 15px; 
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+        
+        /* ලෝගෝ එක වටා ඇති Glow බලපෑම */
+        .logo-container { 
+            width: 130px; 
+            height: 130px; 
+            background-color: white; 
+            border-radius: 50%; 
+            padding: 3px; 
+            overflow: hidden; 
+            border: 2px solid var(--light-blue); 
+            box-shadow: 0 0 25px var(--light-blue);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .logo-container img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            border-radius: 50%;
+        }
+        
+        header h1 { 
+            font-size: 2.2rem; 
+            color: #fff;
+            text-shadow: 0 0 10px var(--light-blue);
+        }
 
-        .inner-page { padding: 30px; }
-        .inner-page h2 { color: var(--light-blue); margin-bottom: 20px; border-bottom: 2px solid var(--light-blue); padding-bottom: 10px; }
+        header p {
+            font-size: 1.1rem;
+            color: var(--light-blue);
+            font-weight: 500;
+        }
         
-        .term-tabs { display: flex; gap: 10px; margin-bottom: 25px; }
-        .term-btn { background-color: #1c2541; border: 2px solid var(--light-blue); color: white; padding: 12px 24px; font-size: 1rem; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.3s; }
-        .term-btn:hover, .term-btn.active { background-color: var(--orange); border-color: var(--orange); }
+        /* ප්‍රධාන ටැබ් තීරුව (මොබයිල් ෆෝන් සඳහා ස්ථාවර කර ඇත) */
+        .main-tab-bar { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            background-color: var(--card-bg); 
+            border: 1px solid var(--light-blue); 
+            border-radius: 8px; 
+            overflow: hidden; 
+            margin-bottom: 30px; 
+            width: 100%;
+        }
         
-        .term-content { display: none; background: rgba(11, 19, 43, 0.5); padding: 20px; border-radius: 12px; border: 1px solid rgba(0,164,228,0.2); }
-        .term-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .resource-box { background-color: var(--card-bg); border-top: 4px solid var(--light-blue); padding: 20px; border-radius: 8px; }
+        .main-tab-bar .tab-btn { 
+            flex: 1;
+            text-align: center; 
+            padding: 15px 20px; 
+            color: #f4f7f6;
+            font-size: 1rem;
+            font-weight: 600; 
+            text-decoration: none; 
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-right: 1px solid rgba(0, 164, 228, 0.2);
+        }
+        
+        .main-tab-bar .tab-btn:last-child { border-right: none; }
+        .main-tab-bar .tab-btn:hover { background-color: rgba(0, 164, 228, 0.15); color: var(--light-blue); }
+        .main-tab-bar .tab-btn.active { background-color: var(--light-blue); color: #ffffff; font-weight: bold; box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.2); }
+
+        /* ඇතුළු පිටුවේ හැඩගැන්වීම් */
+        .inner-page { padding: 10px 5px; }
+        .inner-page h2 { color: var(--light-blue); font-size: 1.6rem; margin-bottom: 25px; border-bottom: 2px solid rgba(0, 164, 228, 0.3); padding-bottom: 10px; }
+        
+        /* වාර (Terms) තෝරන බොත්තම් */
+        .term-tabs { display: flex; gap: 12px; margin-bottom: 25px; }
+        .term-btn { background-color: var(--card-bg); border: 2px solid var(--light-blue); color: white; padding: 12px 24px; font-size: 1rem; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .term-btn:hover, .term-btn.active { background-color: var(--orange); border-color: var(--orange); box-shadow: 0 4px 15px rgba(255, 115, 0, 0.2); }
+        
+        /* ක්‍රියාකාරී වාරයක අන්තර්ගතය (දැනට පළමු වාරය විවෘතව තැබීමට block කර ඇත) */
+        .term-content { display: block; background: rgba(11, 19, 43, 0.6); padding: 25px; border-radius: 12px; border: 1px solid rgba(0,164,228,0.2); margin-bottom: 20px; }
+        .term-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 25px; }
+        
+        /* සම්පත් කොටු (Resource Boxes) */
+        .resource-box { background-color: var(--card-bg); border-top: 4px solid var(--light-blue); padding: 22px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .resource-box.papers-box { border-top-color: var(--orange); }
         .resource-box.videos-box { border-top-color: #ff0000; }
-        .resource-box h4 { margin-bottom: 15px; }
-        .resource-list { list-style: none; }
-        .resource-list li { margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .resource-box h4 { margin-bottom: 18px; font-size: 1.15rem; color: #fff; }
         
-        .action-link { background-color: var(--light-blue); color: #0b132b; padding: 5px 12px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 0.85rem; }
-        .action-link:hover { background-color: var(--orange); color: white; }
+        .resource-list { list-style: none; }
+        .resource-list li { margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; }
+        .resource-list li:last-child { margin-bottom: 0; }
+        
+        /* බාගතකිරීම් සහ වීඩියෝ බොත්තම් */
+        .action-link { background-color: var(--light-blue); color: #0b132b; padding: 6px 14px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 0.85rem; transition: 0.3s; }
+        .action-link:hover { background-color: var(--orange); color: white; transform: scale(1.05); }
         .video-link { background-color: #ff0000; color: white; }
+        .video-link:hover { background-color: #cc0000; }
 
-        .back-btn { margin-top: 20px; background-color: var(--light-blue); color: #0b132b; border: none; padding: 12px 24px; font-weight: bold; border-radius: 5px; cursor: pointer; text-decoration: none; display: inline-block; }
-        @media (max-width: 768px) { .term-tabs { flex-direction: column; } nav { grid-template-columns: repeat(2, 1fr); } }
+        /* ආපසු යන බොත්තම */
+        .back-btn { margin-top: 15px; background-color: rgba(0, 164, 228, 0.1); border: 1px solid var(--light-blue); color: var(--light-blue); padding: 12px 24px; font-weight: bold; border-radius: 6px; cursor: pointer; text-decoration: none; display: inline-block; transition: 0.3s; }
+        .back-btn:hover { background-color: var(--light-blue); color: #0b132b; transform: translateX(-4px); }
+
+        /* --- RESPONSIVE MOBILE VIEW (index.html එක හා සමානව නිවැරදි කර ඇත) --- */
+        @media screen and (max-width: 600px) {
+            body { padding: 10px; }
+            .web-container { padding: 15px; }
+            header { padding: 20px 10px; }
+            header h1 { font-size: 1.6rem; }
+            
+            /* මොබයිල් එකේදී ටැබ් බාර් එක කැපීම වැළැක්වීම */
+            .main-tab-bar { flex-wrap: wrap; }
+            .main-tab-bar .tab-btn { flex: unset; width: 50%; padding: 12px 10px; font-size: 0.95rem; border-bottom: 1px solid rgba(0, 164, 228, 0.2); }
+            .main-tab-bar .tab-btn:nth-child(2n) { border-right: none; }
+            .main-tab-bar .tab-btn:nth-child(3), .main-tab-bar .tab-btn:nth-child(4) { border-bottom: none; }
+            
+            .logo-container { width: 100px; height: 100px; }
+            
+            /* වාර බොත්තම් මොබයිල් එකට ගැළපීම */
+            .term-tabs { flex-direction: column; gap: 8px; }
+            .term-btn { width: 100%; text-align: center; padding: 10px; }
+            
+            .term-grid { grid-template-columns: 1fr; gap: 20px; }
+            .inner-page h2 { font-size: 1.3rem; }
+        }
     </style>
 </head>
 <body>
