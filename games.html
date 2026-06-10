@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>C-TECH - IT Educational Games</title>
     <style>
-           /* CSS Root වර්ණ - ලෝගෝ එකට අනුව */
+        /* CSS Root වර්ණ - ලෝගෝ එකට අනුව */
         :root {
             --primary-blue: #004d80;
             --light-blue: #00a4e4;
@@ -38,7 +38,7 @@
             min-height: 100vh;
         }
 
-        /* ප්‍රධාන ආකෘතිය */
+        /* ප්‍රධාන ආකෘතිය (Fixed Container Name) */
         .web-container {
             width: 100%;
             max-width: 1100px;
@@ -48,45 +48,47 @@
             border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 0 30px rgba(0, 164, 228, 0.3);
+            padding: 25px; /* ඇතුළත ඉඩ ලස්සනට තබා ගැනීමට */
         }
 
         /* 1. ප්‍රධාන ශීර්ෂය (Header Section) */
         header {
             background: linear-gradient(135deg, rgba(11,19,43,0.9) 0%, rgba(28,37,65,0.9) 100%);
             text-align: center;
-            padding: 40px 20px;
+            padding: 30px 20px;
             border-bottom: 2px solid var(--light-blue);
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 15px;
+            border-radius: 12px;
+            margin-bottom: 25px;
         }
 
-       /* ලෝගෝ එක රඳවන බහාලුම (Container) */
-.logo-container {
-    width: 140px;
-    height: 140px;
-    background-color: white;
-    border-radius: 50%; /* බාහිර කොටුව සම්පූර්ණයෙන්ම රවුම් කරයි */
-    padding: 3px; /* සුදු පාට Border එකක් වගේ ලස්සනට පෙනීමට */
-    box-shadow: 0 0 20px var(--light-blue);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden; /* රවුමෙන් පිටත යන සියලුම කොටස් ඉවත් කරයි */
-    border: 2px solid var(--light-blue);
-}
+        /* ලෝගෝ එක රඳවන බහාලුම */
+        .logo-container {
+            width: 130px;
+            height: 130px;
+            background-color: white;
+            border-radius: 50%;
+            padding: 3px;
+            box-shadow: 0 0 25px var(--light-blue);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border: 2px solid var(--light-blue);
+        }
 
-/* ලෝගෝ ඉමේජ් එක රවුමට කැපී පෙනෙන කොටස */
-.logo-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* රූපය විකෘති නොවී රවුම ඇතුලතටම සෙට් කරයි */
-    border-radius: 50%; /* ඉමේජ් එකේ සුදු කොන් හතරම රවුමට කපා දමයි */
-}
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
 
         header h1 {
-            font-size: 2.3rem;
+            font-size: 2.2rem;
             color: #fff;
             text-shadow: 0 0 10px var(--light-blue);
         }
@@ -97,156 +99,150 @@
             font-weight: 500;
         }
 
-.main-tab-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #1c2541; /* පැරණි කාඩ් පසුබිම් වර්ණය */
-    border: 1px solid #00a4e4; /* ලයිට් බ්ලූ බෝඩර් එක */
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 25px;
-}
-
-/* ටැබ් ලින්ක්ස් වල පොදු ස්වරූපය */
-.main-tab-bar .tab-btn {
-    flex: 1;
-    text-align: center;
-    padding: 15px 20px;
-    color: #f4f7f6;
-    font-size: 1rem;
-    font-weight: 600;
-    text-decoration: none; /* Underline සම්පූර්ණයෙන්ම ඉවත් කරයි */
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border-right: 1px solid rgba(0, 164, 228, 0.2);
-}
-
-.main-tab-bar .tab-btn:last-child {
-    border-right: none;
-}
-
-/* මවුස් එක උඩට ලං කරන විට (Hover) */
-.main-tab-bar .tab-btn:hover {
-    background-color: rgba(0, 164, 228, 0.15);
-    color: #00a4e4;
-}
-
-/* ඔයා ආස කලින් තිබ්බා වගේ Active වෙන පිටුවේ පාට නිල් පැහැයෙන් පෙන්වීම */
-.main-tab-bar .tab-btn.active {
-    background-color: #00a4e4; /* ලස්සන ලයිට් බ්ලූ වර්ණය */
-    color: #ffffff;
-    font-weight: bold;
-    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.2);
-}
-
-        /* Screen එකේ පළල පික්සල් 600 ට වඩා අඩු ෆෝන් සඳහා පමණක් ක්‍රියාත්මක වේ */
-@media screen and (max-width: 600px) {
-    /* ටැබ් බාර් එක පේළි 2කට ලස්සනට බෙදා වෙන් කිරීම */
-    .main-tab-bar {
-        display: flex;
-        flex-wrap: wrap; /* ඉඩ මදි නම් ඉතිරි ටැබ් පල්ලෙහා පේළියට ගනී */
-        border-radius: 8px;
-    }
-
-    /* හැම ටැබ් බටන් එකකටම 50% ක පළලක් ලබා දී කොටු 4ක් ලෙස සකස් කිරීම */
-    .main-tab-bar .tab-btn {
-        flex: unset;
-        width: 50%; /* පේළියකට ටැබ් 2 බැගින් පේළි 2ක් සාදයි */
-        box-sizing: border-box;
-        padding: 12px 10px; /* ෆෝන් එකට ගැලපෙන පරිදි පෑඩින් අඩු කිරීම */
-        font-size: 0.95rem; /* අකුරු සියුම්ව කුඩා කිරීම */
-        border-right: 1px solid rgba(0, 164, 228, 0.2);
-        border-bottom: 1px solid rgba(0, 164, 228, 0.2); /* පේළි දෙක අතර මැදින් වැටෙන ඉර */
-    }
-
-    /* දකුණු පස සහ පතුලේ බෝඩර්ස් නිවැරදිව පාලනය කිරීම */
-    .main-tab-bar .tab-btn:nth-child(2n) {
-        border-right: none; /* දෙවැනි සහ සිව්වැනි ටැබ් වල දකුණු ඉර අයින් කරයි */
-    }
-
-    .main-tab-bar .tab-btn:nth-child(3),
-    .main-tab-bar .tab-btn:nth-child(4) {
-        border-bottom: none; /* පල්ලෙහා පේළියේ තියෙන ටැබ් වල යට ඉර අයින් කරයි */
-    }
-    
-    /* ලෝගෝ එක සහ මාතෘකා මොබයිල් එකට ගැලපෙන සේ කුඩා කිරීම */
-    .logo-container .main-logo {
-        width: 90px;
-        height: 90px;
-    }
-    .logo-container .main-title {
-        font-size: 2rem;
-    }
-    .logo-container .main-subtitle {
-        font-size: 1rem;
-    }
-    .logo-container .tagline {
-        font-size: 0.85rem;
-    }
-}
-    </style>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <div class="logo-container">
-                <img src="logo.png" alt="C-TECH Logo">
-            </div>
-            <h1>C-TECH Computer Lab & Education Institute</h1>
-            <p>පරිගණක විද්‍යාවේ සහ තාක්ෂණයේ විශිෂ්ටතමයා</p>
-        </header>
-        <nav class="main-tab-bar">
-            <a href="index.html" class="tab-btn">Home</a>
-            <a href="assignments.html" class="tab-btn">Assignments</a>
-            <a href="tech-updates.html" class="tab-btn">Tech Updates</a>
-            <a href="games.html" class="tab-btn active">Games</a>
-        </nav>
-        <h2>🎮 IT අධ්‍යාපනික ක්‍රීඩා (Educational Games)</h2>
-        <div class="game-grid">
-            
-            <div class="game-card">
-                <h3>🔢 ද්විමය සංඛ්‍යා ක්‍රීඩාව (Binary Guess)</h3>
-                <p>දී ඇති ද්විමය (Binary) අගයට අදාළ දශම (Decimal) අගය සොයන්න.</p>
-                <div class="game-area">
-                    <h2 style="border:none; margin:0;" id="binary-code">0101</h2>
-                    <input type="number" id="binary-ans" placeholder="Decimal අගය ලියන්න">
-                    <button onclick="checkBinary()">Check</button>
-                    <p id="binary-msg" style="margin-top:10px; font-weight:bold;"></p>
-                </div>
-            </div>
-
-            <div class="game-card">
-                <h3>⚡ Fast IT Quiz (වේගවත් ප්‍රශ්න විචාරාත්මක ක්‍රීඩාව)</h3>
-                <p>කෙටි ප්‍රශ්න වලට නිවැරදි පිළිතුර තෝරන්න.</p>
-                <div class="game-area">
-                    <p id="game-q" style="margin-bottom:15px; font-weight:bold;">1 KB යනු කොපමණද?</p>
-                    <div style="display:flex; gap:10px;">
-                        <button onclick="checkQuiz(1024)">1024 Bytes</button>
-                        <button onclick="checkQuiz(1000)">1000 Bytes</button>
-                    </div>
-                    <p id="quiz-msg" style="margin-top:10px; font-weight:bold;"></p>
-                </div>
-            </div>
-
-        </div>
-        <a href="index.html" class="back-link">← ආපසු මුල් පිටුවට</a>
-    </div>
-
-    <script>
-        // Game 1 Logic
-        function checkBinary() {
-            let ans = document.getElementById("binary-ans").value;
-            let msg = document.getElementById("binary-msg");
-            if(ans == "5") { msg.style.color = "#2ecc71"; msg.innerText = "නිවැරදියි! 🎉 (0101 = 5)"; }
-            else { msg.style.color = "#e74c3c"; msg.innerText = "නැවත උත්සාහ කරන්න! ❌"; }
+        /* --- ටැබ් බාර් එක --- */
+        .main-tab-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--card-bg);
+            border: 1px solid var(--light-blue);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            width: 100%;
         }
-        // Game 2 Logic
-        function checkQuiz(val) {
-            let msg = document.getElementById("quiz-msg");
-            if(val === 1024) { msg.style.color = "#2ecc71"; msg.innerText = "සුපිරි! නිවැරදියි 🌟"; }
-            else { msg.style.color = "#e74c3c"; msg.innerText = "වැරදියි, නැවත සිතන්න! 🧐"; }
+
+        .main-tab-bar .tab-btn {
+            flex: 1;
+            text-align: center;
+            padding: 15px 20px;
+            color: #f4f7f6;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-right: 1px solid rgba(0, 164, 228, 0.2);
         }
-    </script>
-</body>
-</html>
+
+        .main-tab-bar .tab-btn:last-child {
+            border-right: none;
+        }
+
+        .main-tab-bar .tab-btn:hover {
+            background-color: rgba(0, 164, 228, 0.15);
+            color: var(--light-blue);
+        }
+
+        .main-tab-bar .tab-btn.active {
+            background-color: var(--light-blue);
+            color: #ffffff;
+            font-weight: bold;
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        /* පිටුවේ ප්‍රධාන මාතෘකාව */
+        .page-title {
+            font-size: 1.6rem;
+            color: #fff;
+            margin-bottom: 25px;
+            border-bottom: 2px solid rgba(0, 164, 228, 0.3);
+            padding-bottom: 10px;
+        }
+
+        /* --- ගේම් ග්‍රිඩ් සහ කාඩ් හැඩගැන්වීම් --- */
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .game-card {
+            background-color: var(--card-bg);
+            border: 1px solid rgba(0, 164, 228, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 164, 228, 0.2);
+            border-color: var(--light-blue);
+        }
+
+        .game-card h3 {
+            color: #fff;
+            font-size: 1.25rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .game-card p {
+            color: #a0aec0;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* ක්‍රීඩා කරන කලාපය (Game Area) */
+        .game-area {
+            background-color: rgba(11, 19, 43, 0.6);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            border: 1px dashed rgba(0, 164, 228, 0.4);
+        }
+
+        .game-area h2 {
+            font-size: 2.2rem;
+            color: var(--orange);
+            letter-spacing: 4px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(255, 115, 0, 0.3);
+        }
+
+        /* ඉන්පුට් සහ බොත්තම් හැඩගැන්වීම් */
+        .game-area input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--dark-bg);
+            border: 1px solid rgba(0, 164, 228, 0.5);
+            border-radius: 6px;
+            color: #fff;
+            font-size: 1rem;
+            text-align: center;
+            margin-bottom: 12px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .game-area input[type="number"]:focus {
+            border-color: var(--light-blue);
+            box-shadow: 0 0 8px rgba(0, 164, 228, 0.4);
+        }
+
+        .game-area button, .btn-group button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(90deg, #008cd1, var(--light-blue));
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.1s;
+        }
+
+        .game-area button:hover, .btn-group button:hover {
+            background: linear-gradient(90deg, var(--light-blue), #00b4ff);
+            box-shadow: 0 0 15px rgba(0, 164, 228, 0.4);
+        }
+
+        .game-area button:active {
+            transform: scale
