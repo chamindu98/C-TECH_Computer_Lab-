@@ -88,6 +88,52 @@
     font-weight: bold;
     box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.2);
 }
+
+        /* Screen එකේ පළල පික්සල් 600 ට වඩා අඩු ෆෝන් සඳහා පමණක් ක්‍රියාත්මක වේ */
+@media screen and (max-width: 600px) {
+    /* ටැබ් බාර් එක පේළි 2කට ලස්සනට බෙදා වෙන් කිරීම */
+    .main-tab-bar {
+        display: flex;
+        flex-wrap: wrap; /* ඉඩ මදි නම් ඉතිරි ටැබ් පල්ලෙහා පේළියට ගනී */
+        border-radius: 8px;
+    }
+
+    /* හැම ටැබ් බටන් එකකටම 50% ක පළලක් ලබා දී කොටු 4ක් ලෙස සකස් කිරීම */
+    .main-tab-bar .tab-btn {
+        flex: unset;
+        width: 50%; /* පේළියකට ටැබ් 2 බැගින් පේළි 2ක් සාදයි */
+        box-sizing: border-box;
+        padding: 12px 10px; /* ෆෝන් එකට ගැලපෙන පරිදි පෑඩින් අඩු කිරීම */
+        font-size: 0.95rem; /* අකුරු සියුම්ව කුඩා කිරීම */
+        border-right: 1px solid rgba(0, 164, 228, 0.2);
+        border-bottom: 1px solid rgba(0, 164, 228, 0.2); /* පේළි දෙක අතර මැදින් වැටෙන ඉර */
+    }
+
+    /* දකුණු පස සහ පතුලේ බෝඩර්ස් නිවැරදිව පාලනය කිරීම */
+    .main-tab-bar .tab-btn:nth-child(2n) {
+        border-right: none; /* දෙවැනි සහ සිව්වැනි ටැබ් වල දකුණු ඉර අයින් කරයි */
+    }
+
+    .main-tab-bar .tab-btn:nth-child(3),
+    .main-tab-bar .tab-btn:nth-child(4) {
+        border-bottom: none; /* පල්ලෙහා පේළියේ තියෙන ටැබ් වල යට ඉර අයින් කරයි */
+    }
+    
+    /* ලෝගෝ එක සහ මාතෘකා මොබයිල් එකට ගැලපෙන සේ කුඩා කිරීම */
+    .logo-container .main-logo {
+        width: 90px;
+        height: 90px;
+    }
+    .logo-container .main-title {
+        font-size: 2rem;
+    }
+    .logo-container .main-subtitle {
+        font-size: 1rem;
+    }
+    .logo-container .tagline {
+        font-size: 0.85rem;
+    }
+}
     </style>
 </head>
 <body>
