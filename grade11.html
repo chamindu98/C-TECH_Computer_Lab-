@@ -138,7 +138,7 @@
         .term-btn:hover, .term-btn.active { background-color: var(--orange); border-color: var(--orange); box-shadow: 0 4px 15px rgba(255, 115, 0, 0.2); }
         
         /* ක්‍රියාකාරී වාරයක අන්තර්ගතය (දැනට පළමු වාරය විවෘතව තැබීමට block කර ඇත) */
-        .term-content { display: block; background: rgba(11, 19, 43, 0.6); padding: 25px; border-radius: 12px; border: 1px solid rgba(0,164,228,0.2); margin-bottom: 20px; }
+        .term-content { display: none; background: rgba(11, 19, 43, 0.6); padding: 25px; border-radius: 12px; border: 1px solid rgba(0,164,228,0.2); margin-bottom: 20px; }
         .term-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 25px; }
         
         /* සම්පත් කොටු (Resource Boxes) */
@@ -229,7 +229,7 @@
                 </div>
             </div>
 
-            <div id="term2" class="term-content">
+            <div id="term2" class="term-content" style="display: none;">
                 <div class="term-grid">
                     <div class="resource-box">
                         <h4>📚 පාඩම් සටහන් (Notes)</h4>
@@ -255,7 +255,7 @@
                 </div>
             </div>
 
-            <div id="term3" class="term-content">
+            <div id="term3" class="term-content" style="display: none;">
                 <div class="term-grid">
                     <div class="resource-box"><h4 style="opacity:0.5;">📚 පාඩම් සටහන් නැත</h4></div>
                     <div class="resource-box papers-box"><h4 style="opacity:0.5;">📝 ප්‍රශ්න පත්‍ර නැත</h4></div>
