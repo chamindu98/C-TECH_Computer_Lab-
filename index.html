@@ -366,9 +366,9 @@
                     <p>📞 දුරකථන: 071-2675988<br>📍 ස්ථානය: C-TECH Computer Lab - වැලිපැන්න</p>
                 </div>
             </div>
-            <div style="text-align: center; margin-top: 15px; font-size: 0.9rem; color: var(--light-blue);">
-    <p>💻 වෙබ් අඩවියට පැමිණි පිරිස:</p>
-    <img src="https://hitwebcounter.com/counter/counter.php?page=1000723650&style=0005&nbdigits=5&type=page&initCount=0" title="Free Counter" Alt="web counter" border="0" />
+           <div class="counter-box" style="text-align: center; margin: 20px 0; padding: 15px; background: var(--card-bg); border-radius: 8px; border: 1px solid var(--light-blue);">
+    <h4 style="color: #fff; margin-bottom: 5px;">🌍 මුළු පැමිණීම් සංඛ්‍යාව (Total Visitors)</h4>
+    <span id="total-visitors" style="font-size: 2rem; font-weight: bold; color: var(--orange); text-shadow: 0 0 10px var(--orange);">Loading...</span>
 </div>
         </div>
 
@@ -474,6 +474,41 @@ window.onload = function() {
         history.replaceState({ tab: 'home' }, "", "#home");
     }
 };
+</script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+<script>
+    // 🔴 ඔයාගේ Firebase Config විස්තර මෙතනට දාන්න (Replace කරන්න)
+    const firebaseConfig = {
+  apiKey: "AIzaSyAtfTwhOmDOLAxxTdXQKwaMNthLMpRgBjQ",
+  authDomain: "ctech-counter.firebaseapp.com",
+  projectId: "ctech-counter",
+  storageBucket: "ctech-counter.firebasestorage.app",
+  messagingSenderId: "892307263196",
+  appId: "1:892307263196:web:bf443261191503be652e19"
+};
+
+    // Firebase Initialize කිරීම
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    const visitorRef = database.ref('visitor_count');
+
+    // 🕵️‍♂️ එකම ළමයා පිටුව Refresh කරද්දී දිගටම Count වෙන එක වැළැක්වීම (Session Check)
+    if (!sessionStorage.getItem('visited')) {
+        // සර්වර් එකේ තියෙන අගය 1 කින් වැඩි කිරීම (Transaction එකක් මඟින් ආරක්ෂිතව)
+        visitorRef.transaction(currentCount => {
+            return (currentCount || 0) + 1;
+        });
+        // මේ සැරේට Count කළා කියලා බ්‍රවුසර් එකේ මතක තබා ගැනීම
+        sessionStorage.setItem('visited', 'true');
+    }
+
+    // 🔄 Database එකේ අගය වෙනස් වන සැම විටම රියල්-ටයිම් සයිට් එකේ අප්ඩේට් කිරීම
+    visitorRef.on('value', (snapshot) => {
+        const count = snapshot.val() || 0;
+        document.getElementById('total-visitors').innerText = count.toLocaleString(); // ලස්සනට කොමා (,) දාලා පෙන්වන්න
+    });
 </script>
 </body>
 </html>
