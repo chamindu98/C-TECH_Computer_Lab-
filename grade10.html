@@ -286,13 +286,23 @@
     </div>
 
     <script>
-        function openTerm(evt, termId) {
+        function openTerm(evt, termName) {
             var i, termcontent, termlinks;
+            
+            // සියලුම වාර වල දත්ත මුලින් හංගන්න
             termcontent = document.getElementsByClassName("term-content");
-            for (i = 0; i < termcontent.length; i++) { termcontent[i].style.display = "none"; }
+            for (i = 0; i < termcontent.length; i++) {
+                termcontent[i].style.display = "none";
+            }
+            
+            // සියලුම බොත්තම් වල active ක්ලාස් එක අයින් කරන්න
             termlinks = document.getElementsByClassName("term-btn");
-            for (i = 0; i < termlinks.length; i++) { termlinks[i].className = termlinks[i].className.replace(" active", ""); }
-            document.getElementById(termId).style.display = "block";
+            for (i = 0; i < termlinks.length; i++) {
+                termlinks[i].className = termlinks[i].className.replace(" active", "");
+            }
+            
+            // තෝරාගත් වාරයේ දත්ත පමණක් පෙන්වන්න, බොත්තම active කරන්න
+            document.getElementById(termName).style.display = "block";
             evt.currentTarget.className += " active";
         }
     </script>
