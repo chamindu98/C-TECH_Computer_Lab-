@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grade 10 - C-TECH</title>
-   <style>
+    <style>
         /* CSS Root වර්ණ (index.html එකට සමානයි) */
         :root {
             --primary-blue: #004d80;
@@ -50,7 +50,7 @@
             padding: 25px;
         }
         
-        /* ප්‍රධාන ශීර්ෂය (Header Section - index.html තීම් එකට අනුව) */
+        /* ප්‍රධාන ශීර්ෂය */
         header { 
             background: linear-gradient(135deg, rgba(11,19,43,0.9) 0%, rgba(28,37,65,0.9) 100%); 
             text-align: center; 
@@ -64,7 +64,6 @@
             margin-bottom: 25px;
         }
         
-        /* ලෝගෝ එක වටා ඇති Glow බලපෑම */
         .logo-container { 
             width: 130px; 
             height: 130px; 
@@ -91,20 +90,14 @@
             color: #fff;
             text-shadow: 0 0 10px var(--light-blue);
         }
-
-        header p {
-            font-size: 1.1rem;
-            color: var(--light-blue);
-            font-weight: 500;
-        }
         
-        /* ප්‍රධාන ටැබ් තීරුව (මොබයිල් ෆෝන් සඳහා ස්ථාවර කර ඇත) */
+        /* ප්‍රධාන ටැබ් තීරුව (මොබයිල් සහ පසුබිම් දෝෂ මඟහරවා ඇත) */
         .main-tab-bar { 
-            display: flex; 
+            display: flex !important; 
             justify-content: space-between; 
             align-items: center; 
-            background-color: var(--card-bg); 
-            border: 1px solid var(--light-blue); 
+            background-color: var(--card-bg) !important; 
+            border: 1px solid var(--light-blue) !important; 
             border-radius: 8px; 
             overflow: hidden; 
             margin-bottom: 30px; 
@@ -115,18 +108,20 @@
             flex: 1;
             text-align: center; 
             padding: 15px 20px; 
-            color: #f4f7f6;
+            color: #f4f7f6 !important;
             font-size: 1rem;
             font-weight: 600; 
             text-decoration: none; 
             cursor: pointer;
             transition: all 0.3s ease;
-            border-right: 1px solid rgba(0, 164, 228, 0.2);
+            border-right: 1px solid rgba(0, 164, 228, 0.2) !important;
+            background: transparent !important;
+            outline: none !important;
         }
         
-        .main-tab-bar .tab-btn:last-child { border-right: none; }
-        .main-tab-bar .tab-btn:hover { background-color: rgba(0, 164, 228, 0.15); color: var(--light-blue); }
-        .main-tab-bar .tab-btn.active { background-color: var(--light-blue); color: #ffffff; font-weight: bold; box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.2); }
+        .main-tab-bar .tab-btn:last-child { border-right: none !important; }
+        .main-tab-bar .tab-btn:hover { background-color: rgba(0, 164, 228, 0.15) !important; color: var(--light-blue) !important; }
+        .main-tab-bar .tab-btn.active { background-color: var(--light-blue) !important; color: #ffffff !important; font-weight: bold; box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.2) !important; }
 
         /* ඇතුළු පිටුවේ හැඩගැන්වීම් */
         .inner-page { padding: 10px 5px; }
@@ -137,11 +132,11 @@
         .term-btn { background-color: var(--card-bg); border: 2px solid var(--light-blue); color: white; padding: 12px 24px; font-size: 1rem; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.3s; }
         .term-btn:hover, .term-btn.active { background-color: var(--orange); border-color: var(--orange); box-shadow: 0 4px 15px rgba(255, 115, 0, 0.2); }
         
-        /* ක්‍රියාකාරී වාරයක අන්තර්ගතය (දැනට පළමු වාරය විවෘතව තැබීමට block කර ඇත) */
-        .term-content { display: block; background: rgba(11, 19, 43, 0.6); padding: 25px; border-radius: 12px; border: 1px solid rgba(0,164,228,0.2); margin-bottom: 20px; }
+        /* ⚠️ මෙතන තිබුණ display: block; එක display: none; කර නිවැරදි කරන ලදී */
+        .term-content { display: none; background: rgba(11, 19, 43, 0.6); padding: 25px; border-radius: 12px; border: 1px solid rgba(0,164,228,0.2); margin-bottom: 20px; }
         .term-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 25px; }
         
-        /* සම්පත් කොටු (Resource Boxes) */
+        /* සම්පත් කොටු */
         .resource-box { background-color: var(--card-bg); border-top: 4px solid var(--light-blue); padding: 22px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .resource-box.papers-box { border-top-color: var(--orange); }
         .resource-box.videos-box { border-top-color: #ff0000; }
@@ -161,22 +156,20 @@
         .back-btn { margin-top: 15px; background-color: rgba(0, 164, 228, 0.1); border: 1px solid var(--light-blue); color: var(--light-blue); padding: 12px 24px; font-weight: bold; border-radius: 6px; cursor: pointer; text-decoration: none; display: inline-block; transition: 0.3s; }
         .back-btn:hover { background-color: var(--light-blue); color: #0b132b; transform: translateX(-4px); }
 
-        /* --- RESPONSIVE MOBILE VIEW (index.html එක හා සමානව නිවැරදි කර ඇත) --- */
+        /* --- RESPONSIVE MOBILE VIEW --- */
         @media screen and (max-width: 600px) {
             body { padding: 10px; }
             .web-container { padding: 15px; }
             header { padding: 20px 10px; }
             header h1 { font-size: 1.6rem; }
             
-            /* මොබයිල් එකේදී ටැබ් බාර් එක කැපීම වැළැක්වීම */
-            .main-tab-bar { flex-wrap: wrap; }
-            .main-tab-bar .tab-btn { flex: unset; width: 50%; padding: 12px 10px; font-size: 0.95rem; border-bottom: 1px solid rgba(0, 164, 228, 0.2); }
-            .main-tab-bar .tab-btn:nth-child(2n) { border-right: none; }
-            .main-tab-bar .tab-btn:nth-child(3), .main-tab-bar .tab-btn:nth-child(4) { border-bottom: none; }
+            .main-tab-bar { flex-wrap: wrap !important; }
+            .main-tab-bar .tab-btn { flex: unset !important; width: 50% !important; padding: 12px 10px !important; font-size: 0.95rem !important; border-bottom: 1px solid rgba(0, 164, 228, 0.2) !important; }
+            .main-tab-bar .tab-btn:nth-child(2n) { border-right: none !important; }
+            .main-tab-bar .tab-btn:nth-child(3), .main-tab-bar .tab-btn:nth-child(4) { border-bottom: none !important; }
             
             .logo-container { width: 100px; height: 100px; }
             
-            /* වාර බොත්තම් මොබයිල් එකට ගැළපීම */
             .term-tabs { flex-direction: column; gap: 8px; }
             .term-btn { width: 100%; text-align: center; padding: 10px; }
             
@@ -192,8 +185,8 @@
             <h1>Grade 10 - තොරතුරු හා සන්නිවේදන තාක්ෂණය</h1>
         </header>
 
-          <nav class="main-tab-bar">
-            <a href="index.html" class="tab-btn active">Home</a>
+        <nav class="main-tab-bar">
+            <a href="index.html" class="tab-btn">Home</a>
             <a href="assignments.html" class="tab-btn">Assignments</a>
             <a href="tech-updates.html" class="tab-btn">Tech Updates</a>
             <a href="games.html" class="tab-btn">Games</a>
@@ -229,7 +222,7 @@
                 </div>
             </div>
 
-            <div id="term2" class="term-content">
+            <div id="term2" class="term-content" style="display: none;">
                 <div class="term-grid">
                     <div class="resource-box">
                         <h4>📚 පාඩම් සටහන් (Notes)</h4>
@@ -258,7 +251,7 @@
                 </div>
             </div>
 
-            <div id="term3" class="term-content">
+            <div id="term3" class="term-content" style="display: none;">
                 <div class="term-grid">
                     <div class="resource-box">
                         <h4>📚 පාඩම් සටහන් (Notes)</h4>
