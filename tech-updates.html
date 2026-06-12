@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assignments - C-TECH</title>
+    <title>Tech Updates - C-TECH</title>
     
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" sizes="180x180" href="favicon.png">
 
     <style>
-        /* CSS Root වර්ණ (පැරණි පිටු වල වර්ණ තේමාවම වේ) */
+        /* CSS Root වර්ණ */
         :root {
             --primary-blue: #004d80;
             --light-blue: #00a4e4;
@@ -128,93 +128,108 @@
         .inner-page { padding: 10px 5px; }
         .inner-page h2 { color: var(--light-blue); font-size: 1.6rem; margin-bottom: 25px; border-bottom: 2px solid rgba(0, 164, 228, 0.3); padding-bottom: 10px; }
         
-        /* 🛠️ Assignment Row Layout (ඔයා එවපු ආකෘතියට අනුව) */
-        .assignment-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            margin-bottom: 25px;
+        /* 📰 Tech Updates Grid Layout */
+        .updates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
         }
 
-        .assignment-row {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            width: 100%;
-        }
-
-        /* වම් පැත්තේ ඇති Grade බට්ටා */
-        .grade-badge {
+        .update-card {
             background-color: var(--card-bg);
-            border: 2px solid var(--light-blue);
-            color: white;
-            font-weight: bold;
-            font-size: 1.1rem;
-            width: 90px;
-            height: 75px;
+            border: 1px solid rgba(0, 164, 228, 0.2);
             border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            flex-shrink: 0; /* ප්‍රමාණය කුඩා වීම වැළැක්වීමට */
         }
-        
-        .grade-badge span {
-            font-size: 0.75rem;
+
+        .update-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--light-blue);
+            box-shadow: 0 8px 25px rgba(0, 164, 228, 0.2);
+        }
+
+        /* පින්තූරය තබන කොටස */
+        .card-image {
+            width: 100%;
+            height: 180px;
+            background-color: rgba(11, 19, 43, 0.5);
+            overflow: hidden;
+            border-bottom: 2px solid rgba(0, 164, 228, 0.1);
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .update-card:hover .card-image img {
+            transform: scale(1.05);
+        }
+
+        /* කාඩ් එකේ විස්තර */
+        .card-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-date {
+            font-size: 0.8rem;
             color: var(--light-blue);
+            font-weight: bold;
+            margin-bottom: 8px;
             text-transform: uppercase;
         }
 
-        /* මැද ඇති දිගු Assignment විස්තර තීරුව */
-        .assignment-details-bar {
-            flex: 1;
-            background-color: var(--card-bg);
-            border: 1px solid rgba(0, 164, 228, 0.4);
-            border-radius: 12px;
-            padding: 15px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            height: 75px;
-        }
-
-        .assignment-title {
-            font-size: 1.1rem;
-            font-weight: 600;
+        .card-title {
+            font-size: 1.2rem;
             color: #fff;
+            margin-bottom: 12px;
+            font-weight: 600;
+            line-height: 1.4;
         }
 
-        /* දකුණු පැත්තේ ඇති Open බොත්තම */
-        .open-btn {
+        .card-text {
+            font-size: 0.95rem;
+            color: #a6b1e1;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .read-more-btn {
+            margin-top: auto; /* බොත්තම හැමවිටම කාඩ් එකේ පතුලටම ගැනීමට */
             background-color: transparent;
             border: 2px solid var(--light-blue);
             color: var(--light-blue);
-            padding: 8px 24px;
-            font-size: 0.95rem;
+            padding: 8px 16px;
+            font-size: 0.9rem;
             font-weight: bold;
-            border-radius: 8px;
+            border-radius: 6px;
             text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
+            text-align: center;
+            transition: 0.3s;
         }
 
-        .open-btn:hover {
+        .read-more-btn:hover {
             background-color: var(--orange);
             border-color: var(--orange);
             color: white;
-            box-shadow: 0 0 15px rgba(255, 115, 0, 0.4);
-            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(255, 115, 0, 0.3);
         }
 
         .back-btn { margin-top: 15px; background-color: rgba(0, 164, 228, 0.1); border: 1px solid var(--light-blue); color: var(--light-blue); padding: 12px 24px; font-weight: bold; border-radius: 6px; cursor: pointer; text-decoration: none; display: inline-block; transition: 0.3s; }
         .back-btn:hover { background-color: var(--light-blue); color: #0b132b; transform: translateX(-4px); }
 
         /* --- RESPONSIVE MOBILE VIEW --- */
-        @media screen and (max-width: 650px) {
+        @media screen and (max-width: 600px) {
             body { padding: 10px; }
             .web-container { padding: 15px; }
             header { padding: 20px 10px; }
@@ -227,12 +242,7 @@
             
             .logo-container { width: 100px; height: 100px; }
             .inner-page h2 { font-size: 1.3rem; }
-
-            /* මොබයිල් ෆෝන් වලදී Row එක පිළිවෙලට හැදීම */
-            .assignment-row { flex-direction: column; align-items: flex-start; gap: 8px; background: rgba(28, 37, 65, 0.5); padding: 12px; border-radius: 12px; border: 1px solid rgba(0, 164, 228, 0.2); }
-            .grade-badge { width: 100%; height: 40px; flex-direction: row; gap: 8px; border-radius: 6px; }
-            .assignment-details-bar { width: 100%; height: auto; flex-direction: column; gap: 15px; align-items: flex-start; padding: 10px 5px; background: transparent; border: none; box-shadow: none; }
-            .open-btn { width: 100%; text-align: center; }
+            .updates-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -240,53 +250,59 @@
     <div class="web-container">
         <header>
             <div class="logo-container"><img src="logo.png" alt="C-TECH Logo"></div>
-            <h1>C-TECH - Assignments</h1>
+            <h1>C-TECH - Tech Updates</h1>
         </header>
 
         <nav class="main-tab-bar">
             <a href="index.html" class="tab-btn">Home</a>
-            <a href="assignments.html" class="tab-btn active">Assignments</a>
-            <a href="tech-updates.html" class="tab-btn">Tech Updates</a>
+            <a href="assignments.html" class="tab-btn">Assignments</a>
+            <a href="tech-updates.html" class="tab-btn active">Tech Updates</a>
             <a href="games.html" class="tab-btn">Games</a>
         </nav>
 
         <div class="inner-page">
-            <h2>පැවරුම් (Assignments List)</h2>
+            <h2>තාක්ෂණික ලෝකයේ අලුත්ම තොරතුරු</h2>
             
-            <div class="assignment-container">
+            <div class="updates-grid">
 
-                <div class="assignment-row">
-                    <div class="grade-badge">
-                        <span>Grade</span>06
+                <div class="update-card">
+                    <div class="card-image">
+                        <img src="news1.jpg" alt="Artificial Intelligence" onerror="this.src='https://images.unsplash.com/photo-1677442136019-21780efad99a?w=500';">
                     </div>
-                    <div class="assignment-details-bar">
-                        <div class="assignment-title">Assignment 01 - පරිගණකයේ මූලිකාංග</div>
-                        <a href="assignments/g6_assign01.pdf" class="open-btn" target="_blank">Open</a>
+                    <div class="card-body">
+                        <div class="card-date">2026 ජූනි 12</div>
+                        <div class="card-title">කෘත්‍රිම බුද්ධිය (AI) සහ අධ්‍යාපනයේ අනාගත පෙරළිය</div>
+                        <div class="card-text">නූතන අධ්‍යාපන පද්ධතිය තුළ කෘත්‍රිම බුද්ධිය (AI) භාවිතයෙන් සිසුන්ට වඩාත් ගැලපෙන ලෙස පාඩම් මාලා සකස් කරගන්නා ආකාරය සහ ස්වයංක්‍රීය ඉගෙනුම් ක්‍රමවේද පිළිබඳ නවතම තොරතුරු...</div>
+                        <a href="news/ai-education.html" class="read-more-btn">තව කියවන්න →</a>
                     </div>
                 </div>
 
-                <div class="assignment-row">
-                    <div class="grade-badge">
-                        <span>Grade</span>07
+                <div class="update-card">
+                    <div class="card-image">
+                        <img src="news2.jpg" alt="Robotics" onerror="this.src='https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=500';">
                     </div>
-                    <div class="assignment-details-bar">
-                        <div class="assignment-title">Assignment 01 - දත්ත සහ තොරතුරු</div>
-                        <a href="assignments/g7_assign01.pdf" class="open-btn" target="_blank">Open</a>
+                    <div class="card-body">
+                        <div class="card-date">2026 ජූනි 05</div>
+                        <div class="card-title">Arduino සහ ESP32 සමඟ රොබෝ තාක්ෂණය ඉගෙන ගනිමු</div>
+                        <div class="card-text">කුඩා දරුවන්ගේ තාර්කික බුද්ධිය (Logic) වර්ධනය කිරීමට මෙන්ම පාසල් මට්ටමේ සිටම IoT (Internet of Things) සහ සරල රොබෝවරුන් නිර්මාණය කිරීමට ඇති අවස්ථා පිළිබඳව හැඳින්වීමක්...</div>
+                        <a href="news/robotics-arduino.html" class="read-more-btn">තව කියවන්න →</a>
                     </div>
                 </div>
 
-                <div class="assignment-row">
-                    <div class="grade-badge">
-                        <span>Grade</span>10
+                <div class="update-card">
+                    <div class="card-image">
+                        <img src="news3.jpg" alt="Cyber Security" onerror="this.src='https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=500';">
                     </div>
-                    <div class="assignment-details-bar">
-                        <div class="assignment-title">Assignment 01 - Operating Systems</div>
-                        <a href="assignments/g10_assign01.pdf" class="open-btn" target="_blank">Open</a>
+                    <div class="card-body">
+                        <div class="card-date">2026 මැයි 28</div>
+                        <div class="card-title">අන්තර්ජාලය තුළ ඔබේ පෞද්ගලික දත්ත ආරක්ෂා කරගන්නේ කෙසේද?</div>
+                        <div class="card-text">සමාජ මාධ්‍ය සහ වෙබ් අඩවි පරිශීලනය කිරීමේදී සිදුවන සයිබර් ප්‍රහාර (Cyber Attacks) වලින් වැළකී සිටීමට, පාස්වර්ඩ් ආරක්ෂා කරගැනීමට සහ 2FA (Two-Factor Authentication) සක්‍රීය කරගැනීමේ වැදගත්කම...</div>
+                        <a href="news/cyber-security.html" class="read-more-btn">තව කියවන්න →</a>
                     </div>
                 </div>
 
             </div>
-            <a href="index.html" class="back-btn">← ආපසු Home වෙත</a>
+            <a href="index.html" class="back-btn">← ಆಪසු Home වෙත</a>
         </div>
     </div>
 </body>
