@@ -213,7 +213,7 @@
         .back-btn { margin-top: 15px; background-color: rgba(0, 164, 228, 0.1); border: 1px solid var(--light-blue); color: var(--light-blue); padding: 12px 24px; font-weight: bold; border-radius: 6px; cursor: pointer; text-decoration: none; display: inline-block; transition: 0.3s; }
         .back-btn:hover { background-color: var(--light-blue); color: #0b132b; transform: translateX(-4px); }
 
-        /* --- RESPONSIVE MOBILE VIEW --- */
+        /* --- RESPONSIVE MOBILE VIEW (UPDATED) --- */
         @media screen and (max-width: 650px) {
             body { padding: 10px; }
             .web-container { padding: 15px; }
@@ -228,11 +228,70 @@
             .logo-container { width: 100px; height: 100px; }
             .inner-page h2 { font-size: 1.3rem; }
 
-            /* මොබයිල් ෆෝන් වලදී Row එක පිළිවෙලට හැදීම */
-            .assignment-row { flex-direction: column; align-items: flex-start; gap: 8px; background: rgba(28, 37, 65, 0.5); padding: 12px; border-radius: 12px; border: 1px solid rgba(0, 164, 228, 0.2); }
-            .grade-badge { width: 100%; height: 40px; flex-direction: row; gap: 8px; border-radius: 6px; }
-            .assignment-details-bar { width: 100%; height: auto; flex-direction: column; gap: 15px; align-items: flex-start; padding: 10px 5px; background: transparent; border: none; box-shadow: none; }
-            .open-btn { width: 100%; text-align: center; }
+            /* 📱 මොබයිල් එකේදී කාඩ් එකක් ලෙස පෙනුම සකස් කිරීම */
+            .assignment-row { 
+                flex-direction: column; 
+                align-items: flex-start; 
+                gap: 12px; 
+                background: rgba(11, 19, 43, 0.8); 
+                padding: 16px; 
+                border-radius: 12px; 
+                border: 1px solid rgba(0, 164, 228, 0.3); 
+                box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            }
+            
+            /* 🏷️ Grade එක පැහැදිලි ටැග් එකක් කිරීම (බොත්තමක් වැනි පෙනුම ඉවත් කර ඇත) */
+            .grade-badge { 
+                width: auto; 
+                height: auto; 
+                flex-direction: row; 
+                gap: 6px; 
+                padding: 5px 12px; 
+                background-color: var(--primary-blue); 
+                border: 1px solid var(--light-blue);
+                border-radius: 6px; 
+                font-size: 0.95rem;
+            }
+            .grade-badge span { 
+                font-size: 0.75rem; 
+                color: #a6b1e1; 
+            }
+            
+            /* 📝 මැද විස්තර තීරුව */
+            .assignment-details-bar { 
+                width: 100%; 
+                height: auto; 
+                flex-direction: column; 
+                gap: 15px; 
+                align-items: flex-start; 
+                padding: 0; 
+                background: transparent; 
+                border: none; 
+                box-shadow: none; 
+            }
+            
+            .assignment-title {
+                font-size: 1.05rem;
+                line-height: 1.4;
+            }
+            
+            /* 🔘 Open බොත්තම කැපී පෙනෙන තැඹිලි පැහැයෙන් */
+            .open-btn { 
+                width: 100%; 
+                text-align: center; 
+                background-color: var(--orange);
+                border: 2px solid var(--orange);
+                color: white;
+                padding: 12px;
+                font-size: 1rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(255, 115, 0, 0.2);
+            }
+            .open-btn:hover {
+                background-color: #e06600;
+                border-color: #e06600;
+                transform: none; /* මොබයිල් වලට hover scale අවශ්‍ය නැත */
+            }
         }
     </style>
 </head>
