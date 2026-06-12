@@ -68,10 +68,9 @@
 
         <form id="quiz-form">
             <div class="question-block">
-                <div class="question-text">1. යම් කාර්යයක් සම්පූර්ණ කර ගැනීම සඳහා සංඝටක කිහිපයක් එකතු වී කටයුතු කිරීම පද්ධතියක් නම් වන අතර තොරතුරු
-පද්ධතියක ප‍්‍රධාන කාර්යයන් සඳහන් වන, වඩාත් ගැලපෙන පිළිතුර වනුයේ කුමක් ද?</div>
+                <div class="question-text">1. යම් කාර්යයක් සම්පූර්ණ කර ගැනීම සඳහා සංඝටක කිහිපයක් එකතු වී කටයුතු කිරීම පද්ධතියක් නම් වන අතර තොරතුරු පද්ධතියක ප‍්‍රධාන කාර්යයන් සඳහන් වන, වඩාත් ගැලපෙන පිළිතුර වනුයේ කුමක් ද?</div>
                 <ul class="options-list">
-                    <li><label><input type="radio" name="q1" value="A">  දත්ත ලබා ගැනීම, දත්ත සැකසීම, සුරැකීම සහ අවශ්‍ය අවස්ථාවල තොරතුරු ලබා දීම.</label></li>
+                    <li><label><input type="radio" name="q1" value="A"> දත්ත ලබා ගැනීම, දත්ත සැකසීම, සුරැකීම සහ අවශ්‍ය අවස්ථාවල තොරතුරු ලබා දීම.</label></li>
                     <li><label><input type="radio" name="q1" value="B"> දත්ත ආදානය, සැකසීම සහ ගබඩා කිරීම යන ක‍්‍රියාවලියයි.</label></li>
                     <li><label><input type="radio" name="q1" value="C"> දත්ත ලබා දීම සහ ලබාගත් දත්ත සැකසීම.</label></li>
                     <li><label><input type="radio" name="q1" value="D"> දත්ත ලබා ගැනීම, ලබාගත් දත්ත විශ්ලේෂණය, දත්ත සැකසීම හා තොරතුරු ප‍්‍රතිදානයයි</label></li>
@@ -131,7 +130,7 @@
             <div class="question-block">
                 <div class="question-text">7. ද්විමය සංඛ්‍යා පද්ධතියේ (Binary) භාවිත වන සංකේත මොනවාද?</div>
                 <ul class="options-list">
-                    <li><label><input type="radio" name="q7" value="A"> 0 සහ 1 පමණි</label></li>
+                    <li><label><input type="radio" name="q7" value="A"> 0 සහ 1 පමණi</label></li>
                     <li><label><input type="radio" name="q7" value="B"> 1 සිට 9 දක්වා</label></li>
                     <li><label><input type="radio" name="q7" value="C"> A සිට F දක්වා</label></li>
                     <li><label><input type="radio" name="q7" value="D"> 0 සිට 7 දක්වා</label></li>
@@ -237,6 +236,7 @@
                     <li><label><input type="radio" name="q17" value="D"> 0 සිට 7 දක්වා</label></li>
                 </ul>
             </div>
+
             <div class="question-block">
                 <div class="question-text">18. ද්විමය සංඛ්‍යා පද්ධතියේ (Binary) භාවිත වන සංකේත මොනවාද?</div>
                 <ul class="options-list">
@@ -256,6 +256,7 @@
                     <li><label><input type="radio" name="q19" value="D"> 0 සිට 7 දක්වා</label></li>
                 </ul>
             </div>
+
             <div class="question-block">
                 <div class="question-text">20. ද්විමය සංඛ්‍යා පද්ධතියේ (Binary) භාවිත වන සංකේත මොනවාද?</div>
                 <ul class="options-list">
@@ -316,8 +317,6 @@
                 </ul>
             </div>
 
-            
-
             <button type="button" class="submit-btn" onclick="submitQuiz(false)">පිළිතුරු භාරදෙන්න (Submit Assignment)</button>
         </form>
     </div>
@@ -334,56 +333,33 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
 <script>
-    // 🔴 ඔයාගේ Firebase Config එක මෙතනට දාන්න (අර කලින් ගත්ත එකමයි)
-   const firebaseConfig = {
-  apiKey: "AIzaSyAtfTwhOmDOLAxxTdXQKwaMNthLMpRgBjQ",
-  authDomain: "ctech-counter.firebaseapp.com",
-  projectId: "ctech-counter",
-  storageBucket: "ctech-counter.firebasestorage.app",
-  messagingSenderId: "892307263196",
-  appId: "1:892307263196:web:bf443261191503be652e19"
-};
+    // 🔴 Firebase Config
+    const firebaseConfig = {
+        apiKey: "AIzaSyAtfTwhOmDOLAxxTdXQKwaMNthLMpRgBjQ",
+        authDomain: "ctech-counter.firebaseapp.com",
+        projectId: "ctech-counter",
+        storageBucket: "ctech-counter.firebasestorage.app",
+        messagingSenderId: "892307263196",
+        appId: "1:892307263196:web:bf443261191503be652e19"
+    };
 
     // Firebase Initialize කිරීම
-
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
-    // ⚙️ සැකසුම් (Settings)
-    const TOTAL_TIME = 30 * 60; // ⏱️ විනාඩි 10 තත්පර වලින් (10 * 60 = 600)
+    // ⚙️ Settings
+    const TOTAL_TIME = 30 * 60; // ⏱️ විනාඩි 30
     let timeLeft = TOTAL_TIME;
     let timerInterval;
     let studentName = "";
 
-    // 🔑 නිවැරදි පිළිතුරු (Answer Key)
+    // 🔑 Answer Key (කොමා ගැටලුව නිවැරදි කර ඇත)
     const correctAnswers = {
-        q1: "C",
-        q2: "B",
-        q3: "A"
-        q4: "A"
-        q5: "A"
-        q6: "A"
-        q7: "A"
-        q8: "A"
-        q9: "A"
-        q10: "A"
-        q11: "A"
-        q12: "A"
-        q13: "A"
-        q14: "A"
-        q15: "A"
-        q16: "A"
-        q17: "A"
-        q18: "A"
-        q19: "A"
-        q20: "A"
-        q21: "A"
-        q22: "A"
-        q23: "A"
-        q24: "A"
-        q25: "A"
-       
-    
+        q1: "C", q2: "B", q3: "A", q4: "A", q5: "A",
+        q6: "A", q7: "A", q8: "A", q9: "A", q10: "A",
+        q11: "A", q12: "A", q13: "A", q14: "A", q15: "A",
+        q16: "A", q17: "A", q18: "A", q19: "A", q20: "A",
+        q21: "A", q22: "A", q23: "A", q24: "A", q25: "A"
     };
 
     // 🚀 Quiz එක පටන් ගැනීම
@@ -396,11 +372,11 @@
         studentName = nameInput;
         document.getElementById("display-name").innerText = studentName;
         
-        // 🔀 UI එක මාරු කිරීම
+        // UI මාරු කිරීම
         document.getElementById("login-box").style.display = "none";
         document.getElementById("quiz-box").style.display = "block";
 
-        // ⏱️ ටයිමරය පණ ගැන්වීම
+        // ටයිමරය පණ ගැන්වීම
         timerInterval = setInterval(updateTimer, 1000);
     }
 
@@ -411,19 +387,19 @@
         let minutes = Math.floor(timeLeft / 60);
         let seconds = timeLeft % 60;
         document.getElementById("time-left").innerText = 
-            (minutes < 60 ? "0" : "") + minutes + ":" + (seconds < 60 ? "0" : "") + seconds;
+            (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
 
-        // 🚨 කාලය අවසන් වූ විට (Auto-Submit)
+        // කාලය අවසන් වූ විට
         if (timeLeft <= 0) {
             clearInterval(timerInterval);
             alert("කාලය අවසන් විය! ඔබේ පැවරුම ස්වයංක්‍රීයව භාරදෙනු ලැබේ.");
-            submitQuiz(true); // true කියන්නේ කාලය ඉවර වෙලා ඔටෝ සබ්මිට් වුණා කියන එක
+            submitQuiz(true);
         }
     }
 
-    // 📊 පිළිතුරු පරීක්ෂා කර ලකුණු සෙවීම සහ සර්වර් යැවීම
+    // 📊 ලකුණු සෙවීම සහ Firebase යැවීම
     function submitQuiz(isTimeout) {
-        clearInterval(timerInterval); // ටයිමරය නවත්වන්න
+        clearInterval(timerInterval);
 
         const form = document.getElementById("quiz-form");
         const formData = new FormData(form);
@@ -446,7 +422,7 @@
         let spentSeconds = timeSpentSeconds % 60;
         let timeSpentString = `${spentMinutes}min ${spentSeconds}sec`;
 
-        // 📥 ළමයාගේ දත්ත Firebase Realtime Database එකට යැවීම
+        // Firebase Realtime Database එකට යැවීම
         const assignmentRef = database.ref('assignments_submissions/grade_10_assignment_01');
         assignmentRef.push({
             name: studentName,
@@ -456,7 +432,7 @@
             status: isTimeout ? "Timeout Auto-Submit" : "User Submitted"
         });
 
-        // 🎯 ළමයාට ලකුණු පෙන්වීම
+        // 🎯 ශිෂ්‍යයාට ප්‍රතිඵල පෙන්වීම
         document.getElementById("final-score").innerText = finalScorePercentage;
         document.getElementById("time-taken").innerText = timeSpentString;
         
