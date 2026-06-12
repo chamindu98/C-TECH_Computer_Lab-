@@ -329,8 +329,8 @@
     </div>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
     // 🔴 Firebase Config
@@ -399,39 +399,51 @@
 
     // 📊 ලකුණු සෙවීම සහ Firebase යැවීම
     function submitQuiz(isTimeout) {
-        clearInterval(timerInterval);
+    clearInterval(timerInterval);
 
-        const form = document.getElementById("quiz-form");
-        const formData = new FormData(form);
-        
-        let correctCount = 0;
-        let totalQuestions = Object.keys(correctAnswers).length;
+    const form = document.getElementById("quiz-form");
+    const formData = new FormData(form);
+    
+    let correctCount = 0;
+    let totalQuestions = Object.keys(correctAnswers).length;
 
-        // ලකුණු හැදීම
-        for (let key in correctAnswers) {
-            if (formData.get(key) === correctAnswers[key]) {
-                correctCount++;
-            }
+    for (let key in correctAnswers) {
+        if (formData.get(key) === correctAnswers[key]) {
+            correctCount++;
         }
+    }
 
-        let finalScorePercentage = Math.round((correctCount / totalQuestions) * 100);
-        
-        // ගතවූ කාලය සෙවීම
-        let timeSpentSeconds = TOTAL_TIME - timeLeft;
-        let spentMinutes = Math.floor(timeSpentSeconds / 60);
-        let spentSeconds = timeSpentSeconds % 60;
-        let timeSpentString = `${spentMinutes}min ${spentSeconds}sec`;
+    let finalScorePercentage = Math.round((correctCount / totalQuestions) * 100);
+    
+    let timeSpentSeconds = TOTAL_TIME - timeLeft;
+    let spentMinutes = Math.floor(timeSpentSeconds / 60);
+    let spentSeconds = timeSpentSeconds % 60;
+    let timeSpentString = `${spentMinutes}min ${spentSeconds}sec`;
 
-        // Firebase Realtime Database එකට යැවීම
-        const assignmentRef = database.ref('assignments_submissions/grade_10_assignment_01');
-        assignmentRef.push({
-            name: studentName,
-            score: finalScorePercentage + "%",
-            time_taken: timeSpentString,
-            submitted_at: new Date().toLocaleString(),
-            status: isTimeout ? "Timeout Auto-Submit" : "User Submitted"
-        });
+    // 🎯 පළමුව ශිෂ්‍යයාට ප්‍රතිඵල තිරය පෙන්වන්න (එවිට කේතය මෙතන හිරවෙන්නේ නැත)
+    document.getElementById("quiz-box").style.display = "none";
+    document.getElementById("result-box").style.display = "block";
+    document.getElementById("final-score").innerText = finalScorePercentage;
+    document.getElementById("time-taken").innerText = timeSpentString;
 
+    // 📥 පසුබිමෙන් Firebase එකට දත්ත යැවීම (Error Handling සමඟ)
+    try {
+        if (typeof firebase !== 'undefined' && firebase.apps.length > 0) {
+            const assignmentRef = database.ref('assignments_submissions/grade_10_assignment_01');
+            assignmentRef.push({
+                name: studentName,
+                score: finalScorePercentage + "%",
+                time_taken: timeSpentString,
+                submitted_at: new Date().toLocaleString(),
+                status: isTimeout ? "Timeout Auto-Submit" : "User Submitted"
+            });
+        } else {
+            console.error("Firebase is not initialized properly.");
+        }
+    } catch (error) {
+        console.error("Data push failed: ", error);
+    }
+}
         // 🎯 ශිෂ්‍යයාට ප්‍රතිඵල පෙන්වීම
         document.getElementById("final-score").innerText = finalScorePercentage;
         document.getElementById("time-taken").innerText = timeSpentString;
