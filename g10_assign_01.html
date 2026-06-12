@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment Quiz - C-TECH</title>
+    <style>
+        :root {
+            --primary-blue: #004d80;
+            --light-blue: #00a4e4;
+            --orange: #ff7300;
+            --dark-bg: #0b132b;
+            --card-bg: #1c2541;
+            --text-light: #f4f7f6;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--dark-bg); color: var(--text-light); padding: 20px; display: flex; justify-content: center; min-height: 100vh; }
+        
+        .quiz-container { width: 100%; max-width: 800px; background-color: rgba(28, 37, 65, 0.9); border: 2px solid var(--light-blue); border-radius: 16px; padding: 25px; box-shadow: 0 0 30px rgba(0, 164, 228, 0.2); }
+        h2 { text-align: center; color: #fff; margin-bottom: 20px; text-shadow: 0 0 10px var(--light-blue); }
+
+        /* Login Section */
+        #login-box { text-align: center; padding: 30px 10px; }
+        #login-box input { width: 100%; max-width: 400px; padding: 12px; border-radius: 8px; border: 2px solid var(--light-blue); background: var(--dark-bg); color: white; font-size: 1.1rem; margin-bottom: 20px; text-align: center; outline: none; }
+        .start-btn { background-color: var(--orange); color: white; border: none; padding: 12px 35px; font-size: 1.1rem; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .start-btn:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(255,115,0,0.4); }
+
+        /* Quiz Status (Timer & Info) */
+        .quiz-header { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 15px; border-radius: 8px; border-left: 5px solid var(--orange); margin-bottom: 25px; }
+        #timer { font-size: 1.3rem; font-weight: bold; color: #ff3333; }
+
+        /* Questions Section */
+        .question-block { background: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid rgba(0,164,228,0.1); }
+        .question-text { font-size: 1.1rem; font-weight: 600; margin-bottom: 15px; color: #fff; }
+        .options-list { list-style: none; }
+        .options-list li { margin-bottom: 10px; }
+        .options-list label { display: flex; align-items: center; gap: 10px; background: rgba(11,19,43,0.5); padding: 12px; border-radius: 6px; cursor: pointer; border: 1px solid transparent; transition: 0.2s; }
+        .options-list label:hover { border-color: var(--light-blue); background: rgba(0,164,228,0.05); }
+        .options-list input[type="radio"] { transform: scale(1.2); accent-color: var(--orange); }
+
+        /* Submit Button */
+        .submit-btn { width: 100%; background-color: var(--light-blue); color: #0b132b; border: none; padding: 15px; font-size: 1.2rem; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .submit-btn:hover { background-color: var(--orange); color: white; }
+
+        /* Result Section */
+        #result-box { text-align: center; padding: 30px 10px; }
+        .score-display { font-size: 3rem; font-weight: bold; color: var(--orange); margin: 20px 0; }
+        .time-display { font-size: 1.2rem; color: var(--light-blue); margin-bottom: 25px; }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <div id="login-box">
+        <h2>Assignment 01 - ශ්‍රේණිය 10</h2>
+        <p style="margin-bottom: 20px; color: #aaa;">කරුණාකර ඔබගේ සම්පූර්ණ නම ඇතුළත් කර ආරම්භ කරන්න.</p>
+        <input type="text" id="student-name" placeholder="ඔබේ නම මෙතන ලියන්න..." autocomplete="off">
+        <br>
+        <button class="start-btn" onclick="startQuiz()">ආරම්භ කරන්න (Start)</button>
+    </div>
+
+    <div id="quiz-box" style="display: none;">
+        <div class="quiz-header">
+            <div>🧑‍🎓 ශිෂ්‍යා: <span id="display-name" style="color: var(--light-blue); font-weight: bold;">-</span></div>
+            <div id="timer">⏱️ ඉතිරි කාලය: <span id="time-left">10:00</span></div>
+        </div>
+
+        <form id="quiz-form">
+            <div class="question-block">
+                <div class="question-text">1. පහත සඳහන් ඒවායින් මෙහෙයුම් පද්ධතියක් (Operating System) නොවන්නේ කුමක්ද?</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q1" value="A"> Windows 11</label></li>
+                    <li><label><input type="radio" name="q1" value="B"> Linux</label></li>
+                    <li><label><input type="radio" name="q1" value="C"> MS Office Word</label></li>
+                    <li><label><input type="radio" name="q1" value="D"> Android</label></li>
+                </ul>
+            </div>
+
+            <div class="question-block">
+                <div class="question-text">2. පරිගණකයේ මධ්‍ය සැකසුම් ඒකකයට (CPU) ඍජුවම සම්බන්ධ විය හැකි මතකය කුමක්ද?</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q2" value="A"> Hard Disk</label></li>
+                    <li><label><input type="radio" name="q2" value="B"> RAM</label></li>
+                    <li><label><input type="radio" name="q2" value="C"> Pen Drive</label></li>
+                    <li><label><input type="radio" name="q2" value="D"> CD-ROM</label></li>
+                </ul>
+            </div>
+
+            <div class="question-block">
+                <div class="question-text">3. ද්විමය සංඛ්‍යා පද්ධතියේ (Binary) භාවිත වන සංකේත මොනවාද?</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q3" value="A"> 0 සහ 1 පමණි</label></li>
+                    <li><label><input type="radio" name="q3" value="B"> 1 සිට 9 දක්වා</label></li>
+                    <li><label><input type="radio" name="q3" value="C"> A සිට F දක්වා</label></li>
+                    <li><label><input type="radio" name="q3" value="D"> 0 සිට 7 දක්වා</label></li>
+                </ul>
+            </div>
+
+            <button type="button" class="submit-btn" onclick="submitQuiz(false)">පිළිතුරු භාරදෙන්න (Submit Assignment)</button>
+        </form>
+    </div>
+
+    <div id="result-box" style="display: none;">
+        <h2>පැවරුම සාර්ථකව අවසන් කළා!</h2>
+        <div class="score-display">ලකුණු: <span id="final-score">0</span>%</div>
+        <div class="time-display">⏱️ ගතවූ කාලය: <span id="time-taken">0</span></div>
+        <p style="color: #637194;">ඔබගේ ලකුණු සහ විස්තර ගුරුතුමා වෙත සාර්ථකව යොමු කෙරුණි.</p>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+<script>
+    // 🔴 ඔයාගේ Firebase Config එක මෙතනට දාන්න (අර කලින් ගත්ත එකමයි)
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        databaseURL: "YOUR_DATABASE_URL",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // ⚙️ සැකසුම් (Settings)
+    const TOTAL_TIME = 10 * 60; // ⏱️ විනාඩි 10 තත්පර වලින් (10 * 60 = 600)
+    let timeLeft = TOTAL_TIME;
+    let timerInterval;
+    let studentName = "";
+
+    // 🔑 නිවැරදි පිළිතුරු (Answer Key)
+    const correctAnswers = {
+        q1: "C",
+        q2: "B",
+        q3: "A"
+    };
+
+    // 🚀 Quiz එක පටන් ගැනීම
+    function startQuiz() {
+        const nameInput = document.getElementById("student-name").value.trim();
+        if (nameInput === "") {
+            alert("කරුණාකර ඉදිරියට යෑමට ඔබේ නම ඇතුළත් කරන්න!");
+            return;
+        }
+        studentName = nameInput;
+        document.getElementById("display-name").innerText = studentName;
+        
+        // 🔀 UI එක මාරු කිරීම
+        document.getElementById("login-box").style.display = "none";
+        document.getElementById("quiz-box").style.display = "block";
+
+        // ⏱️ ටයිමරය පණ ගැන්වීම
+        timerInterval = setInterval(updateTimer, 1000);
+    }
+
+    // ⏱️ ටයිමරය අප්ඩේට් වීම
+    function updateTimer() {
+        timeLeft--;
+        
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+        document.getElementById("time-left").innerText = 
+            (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+
+        // 🚨 කාලය අවසන් වූ විට (Auto-Submit)
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            alert("කාලය අවසන් විය! ඔබේ පැවරුම ස්වයංක්‍රීයව භාරදෙනු ලැබේ.");
+            submitQuiz(true); // true කියන්නේ කාලය ඉවර වෙලා ඔටෝ සබ්මිට් වුණා කියන එක
+        }
+    }
+
+    // 📊 පිළිතුරු පරීක්ෂා කර ලකුණු සෙවීම සහ සර්වර් යැවීම
+    function submitQuiz(isTimeout) {
+        clearInterval(timerInterval); // ටයිමරය නවත්වන්න
+
+        const form = document.getElementById("quiz-form");
+        const formData = new FormData(form);
+        
+        let correctCount = 0;
+        let totalQuestions = Object.keys(correctAnswers).length;
+
+        // ලකුණු හැදීම
+        for (let key in correctAnswers) {
+            if (formData.get(key) === correctAnswers[key]) {
+                correctCount++;
+            }
+        }
+
+        let finalScorePercentage = Math.round((correctCount / totalQuestions) * 100);
+        
+        // ගතවූ කාලය සෙවීම
+        let timeSpentSeconds = TOTAL_TIME - timeLeft;
+        let spentMinutes = Math.floor(timeSpentSeconds / 60);
+        let spentSeconds = timeSpentSeconds % 60;
+        let timeSpentString = `${spentMinutes}min ${spentSeconds}sec`;
+
+        // 📥 ළමයාගේ දත්ත Firebase Realtime Database එකට යැවීම
+        const assignmentRef = database.ref('assignments_submissions/grade_10_assignment_01');
+        assignmentRef.push({
+            name: studentName,
+            score: finalScorePercentage + "%",
+            time_taken: timeSpentString,
+            submitted_at: new Date().toLocaleString(),
+            status: isTimeout ? "Timeout Auto-Submit" : "User Submitted"
+        });
+
+        // 🎯 ළමයාට ලකුණු පෙන්වීම
+        document.getElementById("final-score").innerText = finalScorePercentage;
+        document.getElementById("time-taken").innerText = timeSpentString;
+        
+        document.getElementById("quiz-box").style.display = "none";
+        document.getElementById("result-box").style.display = "block";
+    }
+</script>
+
+</body>
+</html>
