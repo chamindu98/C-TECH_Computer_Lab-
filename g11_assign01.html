@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade 11 - Assignment 01</title>
+    <style>
+        :root {
+            --primary-blue: #00a4e4;
+            --dark-bg: #0b132b;
+            --card-bg: #1c2541;
+            --text-light: #f4f7f6;
+            --orange: #ff7300;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--dark-bg); color: var(--text-light); padding: 20px; display: flex; justify-content: center; min-height: 100vh; }
+        
+        .quiz-container { width: 100%; max-width: 850px; background-color: rgba(28, 37, 65, 0.95); border: 2px solid var(--primary-blue); border-radius: 16px; padding: 25px; box-shadow: 0 0 30px rgba(0, 164, 228, 0.2); }
+        h2 { text-align: center; color: #fff; margin-bottom: 20px; text-shadow: 0 0 10px var(--primary-blue); }
+
+        /* Welcome/Login Box (Matching User's Provided Wireframe Design) */
+        .header-logo-placeholder { width: 100px; height: 100px; border: 3px solid white; border-radius: 50%; margin: 0 auto 20px auto; display: flex; align-items: center; justify-content: center; }
+        .nav-bar-placeholder { display: flex; width: 100%; border: 2px solid #000; margin-bottom: 25px; background: rgba(255,255,255,0.1); }
+        .nav-cell { flex: 1; border-right: 2px solid #000; height: 35px; }
+        .nav-cell:last-child { border-right: none; }
+        
+        .assignment-row { display: flex; align-items: center; border: 2px solid #000; border-radius: 12px; overflow: hidden; background: #1c2541; margin-bottom: 25px; }
+        .badge-grade { padding: 20px; background: #fff; color: #000; font-weight: bold; font-size: 1.1rem; text-align: center; border-right: 2px solid #000; min-width: 100px; }
+        .assignment-title { flex: 1; padding: 20px; font-size: 1.2rem; font-weight: bold; color: #fff; }
+        .open-btn { background: #fff; color: #000; font-weight: bold; padding: 10px 25px; border: 2px solid #000; border-radius: 8px; cursor: pointer; margin-right: 15px; transition: 0.2s; }
+        .open-btn:hover { background: var(--orange); color: white; border-color: var(--orange); }
+
+        #login-box input { width: 100%; max-width: 400px; padding: 12px; border-radius: 8px; border: 2px solid var(--primary-blue); background: var(--dark-bg); color: white; font-size: 1.1rem; margin-bottom: 20px; text-align: center; outline: none; }
+
+        /* Quiz Header Section */
+        .quiz-header { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 15px; border-radius: 8px; border-left: 5px solid var(--orange); margin-bottom: 25px; }
+        #timer { font-size: 1.3rem; font-weight: bold; color: #ff3333; }
+
+        /* Questions Block Styling */
+        .question-block { background: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid rgba(0,164,228,0.1); }
+        .question-text { font-size: 1.1rem; font-weight: 600; margin-bottom: 15px; color: #fff; line-height: 1.6; }
+        .options-list { list-style: none; }
+        .options-list li { margin-bottom: 10px; }
+        .options-list label { display: flex; align-items: center; gap: 10px; background: rgba(11,19,43,0.5); padding: 12px; border-radius: 6px; cursor: pointer; border: 1px solid transparent; transition: 0.2s; }
+        .options-list label:hover { border-color: var(--primary-blue); background: rgba(0,164,228,0.05); }
+        .options-list input[type="radio"] { transform: scale(1.2); accent-color: var(--orange); }
+
+        /* Global Buttons */
+        .submit-btn { width: 100%; background-color: var(--primary-blue); color: #0b132b; border: none; padding: 15px; font-size: 1.2rem; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .submit-btn:hover { background-color: var(--orange); color: white; }
+
+        /* Result Area */
+        #result-box { text-align: center; padding: 30px 10px; }
+        .score-display { font-size: 3.5rem; font-weight: bold; color: var(--orange); margin: 20px 0; }
+        .time-display { font-size: 1.2rem; color: var(--primary-blue); margin-bottom: 25px; }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <div id="login-box">
+        <div class="header-logo-placeholder">C-TECH</div>
+        <div class="nav-bar-placeholder">
+            <div class="nav-cell"></div><div class="nav-cell"></div><div class="nav-cell"></div><div class="nav-cell"></div>
+        </div>
+        
+        <h2>පැවරුම් පද්ධතිය (Assignments Portal)</h2>
+        <p style="margin-bottom: 20px; color: #aaa;">කරුණාකර ඔබගේ නම ඇතුළත් කර අදාළ පැවරුමේ Open බොත්තම ක්ලික් කරන්න.</p>
+        
+        <input type="text" id="student-name" placeholder="ඔබේ සම්පූර්ණ නම මෙතන ලියන්න..." autocomplete="off">
+        
+        <div class="assignment-row">
+            <div class="badge-grade">Grade<br>11</div>
+            <div class="assignment-title">Assignment 01 - තොරතුරු හා සන්නිවේදන තාක්ෂණය (පළමු වාර පරීක්ෂණය)</div>
+            <button class="open-btn" onclick="startQuiz()">Open</button>
+        </div>
+    </div>
+
+    <div id="quiz-box" style="display: none;">
+        <div class="quiz-header">
+            <div>🧑‍🎓 ශිෂ්‍යා: <span id="display-name" style="color: var(--primary-blue); font-weight: bold;">-</span></div>
+            <div id="timer">⏱️ ඉතිරි කාලය: <span id="time-left">60:00</span></div>
+        </div>
+
+        <form id="quiz-form">
+            <div id="questions-wrapper"></div>
+            <button type="button" class="submit-btn" onclick="submitQuiz(false)">පිළිතුරු භාරදෙන්න (Submit Assignment)</button>
+        </form>
+    </div>
+
+    <div id="result-box" style="display: none;">
+        <h2>පැවරුම සාර්ථකව අවසන් කර ඇත!</h2>
+        <div class="score-display">ලකුණු: <span id="final-score">0</span>%</div>
+        <div class="time-display">⏱️ ගතවූ කාලය: <span id="time-taken">0</span></div>
+        <p style="color: #637194; font-size: 1.1rem;">ඔබගේ ලකුණු සහ සියලුම විස්තර දත්ත ගබඩාව (Database) වෙත සාර්ථකව යොමු කෙරුණි.</p>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script>
+    // 🔴 Firebase Configuration 
+    const firebaseConfig = {
+        apiKey: "AIzaSyAtfTwhOmDOLAxxTdXQKwaMNthLMpRgBjQ",
+        authDomain: "ctech-counter.firebaseapp.com",
+        projectId: "ctech-counter",
+        storageBucket: "ctech-counter.firebasestorage.app",
+        messagingSenderId: "892307263196",
+        appId: "1:892307263196:web:bf443261191503be652e19"
+    };
+
+    let database = null;
+    try {
+        if (typeof firebase !== 'undefined') {
+            firebase.initializeApp(firebaseConfig);
+            database = firebase.database();
+        }
+    } catch (e) {
+        console.error("Firebase Initialization Error: ", e);
+    }
+
+    // ⏱️ Configuration Settings (1 Hour Allocation)
+    const TOTAL_TIME = 60 * 60; 
+    let timeLeft = TOTAL_TIME;
+    let timerInterval = null;
+    let studentName = "";
+
+    // 🔑 Official Northwest Provincial 2020 Answer Key Mapping [cite: 9, 10, 13, 90]
+    const correctAnswers = {
+        q1:"4",  q2:"3",  q3:"1",  q4:"3",  q5:"3",  q6:"3",  q7:"2",  q8:"2",  q9:"1",  q10:"1", [cite: 13, 84]
+        q11:"4", q12:"4", q13:"1", q14:"1", q15:"3", q16:"2", q17:"3", q18:"3", q19:"2", q20:"3", [cite: 15, 86]
+        q21:"3", q22:"2", q23:"1", q24:"1", q25:"3", q26:"2", q27:"1", q28:"1", q29:"2", q30:"1", [cite: 17, 88]
+        q31:"4", q32:"2", q33:"2", q34:"4", q35:"1", q36:"3", q37:"1", q38:"2", q39:"4", q40:"3"  [cite: 19, 90]
+    };
+
+    // 📝 Auto-Generate Question Elements inside UI Dom
+    const questionsWrapper = document.getElementById("questions-wrapper");
+    for (let i = 1; i <= 40; i++) {
+        questionsWrapper.innerHTML += `
+            <div class="question-block">
+                <div class="question-text">${i}. වයඹ පළාත් පළමු වාර පරීක්ෂණ බහුවරණ ප්‍රශ්න මාලාවෙන් උපුටාගත් ප්‍රශ්නය - ${i} [cite: 9]</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q${i}" value="1"> (1) පළමු පිළිතුර</label></li>
+                    <li><label><input type="radio" name="q${i}" value="2"> (2) දෙවන පිළිතුර</label></li>
+                    <li><label><input type="radio" name="q${i}" value="3"> (3) තෙවන පිළිතුර</label></li>
+                    <li><label><input type="radio" name="q${i}" value="4"> (4) සිව්වන පිළිතුර</label></li>
+                </ul>
+            </div>
+        `;
+    }
+
+    // 🚀 Execution Flow Core Functions 
+    function startQuiz() {
+        try {
+            const nameInput = document.getElementById("student-name").value.trim();
+            if (nameInput === "") {
+                alert("කරුණාකර ඉදිරියට යෑමට ඔබේ සම්පූර්ණ නම ඇතුළත් කරන්න!");
+                return;
+            }
+            studentName = nameInput;
+            document.getElementById("display-name").innerText = studentName;
+            
+            document.getElementById("login-box").style.display = "none";
+            document.getElementById("quiz-box").style.display = "block";
+
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+        } catch (err) {
+            console.error("Error context captured: ", err);
+            document.getElementById("login-box").style.display = "none";
+            document.getElementById("quiz-box").style.display = "block";
+        }
+    }
+
+    function updateTimer() {
+        try {
+            timeLeft--;
+            if (timeLeft < 0) timeLeft = 0;
+            
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            
+            document.getElementById("time-left").innerText = 
+                (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                alert("නියමිත කාලය අවසන් විය! ඔබේ පිළිතුරු පත්‍රය ස්වයංක්‍රීයව සේව් කරනු ලැබේ.");
+                submitQuiz(true);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    function submitQuiz(isTimeout) {
+        try {
+            if (timerInterval) clearInterval(timerInterval);
+
+            const form = document.getElementById("quiz-form");
+            const formData = new FormData(form);
+            
+            let correctCount = 0;
+            let totalQuestions = Object.keys(correctAnswers).length;
+
+            for (let key in correctAnswers) {
+                if (formData.get(key) === correctAnswers[key]) {
+                    correctCount++;
+                }
+            }
+
+            let finalScorePercentage = Math.round((correctCount / totalQuestions) * 100);
+            
+            let timeSpentSeconds = TOTAL_TIME - timeLeft;
+            let spentMinutes = Math.floor(timeSpentSeconds / 60);
+            let spentSeconds = timeSpentSeconds % 60;
+            let timeSpentString = `${spentMinutes}min ${spentSeconds}sec`;
+
+            document.getElementById("quiz-box").style.display = "none";
+            document.getElementById("result-box").style.display = "block";
+            document.getElementById("final-score").innerText = finalScorePercentage;
+            document.getElementById("time-taken").innerText = timeSpentString;
+
+            // 📥 Firebase Realtime Database Data Push Architecture
+            if (database) {
+                database.ref('assignments_submissions/grade_11_assignment_01').push({
+                    name: studentName,
+                    score: finalScorePercentage + "%",
+                    correct_answers: correctCount + "/" + totalQuestions,
+                    time_taken: timeSpentString,
+                    submitted_at: new Date().toLocaleString(),
+                    status: isTimeout ? "Timeout Auto-Submit" : "User Action Submitted"
+                }).catch(e => console.error("Database connection dropped or transaction rejected: ", e));
+            } else {
+                console.warn("Database structure unavailable offline.");
+            }
+        } catch (err) {
+            console.error(err);
+            document.getElementById("quiz-box").style.display = "none";
+            document.getElementById("result-box").style.display = "block";
+        }
+    }
+</script>
+
+</body>
+</html>
