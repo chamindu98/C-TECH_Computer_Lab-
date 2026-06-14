@@ -3,97 +3,358 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grade 11 - Assignment 01</title>
+    <title>Assignment Quiz - C-TECH</title>
     <style>
         :root {
-            --primary-blue: #00a4e4;
+            --primary-blue: #004d80;
+            --light-blue: #00a4e4;
+            --orange: #ff7300;
             --dark-bg: #0b132b;
             --card-bg: #1c2541;
             --text-light: #f4f7f6;
-            --orange: #ff7300;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background-color: var(--dark-bg); color: var(--text-light); padding: 20px; display: flex; justify-content: center; min-height: 100vh; }
         
-        .quiz-container { width: 100%; max-width: 850px; background-color: rgba(28, 37, 65, 0.95); border: 2px solid var(--primary-blue); border-radius: 16px; padding: 25px; box-shadow: 0 0 30px rgba(0, 164, 228, 0.2); }
-        h2 { text-align: center; color: #fff; margin-bottom: 20px; text-shadow: 0 0 10px var(--primary-blue); }
+        .quiz-container { width: 100%; max-width: 800px; background-color: rgba(28, 37, 65, 0.9); border: 2px solid var(--light-blue); border-radius: 16px; padding: 25px; box-shadow: 0 0 30px rgba(0, 164, 228, 0.2); }
+        h2 { text-align: center; color: #fff; margin-bottom: 20px; text-shadow: 0 0 10px var(--light-blue); }
 
-        /* Welcome/Login Box (Matching User's Provided Wireframe Design) */
-        .header-logo-placeholder { width: 100px; height: 100px; border: 3px solid white; border-radius: 50%; margin: 0 auto 20px auto; display: flex; align-items: center; justify-content: center; }
-        .nav-bar-placeholder { display: flex; width: 100%; border: 2px solid #000; margin-bottom: 25px; background: rgba(255,255,255,0.1); }
-        .nav-cell { flex: 1; border-right: 2px solid #000; height: 35px; }
-        .nav-cell:last-child { border-right: none; }
-        
-        .assignment-row { display: flex; align-items: center; border: 2px solid #000; border-radius: 12px; overflow: hidden; background: #1c2541; margin-bottom: 25px; }
-        .badge-grade { padding: 20px; background: #fff; color: #000; font-weight: bold; font-size: 1.1rem; text-align: center; border-right: 2px solid #000; min-width: 100px; }
-        .assignment-title { flex: 1; padding: 20px; font-size: 1.2rem; font-weight: bold; color: #fff; }
-        .open-btn { background: #fff; color: #000; font-weight: bold; padding: 10px 25px; border: 2px solid #000; border-radius: 8px; cursor: pointer; margin-right: 15px; transition: 0.2s; }
-        .open-btn:hover { background: var(--orange); color: white; border-color: var(--orange); }
+        /* Login Section */
+        #login-box { text-align: center; padding: 30px 10px; }
+        #login-box input { width: 100%; max-width: 400px; padding: 12px; border-radius: 8px; border: 2px solid var(--light-blue); background: var(--dark-bg); color: white; font-size: 1.1rem; margin-bottom: 20px; text-align: center; outline: none; }
+        .start-btn { background-color: var(--orange); color: white; border: none; padding: 12px 35px; font-size: 1.1rem; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .start-btn:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(255,115,0,0.4); }
 
-        #login-box input { width: 100%; max-width: 400px; padding: 12px; border-radius: 8px; border: 2px solid var(--primary-blue); background: var(--dark-bg); color: white; font-size: 1.1rem; margin-bottom: 20px; text-align: center; outline: none; }
-
-        /* Quiz Header Section */
+        /* Quiz Status (Timer & Info) */
         .quiz-header { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 15px; border-radius: 8px; border-left: 5px solid var(--orange); margin-bottom: 25px; }
         #timer { font-size: 1.3rem; font-weight: bold; color: #ff3333; }
 
-        /* Questions Block Styling */
+        /* Questions Section */
         .question-block { background: var(--card-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid rgba(0,164,228,0.1); }
-        .question-text { font-size: 1.1rem; font-weight: 600; margin-bottom: 15px; color: #fff; line-height: 1.6; }
+        .question-text { font-size: 1.1rem; font-weight: 600; margin-bottom: 15px; color: #fff; }
         .options-list { list-style: none; }
         .options-list li { margin-bottom: 10px; }
         .options-list label { display: flex; align-items: center; gap: 10px; background: rgba(11,19,43,0.5); padding: 12px; border-radius: 6px; cursor: pointer; border: 1px solid transparent; transition: 0.2s; }
-        .options-list label:hover { border-color: var(--primary-blue); background: rgba(0,164,228,0.05); }
+        .options-list label:hover { border-color: var(--light-blue); background: rgba(0,164,228,0.05); }
         .options-list input[type="radio"] { transform: scale(1.2); accent-color: var(--orange); }
 
-        /* Global Buttons */
-        .submit-btn { width: 100%; background-color: var(--primary-blue); color: #0b132b; border: none; padding: 15px; font-size: 1.2rem; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        /* Submit Button */
+        .submit-btn { width: 100%; background-color: var(--light-blue); color: #0b132b; border: none; padding: 15px; font-size: 1.2rem; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.3s; margin-top: 10px; }
         .submit-btn:hover { background-color: var(--orange); color: white; }
 
-        /* Result Area */
+        /* Result Section */
         #result-box { text-align: center; padding: 30px 10px; }
-        .score-display { font-size: 3.5rem; font-weight: bold; color: var(--orange); margin: 20px 0; }
-        .time-display { font-size: 1.2rem; color: var(--primary-blue); margin-bottom: 25px; }
+        .score-display { font-size: 3rem; font-weight: bold; color: var(--orange); margin: 20px 0; }
+        .time-display { font-size: 1.2rem; color: var(--light-blue); margin-bottom: 25px; }
     </style>
 </head>
 <body>
 
 <div class="quiz-container">
     <div id="login-box">
-        <div class="header-logo-placeholder">C-TECH</div>
-        <div class="nav-bar-placeholder">
-            <div class="nav-cell"></div><div class="nav-cell"></div><div class="nav-cell"></div><div class="nav-cell"></div>
-        </div>
-        
-        <h2>පැවරුම් පද්ධතිය (Assignments Portal)</h2>
-        <p style="margin-bottom: 20px; color: #aaa;">කරුණාකර ඔබගේ නම ඇතුළත් කර අදාළ පැවරුමේ Open බොත්තම ක්ලික් කරන්න.</p>
-        
-        <input type="text" id="student-name" placeholder="ඔබේ සම්පූර්ණ නම මෙතන ලියන්න..." autocomplete="off">
-        
-        <div class="assignment-row">
-            <div class="badge-grade">Grade<br>11</div>
-            <div class="assignment-title">Assignment 01 - තොරතුරු හා සන්නිවේදන තාක්ෂණය (පළමු වාර පරීක්ෂණය)</div>
-            <button class="open-btn" onclick="startQuiz()">Open</button>
-        </div>
+        <h2>Assignment 01 - 10 ශ්‍රේණිය </h2>
+        <p style="margin-bottom: 20px; color: #aaa;">කරුණාකර ඔබගේ සම්පූර්ණ නම ඇතුළත් කර ආරම්භ කරන්න.</p>
+        <input type="text" id="student-name" placeholder="ඔබේ නම මෙතන ලියන්න..." autocomplete="off">
+        <br>
+        <button class="start-btn" onclick="startQuiz()">ආරම්භ කරන්න (Start)</button>
     </div>
 
     <div id="quiz-box" style="display: none;">
         <div class="quiz-header">
-            <div>🧑‍🎓 ශිෂ්‍යා: <span id="display-name" style="color: var(--primary-blue); font-weight: bold;">-</span></div>
-            <div id="timer">⏱️ ඉතිරි කාලය: <span id="time-left">60:00</span></div>
+            <div>🧑‍🎓 ශිෂ්‍යා: <span id="display-name" style="color: var(--light-blue); font-weight: bold;">-</span></div>
+            <div id="timer">⏱️ ඉතිරි කාලය: <span id="time-left">30:00</span></div>
         </div>
 
         <form id="quiz-form">
-            <div id="questions-wrapper"></div>
+            <div class="question-block">
+                <div class="question-text">1. යම් කාර්යයක් සම්පූර්ණ කර ගැනීම සඳහා සංඝටක කිහිපයක් එකතු වී කටයුතු කිරීම පද්ධතියක් නම් වන අතර තොරතුරු පද්ධතියක ප‍්‍රධාන කාර්යයන් සඳහන් වන, වඩාත් ගැලපෙන පිළිතුර වනුයේ කුමක් ද?</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q1" value="A"> දත්ත ලබා ගැනීම, දත්ත සැකසීම, සුරැකීම සහ අවශ්‍ය අවස්ථාවල තොරතුරු ලබා දීම.</label></li>
+                    <li><label><input type="radio" name="q1" value="B"> දත්ත ආදානය, සැකසීම සහ ගබඩා කිරීම යන ක‍්‍රියාවලියයි.</label></li>
+                    <li><label><input type="radio" name="q1" value="C"> දත්ත ලබා දීම සහ ලබාගත් දත්ත සැකසීම.</label></li>
+                    <li><label><input type="radio" name="q1" value="D"> දත්ත ලබා ගැනීම, ලබාගත් දත්ත විශ්ලේෂණය, දත්ත සැකසීම හා තොරතුරු ප‍්‍රතිදානයයි</label></li>
+                </ul>
+            </div>
+
+            <div class="question-block">
+                <div class="question-text">2. පරිගණකයේ මධ්‍ය සැකසුම් ඒකකයට (CPU) ඍජුවම සම්බන්ධ විය හැකි මතකය කුමක්ද?</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q2" value="A"> Hard Disk</label></li>
+                    <li><label><input type="radio" name="q2" value="B"> RAM</label></li>
+                    <li><label><input type="radio" name="q2" value="C"> Pen Drive</label></li>
+                    <li><label><input type="radio" name="q2" value="D"> CD-ROM</label></li>
+                </ul>
+            </div>
+
+            <div class="question-block">
+                <div class="question-text">3. ද්විමය සංඛ්‍යා පද්ධතියේ (Binary) භාවිත වන සංකේත මොනවාද?</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q3" value="A"> 0 සහ 1 පමණි</label></li>
+                    <li><label><input type="radio" name="q3" value="B"> 1 සිට 9 දක්වා</label></li>
+                    <li><label><input type="radio" name="q3" value="C"> A සිට F දක්වා</label></li>
+                    <li><label><input type="radio" name="q3" value="D"> 0 සිට 7 දක්වා</label></li>
+                </ul>
+            </div>
+
+            <div class="question-block">
+                <div class="question-text">4.  තොරතුරු හා සන්නිවේදන තාක්ෂණය සම්බන්ධයෙන් පහත සඳහන් ප‍්‍රකාශ අතරින් සාවද්‍ය ප‍්‍රකාශයක් වනුයේ කුමක් ද?</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q4" value="A"> නම්‍යශීලී කාල රාමුවක් තුළ පහසු ස්ථානයක සිට අධ්‍යාපනය ලැබීමට ඇති හැකියාව දුරස්ථ අධ්‍යාපනයේ වාසියකි.</label></li>
+                    <li><label><input type="radio" name="q4" value="B">  රජයක් තොරතුරු හා සන්නිවේදන තාක්ෂණය භාවිතයෙන් රටෙහි පුරවැසියන්, සමාගම් රාජ්‍ය හා රාජ්‍ය නොවන
+සංවිධාන හා වෙනත් රටවල රාජ්‍යන් සමග සම්බන්ධතා පැවැත්වීම ඉ-රාජ්‍ය නම් වේ.</label></li>
+                    <li><label><input type="radio" name="q4" value="C">  සේවක පැමිණීම සටහන් කිරීම සඳහා යොදා ගන්නා ඇඟිලි සළකුණු සුපිරීක්සකය  සහ කාඞ් පත්
+කියවනය  මගින් ආයතනයක පරිපාලනය පහසු නොකරන අතර බොහෝ ගැටලූ ඇති කරයි.</label></li>
+                    <li><label><input type="radio" name="q4" value="D">  වර්ථමානයේ බහුලව භාවිතා වන සෙල්ෆ් බෑන්කින් සේවාව :ීැකෙ-ඊ්බනසබට ීහිඑැප* මගින් පුද්ගලයාගේ බැංකු
+ගනුදෙනු වඩාත් පහසු කරන අතර විශ්වාසනීයත්වය වඩාත් තහවුරු කරයි.</label></li>
+                </ul>
+            </div>
+
+           <div class="question-block">
+                <div class="question-text">5. සත්ව ගොවිපළ යෙදවුමක් ලෙස භාවිත කරන උපාංගයක් වන මෙය, යම් සත්වයකුගේ ශරීරයේ රඳවා ඇති අතර එමගින්
+එම සතුන්ගේ තොරතුරු වාර්තා කිරීම හා නිරීක්ෂණය සිදු කළ හැකි උපාංගය සඳහා සුදුසු කෙටි යෙදුම වනුයේ කුමක් ද?</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q5" value="A">  POS (point sales)</label></li>
+                    <li><label><input type="radio" name="q5" value="B"> REID (Radio Frequency Identification Device)</label></li>
+                    <li><label><input type="radio" name="q5" value="C">  MRI (Magnetic Resonance Imaging Machine)</label></li>
+                    <li><label><input type="radio" name="q5" value="D"> CSM (Cardiac Screening Machine)</label></li>
+                </ul>
+            </div>
+
+            <div class="question-block">
+                <div class="question-text">6.  තොරතුරු හා සන්නිවේදන තාක්ෂණයේ අනිසි ප‍්‍රතිඵලයක් නොවන්නේ මින් කුමක් ද?</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q6" value="A"> පරිගණක වෛරස ඇතුලූ වීම</label></li>
+                    <li><label><input type="radio" name="q6" value="B"> බුද්ධිමය දේපල සොරා ගැනීම</label></li>
+                    <li><label><input type="radio" name="q6" value="C">පෞද්ගලිකත්වයට හානි වීම</label></li>
+                    <li><label><input type="radio" name="q6" value="D"> අවිවේකී බව</label></li>
+                </ul>
+            </div>
+
+            <div class="question-block">
+                <div class="question-text">7.  තෙවන පරම්පරාවේ අවසානය සටහන් වූයේ ............... සොයා ගැනීමත් සමගයි. හිස්තැන සඳහා වඩාත් සුදුසු පිළිතුර
+    කුමක් ද?</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q7" value="A"> රික්තක නල</label></li>
+                    <li><label><input type="radio" name="q7" value="B"> ට‍්‍රාන්සින්ටර්</label></li>
+                    <li><label><input type="radio" name="q7" value="C">ඉතා විශාල ප‍්‍රමාණයේ අනුකලිත පරිපථ</label></li>
+                    <li><label><input type="radio" name="q7" value="D"> අධික ප‍්‍රමාණයේ අනුකලිත පරිපථ</label></li>
+                </ul>
+            </div>
+
+            <div class="question-block">
+                <div class="question-text">8.  මධ්‍ය ගත උපාංග කිහිපයකට සම්බන්ධ කරන ලද ජාල කිහිපයක් ප‍්‍රධාන වයරයට සම්බන්ධ කිරීමෙන් සකස් කළ ජාල
+ස්ථලයකි. මෙයට සම්බන්ධිත ජාල වෙන් වෙන් වශයෙන් පාලනය කළ හැකිය. ඉහත ප‍්‍රකාශය සම්බන්ධ ජාල ස්ථල
+විද්‍යාව වනුයේ කුමක් ද?</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q8" value="A">  Star topology   </label></li>
+                    <li><label><input type="radio" name="q8" value="B">  Bus Topology  </label></li>
+                    <li><label><input type="radio" name="q8" value="C">Tree Topology </label></li>
+                    <li><label><input type="radio" name="q8" value="D">  Mesh Topology</label></li>
+                </ul>
+            </div>
+
+            <div class="question-block">
+                <div class="question-text">9.   පහත සඳහන් උපාංග අතරින් පිළිවෙලින් ආදාන උපාංගයක් ආචයන උපාංගයක් සහ ප‍්‍රතිදාන උපාංගයක් නියෝජනය
+කරන්නේ කුමන පිළිතුරෙන් ද?</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q9" value="A">  Flash drive, speaker, touch pad   </label></li>
+                    <li><label><input type="radio" name="q9" value="B">  Mouse, Blue ray disk, speaker  </label></li>
+                    <li><label><input type="radio" name="q9" value="C"> Touch pad, speaker, external hard disk </label></li>
+                    <li><label><input type="radio" name="q9" value="D">  Key board, microphone, hard disk</label></li>
+                </ul>
+            </div>
+
+            <div class="question-block">
+                <div class="question-text">10.  සුපරීක්ෂක යටතේ සඳහන් කළ හැකි උපාංගයක් වන ප‍්‍රකාශ අක්ෂර කියවීමේ තාක්ෂණය (OCR) දක්නට ලැබෙනුයේ
+පහත දැක්වෙන කුමන උපක‍්‍රමයෙහි ද?</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q10" value="A"> මාර්ගකය (Router)   </label></li>
+                    <li><label><input type="radio" name="q10" value="B">  පරිලෝකනය (Scanner)  </label></li>
+                    <li><label><input type="radio" name="q10" value="C"> මුද්‍රකය (Printer) </label></li>
+                    <li><label><input type="radio" name="q10" value="D">  සංඛ්‍යාංක කැමරාව (Digital Camera) </label></li>
+                </ul>
+            </div>
+
+                <div class="question-block">
+                <div class="question-text">11.   බසයක ගමන් කරන මුළු මගීන් සංඛ්‍යාව 110111<sub>2</sub>
+ කි.  ඉන් 31<sub>8</sub>
+ ක් කාන්තාවන් නම් පිරිමි මගීන් සාඛ්‍යාවට තුල්‍ය පිළිතුර
+වනුයේ කුමක් ද?</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q11" value="A">  11110<sub>2</sub>  </label></li>
+                    <li><label><input type="radio" name="q11" value="B">   30<sub>16</sub> </label></li>
+                    <li><label><input type="radio" name="q11" value="C">  101010<sub>2</sub> </label></li>
+                    <li><label><input type="radio" name="q11" value="D"> 32<sub>10</sub> </label></li>
+                </ul>
+            </div>
+
+                      <div class="question-block">
+                <div class="question-text">12.  පහත දැක්වෙන පිළිතුරු අතරින් ටෙරාබයිට 4 කට සමාන නිවැරදි පිළිතුර දැක්වෙන පිළිතුර තෝරන්න.</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q12" value="A"> බිටු 2<sup>45</sup> කි  </label></li>
+                    <li><label><input type="radio" name="q12" value="B">  මෙගා බයිට්ස් 2<sup>21</sup> කි  </label></li>
+                    <li><label><input type="radio" name="q12" value="C"> කිලෝ බයිට්ස් 2<sup>32</sup> කි </label></li>
+                    <li><label><input type="radio" name="q12" value="D">  සඉහත 1 සහ 3 යන පිළිතුරු දෙකම </label></li>
+                </ul>
+            </div>
+
+            <div class="question-block">
+                <div class="question-text">13. 73 යන දශමය සංඛ්‍යාවට තුල්‍ය අෂ්ටමය සංඛ්‍යාව නිවැරදිව දැක්වෙන පිළිතුර වන්නේ කුමක් ද?</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q13" value="A">  111<sub>8</sub>  </label></li>
+                    <li><label><input type="radio" name="q13" value="B">   71<sub>8</sub> </label></li>
+                    <li><label><input type="radio" name="q13" value="C">  66<sub>8</sub> </label></li>
+                    <li><label><input type="radio" name="q13" value="D"> 101<sub>8</sub> </label></li>
+                </ul>
+            </div>
+
+             <div class="question-block">
+                <div class="question-text">14.  පහත දැක්වෙන ගොනු ධාරිතාවයන් සලකා බලා ඒවා අවරෝහණ පිළිවෙලට පෙළගැස්වූ විට ලැබෙන පිළිතුර වන්නේ
+කුමක් ද?</br> X = 2210 Bytes</br> Y = 3 Kilobytes </br> Z=2 <sup>23</sup>bits</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q14" value="A">  X,Y,Z  </label></li>
+                    <li><label><input type="radio" name="q14" value="B">   Z,Y,X </label></li>
+                    <li><label><input type="radio" name="q14" value="C">  Y,X,Z </label></li>
+                    <li><label><input type="radio" name="q14" value="D">  Y,Z,X </label></li>
+                </ul>
+            </div>
+
+            <div class="question-block">
+                <div class="question-text">15.  1111001 යන ද්විමය සංඛ්‍යාවට තුල්‍ය ෂඞ්දශමය සංඛ්‍යාව නිවැරදිව දැක්වෙන පිළිතුර තෝරන්න.</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q15" value="A">  171<sub>16</sub>  </label></li>
+                    <li><label><input type="radio" name="q15" value="B">   79<sub>16</sub> </label></li>
+                    <li><label><input type="radio" name="q15" value="C">  253<sub>16</sub> </label></li>
+                    <li><label><input type="radio" name="q15" value="D"> 97<sub>16</sub> </label></li>
+                </ul>
+            </div>
+
+                 <div class="question-block">
+                <div class="question-text">16.  ඇස්කි අගය නිරූපණයේදී E අනුලක්ෂණය සඳහා දශමය අගය 69 වන අතර B සහ H අනුලක්ෂණ සඳහා හිමි ඇස්කි
+අගයන් පිළිවෙළින් සඳහන් වන පිළිතුර වන්නේ කුමක් ද?</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q16" value="A">  1000001 සහ 1000011  </label></li>
+                    <li><label><input type="radio" name="q16" value="B">   000010 සහ 1001000</label></li>
+                    <li><label><input type="radio" name="q16" value="C">  10101001 සහ 1000110 </label></li>
+                    <li><label><input type="radio" name="q16" value="D"> 1001000 සහ 1000010 </label></li>
+                </ul>
+            </div>
+
+                 <div class="question-block">
+                <div class="question-text">17.  BCD සහ EBCDIC කේත ක‍්‍රමයන්හි පිළිවෙලින් දශමය සංඛ්‍යාංකයක් සහ අනුලක්ෂණයක් නිරූපණය කිරීමේදී භාවිතා
+කරන බිටු ප‍්‍රමාණය නිවැරදිව දැක්වෙන පිළිතුර වන්නේ කුමක් ද?</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q17" value="A">  බිටු 4 ක් සහ බිටු 8 කි  </label></li>
+                    <li><label><input type="radio" name="q17" value="B">   බිටු 3 ක් සහ බිටු 7 කි</label></li>
+                    <li><label><input type="radio" name="q17" value="C">  බිටු 4 ක් සහ බිටු 7 කි. </label></li>
+                    <li><label><input type="radio" name="q17" value="D"> බිටු 2 ක් සහ බිටු 16 කි. </label></li>
+                </ul>
+            </div>
+
+                 <div class="question-block">
+                <div class="question-text">18.  ඇස්කි අගය නිරූපණයේදී E අනුලක්ෂණය සඳහා දශමය අගය 69 වන අතර B සහ H අනුලක්ෂණ සඳහා හිමි ඇස්කි
+අගයන් පිළිවෙළින් සඳහන් වන පිළිතුර වන්නේ කුමක් ද?</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q18" value="A">  1000001 සහ 1000011  </label></li>
+                    <li><label><input type="radio" name="q18" value="B">   000010 සහ 1001000</label></li>
+                    <li><label><input type="radio" name="q18" value="C">  10101001 සහ 1000110 </label></li>
+                    <li><label><input type="radio" name="q18" value="D"> 1001000 සහ 1000010 </label></li>
+                </ul>
+            </div>
+
+                 <div class="question-block">
+                <div class="question-text">19.  අෂ්ටමය 657 යන සංඛ්‍යාව ද්විමය ආකාරයෙන් නිරූපණය සඳහා අවශ්‍ය බිටු ගණන වන්නේ,</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q19" value="A">  12 කි </label></li>
+                    <li><label><input type="radio" name="q19" value="B">   16 කි.</label></li>
+                    <li><label><input type="radio" name="q19" value="C">  8 කි. </label></li>
+                    <li><label><input type="radio" name="q19" value="D"> 9 කි </label></li>
+                </ul>
+            </div>
+                 <div class="question-block">
+                <div class="question-text">20.   තාර්කික ද්වාරයක ආදාන සියල්ලම එක (1) වූ හා ප‍්‍රතිදානය බිංදුව (0) වීම දැකිය හැක්කේ පහත සඳහන් කුමන ද්වාරයේ ද?</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q20" value="A">  AND </label></li>
+                    <li><label><input type="radio" name="q20" value="B">   NAND </label></li>
+                    <li><label><input type="radio" name="q20" value="C">  OR </label></li>
+                    <li><label><input type="radio" name="q20" value="D"> NOR </label></li>
+                </ul>
+            </div>
+
+                 <div class="question-block">
+                <div class="question-text">21. දත්ත ආචයන ධාරිතාවයන් සම්බන්ධව පහත සඳහන් ප‍්‍රකාශ කියවා X,Y හා Z යන හිස්තැන් සඳහා වඩාත් ගැලපෙන පද
+පිළිවෙලින් අඩංගු පිළිතුර වන්නේ කුමක් ද?</br>
+උපාංගවල දත්ත ධාරිතාවය සැලකූ විට ...............X............... හි අඩුම ආචයන ධාරිතාවක් ඇති අතර දත්ත කියවීම හා
+ලිවීමේදී උපාංග වලට ප‍්‍රවේශ වීමට ගතවන කාලය අනුව ..........Y.......... ගතවීමත් බිටු එකක් සඳහා වැය වන මුදල
+සැලකීමේදී ..........Z.......... වැය වීම සඳහන් කළ හැක.</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q21" value="A">  නිහිත මතකය, වැඩිම මුදලක්, අඩුම කාලයක්  </label></li>
+                    <li><label><input type="radio" name="q21" value="B">   රෙජිස්තර මතකය, අඩුම කාලයක්, වැඩිම මුදලක්</label></li>
+                    <li><label><input type="radio" name="q21" value="C">  සසම්භාවි ප‍්‍රවේශ මතකය, අඩුම කාලයක්, වැඩිම මුදලක්</label></li>
+                    <li><label><input type="radio" name="q21" value="D"> චුම්බක පටිය, අඩුම කාලයක්, අඩුම මුදලක් </label></li>
+                </ul>
+            </div>
+
+                 <div class="question-block">
+                <div class="question-text">22.  පරිගණකයක් මිලදී ගැනීමේදී ඔබ සලකා බැලිය යුතු තාක්ෂණික පිරිවිතරයක් සහ තාක්ෂණික නොවන පිරිවිතරයක්
+    පිළිවෙලින් අඩංගු පිළිතුරක් වන්නේ කුමක් ද?</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q22" value="A">  සංදර්ශකයේ ප‍්‍රමාණය සහ වගකීම්  </label></li>
+                    <li><label><input type="radio" name="q22" value="B">  ප‍්‍රධාන මතකයේ ධාරිතාවය සහ දෘඩ තැටියේ ධාරිතාවය</label></li>
+                    <li><label><input type="radio" name="q22" value="C">  වගකීම් සහ ආයතනයේ කීර්තිනාමය </label></li>
+                    <li><label><input type="radio" name="q22" value="D"> පරිගණකයේ මිල සහ සංදර්ශකයේ තාක්ෂණය </label></li>
+                </ul>
+            </div>
+
+                 <div class="question-block">
+                <div class="question-text">23.   වදන් සැකසුම් මෘදුකාංග භාවිතයෙන් තැන්පත් කරන ලද ලේඛණවලට අදාල ගොනු දිගු (File Extention) පමණක්
+     නිවැරදිව දැක්වෙන පිළිතුර වනුයේ,</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q23" value="A">   .accdb, .bmp, dos  </label></li>
+                    <li><label><input type="radio" name="q23" value="B">   .docx, .doc, .odt</label></li>
+                    <li><label><input type="radio" name="q23" value="C">   .odt, .dot, .text'   </label></li>
+                    <li><label><input type="radio" name="q23" value="D">  .docx, .xls, doc </label></li>
+                </ul>
+            </div>
+
+                 <div class="question-block">
+                <div class="question-text">24.   නවීන තාක්ෂණය සමග නිරන්තරව ගැටෙන වර්තමාන සමාජයේ බහුලව වාර්තා වන සයිබර් අපරාධ සම්බන්ධයෙන්
+සාවද්‍ය ප‍්‍රකාශයක් වනුයේ කුමක් ද?</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q24" value="A">  සමාජ වෙබ් අඩවි භාවිතයෙන් නොමග යැවීමේ අරමුණින් ව්‍යාජ තොරතුරු හා ඡුායාරූප අන්තර්ජාලයේ පළ කිරීම  </label></li>
+                    <li><label><input type="radio" name="q24" value="B">  අන්තර්ජාලය ඔස්සේ අනවසරයෙන් පුද්ගල පෞද්ගලික ගිණුම් වෙත පිවිස පෞද්ගලික තොරතුරු සොරා ගැනීම</label></li>
+                    <li><label><input type="radio" name="q24" value="C"> පුද්ගල කීර්තිනාමයට හානිවන අයුරින් තාක්ෂණික උපාංග භාවිතයෙන් නිර්මාණය කරන ලද දැන්වීම් විවිධ ස්ථානවල
+ඇලවීම. </label></li>
+                    <li><label><input type="radio" name="q24" value="D"> කාන්තාවන්ගේ නොගැලපෙන ඡුායාරූප හෝ වීඩියෝ පට අන්තර්ජාලයේ පළ කිරීම හෝ ඒවා භාවිතයෙන් තර්ජනාත්මක
+ක‍්‍රියාකාරකම්වල නිරතවීම </label></li>
+                </ul>
+            </div>
+
+                 <div class="question-block">
+                <div class="question-text">25.  වර්තමානය වන විට බහුලව පරිසරයට එකතු වන ඉලෙක්ට්‍රොනික අපද්‍රව්‍ය සම්බන්ධයෙන් වඩාත් නිවැරදි ප‍්‍රකාශයක්
+වනුයේ කුමක් ද?</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q25" value="A">  මොළය, අක්මාව, ශ්වසන පද්ධතිය, වකුගඩු සහ ස්නායු යනාදි මිනිස් සිරුරේ සියලූම උපාංගයන්ට අහිතකර ලෙස
+බලපාන රසායනික ද්‍රව්‍ය පරිසරයට එකතු වීම සිදුවේ.  </label></li>
+                    <li><label><input type="radio" name="q25" value="B">  පරිසරයට එකතු වන තාක්ෂණික උපාංග විවිධ ස්වයං රැකියා සඳහා යොදා ගැනීම මගින් වැඩි ආදායමක් ලබා ගත
+හැක.</label></li>
+                    <li><label><input type="radio" name="q25" value="C">  ඉලෙක්ට්‍රොනික අපද්‍රව්‍ය භාවිතය අඩු කිරීම සඳහා නවීන තාක්ෂණික උපාංග මිලදී නොගෙන පරිසර හිතකාමී පැරණි
+ක‍්‍රමවේද අනුගමනය කිරීම මගින් පරිසර හානිය අවම කර ගත හැක.</label></li>
+                    <li><label><input type="radio" name="q25" value="D"> ඉලෙක්ට්‍රොනික අපද්‍රව්‍ය ආරක්ෂාකාරීව බැහැර කිරීමේදී ප‍්‍රතිචක‍්‍රීකරණය, නැවත ප‍්‍රයෝජනයට ගැනීම, භාවිතය අඩු
+කිරීම සහ පුළුස්සා දැමීම සිදු කරයි. </label></li>
+                </ul>
+            </div>
+
             <button type="button" class="submit-btn" onclick="submitQuiz(false)">පිළිතුරු භාරදෙන්න (Submit Assignment)</button>
         </form>
     </div>
 
     <div id="result-box" style="display: none;">
-        <h2>පැවරුම සාර්ථකව අවසන් කර ඇත!</h2>
+        <h2>පැවරුම සාර්ථකව අවසන් කළා!</h2>
         <div class="score-display">ලකුණු: <span id="final-score">0</span>%</div>
         <div class="time-display">⏱️ ගතවූ කාලය: <span id="time-taken">0</span></div>
-        <p style="color: #637194; font-size: 1.1rem;">ඔබගේ ලකුණු සහ සියලුම විස්තර දත්ත ගබඩාව (Database) වෙත සාර්ථකව යොමු කෙරුණි.</p>
+        <p style="color: #637194;">ඔබගේ ලකුණු සහ විස්තර ගුරුතුමා වෙත සාර්ථකව යොමු කෙරුණි.</p>
     </div>
 </div>
 
@@ -101,7 +362,7 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
-    // 🔴 Firebase Configuration 
+    // 🔴 Firebase Config
     const firebaseConfig = {
         apiKey: "AIzaSyAtfTwhOmDOLAxxTdXQKwaMNthLMpRgBjQ",
         authDomain: "ctech-counter.firebaseapp.com",
@@ -111,6 +372,7 @@
         appId: "1:892307263196:web:bf443261191503be652e19"
     };
 
+    // Firebase ආරක්ෂිතව Initialize කිරීම
     let database = null;
     try {
         if (typeof firebase !== 'undefined') {
@@ -118,62 +380,51 @@
             database = firebase.database();
         }
     } catch (e) {
-        console.error("Firebase Initialization Error: ", e);
+        console.error("Firebase Init Error: ", e);
     }
 
-    // ⏱️ Configuration Settings (1 Hour Allocation)
-    const TOTAL_TIME = 60 * 60; 
+    // ⚙️ Settings
+    const TOTAL_TIME = 30 * 60; // විනාඩි 30
     let timeLeft = TOTAL_TIME;
     let timerInterval = null;
     let studentName = "";
 
-    // 🔑 Official Northwest Provincial 2020 Answer Key Mapping [cite: 9, 10, 13, 90]
+    // 🔑 Answer Key
     const correctAnswers = {
-        q1:"4",  q2:"3",  q3:"1",  q4:"3",  q5:"3",  q6:"3",  q7:"2",  q8:"2",  q9:"1",  q10:"1", [cite: 13, 84]
-        q11:"4", q12:"4", q13:"1", q14:"1", q15:"3", q16:"2", q17:"3", q18:"3", q19:"2", q20:"3", [cite: 15, 86]
-        q21:"3", q22:"2", q23:"1", q24:"1", q25:"3", q26:"2", q27:"1", q28:"1", q29:"2", q30:"1", [cite: 17, 88]
-        q31:"4", q32:"2", q33:"2", q34:"4", q35:"1", q36:"3", q37:"1", q38:"2", q39:"4", q40:"3"  [cite: 19, 90]
+        q1: "C", q2: "B", q3: "A", q4: "C", q5: "B",
+        q6: "D", q7: "C", q8: "C", q9: "B", q10: "B",
+        q11: "A", q12: "D", q13: "B", q14: "D", q15: "B",
+        q16: "B", q17: "A", q18: "B", q19: "D", q20: "B",
+        q21: "B", q22: "A", q23: "B", q24: "C", q25: "A"
     };
 
-    // 📝 Auto-Generate Question Elements inside UI Dom
-    const questionsWrapper = document.getElementById("questions-wrapper");
-    for (let i = 1; i <= 40; i++) {
-        questionsWrapper.innerHTML += `
-            <div class="question-block">
-                <div class="question-text">${i}. වයඹ පළාත් පළමු වාර පරීක්ෂණ බහුවරණ ප්‍රශ්න මාලාවෙන් උපුටාගත් ප්‍රශ්නය - ${i} [cite: 9]</div>
-                <ul class="options-list">
-                    <li><label><input type="radio" name="q${i}" value="1"> (1) පළමු පිළිතුර</label></li>
-                    <li><label><input type="radio" name="q${i}" value="2"> (2) දෙවන පිළිතුර</label></li>
-                    <li><label><input type="radio" name="q${i}" value="3"> (3) තෙවන පිළිතුර</label></li>
-                    <li><label><input type="radio" name="q${i}" value="4"> (4) සිව්වන පිළිතුර</label></li>
-                </ul>
-            </div>
-        `;
-    }
-
-    // 🚀 Execution Flow Core Functions 
+    // 🚀 Quiz එක පටන් ගැනීම (සම්පූර්ණයෙන්ම ආරක්ෂිත කර ඇත)
     function startQuiz() {
         try {
             const nameInput = document.getElementById("student-name").value.trim();
             if (nameInput === "") {
-                alert("කරුණාකර ඉදිරියට යෑමට ඔබේ සම්පූර්ණ නම ඇතුළත් කරන්න!");
+                alert("කරුණාකර ඉදිරියට යෑමට ඔබේ නම ඇතුළත් කරන්න!");
                 return;
             }
             studentName = nameInput;
             document.getElementById("display-name").innerText = studentName;
             
+            // UI එක මාරු කිරීම (Firebase වැඩ නොකලත් මෙය අනිවාර්යයෙන් සිදුවේ)
             document.getElementById("login-box").style.display = "none";
             document.getElementById("quiz-box").style.display = "block";
 
+            // ටයිමරය ක්‍රියාත්මක කිරීම
             if (timerInterval) clearInterval(timerInterval);
             timerInterval = setInterval(updateTimer, 1000);
         } catch (err) {
-            console.error("Error context captured: ", err);
+            console.error("Error in startQuiz: ", err);
+            // ආරක්ෂිත පියවරක් ලෙස මෙතනදීත් UI එක මාරු කරවයි
             document.getElementById("login-box").style.display = "none";
             document.getElementById("quiz-box").style.display = "block";
         }
     }
 
+    // ⏱️ ටයිමරය අප්ඩේට් වීම
     function updateTimer() {
         try {
             timeLeft--;
@@ -187,14 +438,15 @@
 
             if (timeLeft <= 0) {
                 clearInterval(timerInterval);
-                alert("නියමිත කාලය අවසන් විය! ඔබේ පිළිතුරු පත්‍රය ස්වයංක්‍රීයව සේව් කරනු ලැබේ.");
+                alert("කාලය අවසන් විය! ඔබේ පැවරුම ස්වයංක්‍රීයව භාරදෙනු ලැබේ.");
                 submitQuiz(true);
             }
         } catch (err) {
-            console.error(err);
+            console.error("Error in updateTimer: ", err);
         }
     }
 
+    // 📊 ලකුණු හැදීම සහ දත්ත යැවීම
     function submitQuiz(isTimeout) {
         try {
             if (timerInterval) clearInterval(timerInterval);
@@ -218,26 +470,27 @@
             let spentSeconds = timeSpentSeconds % 60;
             let timeSpentString = `${spentMinutes}min ${spentSeconds}sec`;
 
+            // UI එක වහාම වෙනස් කර ප්‍රතිඵල පෙන්වීම
             document.getElementById("quiz-box").style.display = "none";
             document.getElementById("result-box").style.display = "block";
             document.getElementById("final-score").innerText = finalScorePercentage;
             document.getElementById("time-taken").innerText = timeSpentString;
 
-            // 📥 Firebase Realtime Database Data Push Architecture
+            // පසුබිමෙන් Firebase වෙත දත්ත තල්ලු කිරීම (Non-blocking)
             if (database) {
-                database.ref('assignments_submissions/grade_11_assignment_01').push({
+                database.ref('assignments_submissions/grade_10_assignment_01').push({
                     name: studentName,
                     score: finalScorePercentage + "%",
-                    correct_answers: correctCount + "/" + totalQuestions,
                     time_taken: timeSpentString,
                     submitted_at: new Date().toLocaleString(),
-                    status: isTimeout ? "Timeout Auto-Submit" : "User Action Submitted"
-                }).catch(e => console.error("Database connection dropped or transaction rejected: ", e));
+                    status: isTimeout ? "Timeout Auto-Submit" : "User Submitted"
+                }).catch(e => console.error("Firebase push rejected: ", e));
             } else {
-                console.warn("Database structure unavailable offline.");
+                console.warn("Database not available. Score not saved online.");
             }
         } catch (err) {
-            console.error(err);
+            console.error("Error in submitQuiz: ", err);
+            // දෝෂයක් ආවත් අවසාන තිරය පෙන්වීම සහතික කරයි
             document.getElementById("quiz-box").style.display = "none";
             document.getElementById("result-box").style.display = "block";
         }
