@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C-TECH - අනෙක් විෂයන් (Other Subjects)</title>
+    <style>
+        :root {
+            --primary-blue: #00a4e4;
+            --dark-bg: #0b132b;
+            --card-bg: #1c2541;
+            --text-light: #f4f7f6;
+            --orange: #ff7300;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--dark-bg); color: var(--text-light); padding: 20px; display: flex; justify-content: center; min-height: 100vh; }
+        
+        .container { width: 100%; max-width: 1000px; }
+        
+        /* Header Box (Matching Your C-TECH Style) */
+        .header-box { background: linear-gradient(135deg, #0b132b, #1c2541); border: 2px solid var(--primary-blue); border-radius: 16px; padding: 30px; text-align: center; margin-bottom: 25px; box-shadow: 0 0 25px rgba(0, 164, 228, 0.15); }
+        .logo-text { font-size: 2rem; font-weight: bold; color: #fff; text-shadow: 0 0 10px var(--primary-blue); margin-bottom: 10px; }
+
+        /* Subject Navigation Tabs */
+        .subject-tabs { display: flex; gap: 10px; margin-bottom: 25px; overflow-x: auto; padding-bottom: 5px; }
+        .sub-tab { padding: 12px 25px; background: rgba(255,255,255,0.05); border: 1px solid #2e3856; border-radius: 8px; color: #fff; cursor: pointer; font-weight: bold; transition: 0.3s; white-space: nowrap; }
+        .sub-tab.active, .sub-tab:hover { background: var(--primary-blue); color: #0b132b; border-color: var(--primary-blue); }
+
+        /* Content Grid */
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .resource-card { background: var(--card-bg); border-radius: 12px; padding: 20px; border-left: 4px solid var(--primary-blue); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .resource-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 15px; color: #fff; }
+        
+        .download-btn { display: inline-block; width: 100%; text-align: center; background: var(--primary-blue); color: #0b132b; padding: 10px; border-radius: 6px; font-weight: bold; text-decoration: none; cursor: pointer; transition: 0.3s; }
+        .download-btn:hover { background: var(--orange); color: #fff; }
+
+        /* 🔴 ADVERTISEMENT POPUP MODAL STYLING */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-content: 9999; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        .modal-box { background: var(--card-bg); border: 2px solid var(--orange); border-radius: 16px; padding: 25px; max-width: 500px; width: 90%; text-align: center; box-shadow: 0 0 35px rgba(255, 115, 0, 0.3); position: relative; }
+        
+        .ad-image { width: 100%; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; }
+        .ad-title { font-size: 1.2rem; font-weight: bold; color: #fff; margin-bottom: 5px; }
+        .ad-subtitle { font-size: 0.95rem; color: #a0aec0; margin-bottom: 15px; }
+        
+        .timer-text { font-size: 1.1rem; color: var(--orange); font-weight: bold; margin-bottom: 10px; }
+        .popup-dl-btn { display: none; width: 100%; background: #28a745; color: white; padding: 12px; border-radius: 6px; font-weight: bold; text-decoration: none; font-size: 1.05rem; }
+        
+        /* Back Button */
+        .back-btn { display: inline-block; margin-top: 25px; padding: 10px 20px; border: 1px solid var(--primary-blue); color: var(--primary-blue); text-decoration: none; border-radius: 6px; font-weight: bold; transition: 0.3s; }
+        .back-btn:hover { background: var(--primary-blue); color: #0b132b; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-box">
+        <div class="logo-text">C-TECH EDUCATIONAL PORTAL</div>
+        <p style="color: #a0aec0;">අනෙකුත් බාහිර විෂයයන් සඳහා වන පේපර් සහ කෙටි සටහන් ලබාගැනීමේ පිටුව</p>
+    </div>
+
+    <div class="subject-tabs">
+        <button class="sub-tab active" onclick="switchSubject('science')">විද්‍යාව (Science)</button>
+        <button class="sub-tab" onclick="switchSubject('maths')">ගණිතය (Mathematics)</button>
+        <button class="sub-tab" onclick="switchSubject('history')">ඉතිහාසය (History)</button>
+    </div>
+
+    <div class="grid-container" id="resources-grid">
+        </div>
+
+    <a href="index.html" class="back-btn">← ආපසු මුල් පිටුවට (Home)</a>
+</div>
+
+<div class="modal-overlay" id="adModal">
+    <div class="modal-box">
+        <img src="your-ad-poster.jpg" alt="C-TECH Special Classes" class="ad-image" id="adPoster">
+        
+        <div class="ad-title">C-TECH තාක්ෂණික පන්ති මාලාව</div>
+        <div class="ad-subtitle">රොබෝටික්ස්, ඇන්ඩ්‍රොයිඩ් ඇප් සහ වෙබ් නිර්මාණකරණය දැන්ම අරඹන්න!</div>
+        
+        <div class="timer-text" id="popupTimer">ඔබේ ගොනුව සූදානම් වෙමින් පවතී... තත්පර <span id="secs">10</span></div>
+        <a href="#" id="finalDownloadLink" class="popup-dl-btn" download onclick="closeModal()">ගොනුව බාගත කරගන්න (Download Now)</a>
+    </div>
+</div>
+
+<script>
+    // 📂 විෂයයන්ට අදාළ පේපර් සහ නෝට් දත්ත ගබඩාව (Data Array)
+    const subjectsData = {
+        science: [
+            { title: "11 ශ්‍රේණිය - විද්‍යාව - පළමු වාර පරීක්ෂණය 2023", file: "papers/science_g11_t1_2023.pdf" },
+            { title: "10 ශ්‍රේණිය - ජීව විද්‍යාව කෙටි සටහන් (Short Notes)", file: "notes/biology_g10_notes.pdf" }
+        ],
+        maths: [
+            { title: "11 ශ්‍රේණිය - ගණිතය I, II පත්‍ර - වයඹ පළාත 2022", file: "papers/maths_g11_nwp_2022.pdf" },
+            { title: "10 ශ්‍රේණිය - ජ්‍යාමිතිය විශේෂ ප්‍රශ්නාවලිය", file: "papers/geometry_g10_special.pdf" }
+        ],
+        history: [
+            { title: "11 ශ්‍රේණිය - ඉතිහාසය ප්‍රශ්න පත්‍රය - 2023", file: "papers/history_g11_2023.pdf" }
+        ]
+    };
+
+    let countdownInterval = null;
+
+    // 🔄 විෂයයන් මාරු කිරීමේ ශ්‍රිතය
+    function switchSubject(subjectKey) {
+        // Active Tab Class එක මාරු කිරීම
+        const tabs = document.querySelectorAll('.sub-tab');
+        tabs.forEach(tab => tab.classList.remove('active'));
+        event.target.classList.add('active');
+
+        // පේපර් ලිස්ට් එක Update කිරීම
+        const grid = document.getElementById('resources-grid');
+        grid.innerHTML = '';
+
+        if (subjectsData[subjectKey]) {
+            subjectsData[subjectKey].forEach(item => {
+                grid.innerHTML += `
+                    <div class="resource-card">
+                        <div class="resource-title">📄 ${item.title}</div>
+                        <button class="download-btn" onclick="triggerDownload('${item.file}')">Download Paper</button>
+                    </div>
+                `;
+            });
+        }
+    }
+
+    // 💥 ඇඩ් එක සහ ටයිමරය ක්‍රියාත්මක කරන ශ්‍රිතය
+    function triggerDownload(fileLink) {
+        const modal = document.getElementById('adModal');
+        const timerText = document.getElementById('popupTimer');
+        const dlBtn = document.getElementById('finalDownloadLink');
+        const secsSpan = document.getElementById('secs');
+        
+        let timeLeft = 10; // තත්පර 10 ක ඇඩ් එකක්
+        
+        // Reset Popup UI
+        secsSpan.innerText = timeLeft;
+        timerText.style.display = 'block';
+        dlBtn.style.display = 'none';
+        dlBtn.href = fileLink; // ඩවුන්ලෝඩ් ලින්ක් එක බොත්තමට බද්ධ කිරීම
+        
+        // Popup එක පෙන්වීම
+        modal.style.display = 'flex';
+
+        // Countdown එක ආරම්භ කිරීම
+        if (countdownInterval) clearInterval(countdownInterval);
+        countdownInterval = setInterval(() => {
+            timeLeft--;
+            secsSpan.innerText = timeLeft;
+            
+            if (timeLeft <= 0) {
+                clearInterval(countdownInterval);
+                timerText.style.display = 'none'; // ටයිමරය සඟවන්න
+                dlBtn.style.display = 'block';   // ඩවුන්ලෝඩ් බොත්තම පෙන්වන්න
+            }
+        }, 1000);
+    }
+
+    function closeModal() {
+        setTimeout(() => {
+            document.getElementById('adModal').style.display = 'none';
+        }, 500);
+    }
+
+    // මුලින්ම විද්‍යාව පේපර්ස් ලෝඩ් කර තැබීම
+    window.onload = function() {
+        switchSubject('science');
+    };
+</script>
+
+</body>
+</html>
