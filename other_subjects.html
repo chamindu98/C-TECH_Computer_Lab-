@@ -78,7 +78,9 @@
         <button class="sub-tab active" id="tab-science" onclick="switchTab('science')">විද්‍යාව</button>
         <button class="sub-tab" id="tab-maths" onclick="switchTab('maths')">ගණිතය</button>
         <button class="sub-tab" id="tab-sinhala" onclick="switchTab('sinhala')">සිංහල</button>
+        <button class="sub-tab" id="tab-english" onclick="switchTab('sinhala')">English</button>
         <button class="sub-tab" id="tab-history" onclick="switchTab('history')">ඉතිහාසය</button>
+        <button class="sub-tab" id="tab-buddhist" onclick="switchTab('history')">බුද්ධාගම</button>
     </div>
 
     <div id="sec-science" class="subject-section active">
@@ -116,7 +118,25 @@
         </div>
     </div>
 
+    <div id="sec-english" class="subject-section">
+        <div class="grid-container">
+            <div class="resource-card">
+                <div class="resource-title">📄 11 ශ්‍රේණිය - සිංහල භාෂාව සහ සාහිත්‍යය ප්‍රශ්න පත්‍රය</div>
+                <button class="download-btn" onclick="openAd('papers/sinhala_g11.pdf')">Download Paper</button>
+            </div>
+        </div>
+    </div>
+
     <div id="sec-history" class="subject-section">
+        <div class="grid-container">
+            <div class="resource-card">
+                <div class="resource-title">📄 11 ශ්‍රේණිය - ඉතිහාසය ආදර්ශ ප්‍රශ්න පත්‍රය - 2023</div>
+                <button class="download-btn" onclick="openAd('papers/history_g11.pdf')">Download Paper</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="sec-buddhist" class="subject-section">
         <div class="grid-container">
             <div class="resource-card">
                 <div class="resource-title">📄 11 ශ්‍රේණිය - ඉතිහාසය ආදර්ශ ප්‍රශ්න පත්‍රය - 2023</div>
@@ -131,10 +151,10 @@
 
 <div class="modal-overlay" id="adModal">
     <div class="modal-box">
-        <img src="your-ad-poster.jpg" alt="C-TECH Special Classes" class="ad-image">
+        <img src="add.jpg" alt="C-TECH Special Classes" class="ad-image">
         
-        <div class="ad-title">C-TECH තාක්ෂණික පන්ති මාලාව</div>
-        <div class="ad-subtitle">රොබෝටික්ස්, ඇන්ඩ්‍රොයිඩ් ඇප් සහ වෙබ් නිර්මාණකරණය දැන්ම අරඹන්න!</div>
+        <div class="ad-title">Smart විදියට ICT - ජනිත් ලක්ෂාන්</div>
+        <div class="ad-subtitle">06 වසරේ සිට 11 වසර දක්වා </br>සම්බන්ධ වීම සදහා අමතන්න -<B>071 26 75 988</B></div>
         
         <div class="timer-text" id="popupTimer">ඔබේ ගොනුව සූදානම් වෙමින් පවතී... තත්පර <span id="secs">10</span></div>
         <a href="#" id="finalDownloadLink" class="popup-dl-btn" download onclick="closeModal()">ගොනුව බාගත කරගන්න (Download Now)</a>
