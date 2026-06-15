@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C-TECH - Logic Gate Builder</title>
+    <style>
+        :root {
+            --light-blue: #00a4e4; --orange: #ff7300; --dark-bg: #0b132b; --card-bg: #1c2541; --text-light: #f4f7f6;
+            --on-color: #2ecc71; --off-color: #e74c3c;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body {
+            background-color: var(--dark-bg); color: var(--text-light);
+            display: flex; justify-content: center; padding: 20px; min-height: 100vh;
+            background-image: radial-gradient(at 0% 0%, rgba(0, 164, 228, 0.15) 0px, transparent 50%);
+        }
+        .web-container {
+            width: 100%; max-width: 750px; background-color: rgba(28, 37, 65, 0.85);
+            backdrop-filter: blur(10px); border: 2px solid var(--light-blue);
+            border-radius: 16px; padding: 25px; box-shadow: 0 0 30px rgba(0, 164, 228, 0.3); text-align: center;
+        }
+        .game-title { font-size: 1.8rem; color: #fff; margin-bottom: 5px; text-shadow: 0 0 10px var(--light-blue); }
+        .game-desc { color: #a0aec0; margin-bottom: 20px; font-size: 0.95rem; }
+        
+        .circuit-board {
+            background: #0f172a; border-radius: 12px; border: 2px solid #1e293b;
+            padding: 30px; margin-bottom: 20px; display: flex; flex-direction: column; align-items: center; gap: 25px;
+        }
+        
+        .gate-title-display { font-size: 1.5rem; font-weight: bold; color: var(--orange); letter-spacing: 1px; }
+
+        .gate-simulator { display: flex; align-items: center; justify-content: center; gap: 40px; width: 100%; margin: 15px 0; }
+        
+        .inputs-zone { display: flex; flex-direction: column; gap: 20px; }
+        .switch-btn {
+            width: 60px; padding: 10px; font-weight: bold; border-radius: 6px; border: none; cursor: pointer;
+            transition: 0.3s; color: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .switch-btn.off { background: var(--off-color); }
+        .switch-btn.on { background: var(--on-color); box-shadow: 0 0 15px var(--on-color); }
+
+        .gate-graphic-box {
+            width: 130px; height: 90px; background: var(--card-bg); border: 2px solid var(--light-blue);
+            border-radius: 8px; display: flex; justify-content: center; align-items: center;
+            font-size: 1.6rem; font-weight: bold; color: #fff; box-shadow: inset 0 0 15px rgba(0, 164, 228, 0.2);
+            position: relative;
+        }
+        /* Graphic connectors lines */
+        .gate-graphic-box::before { content: ''; position: absolute; left: -20px; width: 20px; height: 2px; background: var(--light-blue); top: 30%; }
+        .gate-graphic-box.dual-input::after { content: ''; position: absolute; left: -20px; width: 20px; height: 2px; background: var(--light-blue); top: 70%; }
+
+        .output-zone { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .bulb {
+            font-size: 3.5rem; filter: drop-shadow(0 0 0px transparent); transition: 0.3s;
+        }
+        .bulb.glow { filter: drop-shadow(0 0 20px #ffeb3b); animation: pulse 1.5s infinite alternate; }
+
+        .target-mission { background: rgba(255,255,255,0.03); padding: 12px; border-radius: 6px; font-weight: 500; border: 1px solid rgba(255,255,255,0.05); }
+        .status-msg { font-size: 1.1rem; font-weight: bold; margin-top: 10px; height: 25px; }
+
+        button.main-action {
+            width: 100%; max-width: 200px; padding: 12px; background: linear-gradient(90deg, #008cd1, var(--light-blue));
+            border: none; border-radius: 6px; color: white; font-size: 1rem; font-weight: bold; cursor: pointer;
+        }
+        .back-link { display: inline-block; margin-top: 20px; color: var(--light-blue); text-decoration: none; font-weight: 600; }
+        
+        @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.05); } }
+    </style>
+</head>
+<body>
+    <div class="web-container">
+        <h2 class="game-title">⚡ Logic Gate Builder</h2>
+        <p class="game-desc">තාර්කික ද්වාරවල හැසිරීම වටහාගෙන නිවැරදි ප්‍රතිදානය ලබාගන්න.</p>
+
+        <div class="circuit-board">
+            <div class="gate-title-display" id="gateName">AND GATE</div>
+            <div class="target-mission" id="missionText">අරමුණ: බල්බය දැල්වීම (Output = 1) සිදුකරන්න.</div>
+
+            <div class="gate-simulator">
+                <div class="inputs-zone">
+                    <button class="switch-btn off" id="inputA" onclick="toggleInput('A')">A: 0</button>
+                    <button class="switch-btn off" id="inputB" onclick="toggleInput('B')">B: 0</button>
+                </div>
+
+                <div class="gate-graphic-box dual-input" id="gateGraphic">AND</div>
+
+                <div class="output-zone">
+                    <div class="bulb" id="bulbIcon">💡</div>
+                    <span style="font-weight: bold;">Output: <span id="outValue">0</span></span>
+                </div>
+            </div>
+
+            <div class="status-msg" id="statusMsg"></div>
+            <button class="main-action" onclick="nextLevel()">ඊළඟ මට්ටම (Next)</button>
+        </div>
+
+        <a href="games.html" class="back-link">← වෙනත් ගේම් එකක් තෝරන්න</a>
+    </div>
+
+    <script>
+        const levels = [
+            { gate: 'AND', target: 1, desc: 'අරමුණ: බල්බය දැල්වීම (Output = 1) සිදුකරන්න.' },
+            { gate: 'OR', target: 1, desc: 'අරමුණ: බල්බය දැල්වීම (Output = 1) සිදුකරන්න.' },
+            { gate: 'NOT', target: 1, desc: 'අරමුණ: බල්බය දැල්වීම (Output = 1) සිදුකරන්න. (මෙහි ඇත්තේ Input A පමණි)' },
+            { gate: 'AND', target: 0, desc: 'අරමුණ: බල්බය නිවා දැමීම (Output = 0) සිදුකරන්න.' },
+            { gate: 'OR', target: 0, desc: 'අරමුණ: බල්බය නිවා දැමීම (Output = 0) සිදුකරන්න.' }
+        ];
+        
+        let currentLevel = 0; let valA = 0; let valB = 0;
+
+        function toggleInput(type) {
+            if (type === 'A') {
+                valA = valA === 0 ? 1 : 0;
+                updateSwitchDisplay('inputA', valA);
+            } else {
+                valB = valB === 0 ? 1 : 0;
+                updateSwitchDisplay('inputB', valB);
+            }
+            calculateOutput();
+        }
+
+        function updateSwitchDisplay(id, val) {
+            const btn = document.getElementById(id);
+            btn.innerText = id === 'inputA' ? `A: ${val}` : `B: ${val}`;
+            if (val === 1) { btn.className = "switch-btn on"; }
+            else { btn.className = "switch-btn off"; }
+        }
+
+        function calculateOutput() {
+            let out = 0;
+            let gate = levels[currentLevel].gate;
+
+            if (gate === 'AND') { out = valA && valB; }
+            else if (gate === 'OR') { out = valA || valB; }
+            else if (gate === 'NOT') { out = valA === 0 ? 1 : 0; }
+
+            document.getElementById('outValue').innerText = out;
+            const bulb = document.getElementById('bulbIcon');
+            
+            if (out === 1) { bulb.classList.add('glow'); } 
+            else { bulb.classList.remove('glow'); }
+
+            // Check Success
+            const status = document.getElementById('statusMsg');
+            if (out === levels[currentLevel].target) {
+                status.innerText = "🎯 ඉලක්කය සපුරා ඇත! මීළඟ මට්ටමට යන්න.";
+                status.style.color = "#2ecc71";
+            } else {
+                status.innerText = "";
+            }
+        }
+
+        function nextLevel() {
+            currentLevel = (currentLevel + 1) % levels.length;
+            valA = 0; valB = 0;
+            updateSwitchDisplay('inputA', 0);
+            updateSwitchDisplay('inputB', 0);
+            
+            const lvl = levels[currentLevel];
+            document.getElementById('gateName').innerText = `${lvl.gate} GATE`;
+            document.getElementById('missionText').innerText = lvl.desc;
+            
+            const graphic = document.getElementById('gateGraphic');
+            graphic.innerText = lvl.gate;
+            
+            if (lvl.gate === 'NOT') {
+                document.getElementById('inputB').style.display = 'none';
+                graphic.classList.remove('dual-input');
+            } else {
+                document.getElementById('inputB').style.display = 'block';
+                graphic.classList.add('dual-input');
+            }
+            calculateOutput();
+        }
+        
+        window.onload = () => calculateOutput();
+    </script>
+</body>
+</html>

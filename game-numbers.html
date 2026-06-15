@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C-TECH - Number System Explorer</title>
+    <style>
+        :root {
+            --light-blue: #00a4e4; --orange: #ff7300; --dark-bg: #0b132b; --card-bg: #1c2541; --text-light: #f4f7f6;
+            --success: #2ecc71;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body {
+            background-color: var(--dark-bg); color: var(--text-light);
+            display: flex; justify-content: center; padding: 20px; min-height: 100vh;
+            background-image: radial-gradient(at 100% 100%, rgba(255, 115, 0, 0.1) 0px, transparent 50%);
+        }
+        .web-container {
+            width: 100%; max-width: 650px; background-color: rgba(28, 37, 65, 0.85);
+            backdrop-filter: blur(10px); border: 2px solid var(--light-blue);
+            border-radius: 16px; padding: 25px; box-shadow: 0 0 30px rgba(0, 164, 228, 0.3); text-align: center;
+        }
+        .game-title { font-size: 1.8rem; color: #fff; margin-bottom: 5px; text-shadow: 0 0 10px var(--light-blue); }
+        .game-desc { color: #a0aec0; margin-bottom: 25px; font-size: 0.95rem; }
+
+        .game-panel {
+            background-color: rgba(11, 19, 43, 0.6); border-radius: 12px; padding: 35px 25px;
+            border: 1px dashed rgba(0, 164, 228, 0.4); margin-bottom: 20px;
+        }
+
+        .system-badge {
+            display: inline-block; background: var(--orange); color: #fff; padding: 5px 15px;
+            border-radius: 20px; font-weight: bold; font-size: 0.85rem; margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .question-number { font-size: 3rem; font-weight: bold; color: #fff; margin-bottom: 25px; text-shadow: 0 0 15px var(--light-blue); }
+
+        .options-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px; }
+        
+        .option-btn {
+            background: var(--card-bg); border: 1px solid rgba(0, 164, 228, 0.4); border-radius: 8px;
+            padding: 15px; color: #fff; font-size: 1.2rem; font-weight: bold; cursor: pointer; transition: 0.2s;
+        }
+        .option-btn:hover { border-color: var(--orange); background: rgba(255, 115, 0, 0.05); transform: scale(1.02); }
+
+        .stats-bar { display: flex; justify-content: space-between; font-weight: bold; margin-top: 15px; font-size: 0.95rem; color: var(--light-blue); }
+        
+        .alert-box { font-size: 1.1rem; font-weight: bold; margin-top: 15px; height: 30px; }
+
+        .back-link { display: inline-block; margin-top: 20px; color: var(--light-blue); text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="web-container">
+        <h2 class="game-title">🚀 Number System Explorer</h2>
+        <p class="game-desc">විවිධ සංඛ්‍යා පද්ධති එකිනෙකට පරිවර්තනය කරමින් විශ්වය ගවේෂණය කරන්න.</p>
+
+        <div class="game-panel">
+            <div class="system-badge" id="modeBadge">DECIMAL TO BINARY</div>
+            <div style="color: #a0aec0; font-size: 0.9rem; margin-bottom: 5px;">මෙම අගයට සමාන පදය තෝරන්න:</div>
+            <div class="question-number" id="questionDisplay">10</div>
+
+            <div class="options-grid" id="optionsContainer">
+                </div>
+
+            <div class="alert-box" id="feedbackBox"></div>
+
+            <div class="stats-bar">
+                <div>ලකුණු (Score): <span id="gameScore" style="color:var(--orange)">0</span></div>
+                <div>මට්ටම (Level): <span id="gameLevel" style="color:var(--orange)">1/5</span></div>
+            </div>
+        </div>
+
+        <a href="games.html" class="back-link">← වෙනත් ගේම් එකක් තෝරන්න</a>
+    </div>
+
+    <script>
+        const questions = [
+            { src: 'Decimal: 12', ans: '1100', opts: ['1010', '1100', '1110', '1001'], badge: 'DECIMAL TO BINARY' },
+            { src: 'Binary: 0101', ans: '5', opts: ['4', '5', '6', '3'], badge: 'BINARY TO DECIMAL' },
+            { src: 'Decimal: 15', ans: 'F', opts: ['A', 'E', 'F', 'C'], badge: 'DECIMAL TO HEXADECIMAL' },
+            { src: 'Hex: A', ans: '10', opts: ['10', '12', '15', '9'], badge: 'HEXADECIMAL TO DECIMAL' },
+            { src: 'Binary: 1010', ans: '10', opts: ['8', '10', '12', '6'], badge: 'BINARY TO DECIMAL' }
+        ];
+
+        let currentQ = 0; let score = 0;
+
+        function loadQuestion() {
+            document.getElementById('feedbackBox').innerText = "";
+            const q = questions[currentQ];
+            document.getElementById('modeBadge').innerText = q.badge;
+            document.getElementById('questionDisplay').innerText = q.src.split(': ')[1];
+            document.getElementById('gameLevel').innerText = `${currentQ + 1}/${questions.length}`;
+
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = "";
+            
+            q.opts.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "option-btn";
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(opt);
+                container.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selected) {
+            const feed = document.getElementById('feedbackBox');
+            if (selected === questions[currentQ].ans) {
+                score += 10;
+                document.getElementById('gameScore').innerText = score;
+                feed.innerText = "🎉 නිවැරදියි! විශිෂ්ටයි.";
+                feed.style.color = "#2ecc71";
+            } else {
+                feed.innerText = `❌ වැරදියි! නිවැරදි පිළිතුර: ${questions[currentQ].ans}`;
+                feed.style.color = "#e74c3c";
+            }
+
+            setTimeout(() => {
+                currentQ++;
+                if (currentQ < questions.length) {
+                    loadQuestion();
+                } else {
+                    document.getElementById('gamePanel').innerHTML = `<h3 style='font-size:1.8rem; color:#fff; margin-bottom:15px;'>🎮 Game Over!</h3><p style='font-size:1.2rem;'>ඔබේ අවසාන ලකුණු සංඛ්‍යාව: <span style='color:var(--orange); font-weight:bold;'>${score}</span></p><br><button class='option-btn' onclick='window.location.reload()'>නැවත ක්‍රීඩා කරන්න</button>`;
+                }
+            }, 1500);
+        }
+
+        window.onload = loadQuestion;
+    </script>
+</body>
+</html>
