@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>C-TECH - Tech Update Article</title>
+    <title>C-TECH - AI & Robotics Update</title>
     <style>
         :root {
             --light-blue: #00a4e4; 
@@ -24,17 +24,17 @@
         body {
             background-color: var(--dark-bg); 
             color: var(--text-light);
-            line-height: 1.7;
+            line-height: 1.8;
             padding: 20px;
             min-height: 100vh;
-            background-image: radial-gradient(at 0% 0%, rgba(0, 164, 228, 0.12) 0px, transparent 50%);
+            background-image: radial-gradient(at 0% 0%, rgba(0, 164, 228, 0.15) 0px, transparent 50%);
         }
 
         /* 📦 Main Container */
         .article-container {
             width: 100%;
-            max-width: 800px;
-            margin: 40px auto;
+            max-width: 850px;
+            margin: 30px auto;
             background-color: rgba(28, 37, 65, 0.85);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(0, 164, 228, 0.3);
@@ -43,7 +43,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
-        /* 🏷️ Category Badge & Date */
+        /* 🏷️ Meta Info */
         .article-meta {
             display: flex;
             align-items: center;
@@ -69,31 +69,25 @@
         .article-title {
             font-size: 2.2rem;
             color: #fff;
-            line-height: 1.3;
+            line-height: 1.4;
             margin-bottom: 25px;
             text-shadow: 0 0 10px rgba(0, 164, 228, 0.2);
         }
 
-        /* 🖼️ Featured Graphic Placeholder */
+        /* 🖼️ Featured Graphic Area */
         .featured-graphic-box {
             width: 100%;
-            height: 300px;
+            height: 250px;
             background: #0f172a;
             border: 2px dashed rgba(0, 164, 228, 0.4);
             border-radius: 12px;
             margin-bottom: 30px;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             color: var(--light-blue);
-            font-size: 3rem;
-            gap: 10px;
-        }
-
-        .featured-graphic-box span {
-            font-size: 1rem;
-            color: var(--text-muted);
+            font-size: 4rem;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
         }
 
         /* 📄 Content Area */
@@ -106,8 +100,8 @@
 
         .article-content h3 {
             color: var(--light-blue);
-            margin: 30px 0 15px 0;
-            font-size: 1.4rem;
+            margin: 35px 0 15px 0;
+            font-size: 1.35rem;
             border-left: 4px solid var(--orange);
             padding-left: 10px;
         }
@@ -120,6 +114,56 @@
             border-radius: 0 8px 8px 0;
             margin: 25px 0;
             font-style: italic;
+            font-size: 1.1rem;
+            color: #fff;
+            text-align: center;
+        }
+
+        /* 📊 RESPONSIVE DATA TABLE STYLES */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            margin: 30px 0;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 164, 228, 0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            text-align: left;
+            min-width: 500px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        th {
+            background-color: #0f172a;
+            color: var(--light-blue);
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        tr:hover {
+            background-color: rgba(0, 164, 228, 0.05);
+        }
+
+        /* 🛠️ Bullet Lists */
+        .custom-list {
+            margin: 15px 0 25px 25px;
+            color: #e2e8f0;
+        }
+        
+        .custom-list li {
+            margin-bottom: 10px;
+            font-size: 1.05rem;
         }
 
         /* 🔙 Back Navigation */
@@ -147,11 +191,11 @@
             transform: translateX(-3px);
         }
 
-        /* Responsive Design */
+        /* Mobile Optimization */
         @media (max-width: 768px) {
-            .article-container { padding: 25px; margin: 20px auto; }
-            .article-title { font-size: 1.7rem; }
-            .featured-graphic-box { height: 200px; }
+            .article-container { padding: 20px; margin: 10px auto; }
+            .article-title { font-size: 1.6rem; }
+            .featured-graphic-box { height: 180px; font-size: 3rem; }
         }
     </style>
 </head>
@@ -159,29 +203,86 @@
 
     <div class="article-container">
         <div class="article-meta">
-            <span class="category-badge">ROBOTICS & AI</span>
+            <span class="category-badge">AI & ROBOTICS</span>
             <span class="article-date">📅 2026 ජූනි 17</span>
         </div>
 
         <h1 class="article-title">අනාගත ලෝකය වෙනස් කරන AI සහ රොබෝ තාක්ෂණයේ නවතම පිම්ම</h1>
 
-        <div class="featured-graphic-box">
-            🤖
-            <span>[ තාක්ෂණික ලිපියට අදාළ ප්‍රධාන රූපය / Graphic මෙතැනට ]</span>
-        </div>
+        <div class="featured-graphic-box">🤖🚀</div>
 
         <div class="article-content">
-            <p>වත්මන් තාක්ෂණික ලෝකය තුළ කෘතිම බුද්ධිය (Artificial Intelligence) සහ රොබෝ විද්‍යාව ඉතා සීඝ්‍රයෙන් ඉදිරියට ගලා යමින් පවතී. මිනිස් ශ්‍රමයට සහනයක් වෙමින්, වඩාත් නිරවද්‍ය කාර්යයන් ඉටු කිරීම සඳහා වර්තමානයේ ස්වයංක්‍රීය පද්ධති (Automated Systems) බහුලවම භාවිත වේ.</p>
+            <p>අදින් වසර විසිතිහකට පෙර අප සිනමා පටවලින් සහ විද්‍යා ප්‍රබන්ධ කතාවලින් දැක පුදුම වූ "හිතන්න පුළුවන් මැෂින්" සහ "මිනිසුන් වගේ වැඩ කරන රොබෝවරු" දැන් තවදුරටත් හීන නොවෙයි. කෘත්‍රිම බුද්ධිය (Artificial Intelligence හෙවත් AI) සහ රොබෝ තාක්ෂණය (Robotics) මේ වන විටත් අපේ එදිනෙදා ජීවිතය, රැකියා ක්ෂේත්‍රය සහ මුළු මහත් ලෝකයම උඩුයටිකුරු කරමින් මහා පරිමාණ තාක්ෂණික විප්ලවයක් සිදුකරමින් පවතියයි.</p>
+            
+            <p>තාක්ෂණයේ මේ නවතම පිම්ම අපව රැගෙන යන්නේ කෙබඳු අනාගතයකටද? අපි ඒ දෙස විමසිල්ලෙන් බලමු.</p>
 
-            <h3>1. ස්මාර්ට් රොබෝ තාක්ෂණයේ වර්ධනය</h3>
-            <p>නවීන රොබෝවරුන් හුදෙක් කලින් සකස් කරන ලද විධාන (Commands) ක්‍රියාත්මක කරනවාට වඩා, අවට පරිසරය තේරුම් ගෙන තීරණ ගැනීමට සමත් වී ඇත. මේ සඳහා විවිධ සංවේදක (Sensors) සහ පරිගණක දෘෂ්ටිය (Computer Vision) වැනි උසස් තාක්ෂණයන් උපකාරී වේ.</p>
+            <h3>1. Generative AI සහ බුද්ධිමත් රොබෝවරුන්ගේ එකතුව</h3>
+            <p>Mීට පෙර රොබෝවරුන්ට කළ හැකි වූයේ මිනිසා විසින් කලින් වැඩසටහන්ගත කරන ලද (Program කරන ලද) නිශ්චිත කාර්යයන් කිහිපයක් පමණි. නමුත් ChatGPT, Gemini වැනි Generative AI තාක්ෂණයේ දියුණුවත් සමඟ රොබෝවරුන්ට දැන් ස්වාධීනව සිතීමට, තීරණ ගැනීමට සහ මිනිසුන් සමඟ ස්වභාවිකව සන්නිවේදනය කිරීමට හැකියාව ලැබී ඇත.</p>
+            <p>මෙහි ප්‍රතිඵලයක් ලෙස Humanoid Robots හෙවත් මිනිස් රූපී රොබෝවරුන්ගේ ක්ෂේත්‍රය වේගයෙන් දියුණු වෙමින් පවතී. Tesla සමාගමේ Optimus, Figure AI සමාගමේ රොබෝවරුන් දැන් කර්මාන්තශාලාවල මිනිසුන් හා සමානව සංකීර්ණ වැඩ කිරීමට මෙන්ම, නිවෙස්වල එදිනෙදා වැඩකටයුතු කිරීමට පවා පුහුණු වෙමින් සිටියි.</p>
 
-            <div class="highlight-callout">
-                "තාක්ෂණය යනු මිනිසාගේ වැඩකටයුතු පහසු කරන සහ ලෝකය එකම ජාලයකට එකතු කරන ප්‍රධානතම මෙවලමයි."
+            <h3>2. සෞඛ්‍ය ක්ෂේත්‍රයේ විප්ලවීය වෙනසක්</h3>
+            <p>වෛද්‍ය ක්ෂේත්‍රය තුළ AI සහ රොබෝ තාක්ෂණයේ මැදිහත්වීම මිනිස් ජීවිත දහස් ගණනක් බේරා ගැනීමට සමත්ව ඇත.</p>
+            <p><strong>නිරවද්‍ය සැත්කම්:</strong> Da Vinci වැනි රොබෝ ශල්‍ය වෛද්‍ය පද්ධති හරහා මිනිස් අතකින් සිදුවිය හැකි සුළු හෝ වෙව්ලීමකින් තොරව, ඉතා සියුම් සැත්කම් සාර්ථකව සිදු කිරීමට වෛද්‍යවරුන්ට හැකි වී තිබේ.</p>
+            <p><strong>රෝග විනිශ්චය සහ ඖෂධ නිෂ්පාදනය:</strong> පිළිකා වැනි දරුණු රෝග මුල් අවධදියේදීම හඳුනා ගැනීමට AI ඇල්ගොරිතම සමත්ය. එමෙන්ම වසර ගණනාවක් ගතවන නව ඖෂධ පර්යේෂණ ක්‍රියාවලීන් මාස කිහිපයක් දක්වා කෙටි කිරීමට AI සතු දත්ත විශ්ලේෂණ හැකියාව උපකාරී වේ.</p>
+
+            <h3>3. එදිනෙදා ජීවිතය සහ ස්වයංක්‍රීය ප්‍රවාහනය (Autonomous Vehicles)</h3>
+            <p>අනාගතයේදී ඔබට රියදුරෙකු නොමැති වාහනයක නැගී රැකියාවට යාම සාමාන්‍ය දෙයක් වනු ඇත. Waymo, Tesla සහ Cruise වැනි සමාගම් නිපදවන ස්වයංක්‍රීය මෝටර් රථ (Self-driving cars) AI තාක්ෂණය ඔස්සේ මාර්ගයේ ඇති බාධක, වෙනත් වාහන සහ පදිකයන් හඳුනා ගනිමින් ඉතා ආරක්ෂිතව ධාවනය වේ. මෙයට අමතරව භාණ්ඩ ප්‍රවාහනය සඳහා AI මඟින් ක්‍රියාත්මක වන ඩ්‍රෝන (Drone) තාක්ෂණයද බහුලව භාවිත වීමට පටන් ගෙන ඇත.</p>
+
+            <h3 style="border-left-color: var(--light-blue);">AI සහ රොබෝ තාක්ෂණයෙන් විවිධ ක්ෂේත්‍රවලට සිදුවන බලපෑම</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ක්ෂේත්‍රය</th>
+                            <th>වර්තමාන/අනාගත භාවිතය</th>
+                            <th>ලැබෙන ප්‍රධාන වාසිය</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>කර්මාන්තශාලා</strong></td>
+                            <td>ස්වයංක්‍රීය රොබෝ අත් සහ ඇසුරුම්කරණය</td>
+                            <td>24/7 බිඳවැටීමකින් තොරව නිෂ්පාදන ධාරිතාව ඉහළ නැංවීම</td>
+                        </tr>
+                        <tr>
+                            <td><strong>අධ්‍යාපනය</strong></td>
+                            <td>පුද්ගලීකරණය කළ AI ගුරුවරුන් (AI Tutors)</td>
+                            <td>ශිෂ්‍යයාගේ දක්ෂතාවය අනුව වෙන වෙනම ඉගැන්වීම</td>
+                        </tr>
+                        <tr>
+                            <td><strong>කෘෂිකර්මාන්තය</strong></td>
+                            <td>වල් පැලෑටි හඳුනාගන්නා සහ අස්වැන්න නෙළන රොබෝවරු</td>
+                            <td>පලිබෝධනාශක භාවිතය අවම කිරීම සහ ඉහළ අස්වැන්නක්</td>
+                        </tr>
+                        <tr>
+                            <td><strong>පාරිභෝගික සේවා</strong></td>
+                            <td>බුද්ධිමත් Chatbots සහ පාරිභෝගික සහායකයින්</td>
+                            <td>ඕනෑම වේලාවක ක්ෂණික විසඳුම් ලබාදීම</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
-            <h3>2. අධ්‍යාපනයට මෙයින් ලැබෙන පිටුවහල</h3>
-            <p>පාසල් සහ විශ්වවිද්‍යාල මට්ටමින් Arduino සහ ESP32 වැනි මයික්‍රොකොන්ට්‍රෝලර් (Microcontrollers) භාවිතයෙන් කුඩා රොබෝ පද්ධති නිර්මාණය කිරීමට සිසුන් යොමුවීම, ඔවුන්ගේ ප්‍රායෝගික තාක්ෂණික කුසලතා (ICT skills) වර්ධනය වීමට මනා පිටුවහලක් සපයයි.</p>
+            <h3>4. රැකියා වෙළඳපොළට එල්ල වන බලපෑම: අභියෝගයක්ද? අවස්ථාවක්ද?</h3>
+            <p>තාක්ෂණයේ මේ පිම්ම සමඟ බොහෝ දෙනෙකු තුළ ඇති ලොකුම බියක් වන්නේ "AI අපේ රැකියා උදුරා ගනීවිද?" යන්නයි. දත්ත ඇතුළත් කිරීම්, ගණකාධිකරණ සහ කර්මාන්තශාලාවල සිදුකරන ඇතැම් සාම්ප්‍රදායික රැකියා AI සහ රොබෝවරුන් අතට පත්වීම වැළැක්විය නොහැක.</p>
+            <p>නමුත් කාසියක අනෙක් පැත්ත මෙන්, මේ හරහා නව රැකියා මිලියන ගණනක් බිහි වෙමින් පවතී.</p>
+            
+            <ul class="custom-list">
+                <li>✨ Prompt Engineers (AI සමඟ කාර්යක්ෂමව වැඩ කරන අය)</li>
+                <li>✨ AI Data Analysts</li>
+                <li>✨ Robotics Engineers</li>
+                <li>✨ AI Ethics Specialists (තාක්ෂණික සදාචාරය පිළිබඳ විශේෂඥයින්)</li>
+            </ul>
+
+            <div class="highlight-callout">
+                "AI විසින් මිනිසුන්ව ප්‍රතිස්ථාපනය නොකරනු ඇත. නමුත් AI භාවිතා කරන මිනිසා විසින් AI භාවිතා නොකරන මිනිසාව ප්‍රතිස්ථාපනය කරනු ඇත."
+            </div>
+
+            <h3>5. සදාචාරාත්මක ගැටලු සහ අනාගත අභියෝග</h3>
+            <p>තාක්ෂණය කෙතරම් දියුණු වුවත්, එහි අනිසි භාවිතයන් පිළිබඳව ලෝකය අවධානය යොමු කළ යුතුය. 'Deepfakes' (ව්‍යාජ වීඩියෝ සහ හඬ නිපදවීම) හරහා සිදුවන වංචා, පුද්ගලික දත්ත අවභාවිතය (Data Privacy) සහ රොබෝවරුන් අතින් සිදුවිය හැකි අනතුරු පිළිබඳව දැඩි නීති රීති පද්ධතියක් ලෝකයට අවශ්‍යව තිබේ. අනාගත තාක්ෂණය මිනිස් සංහතියේ යහපත උදෙසාම පමණක් භාවිත වන බව සහතික කිරීම ලෝක නායකයන්ගේ වගකීමකි.</p>
+
+            <h3>අවසාන අදහස (Conclusion)</h3>
+            <p>AI සහ රොබෝ තාක්ෂණයේ නවතම පිම්ම යනු හුදෙක් කාර්මික දියුණුවක් පමණක් නොව, එය මිනිස් ශිෂ්ටාචාරයේ මීළඟ පරිච්ඡේදයයි. එය අපේ ජීවිත වඩාත් පහසු, ආරක්ෂිත සහ කාර්යක්ෂම කරනු ඇත. තාක්ෂණය දෙස බියෙන් බැලීම වෙනුවට, නවීන ලෝකයට ගැළපෙන පරිදි අපගේ කුසලතා වර්ධනය කර ගනිමින් (Upskilling) මේ තාක්ෂණික විප්ලවයේ කොටස්කරුවන් වීම අප සතු වගකීමකි. අනාගතය අයිති තාක්ෂණය සමඟ පෙරට යන අයටයි!</p>
         </div>
 
         <div class="nav-footer">
