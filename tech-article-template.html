@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C-TECH - Tech Update Article</title>
+    <style>
+        :root {
+            --light-blue: #00a4e4; 
+            --orange: #ff7300; 
+            --dark-bg: #0b132b; 
+            --card-bg: #1c2541; 
+            --text-light: #f4f7f6;
+            --text-muted: #a0aec0;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+        }
+
+        body {
+            background-color: var(--dark-bg); 
+            color: var(--text-light);
+            line-height: 1.7;
+            padding: 20px;
+            min-height: 100vh;
+            background-image: radial-gradient(at 0% 0%, rgba(0, 164, 228, 0.12) 0px, transparent 50%);
+        }
+
+        /* 📦 Main Container */
+        .article-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: rgba(28, 37, 65, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 164, 228, 0.3);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* 🏷️ Category Badge & Date */
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+        }
+
+        .category-badge {
+            background: var(--orange);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .article-date {
+            color: var(--text-muted);
+        }
+
+        /* ✍️ Typography */
+        .article-title {
+            font-size: 2.2rem;
+            color: #fff;
+            line-height: 1.3;
+            margin-bottom: 25px;
+            text-shadow: 0 0 10px rgba(0, 164, 228, 0.2);
+        }
+
+        /* 🖼️ Featured Graphic Placeholder */
+        .featured-graphic-box {
+            width: 100%;
+            height: 300px;
+            background: #0f172a;
+            border: 2px dashed rgba(0, 164, 228, 0.4);
+            border-radius: 12px;
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--light-blue);
+            font-size: 3rem;
+            gap: 10px;
+        }
+
+        .featured-graphic-box span {
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        /* 📄 Content Area */
+        .article-content p {
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+            color: #e2e8f0;
+            text-align: justify;
+        }
+
+        .article-content h3 {
+            color: var(--light-blue);
+            margin: 30px 0 15px 0;
+            font-size: 1.4rem;
+            border-left: 4px solid var(--orange);
+            padding-left: 10px;
+        }
+
+        /* 💡 Highlight Box */
+        .highlight-callout {
+            background: rgba(255, 115, 0, 0.1);
+            border-left: 4px solid var(--orange);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 25px 0;
+            font-style: italic;
+        }
+
+        /* 🔙 Back Navigation */
+        .nav-footer {
+            margin-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-link {
+            color: var(--light-blue);
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .back-link:hover {
+            color: var(--orange);
+            transform: translateX(-3px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .article-container { padding: 25px; margin: 20px auto; }
+            .article-title { font-size: 1.7rem; }
+            .featured-graphic-box { height: 200px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="article-container">
+        <div class="article-meta">
+            <span class="category-badge">ROBOTICS & AI</span>
+            <span class="article-date">📅 2026 ජූනි 17</span>
+        </div>
+
+        <h1 class="article-title">අනාගත ලෝකය වෙනස් කරන AI සහ රොබෝ තාක්ෂණයේ නවතම පිම්ම</h1>
+
+        <div class="featured-graphic-box">
+            🤖
+            <span>[ තාක්ෂණික ලිපියට අදාළ ප්‍රධාන රූපය / Graphic මෙතැනට ]</span>
+        </div>
+
+        <div class="article-content">
+            <p>වත්මන් තාක්ෂණික ලෝකය තුළ කෘතිම බුද්ධිය (Artificial Intelligence) සහ රොබෝ විද්‍යාව ඉතා සීඝ්‍රයෙන් ඉදිරියට ගලා යමින් පවතී. මිනිස් ශ්‍රමයට සහනයක් වෙමින්, වඩාත් නිරවද්‍ය කාර්යයන් ඉටු කිරීම සඳහා වර්තමානයේ ස්වයංක්‍රීය පද්ධති (Automated Systems) බහුලවම භාවිත වේ.</p>
+
+            <h3>1. ස්මාර්ට් රොබෝ තාක්ෂණයේ වර්ධනය</h3>
+            <p>නවීන රොබෝවරුන් හුදෙක් කලින් සකස් කරන ලද විධාන (Commands) ක්‍රියාත්මක කරනවාට වඩා, අවට පරිසරය තේරුම් ගෙන තීරණ ගැනීමට සමත් වී ඇත. මේ සඳහා විවිධ සංවේදක (Sensors) සහ පරිගණක දෘෂ්ටිය (Computer Vision) වැනි උසස් තාක්ෂණයන් උපකාරී වේ.</p>
+
+            <div class="highlight-callout">
+                "තාක්ෂණය යනු මිනිසාගේ වැඩකටයුතු පහසු කරන සහ ලෝකය එකම ජාලයකට එකතු කරන ප්‍රධානතම මෙවලමයි."
+            </div>
+
+            <h3>2. අධ්‍යාපනයට මෙයින් ලැබෙන පිටුවහල</h3>
+            <p>පාසල් සහ විශ්වවිද්‍යාල මට්ටමින් Arduino සහ ESP32 වැනි මයික්‍රොකොන්ට්‍රෝලර් (Microcontrollers) භාවිතයෙන් කුඩා රොබෝ පද්ධති නිර්මාණය කිරීමට සිසුන් යොමුවීම, ඔවුන්ගේ ප්‍රායෝගික තාක්ෂණික කුසලතා (ICT skills) වර්ධනය වීමට මනා පිටුවහලක් සපයයි.</p>
+        </div>
+
+        <div class="nav-footer">
+            <a href="tech-updates.html" class="back-link">← Tech Updates පිටුවට පසුපසට</a>
+            <span style="font-size: 0.85rem; color: var(--text-muted);">C-TECH Education</span>
+        </div>
+    </div>
+
+</body>
+</html>
