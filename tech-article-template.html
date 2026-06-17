@@ -74,21 +74,27 @@
             text-shadow: 0 0 10px rgba(0, 164, 228, 0.2);
         }
 
-        /* 🖼️ Featured Graphic Area */
-        .featured-graphic-box {
-            width: 100%;
-            height: 250px;
-            background: #0f172a;
-            border: 2px dashed rgba(0, 164, 228, 0.4);
-            border-radius: 12px;
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--light-blue);
-            font-size: 4rem;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
-        }
+        
+                /* 🖼️ පින්තූරය තිරයෙන් පිට පැනීම සහ overlapping වීම වැළැක්වීමේ CSS */
+.featured-image-container {
+    width: 100%;
+    max-height: 400px; /* ලොකු ස්ක්‍රීන්වලදී පින්තූරය ඕනෑවට වඩා විශාල වීම වළක්වයි */
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 25px;
+    border: 2px solid rgba(0, 164, 228, 0.3);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    display: block; /* අකුරු පින්තූරය උඩින් යාම මුළුමනින්ම වළක්වයි */
+}
+
+.featured-image-container img {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: cover; /* රූපයේ හැඩය වෙනස් නොවී ලස්සනට කොටු කර පෙන්වයි */
+    display: block;
+}
+        
 
         /* 📄 Content Area */
         .article-content p {
@@ -191,25 +197,7 @@
             transform: translateX(-3px);
         }
 
-        /* 🖼️ පින්තූරය තිරයෙන් පිට පැනීම සහ overlapping වීම වැළැක්වීමේ CSS */
-.featured-image-container {
-    width: 100%;
-    max-height: 400px; /* ලොකු ස්ක්‍රීන්වලදී පින්තූරය ඕනෑවට වඩා විශාල වීම වළක්වයි */
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 25px;
-    border: 2px solid rgba(0, 164, 228, 0.3);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-    display: block; /* අකුරු පින්තූරය උඩින් යාම මුළුමනින්ම වළක්වයි */
-}
-
-.featured-image-container img {
-    width: 100%;
-    height: auto;
-    max-height: 400px;
-    object-fit: cover; /* රූපයේ හැඩය වෙනස් නොවී ලස්සනට කොටු කර පෙන්වයි */
-    display: block;
-}
+   
 
         /* Mobile Optimization */
         @media (max-width: 768px) {
@@ -231,7 +219,7 @@
 
         <h1 class="article-title">අනාගත ලෝකය වෙනස් කරන AI සහ රොබෝ තාක්ෂණයේ නවතම පිම්ම</h1>
 
-        <div class="featured-graphic-box"><span><img src="ai.jpg" style="width:100%; border-radius:12px;"></span></div>
+        <div class="featured-image-container"><span><img src="ai.jpg" style="width:100%; border-radius:12px;"></span></div>
 
         <div class="article-content">
             <p>අදින් වසර විසිතිහකට පෙර අප සිනමා පටවලින් සහ විද්‍යා ප්‍රබන්ධ කතාවලින් දැක පුදුම වූ "හිතන්න පුළුවන් මැෂින්" සහ "මිනිසුන් වගේ වැඩ කරන රොබෝවරු" දැන් තවදුරටත් හීන නොවෙයි. කෘත්‍රිම බුද්ධිය (Artificial Intelligence හෙවත් AI) සහ රොබෝ තාක්ෂණය (Robotics) මේ වන විටත් අපේ එදිනෙදා ජීවිතය, රැකියා ක්ෂේත්‍රය සහ මුළු මහත් ලෝකයම උඩුයටිකුරු කරමින් මහා පරිමාණ තාක්ෂණික විප්ලවයක් සිදුකරමින් පවතියයි.</p>
