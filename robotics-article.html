@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C-TECH - Robotics with Arduino & ESP32</title>
+    <style>
+        :root {
+            --light-blue: #00a4e4; 
+            --orange: #ff7300; 
+            --dark-bg: #0b132b; 
+            --card-bg: #1c2541; 
+            --text-light: #f4f7f6;
+            --text-muted: #a0aec0;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+        }
+
+        body {
+            background-color: var(--dark-bg); 
+            color: var(--text-light);
+            line-height: 1.8;
+            padding: 15px;
+            min-height: 100vh;
+            background-image: radial-gradient(at 0% 0%, rgba(0, 164, 228, 0.15) 0px, transparent 50%);
+        }
+
+        /* 📦 Main Container */
+        .article-container {
+            width: 100%;
+            max-width: 850px;
+            margin: 20px auto;
+            background-color: rgba(28, 37, 65, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 164, 228, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* 🏷️ Meta Info */
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+        }
+
+        .category-badge {
+            background: var(--orange);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .article-date {
+            color: var(--text-muted);
+        }
+
+        /* ✍️ Typography */
+        .article-title {
+            font-size: 2rem;
+            color: #fff;
+            line-height: 1.4;
+            margin-bottom: 25px;
+            text-shadow: 0 0 10px rgba(0, 164, 228, 0.2);
+        }
+
+        /* 🖼️ FIXED RESPONSIVE FEATURED IMAGE BOX */
+        .featured-image-container {
+            width: 100%;
+            max-height: 400px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            border: 2px solid rgba(0, 164, 228, 0.3);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            display: block; 
+        }
+
+        .featured-image-container img {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: cover; 
+            display: block;
+        }
+
+        /* 📄 Content Area */
+        .article-content p {
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+            color: #e2e8f0;
+            text-align: justify;
+        }
+
+        .article-content h3 {
+            color: var(--light-blue);
+            margin: 35px 0 15px 0;
+            font-size: 1.35rem;
+            border-left: 4px solid var(--orange);
+            padding-left: 10px;
+        }
+
+        /* 💡 Highlight Box */
+        .highlight-callout {
+            background: rgba(255, 115, 0, 0.1);
+            border-left: 4px solid var(--orange);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 25px 0;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #fff;
+            text-align: center;
+        }
+
+        /* 📊 RESPONSIVE DATA TABLE STYLES */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            margin: 30px 0;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 164, 228, 0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            text-align: left;
+            min-width: 550px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        th {
+            background-color: #0f172a;
+            color: var(--light-blue);
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        tr:hover {
+            background-color: rgba(0, 164, 228, 0.05);
+        }
+
+        /* 🛠️ Bullet Lists */
+        .custom-list {
+            margin: 15px 0 25px 25px;
+            color: #e2e8f0;
+        }
+        
+        .custom-list li {
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+        }
+
+        /* 🔙 Back Navigation */
+        .nav-footer {
+            margin-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-link {
+            color: var(--light-blue);
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .back-link:hover {
+            color: var(--orange);
+            transform: translateX(-3px);
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .article-container { padding: 20px; margin: 10px auto; }
+            .article-title { font-size: 1.6rem; }
+            .featured-image-container { max-height: 230px; }
+            .featured-image-container img { max-height: 230px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="article-container">
+        <div class="article-meta">
+            <span class="category-badge">ROBOTICS & ELECTRONICS</span>
+            <span class="article-date">📅 2026 ජූනි 18</span>
+        </div>
+
+        <h1 class="article-title">Arduino සහ ESP32 සමඟ රොබෝ තාක්ෂණය ඉගෙන ගනිමු</h1>
+
+        <div class="featured-image-container">
+            <img src="arduino.jpg" alt="Robotics with Arduino and ESP32">
+        </div>
+
+        <div class="article-content">
+            <p>රොබෝවරු කිව්වාම අපිට මතක් වෙන්නේ හොලිවුඩ් චිත්‍රපටවල ඉන්න, තනියම හිතලා වැඩ කරන සුපිරි බලසම්පන්න යන්ත්‍ර නේද? හැබැයි ඇත්තම කතාව නම්, ඒ වගේ රොබෝ කෙනෙක්ව නැතත්, තමන්ගේම කියලා වැඩක් කරගන්න පුළුවන් ස්මාර්ට් රොබෝ කෙනෙක්ව තමන්ගේම දතින් හදාගන්න එක දැන් එච්චර අමාරු වැඩක් නෙවෙයි.</p>
+            
+            <p>ඔයා පාසල් යන කෙනෙක් වුණත්, විශ්වවිද්‍යාල ශිෂ්‍යයෙක් වුණත්, නැත්නම් තාක්ෂණයට ආස කරන විනෝදාංශකරුවෙක් (Hobbyist) වුණත්, රොබෝ තාක්ෂණයේ ලෝකයට පය තියන්න තියෙන හොඳම සහ ලේසිම පාර තමයි Arduino සහ ESP32 කියන්නේ. මේ පුංචි පරිපථ පුවරු දෙකෙන් කරන්න පුළුවන් දේවල් දැක්කාම ඔයා පුදුම වෙයි!</p>
+
+            <h3>රොබෝ කෙනෙක්ගේ "මොළය" කියන්නේ මොකක්ද?</h3>
+            <p>රොබෝ කෙනෙක් හැදීමේදී ප්‍රධානම දේ තමයි එයාට නියෝග දෙන්න සහ විවිධ සංවේදක (Sensors) මඟින් අවට පරිසරය තේරුම් ගන්න පුළුවන් "මොළයක්" සවි කරන එක. රොබෝ විද්‍යාවේදී මේවාට අපි කියන්නේ Microcontrollers කියලා. අන්න ඒ වගේ ලෝකයේ අතිශය ජනප්‍රිය Microcontroller පුවරු දෙකක් තමයි Arduino සහ ESP32.</p>
+
+            <h3>1. Arduino: ආරම්භකයින්ට කියාපු බඩු!</h3>
+            <p>රොබෝ තාක්ෂණයට අලුතින්ම එකතු වෙන කෙනෙකුට ඉගෙන ගන්න තියෙන හොඳම පුවරුව තමයි Arduino Uno. ඇයි මේක මෙච්චර විශේෂ? මේක භාවිත කිරීම ඉතාම සරලයි. Code කිරීම සඳහා C/C++ මත පදනම් වූ ලේසි මෘදුකාංගයක් (Arduino IDE) තියෙනවා.</p>
+            <p><strong>කරන්න පුළුවන් දේවල්:</strong> බාධක හඳුනාගෙන ගමන් කරන රොබෝවරු (Obstacle Avoiding Robots), රේඛා ඔස්සේ ගමන් කරන රොබෝවරු (Line Follower Robots) සහ රොබෝ අත් (Robotic Arms) වගේ දේවල් ඉතාම පහසුවෙන් Arduino හරහා හදන්න පුළුවන්.</p>
+
+            <h3>2. ESP32: රැහැන් රහිත ලෝකයට මාරු වෙමු!</h3>
+            <p>ඔයා Arduino පාවිච්චි කරලා මූලික දේවල් ඉගෙන ගත්තට පස්සේ ඊළඟට යන්න ඕන තැන තමයි ESP32. මේක Arduino වලට වඩා ප්‍රබල, වේගවත් මෙන්ම මිලෙන්ද අඩු පරිපථයක්. ඇයි මේක විශේෂ? ESP32 එකේ Built-in Wi-Fi සහ Bluetooth තාක්ෂණය අන්තර්ගත වෙනවා.</p>
+            <p><strong>කරන්න පුළුවන් දේවල්:</strong> ඔයාගේ ෆෝන් එකෙන් control කරන්න පුළුවන් රොබෝවරු, Internet එක හරහා ලෝකයේ කොහේ සිටියත් පාරිභෝගිකයාට පාලනය කළ හැකි IoT (Internet of Things) රොබෝවරු වගේම කැමරාවක් සවි කරලා රූප හඳුනාගත හැකි (Computer Vision) උසස් මට්ටමේ රොබෝවරුන් මේකෙන් නිර්මාණය කරන්න පුළුවන්.</p>
+
+            <h3>රොබෝ කෙනෙක් හදන්න අපිට ඕන වෙන්නේ මොනවාද?</h3>
+            <p>Arduino හෝ ESP32 එකක් විතරක් තිබ්බට රොබෝ කෙනෙක් සම්පූර්ණ වෙන්නේ නැහැ. ඒ සඳහා තවත් උපාංග කිහිපයක් අවශ්‍ය වෙනවා:</p>
+            <ul class="custom-list">
+                <li>⚙️ <strong>සංවේදක (Sensors):</strong> රොබෝට අවට පරිසරය පෙනෙන්නේ සහ දැනෙන්නේ මේවායින්. උදාහරණයක් ලෙස බාධක මැනීමට Ultrasonic Sensor එකක් හෝ පොළොවේ රේඛාව හඳුනාගැනීමට IR Sensor එකක් භාවිත කළ හැකියි.</li>
+                <li>⚙️ <strong>මෝටර් සහ මෝටර් ඩ්‍රයිවර් (Motors & Motor Drivers):</strong> රොබෝට චලනය වෙන්න නම් DC මෝටර් හෝ Servo මෝටර් අවශ්‍යයි. මේ මෝටර් පාලනය කරන්න L298N හෝ ශීල්ඩ් (Motor Shield) එකක් එකතු කරගන්න වෙනවා.</li>
+                <li>⚙️ <strong>බල සැපයුම (Battery):</strong> රොබෝට පණ දෙන්න rechargeable Li-ion බැටරි භාවිතා කරන්න පුළුවන්.</li>
+            </ul>
+
+            <h3 style="border-left-color: var(--light-blue);">Arduino සහ ESP32 අතර වෙනස බැලූ බැල්මට</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ලක්ෂණය</th>
+                            <th>Arduino Uno</th>
+                            <th>ESP32</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>වේගය (Processor Speed)</strong></td>
+                            <td>16 MHz</td>
+                            <td>160 MHz / 240 MHz</td>
+                        </tr>
+                        <tr>
+                            <td><strong>රැහැන් රහිත සන්නිවේදනය</strong></td>
+                            <td>නැත (අමතර Module ඕනෑ)</td>
+                            <td>Wi-Fi සහ Bluetooth අන්තර්ගතයි</td>
+                        </tr>
+                        <tr>
+                            <td><strong>මිල</strong></td>
+                            <td>සාමාන්‍යයි</td>
+                            <td>ඉතා ලාභදායී (පහසුකම්වලට සාපේක්ෂව)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>භාවිතය</strong></td>
+                            <td>මුල සිට ඉගෙන ගන්නන්ට</td>
+                            <td>IoT සහ Advanced රොබෝ ව්‍යාපෘති සඳහා</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>රොබෝ තාක්ෂණය ඉගෙන ගැනීමෙන් ඔබට ලැබෙන වාසි</h3>
+            <p>අද ලෝකයේ වේගයෙන්ම දියුණු වන ක්ෂේත්‍රයක් තමයි රොබෝ විද්‍යාව සහ AI (කෘත්‍රිම බුද්ධිය). පාසල් වියේදීම හෝ තාරුණ්‍යයේදීම මේවා ඉගෙන ගැනීමෙන් ඔබට ලැබෙන ප්‍රයෝජන මෙන්න:</p>
+            <ul class="custom-list">
+                <li>✨ <strong>තර්කානුකූල චින්තනය (Logical Thinking):</strong> පරිගණක කේතනය (Coding) සහ ඉලෙක්ට්‍රොනික පරිපථ ගැලපීම මඟින් ගැටලු විසඳීමේ හැකියාව (Problem Solving) ඉබේම දියුණු වෙනවා.</li>
+                <li>✨ <strong>අනාගත රැකියා අවස්ථා:</strong> ඉදිරි දශක කිහිපය තුළ ලෝකයේ වැඩිම ඉල්ලුමක් නිර්මාණය වෙන්නේ Robotics Engineers, IoT Developers සහ Automation Specialists ලාටයි.</li>
+                <li>✨ <strong>ප්‍රායෝගික දැනුම:</strong> පොතේ පතේ තියෙන විද්‍යාව සහ ගණිතය, ප්‍රායෝගිකව මැෂින් එකක් ක්‍රියා කරවන්න යොදාගන්නේ කොහොමද කියලා ඔයා අත්දැකීමෙන්ම ඉගෙන ගන්නවා.</li>
+            </ul>
+
+            <h3>ආරම්භ කරන්නේ කොහොමද?</h3>
+            <p>"මට Code කරන්න බෑනේ", "මට ඕවා තේරෙන්නේ නෑ" කියලා බය වෙන්න එන්න එපා. අද වෙනකොට අන්තර්ජාලය තුළ ඕනෑ තරම් නොමිලේ ඉගෙන ගන්න පුළුවන් YouTube උපදෙස් වීඩියෝ සහ ලිපි තියෙනවා. මුලින්ම Arduino Starter Kit එකක් අරගෙන පුංචි LED බල්බයක් නිවා දැමීමේ සිට (Blink Project) ඔයාගේ ගමන පටන් ගන්න. ඊටපස්සේ හෙමින් සැරේ රෝද දෙකේ පුංචි රොබෝ කෙනෙක් හදන්න උත්සාහ කරන්න.</p>
+
+            <div class="highlight-callout">
+                "රොබෝ තාක්ෂණය කියන්නේ හිතන තරම් අමාරු විෂයක් නෙවෙයි; ඒක හරියට සෙල්ලමක් වගේ ඉතාම විනෝදජනක දෙයක්!"
+            </div>
+
+            <h3>අවසාන අදහස</h3>
+            <p>Arduino සහ ESP32 කියන්නේ ඔයාගේ ඒ සුන්දර තාක්ෂණික ගමනට පාර කියන හොඳම යාළුවෝ දෙන්නෙක්. ඉතින් තවත් බලා සිටින්නේ නැතුව, අදම ඔයාගේ පළමු රොබෝ ව්‍යාපෘතිය ආරම්භ කරලා අනාගත ලෝකය ජයගන්න සූදානම් වෙන්න! අනාගතය අයිති තාක්ෂණය සමඟ පෙරට යන අයටයි!</p>
+        </div>
+
+        <div class="nav-footer">
+            <a href="tech-updates.html" class="back-link">← Tech Updates පිටුවට පසුපසට</a>
+            <span style="font-size: 0.85rem; color: var(--text-muted);">C-TECH Education</span>
+        </div>
+    </div>
+
+</body>
+</html>
