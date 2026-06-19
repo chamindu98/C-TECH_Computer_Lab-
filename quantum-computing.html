@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C-TECH - The Wonder of Quantum Computing</title>
+    <style>
+        :root {
+            --light-blue: #00a4e4; 
+            --orange: #ff7300; 
+            --dark-bg: #0b132b; 
+            --card-bg: #1c2541; 
+            --text-light: #f4f7f6;
+            --text-muted: #a0aec0;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+        }
+
+        body {
+            background-color: var(--dark-bg); 
+            color: var(--text-light);
+            line-height: 1.8;
+            padding: 15px;
+            min-height: 100vh;
+            background-image: radial-gradient(at 0% 0%, rgba(0, 164, 228, 0.15) 0px, transparent 50%);
+        }
+
+        /* 📦 Main Container */
+        .article-container {
+            width: 100%;
+            max-width: 850px;
+            margin: 20px auto;
+            background-color: rgba(28, 37, 65, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 164, 228, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* 🏷️ Meta Info */
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+        }
+
+        .category-badge {
+            background: var(--orange);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .article-date {
+            color: var(--text-muted);
+        }
+
+        /* ✍️ Typography */
+        .article-title {
+            font-size: 2rem;
+            color: #fff;
+            line-height: 1.4;
+            margin-bottom: 25px;
+            text-shadow: 0 0 10px rgba(0, 164, 228, 0.2);
+        }
+
+        /* 🖼️ FIXED RESPONSIVE FEATURED IMAGE BOX */
+        .featured-image-container {
+            width: 100%;
+            max-height: 400px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            border: 2px solid rgba(0, 164, 228, 0.3);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            display: block; 
+        }
+
+        .featured-image-container img {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: cover; 
+            display: block;
+        }
+
+        /* 📄 Content Area */
+        .article-content p {
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+            color: #e2e8f0;
+            text-align: justify;
+        }
+
+        .article-content h3 {
+            color: var(--light-blue);
+            margin: 35px 0 15px 0;
+            font-size: 1.35rem;
+            border-left: 4px solid var(--orange);
+            padding-left: 10px;
+        }
+
+        /* 💡 Highlight Box */
+        .highlight-callout {
+            background: rgba(0, 164, 228, 0.1);
+            border-left: 4px solid var(--light-blue);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 25px 0;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #fff;
+            text-align: center;
+        }
+
+        /* 📊 RESPONSIVE DATA TABLE STYLES */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            margin: 30px 0;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 164, 228, 0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            text-align: left;
+            min-width: 600px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: #0f172a;
+            color: var(--light-blue);
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        tr:hover {
+            background-color: rgba(0, 164, 228, 0.05);
+        }
+
+        /* 🛠️ Bullet Lists */
+        .custom-list {
+            margin: 15px 0 25px 25px;
+            color: #e2e8f0;
+        }
+        
+        .custom-list li {
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+        }
+
+        /* 🔙 Back Navigation */
+        .nav-footer {
+            margin-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-link {
+            color: var(--light-blue);
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .back-link:hover {
+            color: var(--orange);
+            transform: translateX(-3px);
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .article-container { padding: 20px; margin: 10px auto; }
+            .article-title { font-size: 1.6rem; }
+            .featured-image-container { max-height: 230px; }
+            .featured-image-container img { max-height: 230px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="article-container">
+        <!-- Meta Info -->
+        <div class="article-meta">
+            <span class="category-badge">FUTURE TECH</span>
+            <span class="article-date">📅 2026 ජූනි 19</span>
+        </div>
+
+        <!-- Title -->
+        <h1 class="article-title">ක්වන්ටම් පරිගණකයේ විෂ්මය</h1>
+
+        <!-- 🖼️ Responsive Image Container -->
+        <div class="featured-image-container">
+            <!-- මෙම src එකට ඔබේ ක්වන්ටම් පරිගණක පින්තූරයේ නම/ලින්ක් එක ලබා දෙන්න -->
+            <img src="quantum_computing_wonder.jpg" alt="Quantum Computing Technology">
+        </div>
+
+        <!-- Article Content -->
+        <div class="article-content">
+            <p>අද අපි පාවිච්චි කරන සුපිරිම මට්ටමේ ස්මාර්ට් ෆෝන් එකක් හෝ ලෝකයේ තියෙන දැවැන්තම සුපිරි පරිගණකයක් (Supercomputer) වුණත් ක්‍රියා කරන්නේ එකම එක සරල මූලධර්මයක් මතයි. ඒ තමයි 0 සහ 1 කියන බිටු (Bits) සංකල්පය. නමුත් විද්‍යාඥයන් දැන් සූදානම් වෙන්නේ මේ සාම්ප්‍රදායික පරිගණක කලාව සම්පූර්ණයෙන්ම උඩුයටිකුරු කරන්නයි. ඒ, සුපිරි පරිගණකයකට වසර දහස් ගණනක් ගතවන සංකීර්ණ ගණිතමය ගැටලුවක්, තත්පර කිහිපයකින් විසඳන්න පුළුවන් "ක්වන්ටම් පරිගණකය" (Quantum Computer) ලෝකයට හඳුන්වා දෙමින්.</p>
+            
+            <div class="highlight-callout">
+                "මෙය හුදෙක් වේගවත් පරිගණකයක්ම විතරක් නෙවෙයි; එය මිනිස් ඉතිහාසයේ තාක්ෂණික විකාශනයේ මීළඟ මහා විෂ්මයයි!"
+            </div>
+
+            <h3>මොකක්ද මේ ක්වන්ටම් පරිගණකයක් කියන්නේ?</h3>
+            <p>සාමාන්‍ය පරිගණකයක දත්ත ගබඩා කරන්නේ සහ සකසන්නේ (Process කරන්නේ) Bits වලිනුයි. ස්විච් එකක් ඔන් (1) සහ ඕෆ් (0) වෙනවා වගේ, මේ බිටු එක අවස්ථාවකදී පැවතිය හැක්කේ 0 හෝ 1 කියන අගයන් දෙකෙන් එකක විතරයි.</p>
+            
+            <p>නමුත් ක්වන්ටම් පරිගණකයක් ක්‍රියා කරන්නේ ක්වන්ටම් භෞතික විද්‍යාවේ (Quantum Physics) අමුතුම නීති රීති මාලාවක් මතයි. මෙහිදී භාවිත කරන්නේ බිටු වෙනුවට Qubits (Quantum Bits) යි. ක්වන්ටම් පරිගණකවල ඇති සැබෑ විෂ්මය සැඟවී ඇත්තේ මේ කියුබිට් සතු සුවිශේෂී ලක්ෂණ දෙකක් නිසයි:</p>
+
+            <ul class="custom-list">
+                <li>⚛️ <strong>Superposition (සුපිරි පිහිටුම):</strong> සාමාන්‍ය බිට් එකක් 0 හෝ 1 වෙද්දී, කියුබිට් එකකට එකම වෙලාවක 0 සහ 1 කියන අවස්ථා දෙකේම පවතින්න පුළුවන්! (හරියට කාසියක් උඩ දැම්මාම කැරකෙන අතරතුර එකවර රූපය සහ අගය දෙකම පෙනෙනවා වගේ).</li>
+                <li>⚛️ <strong>Entanglement (ක්වන්ටම් වෙළීම):</strong> මෙහිදී කියුබිට් දෙකක් එකිනෙකට කොතරම් දුරින් තිබුණත් (ලෝකයේ දෙකෙළවරක තිබුණත්) ක්ෂණිකව එකිනෙකා සමඟ සම්බන්ධ වෙනවා. එකක වෙනස්වීමක් අනෙකට ක්ෂණිකව බලපානවා.</li>
+            </ul>
+
+            <p>මේ සුපිරි ලක්ෂණ නිසා, ක්වන්ටම් පරිගණකයකට එකිනෙකට වෙනස් විසඳුම් මිලියන ගණනක් එකම තත්පරයකදී එකවර පරීක්ෂා කර බැලීමේ අසමසම හැකියාව ලැබෙනවා.</p>
+
+            <!-- 📊 Responsive Table - Comparison -->
+            <h3 style="border-left-color: var(--light-blue);">සාමාන්‍ය පරිගණක සහ ක්වන්ටම් පරිගණක අතර වෙනස</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ලක්ෂණය</th>
+                            <th>සාමාන්‍ය පරිගණකය</th>
+                            <th>ක්වන්ටම් පරිගණකය</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>මූලික ඒකකය</strong></td>
+                            <td>බිට්ස් (Bits - 0 හෝ 1)</td>
+                            <td>කියුබිට්ස් (Qubits - 0 සහ 1 එකවර)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ගැටලු විසඳන ක්‍රමය</strong></td>
+                            <td>එකින් එක අනුපිළිවෙලින් (Linearly)</td>
+                            <td>සියල්ල එකවර එකම වෙලාවක (Simultaneously)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ක්‍රියාකරන උෂ්ණත්වය</strong></td>
+                            <td>සාමාන්‍ය කාමර උෂ්ණත්වයේ</td>
+                            <td>අභ්‍යවකාශයටත් වඩා සීතල (-273°C ආසන්නයේ)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>භාවිතය</strong></td>
+                            <td>එදිනෙදා වැඩ, Gaming, Web Browsing</td>
+                            <td>අතිශය සංකීර්ණ විද්‍යාත්මක පර්යේෂණ සඳහා</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>ක්වන්ටම් තාක්ෂණයෙන් ලෝකය වෙනස් වෙන්නේ කොහොමද?</h3>
+            <p>ක්වන්ටම් පරිගණකයක් නිපදවීම සාමාන්‍ය කෙනෙකුට YouTube බැලීමට හෝ වීඩියෝ ගේම් ගැසීමට නෙවෙයි. මෙයින් ලෝකයේ මහා පරිමාණ ගැටලු රැසකට විසඳුම් සෙවිය හැකියි:</p>
+
+            <p><strong>1. වෛද්‍ය විද්‍යාවේ නව යුගයක් සහ ඖෂධ නිෂ්පාදනය:</strong><br>
+            දැනට පවතින සුපිරි පරිගණකවලට පවා මිනිස් සිරුරක ඇති අණුක ව්‍යුහයන් (Molecular Structures) 100%ක් නිවැරදිව අනුකරණය (Simulate) කරන්න බැහැ. මේ නිසා අලුත් ඖෂධයක් හෝ එන්නතක් හදන්න වසර 10-15ක් ගත වෙනවා. නමුත් ක්වන්ටම් පරිගණකවලට මිනිස් සිරුරේ ක්‍රියාකාරීත්වය සහ රසායනික ප්‍රතික්‍රියා ඉතාම සියුම්ව විනාඩි කිහිපයකින් විශ්ලේෂණය කර, පිළිකා වැනි මාරාන්තික රෝගවලට ඖෂධ දින කිහිපකින් සොයාගැනීමේ හැකියාව ලැබෙනවා.</p>
+
+            <p><strong>2. සයිබර් ආරක්ෂණයේ මහා පෙරළිය (Cybersecurity):</strong><br>
+            අද ලෝකයේ බැංකු පද්ධති සහ මිලිටරි දත්ත ආරක්ෂා කරලා තියෙන Encryption ක්‍රමවේද බිඳ දැමීමට සාමාන්‍ය පරිගණකයකට වසර මිලියන ගණනක් ගතවෙයි. නමුත් ක්වන්ටම් පරිගණකයකට ඒවා විනාඩි කිහිපයකින් 'හැක්' (Hack) කරන්න පුළුවන්! මෙය ලොකු අනතුරක් වගේ පෙනුණත්, ඒ වෙනුවට කිසිදා බිඳ දැමිය නොහැකි Quantum Cryptography (ක්වන්ටම් සන්නිවේදන පද්ධති) නිර්මාණය කරන්නත් විද්‍යාඥයන් මේ වන විට කටයුතු කරමින් සිටිනවා.</p>
+
+            <p><strong>3. දේශගුණික විපර්යාස සහ කෘත්‍රිම බුද්ධිය (AI):</strong><br>
+            දේශගුණික විපර්යාස පුරෝකථනය කිරීම සහ ගෝලීය උණුසුම පාලනය කිරීමට අවශ්‍ය නව කාබන් අවශෝෂණ ද්‍රව්‍ය නිපදවීමට ක්වන්ටම් දත්ත විශ්ලේෂණය උදව් වෙනවා. එමෙන්ම වර්තමාන AI තාක්ෂණය තවත් බිලියන ගුණයකින් බලගන්වමින්, සැබෑ ලෙසම සිතිය හැකි සුපිරි AI පද්ධති බිහිකිරීමට ක්වන්ටම් පරිගණක පදනම දමනු ඇත.</p>
+
+            <h3>ක්වන්ටම් පරිගණක ඉදිරියේ ඇති අභියෝග</h3>
+            <p>මේ තාක්ෂණය කොතරම් විස්මිත වුණත්, තවමත් අපිට මේවා සාමාන්‍ය වෙළඳපොළෙන් මිලදී ගන්න ලැබෙන්නේ නැහැ. Google, IBM, සහ Intel වැනි සමාගම් සතුව පවතින්නේ අත්හදා බැලීමේ මට්ටමේ (Prototypes) පරිගණක පමණයි.</p>
+            
+            <p><strong>ප්‍රධානම ගැටලුව:</strong> කියුබිට්ස් ඉතාම සංවේදියි. අවට පරිසරයේ ඇති ඉතාම සුළු තාපයක්, ශබ්දයක් හෝ චුම්බක තරංගයක් නිසා පවා එහි දත්ත විනාශ වී යනවා (මෙයට Decoherence කියා කියනු ලැබේ). මේ නිසා මෙම පරිගණක ක්‍රියා කරවීමට නම්, අභ්‍යවකාශයටත් වඩා අධික සීතලක් (Absolute Zero හෙවත් සෙල්සියස් අංශක -273ක පමණ උෂ්ණත්වයක්) කෘත්‍රිමව නිර්මාණය කරන්න සිදුවෙනවා.</p>
+
+            <h3>අවසාන අදහස (Conclusion)</h3>
+            <p>ක්වන්ටම් පරිගණකය කියන්නේ තාක්ෂණ ලෝකයේ මීළඟ පිම්ම විතරක් නෙවෙයි, එය මිනිස් සංහතියේ අනාගතය තීරණය කරන මහා හැරවුම් ලක්ෂ්‍යයක්. තව වසර කිහිපයකින් සැබෑ ක්වන්ටම් පරිගණක යුගය උදා වූ විට, අද අපිට විසඳාගත නොහැකිව තිබෙන විශ්වයේ මහා අභිරහස්, රෝගාබාධ සහ බලශක්ති අර්බුද රැසකට විසඳුම් ලැබෙනු නිසැකයි. ක්වන්ටම් පරිගණකයේ විෂ්මය දෙස ලෝකය බලා සිටින්නේ නොඉවසිල්ලෙනි!</p>
+        </div>
+
+        <!-- Footer / Navigation -->
+        <div class="nav-footer">
+            <a href="tech-updates.html" class="back-link">← Tech Updates පිටුවට පසුපසට</a>
+            <span style="font-size: 0.85rem; color: var(--text-muted);">C-TECH Education</span>
+        </div>
+    </div>
+
+</body>
+</html>
