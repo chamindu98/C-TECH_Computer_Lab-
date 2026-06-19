@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C-TECH - Smart Social Media Usage</title>
+    <style>
+        :root {
+            --light-blue: #00a4e4; 
+            --orange: #ff7300; 
+            --dark-bg: #0b132b; 
+            --card-bg: #1c2541; 
+            --text-light: #f4f7f6;
+            --text-muted: #a0aec0;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+        }
+
+        body {
+            background-color: var(--dark-bg); 
+            color: var(--text-light);
+            line-height: 1.8;
+            padding: 15px;
+            min-height: 100vh;
+            background-image: radial-gradient(at 0% 0%, rgba(0, 164, 228, 0.15) 0px, transparent 50%);
+        }
+
+        /* 📦 Main Container */
+        .article-container {
+            width: 100%;
+            max-width: 850px;
+            margin: 20px auto;
+            background-color: rgba(28, 37, 65, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 164, 228, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* 🏷️ Meta Info */
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+        }
+
+        .category-badge {
+            background: var(--orange);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .article-date {
+            color: var(--text-muted);
+        }
+
+        /* ✍️ Typography */
+        .article-title {
+            font-size: 2rem;
+            color: #fff;
+            line-height: 1.4;
+            margin-bottom: 25px;
+            text-shadow: 0 0 10px rgba(0, 164, 228, 0.2);
+        }
+
+        /* 🖼️ FIXED RESPONSIVE FEATURED IMAGE BOX */
+        .featured-image-container {
+            width: 100%;
+            max-height: 400px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            border: 2px solid rgba(0, 164, 228, 0.3);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            display: block; 
+        }
+
+        .featured-image-container img {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: cover; 
+            display: block;
+        }
+
+        /* 📄 Content Area */
+        .article-content p {
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+            color: #e2e8f0;
+            text-align: justify;
+        }
+
+        .article-content h3 {
+            color: var(--light-blue);
+            margin: 35px 0 15px 0;
+            font-size: 1.35rem;
+            border-left: 4px solid var(--orange);
+            padding-left: 10px;
+        }
+
+        /* 💡 Highlight Box */
+        .highlight-callout {
+            background: rgba(255, 115, 0, 0.1);
+            border-left: 4px solid var(--orange);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 25px 0;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #fff;
+            text-align: center;
+        }
+
+        /* 📊 RESPONSIVE DATA TABLE STYLES */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            margin: 30px 0;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 164, 228, 0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            text-align: left;
+            min-width: 600px; /* ලිපියේ අකුරු වැඩි නිසා තීරුවල හැඩය රැකගනී */
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #0f172a;
+            color: var(--light-blue);
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        tr:hover {
+            background-color: rgba(0, 164, 228, 0.05);
+        }
+
+        /* 🔙 Back Navigation */
+        .nav-footer {
+            margin-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-link {
+            color: var(--light-blue);
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .back-link:hover {
+            color: var(--orange);
+            transform: translateX(-3px);
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .article-container { padding: 20px; margin: 10px auto; }
+            .article-title { font-size: 1.6rem; }
+            .featured-image-container { max-height: 230px; }
+            .featured-image-container img { max-height: 230px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="article-container">
+        <div class="article-meta">
+            <span class="category-badge">DIGITAL LITERACY</span>
+            <span class="article-date">📅 2026 ජූනි 19</span>
+        </div>
+
+        <h1 class="article-title">නිවැරදිව සමාජ මාධ්‍ය භාවිතා කරමු</h1>
+
+        <div class="featured-image-container">
+            <img src="social.jpg" alt="Smart Social Media Usage">
+        </div>
+
+        <div class="article-content">
+            <p>උදේ අවදි වූ මොහොතේ සිට රාත්‍රී නින්දට යන තෙක්ම අපේ ඇඟිලි තුඩු නිතරම ගැවසෙන තැනක් තිබේ. ඒ වෙන කවුරුත් නොව Facebook, TikTok, Instagram, WhatsApp සහ YouTube වැනි සමාජ මාධ්‍ය (Social Media) ජාලයන්ය. අද වන විට සමාජ මාධ්‍ය කියන්නේ අපේ ජීවිතයේම කොටසක්. ලෝකයේ කොහේ හිටියත් නෑදෑ හිතමිතුරන් සමඟ සම්බන්ධ වෙන්න, අලුත් දේවල් ඉගෙන ගන්න වගේම ව්‍යාපාර දියුණු කරගන්නත් මේක කියාපු මෙවලමකි.</p>
+            
+            <p>නමුත්, ඔබ කවදා හෝ සිතුවාද මේ සුන්දර ඩිජිටල් අවකාශය ඇතුළේ අප නොදැනුවත්වම කොතරම් ලොකු අනතුරකද ඉන්නේ කියා? සමාජ මාධ්‍ය කියන්නේ හරියට මුවහත් කැපෙන පිහියක් වගෙයි. එයින් අපිට රසවත් ආහාරයක් කපාගන්නත් පුළුවන්, අපේ අත කපාගන්නත් පුළුවන්. ඉතින්, ජීවිතය වටිනා කියන දෙයක් කරගන්න, සමාජ මාධ්‍ය නිවැරදිව සහ බුද්ධිමත්ව පාවිච්චි කරන්නේ කොහොමද කියලා අද අපි කතා කරමු.</p>
+
+            <h3>1. ඩිජිටල් පියසටහන් (Digital Footprints) ගැන සැලකිලිමත් වන්න</h3>
+            <p>ඔබ සමාජ මාධ්‍ය වෙත මුදාහරින හැම ඡායාරූපයක්ම, දමන හැම කමෙන්ට් එකක්ම සහ "Share" කරන හැම දේම අන්තර්ජාලය තුළ ස්ථිරවම සටහන් වේ. ඔබ පසුව එය "Delete" කළත්, යමෙකුට එහි Screenshot එකක් තබාගත හැක.</p>
+            <p><strong>මතක තබාගන්න:</strong> අනාගතයේදී ඔබ රැකියාවකට යන විට හෝ උසස් අධ්‍යාපනයට ලියාපදිංචි වන විට, බොහෝ ආයතන ඔබේ සමාජ මාධ්‍ය ගිණුම් පරීක්ෂා කර බලයි. එම නිසා, පසුව පසුතැවීමට සිදුවන, අනෙක් අය අපහසුතාවයට පත් කරන හෝ සමාජ වෛරය පතුරවන දේවල් පෝස්ට් කිරීමෙන් සම්පූර්ණයෙන්ම වැළකී සිටින්න.</p>
+
+            <h3>2. "ඇහෙන හැමදේම සහ පෙනෙන හැමදේම" විශ්වාස නොකරන්න</h3>
+            <p>අද සමාජ මාධ්‍ය පුරා සීඝ්‍රයෙන් පැතිරෙන ලොකුම පිළිකාවක් තමයි ව්‍යාජ පුවත් (Fake News) සහ නොමඟ යවන සුලු තොරතුරු. විශේෂයෙන්ම AI තාක්ෂණය දියුණු වීමත් සමඟ, සැබෑ පුද්ගලයන් වගේම පෙනෙන සහ කතා කරන ව්‍යාජ වීඩියෝ (Deepfakes) සෑදීම ඉතාම آسان වී තිබේ.</p>
+            <p>යම් පුවතක් දුටු සැණින් හැඟීම්බර වී එය Share කිරීමට පෙර, "මේක ඇත්තක්ද?" කියා මොහොතක් සිතන්න. පිළිගත හැකි ප්‍රධාන පෙළේ මාධ්‍ය ජාලයක හෝ නිල වෙබ් අඩවියක ඒ පිළිබඳව සඳහන් වී ඇත්දැයි පරීක්ෂා කර බැලීම ඔබේ බුද්ධිමත්කමයි.</p>
+
+            <h3 style="border-left-color: var(--light-blue);">සාර්ථක ඩිජිටල් ජීවිතයකට "සමාජ මාධ්‍ය ආචාරධර්ම"</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="color: #4ade80;">කළ යුතු දේ (Do's)</th>
+                            <th style="color: #f87171;">නොකළ යුතු දේ (Don'ts)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>අන් අයට ගරු කිරීම:</strong><br>කමෙන්ට් තීරුවල අදහස් දක්වන විට ශිෂ්ට සම්පන්න භාෂාවක් භාවිත කරන්න.</td>
+                            <td><strong>Cyberbullying (සයිබර් හිංසනය):</strong><br>කිසිවෙකු මානසිකව වැටෙන පරිදි අපහාස කිරීම හෝ "Troll" කිරීම නොකරන්න.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>පෞද්ගලිකත්වය රැකගැනීම:</strong><br>ඔබේ නිවසේ ලිපිනය, දින චරියාව වැනි සංවේදී දත්ත ප්‍රසිද්ධ නොකරන්න.</td>
+                            <td><strong>අනුන්ගේ ජීවිත සැසඳීම:</strong><br>Screen එක මත පෙනෙන අනුන්ගේ ආටෝපකාරී ජීවිත සමඟ ඔබේ සැබෑ ජීවිතය සසඳා ලතැවෙන්න එපා.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ධනාත්මක දේ ප්‍රවර්ධනය:</strong><br>අලුත් දැනුම, කුසලතා සහ දිරිගන්වන සුලු නිර්මාණ සමාජගත කරන්න.</td>
+                            <td><strong>කාලය කා දැමීම:</strong><br>කිසිදු ඵලක් නොමැතිව පැය ගණන් Screen එක Scroll කරමින් කාලය නාස්ති නොකරන්න.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>3. Screen Time පාලනය කරගන්න (Digital Detox)</h3>
+            <p>සමාජ මාධ්‍ය ඇප්ස් නිර්මාණය කර ඇත්තේම අපව ඒවාට ඇබ්බැහි කරවන (Addictive) ආකාරයටයි. නොදැනුවත්වම පැය ගණනාවක් TikTok හෝ Reels බලමින් සිටීම නිසා ඔබේ වටිනා කාලය මෙන්ම ශාරීරික සෞඛ්‍යයද පිරිහීමට ලක්වේ. ඇස් පෙනීම දුර්වල වීම, කොන්දේ කැක්කුම සහ නින්ද නොයාම මෙහි ප්‍රතිඵලයි.</p>
+            <p><strong>විසඳුම:</strong> දිනකට සමාජ මාධ්‍ය සඳහා වෙන් කරන්නේ පැය කීයක්දැයි (උදාහරණයක් ලෙස විනාඩි 45ක්) තීරණය කර, දුරකථනයේ ඇති "App Timer" පහසුකම භාවිතයෙන් එය සීමා කරන්න. සතියකට සැරයක් හෝ දවසක් පුරා දුරකථනයෙන් ඈත් වී සිටීමට (Digital Detox) හුරුවන්න.</p>
+
+            <h3>4. සමාජ මාධ්‍ය "ධන උල්පතක්" කරගන්න</h3>
+            <p>සමාජ මාධ්‍ය කියන්නේ නිකන්ම විනෝද වෙන්න විතරක් තියෙන තැනක් නෙවෙයි. ඔබට යම් දක්ෂතාවයක් තියෙනවා නම් (ලියන්න, අඳින්න, උයන්න, වීඩියෝ කරන්න හෝ ඉගැන්වීමට) ඒ හරහා තමන්ගේම "Personal Brand" එකක් ගොඩනඟා ගන්න පුළුවන්. ෆේස්බුක් පිටුවක් හෝ යූටියුබ් නාලිකාවක් හරහා අද ලංකාවේ බොහෝ තරුණ තරුණියන් මාසිකව විශාල ආදායමක් උපයනවා. ඉතින්, කාලය කා දමන පාරිභෝගිකයෙක් (Consumer) වෙන්නේ නැතුව, වටිනා දේවල් ලෝකයට දෙන නිර්මාණකරුවෙක් (Creator) වෙන්න උත්සාහ කරන්න.</p>
+
+            <div class="highlight-callout">
+                "රන්මය උපදෙස: සමාජ මාධ්‍ය තුළ සිටින 'Followers' ලා ප්‍රමාණයට වඩා, සැබෑ ලෝකයේ ඔබට සිටින සැබෑ මිතුරන් සහ පවුලේ අය වටිනා බව අමතක කරන්න එපා."
+            </div>
+
+            <h3>අවසාන අදහස (Conclusion)</h3>
+            <p>තාක්ෂණය කියන්නේ අපිට ලැබුණු ආශීර්වාදයක්. සමාජ මාධ්‍ය හරියට පාවිච්චි කළොත් ඔබට මුළු ලෝකයම දිනන්න පුළුවන්. වැදගත් වෙන්නේ ඔබ සමාජ මාධ්‍ය පාලනය කරනවාද, නැත්නම් සමාජ මාධ්‍ය විසින් ඔබව පාලනය කිරීමට ඉඩ දෙනවාද යන්නයි. බුද්ධිමත්ව, ආරක්ෂිතව සහ අන් අයට ගරු කරමින් සමාජ මාධ්‍ය පරිශීලනය කරමින්, යහපත් ඩිජิตල් පුරවැසියන් වෙන්න අදම අධිෂ්ඨාන කරගනිමු!</p>
+        </div>
+
+        <div class="nav-footer">
+            <a href="tech-updates.html" class="back-link">← Tech Updates පිටුවට පසුපසට</a>
+            <span style="font-size: 0.85rem; color: var(--text-muted);">C-TECH Education</span>
+        </div>
+    </div>
+
+</body>
+</html>
