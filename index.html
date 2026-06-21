@@ -491,6 +491,63 @@
     color: #ff7300; /* C-TECH Orange */
     text-shadow: 0 0 10px rgba(255, 115, 0, 0.3);
 }
+        /* 🌐 Smart ICT Section v2 */
+.brand-identity-container-v2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px auto;
+    padding: 0;
+}
+
+/* ⚪ වෘත්තාකාර කුඩා ලෝගෝ ආවරණය (Circular Dynamic Wrapper) */
+.logo-circle-wrapper {
+    width: 140px;          /* ලෝගෝ එකේ ප්‍රමාණය සැලකිය යුතු ලෙස කුඩා කරන ලදී */
+    height: 140px;
+    background: #ffffff;
+    border-radius: 50%;    /* කොටු හැඩය වෙනුවට රවුම් හැඩයක් ලබා දීම */
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;      /* සුදු පසුබිම රවුමෙන් පිටතට යාම වළකයි */
+    border: 3px solid #00a4e4;
+    box-shadow: 0 0 15px rgba(0, 164, 228, 0.5);
+    transition: all 0.3s ease-in-out;
+}
+
+/* Object-fit මඟින් සුදු පසුබිම ස්වයංක්‍රීයව කපා හැරේ (Crop) */
+.brand-logo-v2 {
+    width: 105%;
+    height: 105%;
+    object-fit: contain;  /* පින්තූරය විකෘති නොවී රවුම තුළ හැඩගැසේ */
+    border-radius: 50%;
+}
+
+/* Hover Animation */
+.logo-circle-wrapper:hover {
+    transform: scale(1.05) rotate(2deg);
+    border-color: #ff7300;
+    box-shadow: 0 0 25px rgba(255, 115, 0, 0.7);
+}
+
+/* ✍️ Smart Text Layout */
+.brand-text-v2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    margin-top: 5px;
+}
+
+.cyan-text { color: #00a4e4; }
+.orange-text { color: #ff7300; }
+.dash { color: #a0aec0; margin: 0 5px; }
+
+
 
 
 @media screen and (max-width: 600px) {
@@ -536,13 +593,7 @@
     .logo-container .tagline {
         font-size: 0.85rem;
     }
-    .logo-wrapper {
-        max-width: 220px; /* මොබයිල් තිරවලදී ලෝගෝව තරමක් කුඩා වේ */
-        padding: 8px;
-    }
-    .brand-text-glow {
-        font-size: 1.15rem;
-    }
+    
     .results-stats {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -556,6 +607,15 @@
     .stat-label-large { font-size: 0.95rem; }
     .students-count-badge { font-size: 0.95rem; width: 100%; border-radius: 12px; }
     .highlight-count { font-size: 1.3rem; }
+
+    .logo-circle-wrapper {
+        width: 110px;
+        height: 110px;
+        padding: 8px;
+    }
+    .brand-text-v2 {
+        font-size: 1.05rem;
+    }
 }
     </style>
 </head>
@@ -570,17 +630,18 @@
             <h1>C-TECH Computer Lab & Education Institute</h1>
             <p>පරිගණක විද්‍යාවේ සහ තාක්ෂණයේ විශිෂ්ටතමයා</p>
 
-<div class="brand-identity-container">
-    <div class="logo-wrapper">
-        <img src="mylogo.jpeg" alt="Smart විදියට ICT - Janith Lakshan" class="brand-logo">
+<!-- 🌐 SMART ICT - Janith Lakshan නව නිමවුම (No Extra Boxes) -->
+<div class="brand-identity-container-v2">
+    <div class="logo-circle-wrapper">
+        <!-- ඔබේ නිල ලෝගෝ පින්තූරය (WhatsApp Image 2025-07-20 at 11.18.47 PM.jpeg) -->
+        <img src="mylogo.jpeg" alt="Smart ICT - Janith Lakshan" class="brand-logo-v2">
     </div>
-    <div class="brand-text-glow">
-        SMART විදියට  ICT <span class="orange-text">- Janith Lakshan</span>
+    <div class="brand-text-v2">
+        SMART <span class="cyan-text">ICT</span> <span class="dash">-</span> <span class="orange-text">Janith Lakshan</span>
     </div>
 </div>
 
-<div class="results-container">
-    </div>
+
            <div class="results-container">
     <h3 class="results-heading">✨ මෙවර අපොස සාමාන්‍ය පෙළ (O/L) විශිෂ්ට ප්‍රතිඵල ප්‍රදර්ශනය ✨</h3>
     
