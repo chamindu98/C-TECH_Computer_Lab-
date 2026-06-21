@@ -331,44 +331,126 @@
     margin-top: 5px;
 }
 
-/* 🎨 ප්‍රතිඵල අනුව වර්ණ ගැන්වීම (Theme Colors) */
-.pass-rate { 
-    border-bottom: 4px solid #4ade80; /* කොළ පැහැය */
+/* 🏆 O/L Results Card Styling */
+.results-container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 25px;
+    background: rgba(28, 37, 65, 0.75);
+    border: 1px dashed rgba(0, 164, 228, 0.5);
+    border-radius: 16px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
+
+.results-heading {
+    font-size: 1.25rem;
+    color: #fff;
+    margin-bottom: 20px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 8px rgba(0, 164, 228, 0.3);
+}
+
+/* 👥 සිසුන් ගණන පෙන්වන Box එක */
+.students-count-badge {
+    background: rgba(255, 115, 0, 0.1);
+    border: 1px solid rgba(255, 115, 0, 0.3);
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    color: #f4f7f6;
+    margin-bottom: 25px;
+    display: inline-block;
+    font-weight: 500;
+}
+
+.highlight-count {
+    color: #ff7300; /* Orange Color */
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-left: 5px;
+    text-shadow: 0 0 10px rgba(255, 115, 0, 0.4);
+}
+
+.results-stats {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.stat-box {
+    background: rgba(11, 19, 43, 0.95);
+    border-radius: 12px;
+    padding: 15px 25px;
+    min-width: 145px;
+    flex: 1;
+    max-width: 180px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+}
+
+.stat-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 164, 228, 0.2);
+}
+
+/* 🔢 ලොකු ඉලක්කම් (100%, 07, 01) */
+.stat-number {
+    display: block;
+    font-size: 2.2rem; /* ප්‍රමාණය වැඩි කරන ලදී */
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+/* 🔤 සාමාන්‍ය ලේබල් */
+.stat-label {
+    display: block;
+    font-size: 0.85rem;
+    color: #a0aec0;
+    margin-top: 8px;
+}
+
+/* 🔤 A, B, C අකුරු කැපී පෙනෙන ලේබලය */
+.stat-label-large {
+    display: block;
+    font-size: 1.05rem; /* අකුරු ලොකු කරන ලදී */
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+/* 🎨 වර්ණ ගැන්වීම් */
+.pass-rate { border-bottom: 4px solid #4ade80; }
 .pass-rate .stat-number { color: #4ade80; }
 
-.grade-a { 
-    border-bottom: 4px solid #ff7300; /* C-TECH Orange */
-}
+.grade-a { border-bottom: 4px solid #ff7300; }
 .grade-a .stat-number { color: #ff7300; }
+.grade-a .stat-label-large { color: #ff7300; } /* A අකුර Orange */
 
-.grade-b { 
-    border-bottom: 4px solid #00a4e4; /* C-TECH Light Blue */
-}
+.grade-b { border-bottom: 4px solid #00a4e4; }
 .grade-b .stat-number { color: #00a4e4; }
+.grade-b .stat-label-large { color: #00a4e4; } /* B අකුර Blue */
 
-.grade-c { 
-    border-bottom: 4px solid #e2e8f0; /* සුදු පැහැයට හුරු */
-}
+.grade-c { border-bottom: 4px solid #e2e8f0; }
 .grade-c .stat-number { color: #e2e8f0; }
+.grade-c .stat-label-large { color: #e2e8f0; } /* C අකුර Silver/White */
 
-/* Mobile Responsive Optimization */
+/* Mobile Responsiveness */
 @media (max-width: 600px) {
     .results-stats {
         display: grid;
-        grid-template-columns: repeat(2, 1fr); /* මොබයිල් එකේදී කොටු 2 බැගින් පෙන්වයි */
-        gap: 10px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
     }
     .stat-box {
         max-width: 100%;
-        padding: 8px 12px;
+        padding: 12px 15px;
     }
-    .stat-number {
-        font-size: 1.5rem;
-    }
-    .results-heading {
-        font-size: 1rem;
-    }
+    .stat-number { font-size: 1.8rem; }
+    .stat-label-large { font-size: 0.95rem; }
+    .students-count-badge { font-size: 0.95rem; width: 100%; border-radius: 12px; }
+    .highlight-count { font-size: 1.3rem; }
 }
 @media screen and (max-width: 600px) {
     /* ටැබ් බාර් එක පේළි 2කට ලස්සනට බෙදා වෙන් කිරීම */
@@ -426,8 +508,13 @@
             </div>
             <h1>C-TECH Computer Lab & Education Institute</h1>
             <p>පරිගණක විද්‍යාවේ සහ තාක්ෂණයේ විශිෂ්ටතමයා</p>
-            <div class="results-container">
+           <div class="results-container">
     <h3 class="results-heading">✨ මෙවර අපොස සාමාන්‍ය පෙළ (O/L) විශිෂ්ට ප්‍රතිඵල ප්‍රදර්ශනය ✨</h3>
+    
+    <div class="students-count-badge">
+        🎯 විභාගයට පෙනී සිටි සමස්ත සිසුන් සංඛ්‍යාව: <span class="highlight-count">15</span>
+    </div>
+
     <div class="results-stats">
         <div class="stat-box pass-rate">
             <span class="stat-number">100%</span>
@@ -435,15 +522,15 @@
         </div>
         <div class="stat-box grade-a">
             <span class="stat-number">07</span>
-            <span class="stat-label">A සාමාර්ථ</span>
+            <span class="stat-label-large">"A" සාමාර්ථ</span>
         </div>
         <div class="stat-box grade-b">
             <span class="stat-number">07</span>
-            <span class="stat-label">B සාමාර්ථ</span>
+            <span class="stat-label-large">"B" සාමාර්ථ</span>
         </div>
         <div class="stat-box grade-c">
             <span class="stat-number">01</span>
-            <span class="stat-label">C සාමාර්ථ</span>
+            <span class="stat-label-large">"C" සාමාර්ථ</span>
         </div>
     </div>
 </div>
