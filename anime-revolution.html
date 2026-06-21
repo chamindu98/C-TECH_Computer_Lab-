@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C-TECH - The Anime Revolution</title>
+    <style>
+        :root {
+            --light-blue: #00a4e4; 
+            --orange: #ff7300; 
+            --dark-bg: #0b132b; 
+            --card-bg: #1c2541; 
+            --text-light: #f4f7f6;
+            --text-muted: #a0aec0;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+        }
+
+        body {
+            background-color: var(--dark-bg); 
+            color: var(--text-light);
+            line-height: 1.8;
+            padding: 15px;
+            min-height: 100vh;
+            background-image: radial-gradient(at 0% 0%, rgba(0, 164, 228, 0.15) 0px, transparent 50%);
+        }
+
+        /* 📦 Main Container */
+        .article-container {
+            width: 100%;
+            max-width: 850px;
+            margin: 20px auto;
+            background-color: rgba(28, 37, 65, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 164, 228, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* 🏷️ Meta Info */
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+        }
+
+        .category-badge {
+            background: var(--orange);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .article-date {
+            color: var(--text-muted);
+        }
+
+        /* ✍️ Typography */
+        .article-title {
+            font-size: 2rem;
+            color: #fff;
+            line-height: 1.4;
+            margin-bottom: 25px;
+            text-shadow: 0 0 10px rgba(0, 164, 228, 0.2);
+        }
+
+        /* 🖼️ Responsive Image Box */
+        .featured-image-container {
+            width: 100%;
+            max-height: 400px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            border: 2px solid rgba(0, 164, 228, 0.3);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            display: block; 
+        }
+
+        .featured-image-container img {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: cover; 
+            display: block;
+        }
+
+        /* 📄 Content Area */
+        .article-content p {
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+            color: #e2e8f0;
+            text-align: justify;
+        }
+
+        .article-content h3 {
+            color: var(--light-blue);
+            margin: 35px 0 15px 0;
+            font-size: 1.35rem;
+            border-left: 4px solid var(--orange);
+            padding-left: 10px;
+        }
+
+        /* 💡 Highlight Box / Quotes */
+        .highlight-callout {
+            background: rgba(255, 115, 0, 0.1);
+            border-left: 4px solid var(--orange);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 25px 0;
+            font-style: italic;
+            font-size: 1.15rem;
+            color: #fff;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* 📊 Responsive Table Styles */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            margin: 30px 0;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 164, 228, 0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            text-align: left;
+            min-width: 600px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: #0f172a;
+            color: var(--light-blue);
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        tr:hover {
+            background-color: rgba(0, 164, 228, 0.05);
+        }
+
+        /* 🛠️ Custom List */
+        .custom-list {
+            margin: 15px 0 25px 25px;
+            color: #e2e8f0;
+        }
+        
+        .custom-list li {
+            margin-bottom: 12px;
+            font-size: 1.05rem;
+        }
+
+        /* 🔙 Navigation Footer */
+        .nav-footer {
+            margin-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-link {
+            color: var(--light-blue);
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .back-link:hover {
+            color: var(--orange);
+            transform: translateX(-3px);
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .article-container { padding: 20px; margin: 10px auto; }
+            .article-title { font-size: 1.6rem; }
+            .featured-image-container { max-height: 230px; }
+            .featured-image-container img { max-height: 230px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="article-container">
+        <div class="article-meta">
+            <span class="category-badge">MEDIA & TECH</span>
+            <span class="article-date">📅 2026 ජූනි 21</span>
+        </div>
+
+        <h1 class="article-title">කුඩා කල කාටූන්වලින් පටන් ගෙන ලෝකයම වසඟ කළ ඇනිමේ (Anime) විප්ලවය</h1>
+
+        <div class="featured-image-container">
+            <img src="naruto.jpg" alt="Anime Culture Revolution">
+        </div>
+
+        <div class="article-content">
+            <p>අපි හැමෝටම සුන්දර ළමා කාලයක් තිබුණා. ඒ ළමා කාලය හැඩකරපු, අදටත් අපේ මතකයේ تියෙන 'දගයා', 'දොස්තර හොඳ හිත', 'සූටින් මාටින්' වගේම 'දේදුන්නෙන් පාට පාටින් ආකාසේ ඇඳුනු' සොනික්, ස්කූබි ඩූ වැනි කාටූන් චරිත අපිට කවදාවත් අමතක වෙන්නේ නැහැ. එදා හුදෙක් ළමයින්ට විතරක් වෙන්වුණු විනෝදාංශයක් වුණු මේ කාටූන් කලාව, අද වෙනකොට තාරුණ්‍යය විතරක් නෙවෙයි, වැඩිහිටියන් පවා පිස්සු වට්ටන මහා පරිමාණ සංස්කෘතික විප්ලවයක් බවට පත්වෙලා තිබෙනවා.</p>
+            
+            <p>විශේෂයෙන්ම ජපානයෙන් බිහිවුණු ඇනිමේ (Anime) කලාව අද ලෝකයේ විකාශන ක්ෂේත්‍රය (Broadcasting & Streaming) උඩුයටිකුරු කර අවසන්. ළමා කාටූන් එකක ඉඳන් ලෝකයම හොල්ලන ඇනිමේ රැල්ල දක්වා මේ විකාශන පරිණාමය සිදුවුණේ කොහොමද? අපි ඒ රසවත් කතාව විමසා බලමු.</p>
+
+            <h3>1. රූපවාහිනී තිරයෙන් ආරම්භ වුණු ළමා කාලය</h3>
+            <p>Mීට දශක කිහිපයකට පෙර අපිට කාටූන් එකක් බලන්න තිබුණු එකම මාධ්‍යය රූපවාහිනිය විතරයි. හැන්දෑවේ 5 වෙද්දී ටීවී එක ඉස්සරහට වෙලා, ප්‍රධාන රූපවාහිනී නාලිකාවල විකාශනය වුණු කාටූන් බලන්න අපි නොඉවසිල්ලෙන් බලා සිටියා.</p>
+            <p>ඇමරිකාවේ Disney, Warner Bros (Tom and Jerry) වැනි සමාගම් බටහිර කාටූන් කලාව ලෝකය පුරා ප්‍රසිද්ධ කරද්දී, ජපානය විසින් තමන්ටම ආවේණික සජීවීකරණ ශෛලියක් ලෝකයට හඳුන්වා දුන්නා. එය "Anime" ලෙස හැඳින්වුණු අතර, ලංකාවේ අපිට සිංහල හඬකවා නැරඹීමට ලැබුණු බොහෝ කාටූන් (උදාහරණයක් ලෙස හයිඩි, සින්බාද්, රොබින්හුඩ්) ඇත්තටම ජපානයේ නිෂ්පාදනය වුණු ඇනිමේ නිර්මාණයන්ය.</p>
+
+            <h3>2. Cartoon සහ Anime අතර ඇති සැබෑ වෙනස</h3>
+            <p>බොහෝ දෙනෙක් තවමත් ඇනිමේ (Anime) කියන්නෙත් සාමාන්‍ය කාටූන්වලටමයි කියා සිතනවා. නමුත් මේ දෙක අතර පැහැදිලි වෙනසක් තිබෙනවා:</p>
+            <ul class="custom-list">
+                <li>🎨 <strong>කාටූන් (Cartoons):</strong> බොහෝ විට හාස්‍යය (Comedy) මුල් කරගත්, සරල චිත්‍ර හැඩතල සහිත, ප්‍රධාන වශයෙන්ම ළමා පාඨකයන් ඉලක්ක කරගෙන නිර්මාණය වන ඒවායි.</li>
+                <li>⚔️ <strong>ඇනිමේ (Anime):</strong> ජපානයේ Manga (චිත්‍රකතා) ඇසුරින් නිපදවෙන, ඉතාම සවිස්තරාත්මක සහ TAත්වික චිත්‍ර ශෛලියක් සහිත නිර්මාණයි. මෙහි ඇති විශේෂත්වය වන්නේ මේවායේ ඇති සංකීර්ණ කතා තේමාවන් (Storylines) සහ හැඟීම්බර ගැඹුරු ස්වභාවයයි. මේ නිසා ඇනිමේ කියන්නේ ළමයින්ට විතරක් නෙවෙයි, ඕනෑම වයස් කාණ්ඩයක කෙනෙකුට නැරඹිය හැකි කලාවකි.</li>
+            </ul>
+
+            <h3 style="border-left-color: var(--light-blue);">ඇනිමේ විකාශනයේ විවිධ යුගයන්</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>යුගය</th>
+                            <th>විකාශන මාධ්‍යය</th>
+                            <th>ප්‍රධාන ලක්ෂණය</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>සාම්ප්‍රදායික යුගය</strong></td>
+                            <td>රූපවාහිනී නාලිකා (TV)</td>
+                            <td>නිශ්චිත වෙලාවකට පමණක් විකාශනය වීම, සීමිත කාටූන් ප්‍රමාණයක් තිබීම.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>සංක්‍රාන්ති යුගය</strong></td>
+                            <td>DVD, VCD සහ YouTube</td>
+                            <td>තමන්ට කැමති වෙලාවක නැරඹීමේ හැකියාව ලැබීම, අන්තර්ජාලය හරහා උපසිරැසි (Subtitles) එකතු වීම.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>නූතන ඩිජිටල් යුගය</strong></td>
+                            <td>OTT Streaming (Netflix, Crunchyroll)</td>
+                            <td>ලෝකය පුරාම එකම දිනයකදී උසස්ම තත්ත්වයෙන් (4K/HD) නැරඹීමට ලැබීම.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>3. OTT ප්‍රවාහයේ (Streaming) පිම්ම සහ ඇනිමේ ගෝලීය රැල්ල</h3>
+            <p>අන්තර්ජාලයේ
