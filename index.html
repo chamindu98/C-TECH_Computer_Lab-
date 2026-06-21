@@ -276,6 +276,100 @@
 
         /* Mobile Phone සඳහා Layout සකස් කිරීම */
        /* Screen එකේ පළල පික්සල් 600 ට වඩා අඩු ෆෝන් සඳහා පමණක් ක්‍රියාත්මක වේ */
+        /* 🏆 O/L Results Card Styling */
+.results-container {
+    max-width: 750px;
+    margin: 25px auto;
+    padding: 20px;
+    background: rgba(28, 37, 65, 0.6);
+    border: 1px dashed rgba(0, 164, 228, 0.4);
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+}
+
+.results-heading {
+    font-size: 1.15rem;
+    color: #fff;
+    margin-bottom: 15px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.results-stats {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap; /* ජංගම දුරකථන තිරවලදී පේළි ගැසීම පාලනය කරයි */
+}
+
+.stat-box {
+    background: rgba(11, 19, 43, 0.9);
+    border-radius: 8px;
+    padding: 10px 20px;
+    min-width: 130px;
+    flex: 1;
+    max-width: 160px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+}
+
+.stat-box:hover {
+    transform: translateY(-3px);
+}
+
+.stat-number {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: bold;
+    line-height: 1.2;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.8rem;
+    color: #a0aec0;
+    margin-top: 5px;
+}
+
+/* 🎨 ප්‍රතිඵල අනුව වර්ණ ගැන්වීම (Theme Colors) */
+.pass-rate { 
+    border-bottom: 4px solid #4ade80; /* කොළ පැහැය */
+}
+.pass-rate .stat-number { color: #4ade80; }
+
+.grade-a { 
+    border-bottom: 4px solid #ff7300; /* C-TECH Orange */
+}
+.grade-a .stat-number { color: #ff7300; }
+
+.grade-b { 
+    border-bottom: 4px solid #00a4e4; /* C-TECH Light Blue */
+}
+.grade-b .stat-number { color: #00a4e4; }
+
+.grade-c { 
+    border-bottom: 4px solid #e2e8f0; /* සුදු පැහැයට හුරු */
+}
+.grade-c .stat-number { color: #e2e8f0; }
+
+/* Mobile Responsive Optimization */
+@media (max-width: 600px) {
+    .results-stats {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* මොබයිල් එකේදී කොටු 2 බැගින් පෙන්වයි */
+        gap: 10px;
+    }
+    .stat-box {
+        max-width: 100%;
+        padding: 8px 12px;
+    }
+    .stat-number {
+        font-size: 1.5rem;
+    }
+    .results-heading {
+        font-size: 1rem;
+    }
+}
 @media screen and (max-width: 600px) {
     /* ටැබ් බාර් එක පේළි 2කට ලස්සනට බෙදා වෙන් කිරීම */
     .main-tab-bar {
@@ -332,6 +426,27 @@
             </div>
             <h1>C-TECH Computer Lab & Education Institute</h1>
             <p>පරිගණක විද්‍යාවේ සහ තාක්ෂණයේ විශිෂ්ටතමයා</p>
+            <div class="results-container">
+    <h3 class="results-heading">✨ මෙවර අපොස සාමාන්‍ය පෙළ (O/L) විශිෂ්ට ප්‍රතිඵල ප්‍රදර්ශනය ✨</h3>
+    <div class="results-stats">
+        <div class="stat-box pass-rate">
+            <span class="stat-number">100%</span>
+            <span class="stat-label">විෂය සමත් ප්‍රතිශතය</span>
+        </div>
+        <div class="stat-box grade-a">
+            <span class="stat-number">07</span>
+            <span class="stat-label">A සාමාර්ථ</span>
+        </div>
+        <div class="stat-box grade-b">
+            <span class="stat-number">07</span>
+            <span class="stat-label">B සාමාර්ථ</span>
+        </div>
+        <div class="stat-box grade-c">
+            <span class="stat-number">01</span>
+            <span class="stat-label">C සාමාර්ථ</span>
+        </div>
+    </div>
+</div>
         </header>
 
         <nav class="main-tab-bar">
