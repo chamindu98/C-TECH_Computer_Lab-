@@ -436,22 +436,63 @@
 .grade-c .stat-number { color: #e2e8f0; }
 .grade-c .stat-label-large { color: #e2e8f0; } /* C අකුර Silver/White */
 
-/* Mobile Responsiveness */
-@media (max-width: 600px) {
-    .results-stats {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-    }
-    .stat-box {
-        max-width: 100%;
-        padding: 12px 15px;
-    }
-    .stat-number { font-size: 1.8rem; }
-    .stat-label-large { font-size: 0.95rem; }
-    .students-count-badge { font-size: 0.95rem; width: 100%; border-radius: 12px; }
-    .highlight-count { font-size: 1.3rem; }
+
+        /* 🌐 Brand Identity Section Styling */
+.brand-identity-container {
+    text-align: center;
+    margin: 25px auto;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
 }
+
+/* 🖼️ Logo Wrapper with Neon Border & Glow */
+.logo-wrapper {
+    background: #ffffff; /* ලෝගෝ එකේ පසුබිම සුදු නිසා කැපී පෙනීමට */
+    padding: 10px;
+    border-radius: 16px;
+    box-shadow: 0 0 20px rgba(0, 164, 228, 0.4); /* Dark Cyan Glow */
+    border: 2px solid var(--light-blue);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s ease;
+    max-width: 280px; /* ලෝගෝ එකේ ප්‍රමාණය සීමා කිරීම */
+}
+
+.logo-wrapper:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 25px rgba(255, 115, 0, 0.6); /* Hover කළ විට Orange Glow */
+    border-color: var(--orange);
+}
+
+.brand-logo {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+}
+
+/* ✍️ Creative Text Styling */
+.brand-text-glow {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #00a4e4; /* C-TECH Light Blue */
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(0, 164, 228, 0.3);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    margin-top: 5px;
+}
+
+.orange-text {
+    color: #ff7300; /* C-TECH Orange */
+    text-shadow: 0 0 10px rgba(255, 115, 0, 0.3);
+}
+
+
 @media screen and (max-width: 600px) {
     /* ටැබ් බාර් එක පේළි 2කට ලස්සනට බෙදා වෙන් කිරීම */
     .main-tab-bar {
@@ -495,6 +536,26 @@
     .logo-container .tagline {
         font-size: 0.85rem;
     }
+    .logo-wrapper {
+        max-width: 220px; /* මොබයිල් තිරවලදී ලෝගෝව තරමක් කුඩා වේ */
+        padding: 8px;
+    }
+    .brand-text-glow {
+        font-size: 1.15rem;
+    }
+    .results-stats {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    .stat-box {
+        max-width: 100%;
+        padding: 12px 15px;
+    }
+    .stat-number { font-size: 1.8rem; }
+    .stat-label-large { font-size: 0.95rem; }
+    .students-count-badge { font-size: 0.95rem; width: 100%; border-radius: 12px; }
+    .highlight-count { font-size: 1.3rem; }
 }
     </style>
 </head>
@@ -508,6 +569,18 @@
             </div>
             <h1>C-TECH Computer Lab & Education Institute</h1>
             <p>පරිගණක විද්‍යාවේ සහ තාක්ෂණයේ විශිෂ්ටතමයා</p>
+
+<div class="brand-identity-container">
+    <div class="logo-wrapper">
+        <img src="mylogo.jpeg" alt="Smart විදියට ICT - Janith Lakshan" class="brand-logo">
+    </div>
+    <div class="brand-text-glow">
+        SMART විදියට  ICT <span class="orange-text">- Janith Lakshan</span>
+    </div>
+</div>
+
+<div class="results-container">
+    </div>
            <div class="results-container">
     <h3 class="results-heading">✨ මෙවර අපොස සාමාන්‍ය පෙළ (O/L) විශිෂ්ට ප්‍රතිඵල ප්‍රදර්ශනය ✨</h3>
     
