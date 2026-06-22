@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>C-TECH - Binary & Typing Naval Battle</title>
+    <style>
+        :root {
+            --cyan: #00a4e4;
+            --orange: #ff7300;
+            --dark-bg: #060b19;
+            --neon-green: #39ff14;
+            --neon-red: #ff3131;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: #ffffff;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* Screens Management */
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            background: radial-gradient(circle, #0f1c3f 0%, #060b19 100%);
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        /* Typography & Components */
+        h1 {
+            font-size: 2.5rem;
+            color: #fff;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px var(--cyan);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--cyan);
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--cyan) 0%, #007bb5 100%);
+            border: none;
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 164, 228, 0.4);
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px var(--cyan);
+        }
+
+        .btn-orange {
+            background: linear-gradient(135deg, var(--orange) 0%, #cc5c00 100%);
+            box-shadow: 0 0 15px rgba(255, 115, 0, 0.4);
+        }
+
+        .btn-orange:hover {
+            box-shadow: 0 0 25px var(--orange);
+        }
+
+        /* Info Card */
+        .info-card {
+            background: rgba(28, 37, 65, 0.8);
+            border: 1px solid var(--cyan);
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 600px;
+            margin-bottom: 25px;
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        .info-card h3 {
+            color: var(--orange);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        /* HUD (Heads Up Display) */
+        #hud {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            background: linear-gradient(to bottom, rgba(6,11,25,0.9) 0%, transparent 100%);
+        }
+
+        .hud-item {
+            font-weight: bold;
+            font-size: 1.1rem;
+            background: rgba(28, 37, 65, 0.6);
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(0,164,228,0.3);
+        }
+
+        .hud-value {
+            color: var(--orange);
+        }
+
+        /* 3D-Like Cinematic Canvas Viewport */
+        #game-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: #020813;
+            overflow: hidden;
+        }
+
+        #sky-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 45%;
+            background: linear-gradient(to bottom, #020d26 0%, #10254c 100%);
+            transition: background 1s ease;
+        }
+
+        #sea-canvas {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 55%;
+            background: linear-gradient(to bottom, #0c3166 0%, #03122b 100%);
+        }
+
+        /* Ships Container with Perspective */
+        #scene-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            perspective: 300px;
+        }
+
+        /* Player Ship Cinematic Graphic */
+        #player-ship {
+            position: absolute;
+            bottom: 12%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 240px;
+            height: 90px;
+            background: linear-gradient(to bottom, #3a4750 0%, #222831 100%);
+            border-radius: 40% 40% 10% 10% / 80% 80% 20% 20%;
+            box-shadow: 0 15px 25px rgba(0,0,0,0.7), inset 0 2px 5px rgba(255,255,255,0.2);
+            z-index: 5;
+            transition: transform 0.1s ease;
+        }
+
+        #player-ship::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 70px;
+            width: 100px;
+            height: 20px;
+            background: #2f383e;
+            border-radius: 5px;
+        }
+
+        #player-ship::after {
+            content: '';
+            position: absolute;
+            top: -35px;
+            left: 110px;
+            width: 20px;
+            height: 25px;
+            background: #ff7300;
+            border-radius: 3px;
+            box-shadow: 0 0 10px var(--orange);
+        }
+
+        /* Enemy Ship Graphic */
+        #enemy-ship {
+            position: absolute;
+            top: 35%;
+            left: 50%;
+            transform: translateX(-50%) scale(0.6);
+            width: 200px;
+            height: 70px;
+            background: linear-gradient(to bottom, #4f5d75 0%, #2d3142 100%);
+            border-radius: 50% 50% 10% 10% / 90% 90% 10% 10%;
+            z-index: 2;
+            transition: all 0.5s ease;
+        }
+
+        #enemy-ship::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 60px;
+            width: 80px;
+            height: 15px;
+            background: #3f4b5e;
+        }
+
+        /* Threat Elements */
+        .threat {
+            position: absolute;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            animation: float 2s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .torpedo {
+            background: rgba(255, 49, 49, 0.2);
+            border: 2px solid var(--neon-red);
+            color: var(--neon-red);
+            text-shadow: 0 0 5px var(--neon-red);
+        }
+        
+        .torpedo::before {
+            content: '⚓ TORPEDO';
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+        }
+
+        .rocket {
+            background: rgba(255, 115, 0, 0.2);
+            border: 2px solid var(--orange);
+            color: #ffffff;
+            text-shadow: 0 0 5px var(--orange);
+        }
+
+        .rocket::before {
+            content: '🚀 ROCKET';
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+            color: var(--orange);
+        }
+
+        /* Input Controls Area */
+        #control-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 500px;
+            z-index: 20;
+            display: flex;
+            gap: 10px;
+        }
+
+        #game-input {
+            flex: 1;
+            background: rgba(6, 11, 25, 0.9);
+            border: 2px solid var(--cyan);
+            border-radius: 12px;
+            padding: 15px;
+            color: white;
+            font-size: 1.3rem;
+            text-align: center;
+            outline: none;
+            box-shadow: 0 0 15px rgba(0, 164, 228, 0.3);
+        }
+
+        #game-input:focus {
+            border-color: var(--orange);
+            box-shadow: 0 0 15px rgba(255, 115, 0, 0.4);
+        }
+
+        /* Muted background wave effects */
+        .wave {
+            position: absolute;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            animation: drift 10s infinite linear;
+        }
+
+        /* Mobile Controls Layout Helper */
+        .mobile-hint {
+            position: absolute;
+            bottom: 85px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            opacity: 0.7;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 🎬 MAIN MENU SCREEN -->
+    <div id="screen-menu" class="screen active">
+        <h1>BATTLESHIP CYBER DEFENSE</h1>
+        <p class="subtitle">පරිගණක විද්‍යාවේ සහ තාක්ෂණයේ විශිෂ්ටතමයා - C-TECH ICT</p>
+        
+        <div class="info-card">
+            <h3>🎮 ක්‍රීඩා කරන ආකාරය (Game Instructions)</h3>
+            <p>🔹 <strong>Torpedoes (ටෝපිඩෝ ප්‍රහාර):</strong> සතුරු නැව් වලින් එන ටෝපිඩෝ වල <strong>Binary (ද්විමය) කේතයක්</strong> ඇත. එයට අදාළ <strong>Decimal (දශමය) අගය</strong> නිවැරදිව ටයිප් කර Enter කරන්න.</p>
+            <p style="margin-top: 8px;">🔹 <strong>Rockets (රොකට් ප්‍රහාර):</strong> රොකට් වල ඉංග්‍රීසි වචනයක් දිස්වේ. එම <strong>වචනය (Word)</strong> ඒ අයුරින්ම වේගයෙන් ටයිප් කර ප්‍රති-ප්‍රහාර එල්ල කරන්න.</p>
+            <p style="margin-top: 8px; color: var(--neon-red);">⚠️ ටෝපිඩෝ හෝ රොකට් 3ක් ඔබේ නැවේ වැදුණහොත් නැව විනාශ වේ! සෑම ලෙවල් එකක්ම ජය ගැනීමට සතුරු ටෝපිඩෝ 5ක් සහ රොකට් 10ක් විනාශ කරන්න.</p>
+        </div>
+
+        <button class="btn btn-orange" onclick="startGame()">යුද්ධය ආරම්භ කරන්න (Start Game)</button>
+    </div>
+
+    <!-- ⚔️ GAME PLAY SCREEN -->
+    <div id="screen-game" class="screen" style="padding:0;">
+        <div id="hud">
+            <div class="hud-item">LEVEL: <span id="hud-level" class="hud-value">1/5</span></div>
+            <div class="hud-item">LOCATION: <span id="hud-location" class="hud-value">-</span></div>
+            <div class="hud-item">SHIP HP: <span id="hud-hp" class="hud-value">❤️❤️❤️</span></div>
+            <div class="hud-item">TARGET: <span id="hud-target" class="hud-value">T:0/5 | R:0/10</span></div>
+        </div>
+
+        <div id="game-container">
+            <div id="sky-bg"></div>
+            <div id="sea-canvas"></div>
+            
+            <div id="scene-layer">
+                <div id="enemy-ship"></div>
+                <div id="player-ship"></div>
+                <!-- Active threats will be spawned here dynamically -->
+            </div>
+        </div>
+
+        <div class="mobile-hint">Type value and press Enter/Go</div>
+        <div id="control-panel">
+            <input type="text" id="game-input" placeholder="ප්‍රහාරය සඳහා ටයිප් කරන්න..." autocomplete="off">
+        </div>
+    </div>
+
+    <!-- 🏆 GAME OVER / SUCCESS SCREEN -->
+    <div id="screen-over" class="screen">
+        <h1 id="over-title">GAME OVER</h1>
+        <p id="over-msg" class="subtitle">ඔබේ නැව සතුරු ප්‍රහාර හමුවේ විනාශ විය!</p>
+        <button class="btn" onclick="showMenu()">ප්‍රධාන පිටුවට (Main Menu)</button>
+    </div>
+
+    <script>
+        // Game Engine States & Logic
+        const levels = [
+            { no: 1, name: "Welipenna Sea Boundary", sky: "#020d26", bits: 3, speed: 1.5, words: ["ict", "code", "byte", "data", "ram"] },
+            { no: 2, name: "Bopitiya Deep Ocean", sky: "#081c15", bits: 4, speed: 2.0, words: ["input", "logic", "mouse", "drive", "intel"] },
+            { no: 3, name: "Nabada Reef Zone", sky: "#1a0f2e", bits: 4, speed: 2.6, words: ["binary", "python", "pascal", "router", "output"] },
+            { no: 4, name: "C-TECH Combat Bay", sky: "#2e0f1a", bits: 5, speed: 3.2, words: ["network", "gateway", "monitor", "arduino", "android"] },
+            { no: 5, name: "Final Ultimate Showdown", sky: "#111111", bits: 6, speed: 4.0, words: ["processor", "algorithm", "cybersecurity", "robotics", "database"] }
+        ];
+
+        let currentLevelIndex = 0;
+        let hp = 3;
+        let torpedoesDestroyed = 0;
+        let rocketsDestroyed = 0;
+        let activeThreats = [];
+        let gameInterval;
+        let spawnTimeout;
+
+        const menuScreen = document.getElementById('screen-menu');
+        const gameScreen = document.getElementById('screen-game');
+        const overScreen = document.getElementById('screen-over');
+        const gameInput = document.getElementById('game-input');
+
+        function showMenu() {
+            overScreen.classList.remove('active');
+            menuScreen.classList.add('active');
+        }
+
+        function startGame() {
+            menuScreen.classList.remove('active');
+            gameScreen.classList.add('active');
+            currentLevelIndex = 0;
+            initLevel();
+            gameInput.focus();
+            
+            // Background keyboard trigger focus for mobile usability
+            document.addEventListener('click', () => {
+                if(gameScreen.classList.contains('active')) gameInput.focus();
+            });
+        }
+
+        function initLevel() {
+            hp = 3;
+            torpedoesDestroyed = 0;
+            rocketsDestroyed = 0;
+            activeThreats.forEach(t => t.el.remove());
+            activeThreats = [];
+            
+            let lvl = levels[currentLevelIndex];
+            document.getElementById('hud-level').innerText = `${lvl.no}/5`;
+            document.getElementById('hud-location').innerText = lvl.name;
+            document.getElementById('sky-bg').style.background = `linear-gradient(to bottom, ${lvl.sky} 0%, #10254c 100%)`;
+            
+            updateHUD();
+            
+            // Clear existing loops
+            clearInterval(gameInterval);
+            clearTimeout(spawnTimeout);
+            
+            // Start Game Engines
+            gameInterval = setInterval(updateGamePhysics, 30);
+            scheduleNextSpawn();
+            
+            // Cinematic Entrance Animation Effect
+            const enemy = document.getElementById('enemy-ship');
+            enemy.style.left = '-200px';
+            setTimeout(() => { enemy.style.left = '50%'; }, 500);
+        }
+
+        function updateHUD() {
+            let hpHearts = "❤️".repeat(hp);
+            document.getElementById('hud-hp').innerText = hpHearts || "💥";
+            document.getElementById('hud-target').innerText = `T:${torpedoesDestroyed}/5 | R:${rocketsDestroyed}/10`;
+        }
+
+        function scheduleNextSpawn() {
+            let lvl = levels[currentLevelIndex];
+            // dynamic difficulty matching
+            let spawnRate = Math.max(1500, 4000 - (lvl.no * 500)); 
+            spawnTimeout = setTimeout(() => {
+                spawnThreat();
+                scheduleNextSpawn();
+            }, spawnRate);
+        }
+
+        function spawnThreat() {
+            if (!gameScreen.classList.contains('active')) return;
+            
+            let lvl = levels[currentLevelIndex];
+            let isTorpedo = Math.random() > 0.4; // 60% Torpedoes, 40% Rockets
+            
+            // Check if criteria already met for level to avoid over-spawning needed targets
+            if (torpedoesDestroyed >= 5 && isTorpedo) isTorpedo = false;
+            if (rocketsDestroyed >= 10 && !isTorpedo) isTorpedo = true;
+            if (torpedoesDestroyed >= 5 && rocketsDestroyed >= 10) return; 
+
+            let el = document.createElement('div');
+            el.className = `threat ${isTorpedo ? 'torpedo' : 'rocket'}`;
+            
+            let targetValue = "";
+            let displayCode = "";
+            
+            if (isTorpedo) {
+                // Generate Binary
+                let maxVal = Math.pow(2, lvl.bits) - 1;
+                let decimalVal = Math.floor(Math.random() * maxVal) + 1;
+                targetValue = decimalVal.toString();
+                displayCode = decimalVal.toString(2).padStart(lvl.bits, '0');
+            } else {
+                // Pick Random Word from List
+                let word = lvl.words[Math.floor(Math.random() * lvl.words.length)];
+                targetValue = word;
+                displayCode = word;
+            }
+            
+            el.innerText = displayCode;
+            
+            // Horizontal random position
+            let startX = 20 + Math.random() * 60; // 20% to 80% width
+            el.style.left = `${startX}%`;
+            el.style.top = '38%'; // Starts near the enemy ship horizon
+            el.style.transform = 'translateX(-50%) scale(0.4)';
+            
+            document.getElementById('game-container').appendChild(el);
+            
+            activeThreats.push({
+                el: el,
+                type: isTorpedo ? 'torpedo' : 'rocket',
+                value: targetValue,
+                top: 38,
+                scale: 0.4,
+                speed: lvl.speed * (0.6 + Math.random() * 0.8) // Randomized speed profile
+            });
+        }
+
+        function updateGamePhysics() {
+            for (let i = activeThreats.length - 1; i >= 0; i--) {
+                let t = activeThreats[i];
+                t.top += (t.speed * 0.15);
+                t.scale += 0.003 * t.speed;
+                
+                t.el.style.top = `${t.top}%`;
+                t.el.style.transform = `translateX(-50%) scale(${t.scale})`;
+                
+                // Check Collision with player ship (Bottom of screen horizon boundary)
+                if (t.top >= 75) {
+                    // Flash explosion look
+                    t.el.remove();
+                    activeThreats.splice(i, 1);
+                    playerTakeDamage();
+                }
+            }
+        }
+
+        function playerTakeDamage() {
+            hp--;
+            updateHUD();
+            
+            // Camera Shake Screen Shake Cinematic effect
+            const container = document.getElementById('game-container');
+            container.style.transform = 'translate(10px, 10px)';
+            setTimeout(() => container.style.transform = 'translate(-10px, -10px)', 50);
+            setTimeout(() => container.style.transform = 'translate(0, 0)', 100);
+
+            if (hp <= 0) {
+                endGame(false);
+            }
+        }
+
+        // Input Processor
+        gameInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                let submission = gameInput.value.trim().toLowerCase();
+                gameInput.value = "";
+                
+                if (!submission) return;
+
+                // Find matching threat
+                let foundIndex = activeThreats.findIndex(t => t.value === submission);
+                
+                if (foundIndex !== -1) {
+                    let matched = activeThreats[foundIndex];
+                    
+                    // Visual counter-rocket effect emulation
+                    matched.el.style.background = "var(--neon-green)";
+                    matched.el.style.color = "#000";
+                    
+                    setTimeout(() => {
+                        matched.el.remove();
+                    }, 100);
+
+                    if (matched.type === 'torpedo') torpedoesDestroyed++;
+                    else rocketsDestroyed++;
+
+                    activeThreats.splice(foundIndex, 1);
+                    updateHUD();
+                    checkLevelWin();
+                }
+            }
+        });
+
+        function checkLevelWin() {
+            if (torpedoesDestroyed >= 5 && rocketsDestroyed >= 10) {
+                clearInterval(gameInterval);
+                clearTimeout(spawnTimeout);
+                
+                if (currentLevelIndex < levels.length - 1) {
+                    currentLevelIndex++;
+                    alert(`🌟 LEVEL COMPLETED! 🌟\nසූදානම් වන්න ඊළඟ කලාපයට ඇතුළු වීමට: ${levels[currentLevelIndex].name}`);
+                    initLevel();
+                } else {
+                    endGame(true);
+                }
+            }
+        }
+
+        function endGame(isWin) {
+            clearInterval(gameInterval);
+            clearTimeout(spawnTimeout);
+            
+            gameScreen.classList.remove('active');
+            overScreen.classList.add('active');
+            
+            const title = document.getElementById('over-title');
+            const msg = document.getElementById('over-msg');
+            
+            if (isWin) {
+                title.innerText = "🏆 VICTORY EFFECT 🏆";
+                title.style.color = "var(--neon-green)";
+                title.style.textShadow = "0 0 20px var(--neon-green)";
+                msg.innerHTML = "🎯 <strong>සුභ පැතුම්! Janith Lakshan සර්ගේ C-TECH පන්තියේ වීරයා!</strong><br>ඔබ සතුරු බලඇණි සියල්ලම සාර්ථකව සහ සම්පූර්ණයෙන්ම විනාශ කර මුහුදු සීමාව ජයග්‍රහණය කළා!";
+            } else {
+                title.innerText = "💥 MISSION FAILED 💥";
+                title.style.color = "var(--neon-red)";
+                title.style.textShadow = "0 0 20px var(--neon-red)";
+                msg.innerText = "ඔබේ නැව සතුරු ප්‍රහාර හමුවේ විනාශ විය! නැවත උත්සාහ කර ද්විමය සංඛ්‍යා වේගයෙන් විසඳන්න.";
+            }
+        }
+    </script>
+</body>
+</html>
