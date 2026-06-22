@@ -159,6 +159,103 @@
         .back-btn { margin-top: 15px; background-color: rgba(0, 164, 228, 0.1); border: 1px solid var(--light-blue); color: var(--light-blue); padding: 12px 24px; font-weight: bold; border-radius: 6px; cursor: pointer; text-decoration: none; display: inline-block; transition: 0.3s; }
         .back-btn:hover { background-color: var(--light-blue); color: #0b132b; transform: translateX(-4px); }
 
+
+        /* 📦 ලස්සන Lesson Card එකක් සඳහා (නැතිනම් අතහැර දමන්න) */
+    .lesson-card {
+        background: #1c2541;
+        border: 1px solid rgba(0, 164, 228, 0.2);
+        border-radius: 12px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        max-width: 450px;
+        margin: 15px auto;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        color: #f4f7f6;
+    }
+    
+    .lesson-details h4 {
+        color: #fff;
+        margin-bottom: 5px;
+        font-size: 1.15rem;
+    }
+    
+    .lesson-details p {
+        color: #a0aec0;
+        font-size: 0.9rem;
+    }
+
+    /* 🔘 බොත්තම් දෙක පෙළගස්වන ආකාරය (Actions Container) */
+    .note-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px; /* බොත්තම් දෙක අතර පරතරය */
+        width: 100%;
+        margin-top: 5px;
+    }
+
+    /* 👁️ විශාල View Note බොත්තම (Cyan Color) */
+    .btn-view {
+        flex: 2; /* වැඩි ඉඩක් ලබා දීමට */
+        background: linear-gradient(135deg, #00a4e4 0%, #007bb5 100%);
+        color: white;
+        text-decoration: none;
+        text-align: center;
+        padding: 12px 20px;
+        font-size: 1rem;
+        font-weight: bold;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 164, 228, 0.2);
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+
+    .btn-view:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0, 164, 228, 0.4);
+        background: linear-gradient(135deg, #00b4f5 0%, #007bb5 100%);
+    }
+
+    /* 📥 තරමක් කුඩා Download බොත්තම (Orange Color) */
+    .btn-download {
+        flex: 1; /* අඩු ඉඩක් ලබා දීමට (පොඩියට සිටීමට) */
+        background: transparent;
+        color: #ff7300;
+        border: 2px solid #ff7300;
+        text-decoration: none;
+        text-align: center;
+        padding: 9px 15px; /* අඩු Padding එකක් මඟින් ප්‍රමාණය කුඩා කර ඇත */
+        font-size: 0.85rem; /* අකුරු වල ප්‍රමාණය කුඩා කර ඇත */
+        font-weight: bold;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        white-space: nowrap;
+    }
+
+    .btn-download:hover {
+        background: #ff7300;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 115, 0, 0.3);
+    }
+
+    /* ජංගම දුරකථන තිර සඳහා (Mobile Responsive) */
+    @media (max-width: 480px) {
+        .note-actions {
+            flex-direction: row; /* ජංගම දුරකථනයේදීත් එක පේළියක තබා ගැනීමට */
+        }
+        .btn-view { padding: 10px 15px; font-size: 0.9rem; }
+        .btn-download { padding: 8px 12px; font-size: 0.8rem; }
+    }
+
         /* --- RESPONSIVE MOBILE VIEW --- */
         @media screen and (max-width: 600px) {
             body { padding: 10px; }
@@ -222,7 +319,9 @@
                     <div class="resource-box">
                         <h4>📚 පාඩම් සටහන් (Notes)</h4>
                         <ul class="resource-list">
-                            <li><span>1. තොරතුරු ලෝකය</span> <a href="g6_t1_w1.pdf" class="action-link" download>Download</a></li>
+                            <li><span>1. තොරතුරු ලෝකය</span> <a href="notes/grade10-ch1-view.html" class="btn-view">
+                                                                👁️ View Note</a>
+                                    <a href="notes/grade10-ch1.pdf" class="btn-download" download>📥 Download</a>    </li>
                         </ul>
                     </div>
                     <div class="resource-box papers-box">
