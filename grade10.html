@@ -142,116 +142,121 @@
         
         .term-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 25px; }
         
-        .resource-box { background-color: var(--card-bg); border-top: 4px solid var(--light-blue); padding: 22px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .resource-box.papers-box { border-top-color: var(--orange); }
-        .resource-box.videos-box { border-top-color: #ff0000; }
-        .resource-box h4 { margin-bottom: 18px; font-size: 1.15rem; color: #fff; }
-        
-        .resource-list { list-style: none; }
-        .resource-list li { margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; }
-        .resource-list li:last-child { margin-bottom: 0; }
-        
-        .action-link { background-color: var(--light-blue); color: #0b132b; padding: 6px 14px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 0.85rem; transition: 0.3s; }
-        .action-link:hover { background-color: var(--orange); color: white; transform: scale(1.05); }
-        .video-link { background-color: #ff0000; color: white; }
-        .video-link:hover { background-color: #cc0000; }
+/* ==========================================================
+   🎯 සම්පත් කොටු (Resource Boxes) & නිවැරදි කළ බොත්තම් පද්ධතිය
+   ========================================================== */
+
+.resource-box { 
+    background-color: var(--card-bg); 
+    border-top: 4px solid var(--light-blue); 
+    padding: 22px; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
+    /* 🛡️ Card එකේ උස Auto කිරීම මඟින් පිට පැනීම වළක්වයි */
+    height: auto !important; 
+}
+.resource-box.papers-box { border-top-color: var(--orange); }
+.resource-box.videos-box { border-top-color: #ff0000; }
+.resource-box h4 { margin-bottom: 18px; font-size: 1.15rem; color: #fff; }
+
+.resource-list { list-style: none; }
+.resource-list li { margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; }
+.resource-list li:last-child { margin-bottom: 0; }
+
+/* ⬇️ පැරණි බාගතකිරීම් සහ වීඩියෝ බොත්තම් (Papers & Videos Boxes සඳහා) */
+.action-link { 
+    background-color: var(--light-blue); 
+    color: #0b132b; 
+    padding: 6px 14px; 
+    border-radius: 4px; 
+    text-decoration: none; 
+    font-weight: bold; 
+    font-size: 0.85rem; 
+    transition: 0.3s; 
+}
+.action-link:hover { background-color: var(--orange); color: white; transform: scale(1.05); }
+.video-link { background-color: #ff0000; color: white; }
+.video-link:hover { background-color: #cc0000; }
+
+
+/* ==========================================================
+   🔥 [NEW] 1 වන කාඩ් එක (Notes) සඳහා විශේෂිත සිරස් පිරිසැලසුම 
+   ========================================================== */
+
+/* 📦 පාඩම් පේළියේ නව ව්‍යුහය */
+.ctech-note-item {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    padding: 5px 0;
+}
+
+/* 📝 පාඩම් අංකය සහ නම */
+.lesson-info {
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+}
+.lesson-idx {
+    color: #00a4e4; /* C-TECH Cyan */
+    margin-right: 6px;
+    font-weight: bold;
+}
+
+/* 🔄 බොත්තම් දෙක එකක් යට එකක් තබා ගන්නා Flex Box එක */
+.ctech-vertical-btns {
+    display: flex;
+    flex-direction: column; 
+    gap: 8px; /* බොත්තම් දෙක අතර සිරස් පරතරය */
+    width: 100%;
+}
+
+/* ⚡ නව පොදු බොත්තම් හැඩය */
+.ctech-card-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px; /* පිරිසිදු නිමාවක් සඳහා නියමිත උස */
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* 👁️ View Note බොත්තමේ වර්ණය (C-TECH Cyan) */
+.btn-view-cyan {
+    background-color: #00a4e4;
+    color: #ffffff;
+}
+.btn-view-cyan:hover {
+    background-color: #008cc4;
+    transform: translateY(-1px);
+}
+
+/* 📥 Download බොත්තමේ වර්ණය (කුඩාවට පෙනෙන බෝඩර් සහිත - Orange) */
+.btn-download-orange {
+    background-color: transparent;
+    color: #ff7300;
+    border: 1.5px solid #ff7300;
+}
+.btn-download-orange:hover {
+    background-color: #ff7300;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
 
         .back-btn { margin-top: 15px; background-color: rgba(0, 164, 228, 0.1); border: 1px solid var(--light-blue); color: var(--light-blue); padding: 12px 24px; font-weight: bold; border-radius: 6px; cursor: pointer; text-decoration: none; display: inline-block; transition: 0.3s; }
         .back-btn:hover { background-color: var(--light-blue); color: #0b132b; transform: translateX(-4px); }
 
 
-       /* 🌌 පාඩම් පේළියේ මූලික හැඩගැන්වීම */
-    .ctech-lesson-row {
-        background: #0f172a; /* Dark Blue-Grey Background */
-        border: 1px solid rgba(0, 164, 228, 0.15);
-        border-radius: 12px;
-        padding: 15px 25px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        max-width: 650px;
-        margin: 15px auto;
-        font-family: 'Segoe UI', system-ui, sans-serif;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        transition: border-color 0.3s ease;
-    }
-    
-    .ctech-lesson-row:hover {
-        border-color: rgba(0, 164, 228, 0.4);
-    }
-
-    /* 📝 පාඩම් නම සහ අංකය */
-    .lesson-title-box {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        color: #ffffff;
-        font-size: 1.1rem;
-        font-weight: 600;
-    }
-    
-    .lesson-num {
-        color: #00a4e4; /* C-TECH Blue */
-    }
-
-    /* 🔘 බොත්තම් එක පෙළට තබාගන්නා Container එක */
-    .ctech-action-group {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    /* ⚡ පොදු බොත්තම් ව්‍යුහය (Base Button Style) */
-    .ctech-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        height: 44px; /* බොත්තම් දෙකේම උස 100% ක් සමාන කිරීමට */
-        padding: 0 18px;
-        border-radius: 8px;
-        font-size: 0.95rem;
-        font-weight: bold;
-        text-decoration: none;
-        box-sizing: border-box;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        white-space: nowrap;
-    }
-
-    /* 👁️ View Note බොත්තම (Solid Neon Cyan Style) */
-    .btn-cyber-view {
-        background: linear-gradient(135deg, #00a4e4 0%, #007bb5 100%);
-        color: #ffffff;
-        border: none;
-        box-shadow: 0 4px 12px rgba(0, 164, 228, 0.2);
-    }
-
-    .btn-cyber-view:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(0, 164, 228, 0.4);
-        filter: brightness(1.1);
-    }
-
-    /* 📥 Download බොත්තම (Premium Glassmorphism + Orange Border Style) */
-    .btn-cyber-download {
-        background: rgba(255, 115, 0, 0.05);
-        color: #ff7300;
-        border: 2px solid #ff7300;
-        box-shadow: inset 0 0 4px rgba(255, 115, 0, 0.1);
-    }
-
-    .btn-cyber-download:hover {
-        background: #ff7300;
-        color: #ffffff;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(255, 115, 0, 0.3);
-    }
-    
-    /* Icons ප්‍රමාණය සකස් කිරීම */
-    .btn-icon {
-        font-size: 1.1rem;
-    }
-
+      
   
         /* --- RESPONSIVE MOBILE VIEW --- */
         @media screen and (max-width: 600px) {
