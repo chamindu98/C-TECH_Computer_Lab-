@@ -160,102 +160,99 @@
         .back-btn:hover { background-color: var(--light-blue); color: #0b132b; transform: translateX(-4px); }
 
 
-        /* 📦 ලස්සන Lesson Card එකක් සඳහා (නැතිනම් අතහැර දමන්න) */
-    .lesson-card {
-        background: #1c2541;
-        border: 1px solid rgba(0, 164, 228, 0.2);
+       /* 🌌 පාඩම් පේළියේ මූලික හැඩගැන්වීම */
+    .ctech-lesson-row {
+        background: #0f172a; /* Dark Blue-Grey Background */
+        border: 1px solid rgba(0, 164, 228, 0.15);
         border-radius: 12px;
-        padding: 20px;
+        padding: 15px 25px;
         display: flex;
-        flex-direction: column;
-        gap: 15px;
-        max-width: 450px;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 650px;
         margin: 15px auto;
         font-family: 'Segoe UI', system-ui, sans-serif;
-        color: #f4f7f6;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        transition: border-color 0.3s ease;
     }
     
-    .lesson-details h4 {
-        color: #fff;
-        margin-bottom: 5px;
-        font-size: 1.15rem;
-    }
-    
-    .lesson-details p {
-        color: #a0aec0;
-        font-size: 0.9rem;
+    .ctech-lesson-row:hover {
+        border-color: rgba(0, 164, 228, 0.4);
     }
 
-    /* 🔘 බොත්තම් දෙක පෙළගස්වන ආකාරය (Actions Container) */
-    .note-actions {
+    /* 📝 පාඩම් නම සහ අංකය */
+    .lesson-title-box {
         display: flex;
         align-items: center;
-        gap: 12px; /* බොත්තම් දෙක අතර පරතරය */
-        width: 100%;
-        margin-top: 5px;
+        gap: 10px;
+        color: #ffffff;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+    
+    .lesson-num {
+        color: #00a4e4; /* C-TECH Blue */
     }
 
-    /* 👁️ විශාල View Note බොත්තම (Cyan Color) */
-    .btn-view {
-        flex: 2; /* වැඩි ඉඩක් ලබා දීමට */
-        background: linear-gradient(135deg, #00a4e4 0%, #007bb5 100%);
-        color: white;
-        text-decoration: none;
-        text-align: center;
-        padding: 12px 20px;
-        font-size: 1rem;
-        font-weight: bold;
-        border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0, 164, 228, 0.2);
-        transition: all 0.3s ease;
+    /* 🔘 බොත්තම් එක පෙළට තබාගන්නා Container එක */
+    .ctech-action-group {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    /* ⚡ පොදු බොත්තම් ව්‍යුහය (Base Button Style) */
+    .ctech-btn {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 6px;
-    }
-
-    .btn-view:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 15px rgba(0, 164, 228, 0.4);
-        background: linear-gradient(135deg, #00b4f5 0%, #007bb5 100%);
-    }
-
-    /* 📥 තරමක් කුඩා Download බොත්තම (Orange Color) */
-    .btn-download {
-        flex: 1; /* අඩු ඉඩක් ලබා දීමට (පොඩියට සිටීමට) */
-        background: transparent;
-        color: #ff7300;
-        border: 2px solid #ff7300;
-        text-decoration: none;
-        text-align: center;
-        padding: 9px 15px; /* අඩු Padding එකක් මඟින් ප්‍රමාණය කුඩා කර ඇත */
-        font-size: 0.85rem; /* අකුරු වල ප්‍රමාණය කුඩා කර ඇත */
-        font-weight: bold;
+        gap: 8px;
+        height: 44px; /* බොත්තම් දෙකේම උස 100% ක් සමාන කිරීමට */
+        padding: 0 18px;
         border-radius: 8px;
-        transition: all 0.3s ease;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 4px;
+        font-size: 0.95rem;
+        font-weight: bold;
+        text-decoration: none;
+        box-sizing: border-box;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         white-space: nowrap;
     }
 
-    .btn-download:hover {
-        background: #ff7300;
-        color: white;
+    /* 👁️ View Note බොත්තම (Solid Neon Cyan Style) */
+    .btn-cyber-view {
+        background: linear-gradient(135deg, #00a4e4 0%, #007bb5 100%);
+        color: #ffffff;
+        border: none;
+        box-shadow: 0 4px 12px rgba(0, 164, 228, 0.2);
+    }
+
+    .btn-cyber-view:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(255, 115, 0, 0.3);
+        box-shadow: 0 6px 20px rgba(0, 164, 228, 0.4);
+        filter: brightness(1.1);
     }
 
-    /* ජංගම දුරකථන තිර සඳහා (Mobile Responsive) */
-    @media (max-width: 480px) {
-        .note-actions {
-            flex-direction: row; /* ජංගම දුරකථනයේදීත් එක පේළියක තබා ගැනීමට */
-        }
-        .btn-view { padding: 10px 15px; font-size: 0.9rem; }
-        .btn-download { padding: 8px 12px; font-size: 0.8rem; }
+    /* 📥 Download බොත්තම (Premium Glassmorphism + Orange Border Style) */
+    .btn-cyber-download {
+        background: rgba(255, 115, 0, 0.05);
+        color: #ff7300;
+        border: 2px solid #ff7300;
+        box-shadow: inset 0 0 4px rgba(255, 115, 0, 0.1);
     }
 
+    .btn-cyber-download:hover {
+        background: #ff7300;
+        color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 115, 0, 0.3);
+    }
+    
+    /* Icons ප්‍රමාණය සකස් කිරීම */
+    .btn-icon {
+        font-size: 1.1rem;
+    }
+
+  
         /* --- RESPONSIVE MOBILE VIEW --- */
         @media screen and (max-width: 600px) {
             body { padding: 10px; }
@@ -275,6 +272,21 @@
             
             .term-grid { grid-template-columns: 1fr; gap: 20px; }
             .inner-page h2 { font-size: 1.3rem; }
+
+            .ctech-lesson-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 20px;
+        }
+        .ctech-action-group {
+            width: 100%;
+        }
+        .ctech-btn {
+            flex: 1; /* Mobile එකේදී බොත්තම් දෙක සමානව බෙදී යයි */
+            height: 42px;
+            font-size: 0.9rem;
+        }
         }
     </style>
 </head>
