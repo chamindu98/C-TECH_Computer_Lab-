@@ -130,7 +130,7 @@
         .term-btn { background-color: var(--card-bg); border: 2px solid var(--light-blue); color: white; padding: 12px 24px; font-size: 1rem; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.3s; }
         .term-btn:hover, .term-btn.active { background-color: var(--orange); border-color: var(--orange); box-shadow: 0 4px 15px rgba(255, 115, 0, 0.2); }
         
-        /* 🛠️ ප්‍රශ්නය විසඳූ තැන: මුලින්ම සියලුම වාර සැඟවීමට display: none; කරන ලදී */
+        /* 🛠️ සියලුම වාර සැඟවීමට display: none; කරන ලදී */
         .term-content { 
             display: none; 
             background: rgba(11, 19, 43, 0.6); 
@@ -142,8 +142,15 @@
         
         .term-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 25px; }
         
- /* සම්පත් කොටු (Resource Boxes) */
-        .resource-box { background-color: var(--card-bg); border-top: 4px solid var(--light-blue); padding: 22px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        /* සම්පත් කොටු (Resource Boxes) */
+        .resource-box { 
+            background-color: var(--card-bg); 
+            border-top: 4px solid var(--light-blue); 
+            padding: 22px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            height: auto !important; /* --- NEW UPDATE: උස Auto කිරීම මඟින් බොත්තම් පිට පැනීම වළක්වයි --- */
+        }
         .resource-box.papers-box { border-top-color: var(--orange); }
         .resource-box.videos-box { border-top-color: #ff0000; }
         .resource-box h4 { margin-bottom: 18px; font-size: 1.15rem; color: #fff; }
@@ -162,8 +169,88 @@
         .back-btn:hover { background-color: var(--light-blue); color: #0b132b; transform: translateX(-4px); }
 
 
-      
-  
+        /* =================================================================
+           🔥 [NEW UPDATE - CSS] Dynamic Reveal Buttons For Notes Card
+           ================================================================= */
+        
+        /* 📦 පාඩම් සිරස් පෙළගැස්ම සඳහා වූ Container එක */
+        .ctech-note-item {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+            margin-bottom: 14px; /* ලැයිස්තුවේ අයිතම අතර පරතරය */
+        }
+        .ctech-note-item:last-child { margin-bottom: 0; }
+
+        /* 📝 පාඩම් නම සහ විස්තර අකුරු */
+        .lesson-info {
+            color: #ffffff;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* 🔄 බොත්තම් දෙක එක පේළියක තබා ගන්නා Flex Box ව්‍යුහය */
+        .ctech-row-btns {
+            display: flex;
+            flex-direction: row;
+            gap: 8px;
+            width: 100%;
+            position: relative;
+        }
+
+        /* ⚡ පොදු බොත්තම් හැඩගැන්වීම */
+        .ctech-card-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 36px;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-decoration: none;
+            box-sizing: border-box;
+            white-space: nowrap;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* 👁️ View Note බොත්තම (මුලින් 100% පළලක් ගන්නා අතර Cyan වර්ණයෙන් යුක්ත වේ) */
+        .btn-view-cyan {
+            flex: 1;
+            background-color: #00a4e4;
+            color: #ffffff;
+        }
+        .btn-view-cyan:hover {
+            background-color: #008cc4;
+        }
+
+        /* 📥 Download බොත්තම (මුලින් මුළුමනින්ම සැඟවී පවතී - Hidden State) */
+        .btn-download-orange {
+            width: 0;
+            opacity: 0;
+            overflow: hidden;
+            padding: 0;
+            border: 0px solid #ff7300;
+            background-color: transparent;
+            color: #ff7300;
+            pointer-events: none; /* සැඟවී ඇති විට ක්ලික් වීම වැළැක්වීමට */
+        }
+
+        /* 🔥 [ACTIVE STATE] View Note ක්ලික් කළ පසු Download බොත්තම Dynamic ලෙස මතු වන ආකාරය */
+        .ctech-row-btns.revealed .btn-download-orange {
+            width: 50%; /* තිරයෙන් හරියටම 50% ක ඉඩක් ගනී */
+            opacity: 1;
+            padding: 0 10px;
+            border: 1.5px solid #ff7300;
+            pointer-events: auto;
+        }
+
+        .btn-download-orange:hover {
+            background-color: #ff7300;
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+        
         /* --- RESPONSIVE MOBILE VIEW --- */
         @media screen and (max-width: 600px) {
             body { padding: 10px; }
@@ -184,20 +271,13 @@
             .term-grid { grid-template-columns: 1fr; gap: 20px; }
             .inner-page h2 { font-size: 1.3rem; }
 
-            .ctech-lesson-row {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 15px;
-            padding: 20px;
-        }
-        .ctech-action-group {
-            width: 100%;
-        }
-        .ctech-btn {
-            flex: 1; /* Mobile එකේදී බොත්තම් දෙක සමානව බෙදී යයි */
-            height: 42px;
-            font-size: 0.9rem;
-        }
+            /* Mobile තිර වලදී බොත්තම් දෙක එකක් යට එකක් වීමට (Responsive Auto Adjust) */
+            .ctech-row-btns.revealed {
+                flex-direction: column;
+            }
+            .ctech-row-btns.revealed .btn-download-orange {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -239,17 +319,22 @@
 
             <div id="term1" class="term-content" style="display: block;">
                 <div class="term-grid">
-                   
-        
-        <div class="resource-box">
+                    
+                    <div class="resource-box">
                         <h4>📚 පාඩම් සටහන් (Notes)</h4>
-                        <ul class="resource-list">
-                            <li><span>1. තොරතුරු ලෝකය</span> <a href="g6_t1_w1.pdf" class="action-link" download>Download</a></li>
-                        </ul>
+                        <div class="resource-list">
+                            <div class="ctech-note-item">
+                                <div class="lesson-info">1. තොරතුරු ලෝකය</div>
+                                <div class="ctech-row-btns">
+                                    <a href="notes/g10_t1_w1_view.html" target="_blank" class="ctech-card-btn btn-view-cyan" onclick="revealDownload(this)">👁️ View Note</a>
+                                    <a href="g6_t1_w1.pdf" class="ctech-card-btn btn-download-orange" download>📥 Download</a>
+                                </div>
+                            </div>
+                            </div>
                     </div>
 
                     <div class="resource-box papers-box">
-                        <h4>📝 ප්‍රශ්න පත්‍ර (Papers) </h4>
+                        <h4>📝 PRŠNA PATRA (Papers) </h4>
                         <ul class="resource-list">
                             <li><span>පළමු වාර පරීක්ෂණය</span> <a href="g6_term1.pdf" class="action-link" download>Download</a></li>
                         </ul>
@@ -265,14 +350,38 @@
 
             <div id="term2" class="term-content" style="display: none;">
                 <div class="term-grid">
+                    
                     <div class="resource-box">
                         <h4>📚 පාඩම් සටහන් (Notes)</h4>
-                        <ul class="resource-list">
-                            <li><span>1. සංඛ්‍යා පද්ධති</span> <a href="g10_t2_w1.pdf" class="action-link" download>Download</a></li>
-                            <li><span>2. තාර්කික ද්වාර  </span> <a href="g10_t2_w2.pdf" class="action-link" download>Download</a></li>
-                            <li><span>3. මෙහෙයුම් පද්ධතිය </span> <a href="g10_t2_w3.pdf" class="action-link" download>Download</a></li>
-                               </ul>
+                        <div class="resource-list">
+                            
+                            <div class="ctech-note-item">
+                                <div class="lesson-info">1. සංඛ්‍යා පද්ධති</div>
+                                <div class="ctech-row-btns">
+                                    <a href="notes/g10_t2_w1_view.html" target="_blank" class="ctech-card-btn btn-view-cyan" onclick="revealDownload(this)">👁️ View Note</a>
+                                    <a href="g10_t2_w1.pdf" class="ctech-card-btn btn-download-orange" download>📥 Download</a>
                                 </div>
+                            </div>
+                            
+                            <div class="ctech-note-item">
+                                <div class="lesson-info">2. TAARKIKA DVAARA</div>
+                                <div class="ctech-row-btns">
+                                    <a href="notes/g10_t2_w2_view.html" target="_blank" class="ctech-card-btn btn-view-cyan" onclick="revealDownload(this)">👁️ View Note</a>
+                                    <a href="g10_t2_w2.pdf" class="ctech-card-btn btn-download-orange" download>📥 Download</a>
+                                </div>
+                            </div>
+                            
+                            <div class="ctech-note-item">
+                                <div class="lesson-info">3. මෙහෙයුම් පද්ධතිය</div>
+                                <div class="ctech-row-btns">
+                                    <a href="notes/g10_t2_w3_view.html" target="_blank" class="ctech-card-btn btn-view-cyan" onclick="revealDownload(this)">👁️ View Note</a>
+                                    <a href="g10_t2_w3.pdf" class="ctech-card-btn btn-download-orange" download>📥 Download</a>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
                     <div class="resource-box papers-box">
                         <h4>📝 ප්‍රශ්න පත්‍ර (Papers) </h4>
                         <ul class="resource-list">
@@ -296,12 +405,20 @@
 
             <div id="term3" class="term-content" style="display: none;">
                 <div class="term-grid">
+                    
                     <div class="resource-box">
                         <h4>📚 පාඩම් සටහන් (Notes) </h4>
-                        <ul class="resource-list">
-                            <li><span>1. තොරතුරු ලෝකය</span> <a href="g6_t1_w1.pdf" class="action-link" download>Download</a></li>
-                        </ul>
+                        <div class="resource-list">
+                            <div class="ctech-note-item">
+                                <div class="lesson-info">1. තොරතුරු ලෝකය</div>
+                                <div class="ctech-row-btns">
+                                    <a href="notes/g10_t3_w1_view.html" target="_blank" class="ctech-card-btn btn-view-cyan" onclick="revealDownload(this)">👁️ View Note</a>
+                                    <a href="g6_t1_w1.pdf" class="ctech-card-btn btn-download-orange" download>📥 Download</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    
                     <div class="resource-box papers-box">
                         <h4>📝 ප්‍රශ්න පත්‍ර (Papers) </h4>
                         <ul class="resource-list">
@@ -322,6 +439,7 @@
     </div>
 
     <script>
+        // වාර මාරු කරන ප්‍රධාන ශ්‍රිතය (Tab System)
         function openTerm(evt, termName) {
             var i, termcontent, termlinks;
             
@@ -340,6 +458,15 @@
             // තෝරාගත් වාරයේ දත්ත පමණක් පෙන්වන්න, බොත්තම active කරන්න
             document.getElementById(termName).style.display = "block";
             evt.currentTarget.className += " active";
+        }
+
+        /* --- NEW UPDATE: View Note ක්ලික් කළ විට Download බොත්තම Smooth ලෙස Reveal කරවන ශ්‍රිතය --- */
+        function revealDownload(element) {
+            // ක්ලික් කරන ලද 'View Note' බොත්තම පිහිටි ප්‍රධාන Container (.ctech-row-btns) එක හඳුනාගැනීම
+            const buttonGroup = element.parentElement;
+            
+            // එයට 'revealed' කියන CSS class එක එක් කිරීම (මෙයින් CSS Transition එක පණ ගැන්වේ)
+            buttonGroup.classList.add('revealed');
         }
     </script>
 </body>
