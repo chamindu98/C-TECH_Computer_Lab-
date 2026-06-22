@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C-TECH AlgoBot - Learn Algorithms</title>
+    <style>
+        :root {
+            --cyan: #00a4e4;
+            --orange: #ff7300;
+            --dark: #0a0f1d;
+            --grid-bg: #131a30;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        
+        body {
+            background-color: var(--dark);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        h1 { font-size: 2rem; color: #fff; text-shadow: 0 0 10px var(--cyan); margin-bottom: 5px; }
+        .sub { color: var(--cyan); margin-bottom: 20px; font-size: 1rem; }
+
+        .game-wrapper {
+            display: flex;
+            gap: 30px;
+            max-width: 900px;
+            width: 100%;
+            background: rgba(28, 37, 65, 0.6);
+            padding: 25px;
+            border-radius: 16px;
+            border: 1px solid rgba(0, 164, 228, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        /* 🗺️ Grid Area */
+        .grid-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 60px);
+            grid-template-rows: repeat(5, 60px);
+            gap: 4px;
+            background: rgba(0,0,0,0.3);
+            padding: 8px;
+            border-radius: 10px;
+            border: 2px solid #1e293b;
+        }
+
+        .cell {
+            background: var(--grid-bg);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .cell.obstacle { background: #341212; border: 1px solid #ff3131; }
+        .cell.obstacle::after { content: '🚧'; font-size: 1.2rem; }
+        
+        /* 🕹️ Control Panel */
+        .control-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .command-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .btn {
+            background: #1e293b;
+            border: 1px solid var(--cyan);
+            color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .btn:hover { background: var(--cyan); color: #000; box-shadow: 0 0 10px var(--cyan); }
+        
+        .btn-run { background: var(--orange); border-color: var(--orange); color: white; font-size: 1.1rem; padding: 12px; }
+        .btn-run:hover { background: #e06600; box-shadow: 0 0 15px var(--orange); color: #fff; }
+        
+        .btn-clear { background: #475569; border-color: #475569; }
+
+        /* 📝 Algorithm Output Box */
+        .algo-box {
+            background: #060b19;
+            border: 1px dashed var(--cyan);
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 120px;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        .algo-title { font-size: 0.9rem; color: var(--orange); margin-bottom: 5px; font-weight: bold; }
+        
+        .command-line {
+            font-family: monospace;
+            color: #39ff14;
+            margin-bottom: 4px;
+            font-size: 0.95rem;
+        }
+
+        .status-msg {
+            margin-top: 10px;
+            font-weight: bold;
+            text-align: center;
+            min-height: 25px;
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .game-wrapper { flex-direction: column; align-items: center; }
+            .control-panel { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>C-TECH ALGOBOT EXPLORER</h1>
+    <p class="sub">දරුවන්ට ඇල්ගොරිතම සිතීම පුහුණු කරන තාක්ෂණික ක්‍රීඩාව</p>
+
+    <div class="game-wrapper">
+        <!-- Grid Space -->
+        <div class="grid-container">
+            <div class="grid" id="map-grid"></div>
+            <div id="game-status" class="status-msg">🤖 රෝවර් එක Crystal එක 💎 වෙත රැගෙන යාමට ඇල්ගොරිතමයක් ලියන්න!</div>
+        </div>
+
+        <!-- Controls Space -->
+        <div class="control-panel">
+            <div class="algo-title">📜 ඔබේ ඇල්ගොරිතමය (Your Code/Algorithm):</div>
+            <div class="algo-box" id="algo-code-box">
+                <div style="color: #64748b; font-style: italic;" id="empty-hint">පියවරවල් ඇතුළත් කර නොමැත...</div>
+            </div>
+
+            <div class="command-buttons">
+                <button class="btn" onclick="addCommand('FORWARD')">⬆️ ඉදිරියට</button>
+                <button class="btn" onclick="addCommand('LEFT')">↩️ වමට හැරෙන්න</button>
+                <button class="btn" onclick="addCommand('RIGHT')">↪️ දකුණට හැරෙන්න</button>
+            </div>
+
+            <button class="btn btn-run" onclick="runAlgorithm()">▶️ ALGORITHM එක ධාවනය කරන්න</button>
+            <button class="btn btn-clear" onclick="clearAlgorithm()">🔄 RESET</button>
+        </div>
+    </div>
+
+    <script>
+        // Game Settings (5x5 Matrix)
+        // 0 = Empty, 1 = Obstacle, 2 = Target (Crystal)
+        const mapData = [
+            [0, 0, 0, 0, 2],
+            [0, 1, 1, 0, 0],
+            [0, 0, 0, 1, 0],
+            [1, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0]
+        ];
+
+        let startPos = { x: 0, y: 4 }; // Bottom Left
+        let botPos = { x: 0, y: 4 };
+        let botDir = 0; // 0: Up, 1: Right, 2: Down, 3: Left
+        const dirSymbols = ['🤖', '👉', '👇', '👈'];
+        
+        let algorithm = [];
+        let isRunning = false;
+
+        function initGrid() {
+            const gridEl = document.getElementById('map-grid');
+            gridEl.innerHTML = '';
+            
+            for (let y = 0; y < 5; y++) {
+                for (let x = 0; x < 5; x++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    if (mapData[y][x] === 1) cell.classList.add('obstacle');
+                    if (mapData[y][x] === 2) cell.innerText = '💎';
+                    
+                    if (botPos.x === x && botPos.y === y) {
+                        cell.innerText = dirSymbols[botDir];
+                        cell.style.background = 'rgba(0, 164, 228, 0.3)';
+                    }
+                    gridEl.appendChild(cell);
+                }
+            }
+        }
+
+        function addCommand(cmd) {
+            if (isRunning) return;
+            algorithm.push(cmd);
+            updateAlgoDisplay();
+        }
+
+        function clearAlgorithm() {
+            algorithm = [];
+            isRunning = false;
+            botPos = { ...startPos };
+            botDir = 0;
+            document.getElementById('game-status').innerText = "🤖 රෝවර් එක Crystal එක වෙත රැගෙන යාමට ඇල්ගොරිතමයක් ලියන්න!";
+            document.getElementById('game-status').style.color = '#fff';
+            updateAlgoDisplay();
+            initGrid();
+        }
+
+        function updateAlgoDisplay() {
+            const box = document.getElementById('algo-code-box');
+            box.innerHTML = '';
+            if (algorithm.length === 0) {
+                box.innerHTML = '<div style="color: #64748b; font-style: italic;">පියවරවල් ඇතුළත් කර නොමැත...</div>';
+                return;
+            }
+            algorithm.forEach((cmd, idx) => {
+                box.innerHTML += `<div class="command-line">${idx + 1}. step_${cmd.toLowerCase()}();</div>`;
+            });
+        }
+
+        async function runAlgorithm() {
+            if (isRunning || algorithm.length === 0) return;
+            isRunning = true;
+            const status = document.getElementById('game-status');
+            
+            for (let i = 0; i < algorithm.length; i++) {
+                let cmd = algorithm[i];
+                status.innerText = `Executing step ${i+1}: ${cmd}...`;
+                status.style.color = 'var(--cyan)';
+                
+                await new Promise(r => setTimeout(r, 700)); // Delay for animation
+                
+                if (cmd === 'LEFT') {
+                    botDir = (botDir + 3) % 4;
+                } else if (cmd === 'RIGHT') {
+                    botDir = (botDir + 1) % 4;
+                } else if (cmd === 'FORWARD') {
+                    if (botDir === 0 && botPos.y > 0) botPos.y--;
+                    else if (botDir === 1 && botPos.x < 4) botPos.x++;
+                    else if (botDir === 2 && botPos.y < 4) botPos.y++;
+                    else if (botDir === 3 && botPos.x > 0) botPos.x--;
+                }
+                
+                initGrid();
+
+                // Check Matrix Constraints/Collisions
+                if (mapData[botPos.y][botPos.x] === 1) {
+                    status.innerText = "💥 ALGORITHM ERROR: රෝවර් එක බාධකයක වැදී අනතුරට පත් විය! (Logic Error)";
+                    status.style.color = '#ff3131';
+                    isRunning = false;
+                    return;
+                }
+                
+                if (mapData[botPos.y][botPos.x] === 2) {
+                    status.innerText = "🏆 SUCCESS! ඇල්ගොරිතමය සාර්ථකයි! ඔබ 💎 දිනාගත්තා!";
+                    status.style.color = '#39ff14';
+                    isRunning = false;
+                    return;
+                }
+            }
+            
+            // If sequence finishes without reaching goal
+            status.innerText = "⚠️ ඇල්ගොරිතමය අවසන් වුවත් රෝවර් එක ඉලක්කයට ගියේ නැත. (Incomplete Algorithm)";
+            status.style.color = 'var(--orange)';
+            isRunning = false;
+        }
+
+        // Initialize on load
+        initGrid();
+    </script>
+</body>
+</html>
