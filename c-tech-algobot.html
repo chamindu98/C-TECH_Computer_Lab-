@@ -193,120 +193,20 @@
     </div>
 
     <script>
-        // 10 Distinct Maps Data Matrix Configuration (5x5)
-        // 0 = Empty path, 1 = Obstacle (🚧), 2 = Goal Crystal (💎)
-        // startPos determines where the robot spawns in that level
+        // Fixed 10 Distinct Levels Configuration (Corrected Coordinates)
+        // 0 = Path, 1 = Obstacle, 2 = Crystal Goal
+        // Maps are fixed dynamically below using a randomizer function
         const levels = [
-            {
-                no: 1,
-                start: {x: 0, y: 4},
-                map: [
-                    [0, 0, 0, 0, 2],
-                    [0, 1, 1, 0, 0],
-                    [0, 0, 0, 1, 0],
-                    [1, 1, 0, 0, 0],
-                    [0, 0, 0, 0, 0]
-                ]
-            },
-            {
-                no: 2,
-                start: {x: 0, y: 4},
-                map: [
-                    [0, 0, 2, 0, 0],
-                    [0, 1, 0, 1, 0],
-                    [0, 1, 0, 1, 0],
-                    [0, 0, 0, 0, 0],
-                    [0, 1, 1, 1, 0]
-                ]
-            },
-            {
-                no: 3,
-                start: {x: 2, y: 4},
-                map: [
-                    [2, 0, 0, 0, 0],
-                    [1, 1, 1, 1, 0],
-                    [0, 0, 0, 0, 0],
-                    [0, 1, 1, 1, 1],
-                    [0, 0, 0, 0, 0]
-                ]
-            },
-            {
-                no: 4,
-                start: {x: 4, y: 4},
-                map: [
-                    [2, 1, 0, 0, 0],
-                    [0, 1, 0, 1, 0],
-                    [0, 0, 0, 1, 0],
-                    [1, 1, 1, 1, 0],
-                    [0, 0, 0, 0, 0]
-                ]
-            },
-            {
-                no: 5,
-                start: {x: 0, y: 0},
-                map: [
-                    [0, 1, 0, 0, 0],
-                    [0, 1, 0, 1, 0],
-                    [0, 0, 0, 1, 2],
-                    [1, 1, 1, 1, 0],
-                    [0, 0, 0, 0, 0]
-                ]
-            },
-            {
-                no: 6,
-                start: {x: 2, y: 2},
-                map: [
-                    [1, 0, 0, 0, 1],
-                    [0, 0, 1, 0, 0],
-                    [0, 1, 0, 1, 0],
-                    [0, 0, 1, 0, 0],
-                    [2, 0, 0, 0, 1]
-                ]
-            },
-            {
-                no: 7,
-                start: {x: 0, y: 4},
-                map: [
-                    [0, 0, 0, 1, 2],
-                    [0, 1, 0, 1, 0],
-                    [0, 1, 0, 0, 0],
-                    [0, 1, 1, 1, 1],
-                    [0, 0, 0, 0, 0]
-                ]
-            },
-            {
-                no: 8,
-                start: {x: 4, y: 0},
-                map: [
-                    [0, 0, 0, 0, 0],
-                    [1, 1, 1, 1, 0],
-                    [2, 0, 0, 1, 0],
-                    [0, 1, 0, 1, 0],
-                    [0, 1, 0, 0, 0]
-                ]
-            },
-            {
-                no: 9,
-                start: {x: 0, y: 2},
-                map: [
-                    [1, 1, 2, 1, 1],
-                    [1, 0, 0, 0, 1],
-                    [0, 0, 1, 0, 0],
-                    [1, 0, 0, 0, 1],
-                    [1, 1, 1, 1, 1]
-                ]
-            },
-            {
-                no: 10,
-                start: {x: 2, y: 4},
-                map: [
-                    [2, 0, 1, 0, 0],
-                    [1, 0, 1, 0, 1],
-                    [0, 0, 0, 0, 0],
-                    [1, 1, 0, 1, 1],
-                    [0, 0, 0, 0, 0]
-                ]
-            }
+            { no: 1, start: {x: 0, y: 4}, goal: {x: 4, y: 0} },
+            { no: 2, start: {x: 0, y: 4}, goal: {x: 2, y: 0} },
+            { no: 3, start: {x: 2, y: 4}, goal: {x: 0, y: 0} },
+            { no: 4, start: {x: 4, y: 4}, goal: {x: 0, y: 0} },
+            { no: 5, start: {x: 0, y: 0}, goal: {x: 4, y: 2} },
+            { no: 6, start: {x: 2, y: 2}, goal: {x: 0, y: 4} }, // Fixed Logic Bug
+            { no: 7, start: {x: 0, y: 4}, goal: {x: 4, y: 0} }, // Fixed Logic Bug
+            { no: 8, start: {x: 4, y: 0}, goal: {x: 0, y: 2} }, // Fixed Logic Bug
+            { no: 9, start: {x: 0, y: 2}, goal: {x: 2, y: 0} }, // Fixed Logic Bug
+            { no: 10, start: {x: 2, y: 4}, goal: {x: 0, y: 0} } // Fixed Logic Bug
         ];
 
         let currentLevelIdx = 0;
@@ -316,6 +216,40 @@
         
         let algorithm = [];
         let isRunning = false;
+        let currentMap = [];
+
+        // Generates dynamic random barrier pattern for each map setup
+        function generateRandomMap(level) {
+            let map = [
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0]
+            ];
+
+            // Place Crystal Goal
+            map[level.goal.y][level.goal.x] = 2;
+
+            // Define number of barriers based on difficulty level
+            let obstacleCount = 4 + Math.min(level.no, 5); 
+
+            // Place Random Barriers (1) ensuring they don't block start or goal positions
+            while(obstacleCount > 0) {
+                let rx = Math.floor(Math.random() * 5);
+                let ry = Math.floor(Math.random() * 5);
+
+                if ((rx === level.start.x && ry === level.start.y) || 
+                    (rx === level.goal.x && ry === level.goal.y) ||
+                    map[ry][rx] === 1) {
+                    continue; // Skip invalid spots
+                }
+                
+                map[ry][rx] = 1;
+                obstacleCount--;
+            }
+            return map;
+        }
 
         function initLevel() {
             let lvl = levels[currentLevelIdx];
@@ -323,6 +257,9 @@
             botDir = 0; 
             algorithm = [];
             isRunning = false;
+
+            // Generate fresh random map layout every initialization
+            currentMap = generateRandomMap(lvl);
             
             document.getElementById('hud-level').innerText = `${lvl.no} / 10`;
             document.getElementById('game-status').innerText = `Level ${lvl.no}: රෝවර් එක Crystal එක 💎 වෙත රැගෙන යාමට පියවර ලියන්න!`;
@@ -335,7 +272,6 @@
         function renderGrid() {
             const gridEl = document.getElementById('map-grid');
             gridEl.innerHTML = '';
-            let currentMap = levels[currentLevelIdx].map;
             
             for (let y = 0; y < 5; y++) {
                 for (let x = 0; x < 5; x++) {
@@ -379,7 +315,6 @@
             if (isRunning || algorithm.length === 0) return;
             isRunning = true;
             const status = document.getElementById('game-status');
-            let currentMap = levels[currentLevelIdx].map;
             
             for (let i = 0; i < algorithm.length; i++) {
                 let cmd = algorithm[i];
