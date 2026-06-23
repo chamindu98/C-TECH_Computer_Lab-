@@ -259,35 +259,52 @@
             isRunning = false;
 
             // Generate fresh random map layout every initialization
-            currentMap = generateRandomMap(lvl);
-            
-            document.getElementById('hud-level').innerText = `${lvl.no} / 10`;
-            document.getElementById('game-status').innerText = `Level ${lvl.no}: රෝවර් එක Crystal එක 💎 වෙත රැගෙන යාමට පියවර ලියන්න!`;
-            document.getElementById('game-status').style.color = '#fff';
-            
-            updateAlgoDisplay();
-            renderGrid();
-        }
+           // බාධක සිරවීම් වළක්වන නව සසම්භාවී සිතියම් ජනන පද්ධතිය
+function generateRandomMap(level) {
+    let map = [
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0]
+    ];
 
-        function renderGrid() {
-            const gridEl = document.getElementById('map-grid');
-            gridEl.innerHTML = '';
-            
-            for (let y = 0; y < 5; y++) {
-                for (let x = 0; x < 5; x++) {
-                    const cell = document.createElement('div');
-                    cell.className = 'cell';
-                    if (currentMap[y][x] === 1) cell.classList.add('obstacle');
-                    if (currentMap[y][x] === 2) cell.innerText = '💎';
-                    
-                    if (botPos.x === x && botPos.y === y) {
-                        cell.innerText = dirSymbols[botDir];
-                        cell.style.background = 'rgba(0, 164, 228, 0.35)';
-                    }
-                    gridEl.appendChild(cell);
-                }
-            }
-        }
+    // Crystal Goal එක සිතියම මත තැබීම
+    map[level.goal.y][level.goal.x] = 2;
+
+    // මට්ටම අනුව බාධක ප්‍රමාණය තීරණය කිරීම
+    let obstacleCount = 4 + Math.min(level.no, 5); 
+
+    // රෝවර් එකට මුලින්ම හැරීමට හෝ ඉදිරියට යාමට ඇති අවට කොටු (Safe Zone)
+    // රෝවර් එක පිහිටි තැනින් අවම වශයෙන් එක පැත්තකවත් මාර්ගය විවෘතව තැබිය යුතුය
+    let safeZones = [
+        { x: level.start.x, y: level.start.y },          // රෝවර් එක ඇති ස්ථානය
+        { x: level.start.x, y: level.start.y - 1 },      // රෝවර් එකට කෙලින්ම ඉහළ කොටුව
+        { x: level.start.x + 1, y: level.start.y },      // රෝවර් එකට දකුණු පස කොටුව
+        { x: level.start.x - 1, y: level.start.y },      // රෝවර් එකට වම් පස කොටුව
+        { x: level.start.x, y: level.start.y + 1 }       // රෝවර් එකට පහළ කොටුව
+    ];
+
+    while(obstacleCount > 0) {
+        let rx = Math.floor(Math.random() * 5);
+        let ry = Math.floor(Math.random() * 5);
+
+        // 1. තෝරාගත් කොටුව Crystal එක ඇති ස්ථානයදැයි බැලීම
+        if (rx === level.goal.x && ry === level.goal.y) continue;
+
+        // 2. තෝරාගත් කොටුව දැනටමත් බාධකයක් දැයි බැලීම
+        if (map[ry][rx] === 1) continue;
+
+        // 3. CRITICAL FIX: තෝරාගත් කොටුව රෝවර් එක අවට ඇති ආරක්ෂිත කලාපයේ (Safe Zone) පවතීදැයි පරික්ෂාව
+        let isSafeZone = safeZones.some(zone => zone.x === rx && zone.y === ry);
+        if (isSafeZone) continue; // රෝවර් එක අවට කොටු මත බාධක තැබීම මඟහරියි
+
+        // සියලු කොන්දේසි සපුරාලන්නේ නම් බාධකය තැබීම
+        map[ry][rx] = 1;
+        obstacleCount--;
+    }
+    return map;
+}
 
         function addCommand(cmd) {
             if (isRunning) return;
