@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberQuest: The 10 Code Kingdoms</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #0d1117; /* වෘත්තීය Dark Theme පසුබිම */
+            color: #c9d1d9;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        #game-container {
+            text-align: center;
+            background: #161b22;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 255, 245, 0.1);
+            border: 1px solid #30363d;
+        }
+        h1 {
+            margin: 0 0 10px 0;
+            color: #00fff5;
+            font-size: 28px;
+            text-shadow: 0 0 10px rgba(0, 255, 245, 0.3);
+        }
+        #info-panel {
+            display: flex;
+            justify-content: space-between;
+            width: 800px;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .stat-box {
+            background: #21262d;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+        }
+        #level-title { color: #ffeb3b; }
+        #score-display { color: #00fff5; }
+        #question-box {
+            width: 760px;
+            font-size: 20px;
+            margin-bottom: 15px;
+            background: #1f242c;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 5px solid #00fff5;
+            text-align: left;
+            line-height: 1.5;
+        }
+        canvas {
+            border: 2px solid #30363d;
+            background: #090d13;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+            border-radius: 12px;
+            cursor: none; /* Character එක වෙනුවට mouse/touch control වලට පහසු වීමට */
+        }
+        .controls-hint {
+            margin-top: 12px;
+            font-size: 14px;
+            color: #8b949e;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <h1>🤖 CYBERQUEST: THE 10 CODE KINGDOMS</h1>
+    
+    <div id="info-panel">
+        <div class="stat-box">මට්ටම: <span id="level-title">1 / 10</span></div>
+        <div class="stat-box">ලකුණු: <span id="score-display">0</span></div>
+    </div>
+
+    <div id="question-box">
+        <strong>ප්‍රශ්නය:</strong> <span id="question-text">Loading...</span>
+    </div>
+
+    <canvas id="gameCanvas" width="800" height="400"></canvas>
+    
+    <div class="controls-hint">💡 ක්‍රීඩා කරන්නේ කෙසේද: Arrow Keys (ඊතල) මඟින් සයිබර් කැටය පාලනය කර නිවැරදි කොටුව ස්පර්ශ කරන්න.</div>
+</div>
+
+<script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    // Game State
+    let currentLevel = 0;
+    let score = 0;
+    let player = { x: 60, y: 200, width: 35, height: 35, speed: 6, color: "#00fff5" };
+    let keys = {};
+
+    // 10 Levels Data Bank
+    const levelsData = [
+        {
+            title: "1 - Hardware Forest (දෘඪාංග)",
+            question: "පරිගණක පද්ධතියකට දත්ත ඇතුළත් කිරීමට ගන්නා Input Device එකක් තෝරන්න.",
+            answers: [
+                { text: "A. Monitor (මොනිටරය)", isCorrect: false, x: 520, y: 100 },
+                { text: "B. Keyboard (කීබෝඩය)", isCorrect: true, x: 520, y: 250 }
+            ]
+        },
+        {
+            title: "2 - Binary Bridge (ද්විමය පද්ධති)",
+            question: "දශමක සංඛ්‍යා පද්ධතියේ '2' අගය ද්විමය (Binary) ආකාරයෙන් දැක්වූ විට නිවැරදි පිළිතුර කුමක්ද?",
+            answers: [
+                { text: "A. 10 (Binary)", isCorrect: true, x: 520, y: 100 },
+                { text: "B. 11 (Binary)", isCorrect: false, x: 520, y: 250 }
+            ]
+        },
+        {
+            title: "3 - Memory Zone (මතක උපාංග)",
+            question: "පරිගණකය ක්‍රියා විරහිත කළ විට එහි ඇති දත්ත මැකී යන තාවකාලික මතකය කුමක්ද?",
+            answers: [
+                { text: "A. Hard Disk (HDD)", isCorrect: false, x: 520, y: 100 },
+                { text: "B. RAM (රැම් මතකය)", isCorrect: true, x: 520, y: 250 }
+            ]
+        },
+        {
+            title: "4 - Logic Gates (තර්ක ද්වාර)",
+            question: "ප්‍රතිදානය (Output) 1 වීමට නම් ආදාන (Inputs) සියල්ලම 1 විය යුතු Logic Gate එක කුමක්ද?",
+            answers: [
+                { text: "A. AND Gate", isCorrect: true, x: 520, y: 100 },
+                { text: "B. OR Gate", isCorrect: false, x: 520, y: 250 }
+            ]
+        },
+        {
+            title: "5 - Network Hub (පරිගණක ජාල)",
+            question: "ලෝකය පුරා විසිරී ඇති පරිගණක ජාල එකිනෙක සම්බන්ධ කරන ලොකුම ජාලය හඳුන්වන්නේ?",
+            answers: [
+                { text: "A. LAN (දේශීය ජාලය)", isCorrect: false, x: 520, y: 100 },
+                { text: "B. Internet (අන්තර්ජාලය)", isCorrect: true, x: 520, y: 250 }
+            ]
+        },
+        {
+            title: "6 - Operating Systems (මෙහෙයුම් පද්ධති)",
+            question: "පහත දැක්වෙන ඒවායින් විවෘත මෘදුකාංග (Open Source Operating System) ගණයට අයිති වන්නේ කුමක්ද?",
+            answers: [
+                { text: "A. Linux (ලිනක්ස්)", isCorrect: true, x: 520, y: 100 },
+                { text: "B. MS Windows", isCorrect: false, x: 520, y: 250 }
+            ]
+        },
+        {
+            title: "7 - Software Types (මෘදුකාංග වර්ගීකරණය)",
+            question: "MS Word සහ VLC Media Player අයත් වන්නේ කුමන මෘදුකාංග වර්ගයටද?",
+            answers: [
+                { text: "A. System Software", isCorrect: false, x: 520, y: 100 },
+                { text: "B. Application Software", isCorrect: true, x: 520, y: 250 }
+            ]
+        },
+        {
+            title: "8 - Pascal Variables (පැස්කල් ක්‍රමලේඛනය)",
+            question: "Pascal භාෂාවේදී පූර්ණ සංඛ්‍යා (නිඛිල) ගබඩා කිරීම සඳහා භාවිත කරන Data Type එක කුමක්ද?",
+            answers: [
+                { text: "A. Integer", isCorrect: true, x: 520, y: 100 },
+                { text: "B. Real", isCorrect: false, x: 520, y: 250 }
+            ]
+        },
+        {
+            title: "9 - Flowcharts (ප්‍රවාහ සටහන්)",
+            question: "ප්‍රවාහ සටහනක (Flowchart) තීරණයක් ගැනීම (Decision Making) සංකේතවත් කිරීමට ගන්නා රූපය?",
+            answers: [
+                { text: "A. ඍජුකෝණාස්‍රය (Rectangle)", isCorrect: false, x: 520, y: 100 },
+                { text: "B. රොම්බසය (Diamond)", isCorrect: true, x: 520, y: 250 }
+            ]
+        },
+        {
+            title: "10 - Cyber Security (සයිබර් ආරක්ෂණ)",
+            question: "පරිගණක පද්ධති වලට හානි කරන 'Malware/Virus' වලින් ආරක්ෂා වීමට අප ස්ථාපනය කළ යුත්තේ?",
+            answers: [
+                { text: "A. Anti-Virus Software", isCorrect: true, x: 520, y: 100 },
+                { text: "B. Adobe Reader", isCorrect: false, x: 520, y: 250 }
+            ]
+        }
+    ];
+
+    // Key Listeners
+    window.addEventListener("keydown", e => keys[e.code] = true);
+    window.addEventListener("keyup", e => keys[e.code] = false);
+
+    function initLevel() {
+        if (currentLevel >= levelsData.length) {
+            alert("🎉 සුභ පැතුම්! ඔයා CyberQuest Levels 10ම ජයගෙන ලෝකය බේරගත්තා! ඔයා නියම ICT විරුවෙක්!");
+            currentLevel = 0; // Restart game
+            score = 0;
+        }
+        
+        // Update DOM elements
+        document.getElementById("level-title").innerText = levelsData[currentLevel].title;
+        document.getElementById("question-text").innerText = levelsData[currentLevel].question;
+        document.getElementById("score-display").innerText = score;
+        
+        // Reset player placement
+        player.x = 60;
+        player.y = 200;
+    }
+
+    function checkCollision(rect1, rect2) {
+        return rect1.x < rect2.x + 220 && // Box width is 220
+               rect1.x + rect1.width > rect2.x &&
+               rect1.y < rect2.y + 65 &&    // Box height is 65
+               rect1.y + rect1.height > rect2.y;
+    }
+
+    function update() {
+        // Player Control Mechanics
+        if ((keys["ArrowUp"] || keys["KeyW"]) && player.y > 10) player.y -= player.speed;
+        if ((keys["ArrowDown"] || keys["KeyS"]) && player.y < canvas.height - player.height - 10) player.y += player.speed;
+        if ((keys["ArrowLeft"] || keys["KeyA"]) && player.x > 10) player.x -= player.speed;
+        if ((keys["ArrowRight"] || keys["KeyD"]) && player.x < canvas.width - player.width - 10) player.x += player.speed;
+
+        // Check Target Collisions
+        let lvl = levelsData[currentLevel];
+        for (let ans of lvl.answers) {
+            if (checkCollision(player, ans)) {
+                if (ans.isCorrect) {
+                    score += 10;
+                    currentLevel++;
+                    alert("🎖️ නිවැරදියි! ඊළඟ මට්ටමට පිවිසෙන්න.");
+                    initLevel();
+                } else {
+                    score = Math.max(0, score - 5); // Deduct marks slightly for wrong answer
+                    alert("❌ පිළිතුර වැරදියි! නැවත උත්සාහ කරන්න.");
+                    player.x = 60; // Reset player position
+                    player.y = 200;
+                    document.getElementById("score-display").innerText = score;
+                }
+                break;
+            }
+        }
+    }
+
+    function draw() {
+        // Clear frame
+        ctx.fillStyle = "#090d13";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Grid Cyber effect lines (පසුබිම් සයිබර් ඉරි රටා)
+        ctx.strokeStyle = "#161b22";
+        ctx.lineWidth = 1;
+        for (let i = 0; i < canvas.width; i += 40) {
+            ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height); ctx.stroke();
+        }
+        for (let j = 0; j < canvas.height; j += 40) {
+            ctx.beginPath(); ctx.moveTo(0, j); ctx.lineTo(canvas.width, j); ctx.stroke();
+        }
+
+        // Draw Player (Neon Cyan Box)
+        ctx.fillStyle = player.color;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = "#00fff5";
+        ctx.fillRect(player.x, player.y, player.width, player.height);
+        
+        // Player Tech Details
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(player.x + 8, player.y + 10, 6, 6);
+        ctx.fillRect(player.x + 22, player.y + 10, 6, 6);
+        ctx.fillStyle = "#0d1117";
+        ctx.fillRect(player.x + 8, player.y + 22, 20, 4);
+
+        // Draw Answers Blocks
+        let lvl = levelsData[currentLevel];
+        lvl.answers.forEach(ans => {
+            // Box Border & Fill
+            ctx.fillStyle = "#1f242c";
+            ctx.strokeStyle = "#30363d";
+            ctx.lineWidth = 2;
+            ctx.shadowBlur = 5;
+            ctx.shadowColor = "rgba(0,0,0,0.5)";
+            
+            ctx.fillRect(ans.x, ans.y, 240, 65);
+            ctx.strokeRect(ans.x, ans.y, 240, 65);
+
+            // Left indicator glow
+            ctx.fillStyle = "#ff5f56"; // Default reddish/orange indicator
+            if(ans.text.startsWith("B")) ctx.fillStyle = "#ffbd2e"; // Yellow indicator
+            ctx.fillRect(ans.x, ans.y, 6, 65);
+
+            // Font configurations
+            ctx.fillStyle = "#e1e4e8";
+            ctx.shadowBlur = 0; // turn off shadow for text crispness
+            ctx.font = "bold 13px 'Segoe UI', sans-serif";
+            ctx.fillText(ans.text, ans.x + 18, ans.y + 38);
+        });
+    }
+
+    function gameLoop() {
+        update();
+        draw();
+        requestAnimationFrame(gameLoop);
+    }
+
+    // Start running the engine
+    initLevel();
+    gameLoop();
+</script>
+
+</body>
+</html>
