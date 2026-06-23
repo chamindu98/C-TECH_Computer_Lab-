@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberDefenders: Data Packets - ICT Game</title>
+    <style>
+        :root {
+            --neon-blue: #00f0ff;
+            --neon-green: #39ff14;
+            --neon-red: #ff3131;
+            --dark-bg: #030712;
+            --panel-bg: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+
+        body {
+            background-color: var(--dark-bg);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            min-height: 100vh;
+            background-image: linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        h1 { font-size: 2rem; color: #fff; text-shadow: 0 0 15px var(--neon-blue); margin-bottom: 5px; text-align: center; }
+        .sub { color: var(--neon-blue); margin-bottom: 20px; font-size: 0.95rem; text-align: center; font-weight: bold; }
+
+        .game-container {
+            display: flex;
+            gap: 20px;
+            max-width: 950px;
+            width: 100%;
+            background: rgba(17, 24, 39, 0.8);
+            padding: 20px;
+            border-radius: 16px;
+            border: 2px solid rgba(0, 240, 255, 0.2);
+            backdrop-filter: blur(8px);
+        }
+
+        /* 📋 Instruction / Score Panel */
+        .side-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: #0f172a;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-box {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 6px;
+            border-left: 4px solid var(--neon-blue);
+            font-weight: bold;
+        }
+
+        .instructions {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #9ca3af;
+        }
+
+        .packet-info {
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid var(--neon-blue);
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .packet-display {
+            font-size: 1.5rem;
+            margin: 8px 0;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        /* 🗺️ Network Map (Canvas Grid) */
+        .network-map {
+            position: relative;
+            width: 500px;
+            height: 400px;
+            background: #070a13;
+            border-radius: 12px;
+            border: 2px solid #1e293b;
+            overflow: hidden;
+        }
+
+        .node {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: #1f2937;
+            border: 2px solid #4b5563;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .node:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .node.sender { border-color: var(--neon-blue); box-shadow: 0 0 15px var(--neon-blue); }
+        .node.receiver { border-color: var(--neon-green); box-shadow: 0 0 15px var(--neon-green); }
+        .node.router { border-color: #f59e0b; }
+
+        .node-icon { font-size: 1.4rem; margin-bottom: 2px; }
+
+        /* Moving Data Packet Animation */
+        .data-packet-dot {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: var(--neon-blue);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--neon-blue);
+            z-index: 5;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            font-weight: bold;
+            color: #000;
+        }
+
+        /* Controls */
+        .btn-action {
+            background: var(--neon-blue);
+            color: #000;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 1rem;
+            text-align: center;
+            width: 100%;
+        }
+
+        .btn-action:hover {
+            background: #fff;
+            box-shadow: 0 0 15px #fff;
+        }
+
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        line {
+            stroke: rgba(255, 255, 255, 0.1);
+            stroke-width: 2;
+            stroke-dasharray: 4;
+        }
+
+        @media (max-width: 768px) {
+            .game-container { flex-direction: column; align-items: center; }
+            .network-map { width: 100%; max-width: 500px; height: 350px; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>CYBERDEFENDERS: DATA PACKETS</h1>
+    <p class="sub">ජාලකරණය (Networking) සහ දත්ත සම්ප්‍රේෂණය ඉගෙන ගන්නා ප්‍රායෝගික ක්‍රීඩාව</p>
+
+    <div class="game-container">
+        
+        <div class="network-map" id="network-map">
+            <svg id="network-lines"></svg>
+            
+            <div class="data-packet-dot" id="moving-packet">📦</div>
+        </div>
+
+        <div class="side-panel">
+            <div class="stat-box">
+                <span>ලකුණු (SCORE):</span>
+                <span id="score-val" style="color: var(--neon-green);">0</span>
+            </div>
+            <div class="stat-box">
+                <span>ජීවිත (LIVES):</span>
+                <span id="lives-val" style="color: var(--neon-red);">❤️❤️❤️</span>
+            </div>
+
+            <div class="packet-info">
+                <div style="font-size: 0.85rem; color: #cbd5e1;">ලැබෙන දත්ත පැකට්ටුව (Incoming Packet):</div>
+                <div class="packet-display" id="packet-data">010110</div>
+                <div style="font-size: 0.8rem; color: #94a3b8;">ගමනාන්ත IP ලිපිනය (Destination IP): <br><strong id="target-ip-display" style="color: var(--neon-green)">192.168.1.5</strong></div>
+            </div>
+
+            <div class="instructions">
+                <strong>🎮 සෙල්ලම් කරන්නේ කොහොමද?</strong>
+                <p style="margin-top: 5px;">1. ඉහත දැක්වෙන දත්ත පැකට්ටුවේ <strong>Destination IP</strong> එක බලන්න.</p>
+                <p>2. සිතියම මත ඇති නිවැරදි IP ලිපිනය සහිත පරිගණකය (Receiver 🖥️) සොයා ගන්න.</p>
+                <p>3. දත්ත පැකට්ටුව අතරමඟ ඇති <strong>Routers 🌐</strong> හරහා ගමන් කරවා නිවැරදි පරිගණකය වෙත ක්ලික් කරමින් රැගෙන යන්න!</p>
+            </div>
+
+            <button class="btn-action" onclick="startNewPacket()">ඊළඟ පැකට්ටුව එවන්න 🚀</button>
+        </div>
+
+    </div>
+
+    <script>
+        // Web Audio API context for sound effects without external files
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playBeep(freq, duration, type="sine") {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        // Network Node Data
+        const nodes = [
+            { id: 'S', name: 'Sender', icon: '💻', x: 40, y: 170, ip: '192.168.1.1', type: 'sender' },
+            { id: 'R1', name: 'Router Alpha', icon: '🌐', x: 180, y: 70, ip: '10.0.0.1', type: 'router' },
+            { id: 'R2', name: 'Router Beta', icon: '🌐', x: 180, y: 270, ip: '10.0.0.2', type: 'router' },
+            { id: 'R3', name: 'Router Gamma', icon: '🌐', x: 320, y: 170, ip: '10.0.0.3', type: 'router' },
+            { id: 'D1', name: 'PC A', icon: '🖥️', x: 410, y: 50, ip: '192.168.1.5', type: 'receiver' },
+            { id: 'D2', name: 'PC B', icon: '🖥️', x: 410, y: 170, ip: '192.168.1.12', type: 'receiver' },
+            { id: 'D3', name: 'PC C', icon: '🖥️', x: 410, y: 290, ip: '192.168.1.45', type: 'receiver' }
+        ];
+
+        // Valid connections paths
+        const connections = [
+            ['S', 'R1'], ['S', 'R2'],
+            ['R1', 'R3'], ['R2', 'R3'],
+            ['R1', 'D1'], ['R3', 'D2'], ['R2', 'D3']
+        ];
+
+        let score = 0;
+        let lives = 3;
+        let currentTargetNode = null;
+        let botCurrentNode = 'S';
+        let isMoving = false;
+
+        function initGame() {
+            const mapEl = document.getElementById('network-map');
+            const svgEl = document.getElementById('network-lines');
+
+            // Render Connections (Lines)
+            connections.forEach(conn => {
+                const n1 = nodes.find(n => n.id === conn[0]);
+                const n2 = nodes.find(n => n.id === conn[1]);
+                
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', n1.x + 35);
+                line.setAttribute('y1', n1.y + 35);
+                line.setAttribute('x2', n2.x + 35);
+                line.setAttribute('y2', n2.y + 35);
+                svgEl.appendChild(line);
+            });
+
+            // Render Nodes
+            nodes.forEach(node => {
+                const div = document.createElement('div');
+                div.className = `node ${node.type}`;
+                div.style.left = `${node.x}px`;
+                div.style.top = `${node.y}px`;
+                div.innerHTML = `<span class="node-icon">${node.icon}</span><div>${node.ip}</div>`;
+                
+                div.onclick = () => onNodeClick(node.id);
+                mapEl.appendChild(div);
+            });
+
+            startNewPacket();
+        }
+
+        function startNewPacket() {
+            if (isMoving || lives <= 0) return;
+
+            // Pick a random destination node (D1, D2, or D3)
+            const targets = ['D1', 'D2', 'D3'];
+            const randomTargetId = targets[Math.floor(Math.random() * targets.length)];
+            currentTargetNode = nodes.find(n => n.id === randomTargetId);
+
+            // Generate dynamic binary fake packet data
+            let binary = "";
+            for(let i=0; i<6; i++) binary += Math.floor(Math.random()*2);
+            
+            document.getElementById('packet-data').innerText = binary;
+            document.getElementById('target-ip-display').innerText = currentTargetNode.ip;
+
+            // Reset packet to sender position
+            botCurrentNode = 'S';
+            const packetDot = document.getElementById('moving-packet');
+            const senderNode = nodes.find(n => n.id === 'S');
+            packetDot.style.left = `${senderNode.x + 27}px`;
+            packetDot.style.top = `${senderNode.y + 27}px`;
+            packetDot.style.display = 'flex';
+            
+            playBeep(600, 0.1);
+        }
+
+        function onNodeClick(nodeId) {
+            if (isMoving || lives <= 0 || botCurrentNode === nodeId) return;
+
+            // Check if clicked node is connected to current position
+            const isValidPath = connections.some(conn => 
+                (conn[0] === botCurrentNode && conn[1] === nodeId) || 
+                (conn[1] === botCurrentNode && conn[0] === nodeId)
+            );
+
+            if (!isValidPath) {
+                playBeep(150, 0.3, 'sawtooth');
+                alert("❌ එම උපාංග අතර ඍජු කේබල් සම්බන්ධතාවයක් (Direct Connection) නොමැත!");
+                return;
+            }
+
+            // Move the Packet Animation
+            isMoving = true;
+            const targetNode = nodes.find(n => n.id === nodeId);
+            const packetDot = document.getElementById('moving-packet');
+            
+            packetDot.style.left = `${targetNode.x + 27}px`;
+            packetDot.style.top = `${targetNode.y + 27}px`;
+
+            playBeep(440, 0.15);
+
+            setTimeout(() => {
+                botCurrentNode = nodeId;
+                isMoving = false;
+
+                // Check final destination if they hit a receiver PC
+                if (targetNode.type === 'receiver') {
+                    if (botCurrentNode === currentTargetNode.id) {
+                        // Success Win Path
+                        score += 10;
+                        document.getElementById('score-val').innerText = score;
+                        playBeep(880, 0.3);
+                        alert("🎉 සාර්ථකයි! දත්ත පැකට්ටුව නිවැරදි IP ලිපිනය වෙත ගමන් කලා!");
+                    } else {
+                        // Wrong Path Loss Life
+                        lives--;
+                        updateLivesDisplay();
+                        playBeep(200, 0.4, 'triangle');
+                        alert("💥 වැරදියි! දත්ත පැකට්ටුව වෙනත් IP ලිපිනයක් සහිත පරිගණකයකට ලැබුණි. (Wrong Destination)");
+                    }
+                    packetDot.style.display = 'none';
+                    
+                    if(lives > 0) {
+                        startNewPacket();
+                    }
+                }
+            }, 800);
+        }
+
+        function updateLivesDisplay() {
+            let heartStr = "";
+            for(let i=0; i<lives; i++) heartStr += "❤️";
+            if(lives === 0) heartStr = "💀 GAME OVER";
+            document.getElementById('lives-val').innerText = heartStr;
+            
+            if(lives === 0) {
+                alert(`🏁 ක්‍රීඩාව අවසන්! ඔබ ලබාගත් මුළු ලකුණු සංඛ්‍යාව: ${score}`);
+            }
+        }
+
+        // Run on load
+        window.onload = initGame;
+    </script>
+</body>
+</html>
