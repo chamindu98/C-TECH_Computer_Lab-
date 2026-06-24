@@ -3,145 +3,377 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>C-TECH - ICT Memory Match Game</title>
+    <title>C-TECH - ICT Memory Match Master PRO</title>
     <style>
         :root {
-            --primary-blue: #004d80;
-            --light-blue: #00a4e4;
-            --orange: #ff7300;
-            --dark-bg: #0b132b;
-            --card-bg: #1c2541;
+            --neon-blue: #00f0ff;
+            --neon-green: #39ff14;
+            --neon-red: #ff3131;
+            --neon-gold: #f59e0b;
+            --dark-bg: #030712;
+            --panel-bg: rgba(9, 17, 36, 0.9);
+            --card-back-bg: radial-gradient(circle, #1c2541, #0b132b);
             --text-light: #f4f7f6;
-            --success-green: #2ecc71;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Consolas', 'Segoe UI', monospace; }
+        
         body {
-            background-color: var(--dark-bg); color: var(--text-light);
-            display: flex; justify-content: center; padding: 20px; min-height: 100vh;
-            background-image: radial-gradient(at 0% 0%, rgba(0, 164, 228, 0.15) 0px, transparent 50%);
+            background-color: var(--dark-bg); 
+            color: var(--text-light);
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            padding: 20px; 
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 50% 30%, rgba(0, 240, 255, 0.08), transparent 70%),
+                linear-gradient(rgba(0, 240, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 30px 30px, 30px 30px;
         }
 
         .web-container {
-            width: 100%; max-width: 700px; background-color: rgba(28, 37, 65, 0.85);
-            backdrop-filter: blur(10px); border: 2px solid var(--light-blue);
-            border-radius: 16px; padding: 25px; box-shadow: 0 0 30px rgba(0, 164, 228, 0.3); text-align: center;
+            width: 100%; 
+            max-width: 900px; 
+            background-color: var(--panel-bg);
+            backdrop-filter: blur(10px); 
+            border: 2px solid rgba(0, 240, 255, 0.3);
+            border-radius: 16px; 
+            padding: 25px; 
+            box-shadow: 0 0 40px rgba(0, 240, 255, 0.15); 
+            text-align: center;
         }
 
-        .game-title { font-size: 1.8rem; color: #fff; margin-bottom: 10px; text-shadow: 0 0 10px var(--light-blue); }
-        .game-desc { color: #a0aec0; margin-bottom: 20px; font-size: 0.95rem; }
+        .game-header {
+            border-bottom: 2px dashed rgba(0, 240, 255, 0.25);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .game-title { 
+            font-size: 2.2rem; 
+            color: #fff; 
+            text-shadow: 0 0 15px var(--neon-blue); 
+            letter-spacing: 2px;
+        }
+        
+        .game-desc { 
+            color: #a0aec0; 
+            margin-top: 5px; 
+            font-size: 0.95rem; 
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            background: rgba(1, 3, 10, 0.9);
+            border-radius: 6px;
+            border-left: 4px solid var(--neon-blue);
+        }
+        .stat-box.level { border-left-color: var(--neon-gold); }
+        .stat-box.score { border-left-color: var(--neon-green); }
+        .stat-box.timer { border-left-color: var(--neon-blue); }
+        .stat-box.moves { border-left-color: #64748b; }
+
+        .stat-label { font-size: 0.65rem; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-value { font-size: 1.3rem; font-weight: bold; margin-top: 3px; }
 
         .game-area {
-            background-color: rgba(11, 19, 43, 0.6); border-radius: 12px; padding: 25px;
-            border: 1px dashed rgba(0, 164, 228, 0.4); margin-bottom: 20px;
+            background-color: rgba(4, 8, 20, 0.6); 
+            border-radius: 12px; 
+            padding: 20px;
+            border: 1px dashed rgba(0, 240, 255, 0.3); 
+            margin-bottom: 20px;
+            min-height: 300px;
         }
 
-        .game-stats {
-            display: flex; justify-content: space-around; background: rgba(255,255,255,0.03);
-            padding: 10px; border-radius: 6px; margin-bottom: 20px; font-weight: bold;
+        .memory-grid-arena { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 12px; 
+            margin-bottom: 20px; 
+            justify-content: center;
         }
-        .stat-highlight { color: var(--orange); }
 
-        .memory-grid-arena { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
-
-        .mem-card { height: 90px; position: relative; transform-style: preserve-3d; transition: transform 0.4s; cursor: pointer; }
+        .mem-card { 
+            height: 100px; 
+            position: relative; 
+            transform-style: preserve-3d; 
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            cursor: pointer; 
+        }
+        
         .mem-card.flipped { transform: rotateY(180deg); }
         .mem-card.matched { animation: cardPulse 0.5s forwards; cursor: default; }
         
         .mem-face {
-            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
-            display: flex; justify-content: center; align-items: center; border-radius: 8px;
-            border: 2px solid #2e3856; font-weight: bold;
+            position: absolute; 
+            width: 100%; 
+            height: 100%; 
+            backface-visibility: hidden;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            border-radius: 8px;
+            border: 2px solid #1e293b; 
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
         }
-        .mem-front { background: radial-gradient(circle, #1c2541, #0b132b); color: var(--light-blue); font-size: 1.8rem; }
-        .mem-back {
-            background: #2e3856; color: #fff; transform: rotateY(180deg); border-color: var(--light-blue);
-            display: flex; flex-direction: column; justify-content: center; padding: 5px;
+        
+        .mem-front { 
+            background: var(--card-back-bg); 
+            color: var(--neon-blue); 
+            font-size: 1.8rem; 
+            border-color: rgba(0, 240, 255, 0.2);
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
         }
-        .mem-back span { font-size: 2rem; }
-        .mem-text-node { font-size: 0.85rem; color: #ffeb3b; line-height: 1.2; }
+        
+        .mem-front::after {
+            content: 'C';
+            font-family: 'Consolas', monospace;
+        }
 
-        .game-overlay-message { display: none; background: var(--card-bg); border: 2px solid var(--success-green); border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .mem-back {
+            background: #0f172a; 
+            color: #fff; 
+            transform: rotateY(180deg); 
+            border-color: var(--neon-blue);
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            padding: 8px;
+        }
+        
+        .mem-back span { font-size: 2.2rem; filter: drop-shadow(0 0 8px rgba(255,255,255,0.3)); }
+        .mem-text-node { font-size: 0.85rem; color: #ffeb3b; line-height: 1.3; font-weight: 600; word-break: break-word; }
+
+        .game-overlay-message { 
+            display: none; 
+            background: rgba(1, 3, 10, 0.95); 
+            border: 2px solid var(--neon-green); 
+            border-radius: 8px; 
+            padding: 20px; 
+            margin-bottom: 20px; 
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.2);
+        }
+
+        .btn-panel {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
 
         button {
-            width: 100%; max-width: 250px; padding: 12px; background: linear-gradient(90deg, #008cd1, var(--light-blue));
-            border: none; border-radius: 6px; color: white; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.2s;
+            width: 100%; 
+            max-width: 220px; 
+            padding: 12px; 
+            background: linear-gradient(135deg, #00f0ff, #0066ff);
+            border: none; 
+            border-radius: 6px; 
+            color: #000; 
+            font-size: 1rem; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: 0.2s;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0, 240, 255, 0.25);
         }
-        button:hover { background: linear-gradient(90deg, var(--light-blue), #00b4ff); box-shadow: 0 0 15px rgba(0, 164, 228, 0.4); }
+        button:hover { 
+            background: #fff; 
+            color: #000;
+            box-shadow: 0 0 20px #fff; 
+            transform: translateY(-1px);
+        }
         
-        .back-link { display: inline-block; margin-top: 20px; color: var(--light-blue); text-decoration: none; font-weight: 600; }
-        .back-link:hover { color: var(--orange); }
+        .back-link { display: inline-block; margin-top: 20px; color: var(--neon-blue); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+        .back-link:hover { color: var(--neon-gold); text-shadow: 0 0 8px var(--neon-gold); }
 
         @keyframes cardPulse {
-            50% { transform: rotateY(180deg) scale(1.05); border-color: var(--success-green); }
-            100% { transform: rotateY(180deg) scale(1); border-color: var(--success-green); opacity: 0.65; }
+            50% { transform: rotateY(180deg) scale(1.06); border-color: var(--neon-green); box-shadow: 0 0 20px var(--neon-green); }
+            100% { transform: rotateY(180deg) scale(1); border-color: var(--neon-green); opacity: 0.7; }
         }
-        @media screen and (max-width: 500px) { .memory-grid-arena { grid-template-columns: repeat(3, 1fr); } .mem-card { height: 75px; } }
+
+        @media screen and (max-width: 600px) { 
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .memory-grid-arena { gap: 8px; }
+            .mem-card { height: 85px; }
+        }
     </style>
 </head>
 <body>
     <div class="web-container">
-        <h2 class="game-title">🧠 ICT Memory Match Master</h2>
-        <p class="game-desc">IT විෂයට අදාළ සමාන පද සහ සංකේත යුගල නිවැරදිව තෝරා ගළපන්න.</p>
+        <div class="game-header">
+            <h2 class="game-title">🧠 ICT MEMORY MATCH PRO</h2>
+            <p class="game-desc">ලෙවල් 50කින් සමන්විත උසස් පරිගණක විද්‍යා තාක්ෂණික යුගල ගැලපීමේ අභියෝගය</p>
+        </div>
         
-        <div class="game-area">
-            <div class="game-stats">
-                <div>Time: <span id="mem-timer" class="stat-highlight">00:00</span></div>
-                <div>Flips: <span id="mem-moves" class="stat-highlight">0</span></div>
+        <div class="stats-grid">
+            <div class="stat-box level">
+                <span class="stat-label">STAGE LEVEL</span>
+                <span class="stat-value" id="mem-level" style="color: var(--neon-gold);">01/50</span>
             </div>
+            <div class="stat-box score">
+                <span class="stat-label">NET SCORE</span>
+                <span class="stat-value" id="mem-score" style="color: var(--neon-green);">0000</span>
+            </div>
+            <div class="stat-box timer">
+                <span class="stat-label">ELAPSED TIME</span>
+                <span class="stat-value" id="mem-timer">00:00</span>
+            </div>
+            <div class="stat-box moves">
+                <span class="stat-label">TOTAL FLIPS</span>
+                <span class="stat-value" id="mem-moves">0</span>
+            </div>
+        </div>
 
+        <div class="game-area">
             <div class="game-overlay-message" id="memWinBox">
-                <p style="color: var(--success-green); font-weight: bold; font-size: 1.3rem; margin-bottom: 8px;">🎉 සුභ පැතුම්! ඔබට ජය!</p>
-                <p id="memWinResult"></p>
+                <p style="color: var(--neon-green); font-weight: bold; font-size: 1.4rem; margin-bottom: 8px;">🎉 STAGE COMPLETED! මට්ටම සාර්ථකයි!</p>
+                <p id="memWinResult" style="margin-bottom: 15px; font-size: 0.95rem;"></p>
+                <button onclick="nextLevel()" id="next-lvl-btn">ඊළඟ ලෙවල් එක ➡️</button>
             </div>
 
             <div class="memory-grid-arena" id="memGridArena"></div>
-            <button onclick="resetMemoryGame()">Reset Game</button>
+            
+            <div class="btn-panel">
+                <button onclick="resetCurrentLevel()">Reset Level 🔄</button>
+                <button onclick="restartGame()" style="background: linear-gradient(135deg, #ff3131, #990000); color: #fff;">Restart Game ⚠️</button>
+            </div>
         </div>
 
         <a href="games.html" class="back-link">← වෙනත් ගේම් එකක් තෝරන්න</a>
     </div>
 
     <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playSound(freq, type, duration) {
             try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = ctx.createOscillator(); const gain = ctx.createGain();
+                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
                 osc.type = type; osc.frequency.value = freq;
-                gain.gain.setValueAtTime(0.08, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
-                osc.connect(gain); gain.connect(ctx.destination);
-                osc.start(); osc.stop(ctx.currentTime + duration);
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + duration);
             } catch(e){}
         }
 
-        const memData = [
-            { id: 1, type: 'pic', content: '💻' }, { id: 1, type: 'txt', content: 'Keyboard' },
-            { id: 2, type: 'pic', content: '🖥️' }, { id: 2, type: 'txt', content: 'Monitor' },
-            { id: 3, type: 'pic', content: '💾' }, { id: 3, type: 'txt', content: 'Hard Disk' },
-            { id: 4, type: 'pic', content: '🖲️' }, { id: 4, type: 'txt', content: 'Processor' },
-            { id: 5, type: 'pic', content: '🔌' }, { id: 5, type: 'txt', content: 'System Unit' },
-            { id: 6, type: 'pic', content: '🌐' }, { id: 6, type: 'txt', content: 'Internet' }
+        // Comprehensive 30+ Core ICT Components Data Pool
+        const ictMasterPool = [
+            { id: 1, pic: '💻', txt: 'Keyboard (ආදාන උපාංගය)' },
+            { id: 2, pic: '🖥️', txt: 'Monitor (ප්‍රතිදාන උපාංගය)' },
+            { id: 3, pic: '💾', txt: 'Hard Disk (ද්විතීයික ආචයනය)' },
+            { id: 4, pic: '🖲️', txt: 'Processor (මධ්‍ය සැකසුම් ඒකකය)' },
+            { id: 5, pic: '🔌', txt: 'System Unit (පද්ධති ඒකකය)' },
+            { id: 6, pic: '🌐', txt: 'Internet (අන්තර්ජාලය)' },
+            { id: 7, pic: '🖱️', txt: 'Mouse (සංකේතක උපාංගය)' },
+            { id: 8, pic: '🖨️', txt: 'Printer (මුද්‍රණ යන්ත්‍රය)' },
+            { id: 9, pic: '📁', txt: 'Folder (ගොනු බහලුම)' },
+            { id: 10, pic: '📡', txt: 'Router (මාර්ගකය)' },
+            { id: 11, pic: '🔋', txt: 'UPS (නොබිඳුණු විදුලි සැපයුම)' },
+            { id: 12, pic: '🔊', txt: 'Speaker (ශබ්ද විකාශකය)' },
+            { id: 13, pic: '🧠', txt: 'ALU (ගණිතමය හා තර්කන ඒකකය)' },
+            { id: 14, pic: '⚡', txt: 'RAM (සසම්භාවී ප්‍රවේශ මතකය)' },
+            { id: 15, pic: '🔒', txt: 'ROM (කියවීම පමණක් ඇති මතකය)' },
+            { id: 16, pic: '🛡️', txt: 'Firewall (ගිනිපවුර)' },
+            { id: 17, pic: '🦠', txt: 'Malware (අනිෂ්ට මෘදුකාංග)' },
+            { id: 18, pic: '🎨', txt: 'GUI (ප්‍රකෘති පරිශීලක අතුරුමුහුණත)' },
+            { id: 19, pic: '🔢', txt: 'Binary Number (ද්විමය සංඛ්‍යාව)' },
+            { id: 20, pic: '✍️', txt: 'Pascal Code (පැස්කල් ක්‍රමලේඛය)' },
+            { id: 21, pic: '🤖', txt: 'Arduino (ක්ෂුද්‍ර පාලකය)' },
+            { id: 22, pic: '🗺️', txt: 'IP Address (ජාල ලිපිනය)' },
+            { id: 23, pic: '📧', txt: 'E-mail (විද්‍යුත් තැපෑල)' },
+            { id: 24, pic: '🕸️', txt: 'WWW (ලෝක ව්‍යාප්ත ජාලය)' },
+            { id: 25, pic: '☁️', txt: 'Cloud Storage (වලාකුළු ආචයනය)' },
+            { id: 26, pic: '📶', txt: 'Wi-Fi (රේඩියෝ තරංග ජාලය)' },
+            { id: 27, pic: '💿', txt: 'Optical Disc (ඔප්ටිකල් තැටිය)' },
+            { id: 28, pic: '📷', txt: 'Webcam (වෙබ් කැමරාව)' },
+            { id: 29, pic: '🎤', txt: 'Microphone (ධ්වනිග්‍රාහකය)' },
+            { id: 30, pic: '🔍', txt: 'Search Engine (සෙවුම් යන්ත්‍රය)' }
         ];
 
-        let memFlipped = []; let memMatched = 0; let memMoves = 0;
-        let memTime = 0; let memTimerInterval = null; let memStarted = false; let memLock = false;
+        let currentLevel = 1;
+        let score = 0;
+        let memFlipped = []; 
+        let memMatched = 0; 
+        let memMoves = 0;
+        let memTime = 0; 
+        let memTimerInterval = null; 
+        let memStarted = false; 
+        let memLock = false;
+        let activePairsCount = 4; 
+        let currentLevelData = [];
 
-        function resetMemoryGame() {
+        function generateLevelData() {
+            // Dynamic difficulty scaling path mapping
+            if (currentLevel <= 5) activePairsCount = 4;        // 4 Pairs (8 Cards) - Grid 4x2
+            else if (currentLevel <= 15) activePairsCount = 6;  // 6 Pairs (12 Cards) - Grid 4x3
+            else if (currentLevel <= 30) activePairsCount = 8;  // 8 Pairs (16 Cards) - Grid 4x4
+            else if (currentLevel <= 45) activePairsCount = 10; // 10 Pairs (20 Cards) - Grid 5x4
+            else activePairsCount = 12;                         // 12 Pairs (24 Cards) - Grid 6x4
+
+            let shuffledPool = [...ictMasterPool].sort(() => Math.random() - 0.5);
+            let selectedItems = shuffledPool.slice(0, activePairsCount);
+
+            currentLevelData = [];
+            selectedItems.forEach(item => {
+                currentLevelData.push({ id: item.id, type: 'pic', content: item.pic });
+                currentLevelData.push({ id: item.id, type: 'txt', content: item.txt });
+            });
+        }
+
+        function updateGridUI() {
+            const arena = document.getElementById('memGridArena');
+            if (activePairsCount <= 4) {
+                arena.style.gridTemplateColumns = 'repeat(4, 1fr)';
+            } else if (activePairsCount === 6) {
+                arena.style.gridTemplateColumns = 'repeat(4, 1fr)';
+            } else if (activePairsCount === 8) {
+                arena.style.gridTemplateColumns = 'repeat(4, 1fr)';
+            } else if (activePairsCount === 10) {
+                arena.style.gridTemplateColumns = 'repeat(5, 1fr)';
+            } else {
+                arena.style.gridTemplateColumns = 'repeat(6, 1fr)';
+            }
+        }
+
+        function initLevel() {
             clearInterval(memTimerInterval);
-            memFlipped = []; memMatched = 0; memMoves = 0; memTime = 0; memStarted = false; memLock = false;
+            memFlipped = []; 
+            memMatched = 0; 
+            memMoves = 0; 
+            memTime = 0; 
+            memStarted = false; 
+            memLock = false;
+            
             document.getElementById('mem-timer').innerText = '00:00';
             document.getElementById('mem-moves').innerText = '0';
+            document.getElementById('mem-level').innerText = String(currentLevel).padStart(2, '0') + "/50";
             document.getElementById('memWinBox').style.display = 'none';
-            const arena = document.getElementById('memGridArena');
-            arena.style.display = 'grid'; arena.innerHTML = '';
             
-            let shuffled = [...memData].sort(() => Math.random() - 0.5);
-            shuffled.forEach(item => {
+            const arena = document.getElementById('memGridArena');
+            arena.style.display = 'grid'; 
+            arena.innerHTML = '';
+            
+            generateLevelData();
+            updateGridUI();
+
+            let shuffledCards = [...currentLevelData].sort(() => Math.random() - 0.5);
+            shuffledCards.forEach(item => {
                 const card = document.createElement('div');
-                card.classList.add('mem-card'); card.dataset.id = item.id;
+                card.classList.add('mem-card'); 
+                card.dataset.id = item.id;
                 card.innerHTML = `
-                    <div class="mem-face mem-front">C</div>
+                    <div class="mem-face mem-front"></div>
                     <div class="mem-face mem-back">
                         ${item.type === 'pic' ? `<span>${item.content}</span>` : `<div class="mem-text-node">${item.content}</div>`}
                     </div>`;
@@ -151,7 +383,8 @@
         }
 
         function flipMemCard() {
-            if (memLock || this === memFlipped[0] || this.classList.contains('matched')) return;
+            if (memLock || this === memFlipped[0] || this.classList.contains('matched') || this.classList.contains('flipped')) return;
+            
             if (!memStarted) {
                 memStarted = true;
                 memTimerInterval = setInterval(() => {
@@ -160,34 +393,74 @@
                 }, 1000);
             }
 
-            playSound(400, 'sine', 0.08);
-            this.classList.add('flipped'); memFlipped.push(this);
+            playSound(420, 'sine', 0.08);
+            this.classList.add('flipped'); 
+            memFlipped.push(this);
 
             if (memFlipped.length === 2) {
-                memMoves++; document.getElementById('mem-moves').innerText = memMoves;
+                memMoves++; 
+                document.getElementById('mem-moves').innerText = memMoves;
                 memLock = true;
+                
                 if (memFlipped[0].dataset.id === memFlipped[1].dataset.id) {
                     setTimeout(() => {
-                        playSound(650, 'triangle', 0.15);
-                        memFlipped[0].classList.add('matched'); memFlipped[1].classList.add('matched');
-                        memMatched++; memFlipped = []; memLock = false;
-                        if (memMatched === memData.length / 2) {
+                        playSound(700, 'triangle', 0.15);
+                        memFlipped[0].classList.add('matched'); 
+                        memFlipped[1].classList.add('matched');
+                        memMatched++; 
+                        memFlipped = []; 
+                        memLock = false;
+                        
+                        if (memMatched === activePairsCount) {
                             clearInterval(memTimerInterval);
+                            
+                            let levelBonus = (activePairsCount * 50) - (memMoves * 2) - memTime;
+                            if (levelBonus < 50) levelBonus = 50; 
+                            score += levelBonus;
+                            document.getElementById('mem-score').innerText = String(score).padStart(4, '0');
+
                             document.getElementById('memGridArena').style.display = 'none';
                             document.getElementById('memWinBox').style.display = 'block';
-                            document.getElementById('memWinResult').innerText = `ගතවූ කාලය: ${document.getElementById('mem-timer').innerText} | උත්සාහයන්: ${memMoves}`;
+                            document.getElementById('memWinResult').innerText = `ගතවූ කාලය: ${document.getElementById('mem-timer').innerText} | මුළු උත්සාහයන්: ${memMoves} | එකතු වූ ලකුණු: +${levelBonus}`;
+                            
+                            if(currentLevel === 50) {
+                                document.getElementById('memWinBox').innerHTML = `<p style="color: var(--neon-green); font-weight: bold; font-size: 1.6rem; margin-bottom: 8px;">🏆 GRAND CHAMPION! 🏆</p><p>ඔබ මට්ටම් 50ම සාර්ථකව අවසන් කර ICT Memory Match Grand Master කිරුළ දිනාගත්තා! මුළු ලකුණු: ${score}</p>`;
+                            }
                         }
                     }, 400);
                 } else {
                     setTimeout(() => {
-                        playSound(200, 'sawtooth', 0.1);
-                        memFlipped[0].classList.remove('flipped'); memFlipped[1].classList.remove('flipped');
-                        memFlipped = []; memLock = false;
-                    }, 800);
+                        playSound(220, 'sawtooth', 0.12);
+                        memFlipped[0].classList.remove('flipped'); 
+                        memFlipped[1].classList.remove('flipped');
+                        memFlipped = []; 
+                        memLock = false;
+                    }, 900);
                 }
             }
         }
-        window.onload = resetMemoryGame;
+
+        function nextLevel() {
+            if (currentLevel < 50) {
+                currentLevel++;
+                initLevel();
+            }
+        }
+
+        function resetCurrentLevel() {
+            initLevel();
+        }
+
+        function restartGame() {
+            if (confirm("ඔබට මුල සිටම ක්‍රීඩාව නැවත ආරම්භ කිරීමට අවශ්‍යද?")) {
+                currentLevel = 1;
+                score = 0;
+                document.getElementById('mem-score').innerText = "0000";
+                initLevel();
+            }
+        }
+
+        window.onload = initLevel;
     </script>
 </body>
 </html>
