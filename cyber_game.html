@@ -3,480 +3,597 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberQuest: 50 Code Kingdoms - Advanced Routing Edition</title>
+    <title>CyberDefenders: Data Packets - ICT Game PRO</title>
     <style>
         :root {
-            --bg-dark: #060913;
-            --panel-bg: #0d1527;
-            --neon-cyan: #00fff5;
-            --neon-pink: #ff007f;
+            --neon-blue: #00f0ff;
             --neon-green: #39ff14;
-            --neon-yellow: #fffb00;
-            --border-color: #1e293b;
+            --neon-red: #ff3131;
+            --neon-gold: #f59e0b;
+            --dark-bg: #0a0f1d;
+            --panel-bg: #111c32;
+            --node-bg: #1e293b;
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Consolas', 'Segoe UI', monospace; }
+
         body {
-            margin: 0;
-            background-color: var(--bg-dark);
-            color: #c9d1d9;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--dark-bg);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.05), transparent 80%),
+                linear-gradient(rgba(0, 240, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 25px 25px, 25px 25px;
+            overflow-x: hidden;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px dashed rgba(0, 240, 255, 0.2);
+            padding-bottom: 15px;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        h1 { font-size: 2.2rem; color: #fff; text-shadow: 0 0 15px var(--neon-blue); letter-spacing: 2px; }
+        .sub { color: var(--neon-blue); font-size: 0.95rem; margin-top: 5px; opacity: 0.8; }
+
+        .game-layout {
+            display: flex;
+            gap: 25px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* 🗺️ Interactive Network Map */
+        .network-container {
+            flex: 2;
+            position: relative;
+            background: rgba(7, 11, 22, 0.9);
+            border-radius: 16px;
+            border: 2px solid rgba(0, 240, 255, 0.3);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.1);
+            height: 550px;
+            overflow: hidden;
+        }
+
+        .network-map {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* HUD & Side Panel */
+        .side-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: var(--panel-bg);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+            min-width: 320px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .stat-box {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            border-left: 4px solid var(--neon-blue);
+        }
+        .stat-box.level { border-left-color: var(--neon-gold); }
+        .stat-box.lives { border-left-color: var(--neon-red); }
+        .stat-box.score { border-left-color: var(--neon-green); }
+
+        .stat-label { font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; }
+        .stat-value { font-size: 1.2rem; font-weight: bold; margin-top: 2px; }
+
+        .packet-info {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 240, 255, 0.4);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .packet-display {
+            font-size: 1.6rem;
+            margin: 10px 0;
+            font-weight: bold;
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px rgba(0,240,255,0.5);
+            letter-spacing: 3px;
+        }
+
+        /* Nodes Styling */
+        .node {
+            position: absolute;
+            width: 65px;
+            height: 65px;
+            border-radius: 12px;
+            background: var(--node-bg);
+            border: 2px solid #4b5563;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            overflow: hidden;
-            background-image: linear-gradient(rgba(0, 255, 245, 0.02) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(0, 255, 245, 0.02) 1px, transparent 1px);
-            background-size: 30px 30px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 10;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
         }
 
-        #game-container {
-            text-align: center;
-            background: rgba(13, 21, 39, 0.85);
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 0 40px rgba(0, 255, 245, 0.1);
-            border: 2px solid rgba(0, 255, 245, 0.2);
-            backdrop-filter: blur(12px);
-            width: 860px;
+        .node:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
         }
 
-        h1 {
-            margin: 0 0 5px 0;
-            color: var(--neon-cyan);
-            font-size: 28px;
-            letter-spacing: 2px;
-            text-shadow: 0 0 20px rgba(0, 255, 245, 0.5);
-            font-weight: 800;
+        .node .node-label {
+            font-size: 0.65rem;
+            position: absolute;
+            bottom: -20px;
+            white-space: nowrap;
+            background: rgba(0,0,0,0.8);
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .sub-title {
-            font-size: 13px;
-            color: #64748b;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* HUD Matrix */
-        #info-panel {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            margin-bottom: 15px;
-            gap: 15px;
-        }
+        .node.sender { border-color: var(--neon-blue); box-shadow: 0 0 15px rgba(0, 240, 255, 0.4); background: #0c2540;}
+        .node.receiver { border-color: var(--neon-green); box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); background: #0f2d1a;}
+        .node.router { border-color: var(--neon-gold); background: #241d11;}
         
-        .stat-box {
-            background: #090f1e;
-            padding: 10px 20px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            flex: 1;
-            font-size: 16px;
+        .node.active-route {
+            border-color: #fff;
+            box-shadow: 0 0 25px #fff;
+            animation: pulse 1s infinite alternate;
+        }
+
+        .node-icon { font-size: 1.3rem; }
+
+        /* Packet Dot */
+        #moving-packet {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 15px #fff, 0 0 30px var(--neon-blue);
+            z-index: 100;
+            display: none;
+            transition: all 0.5s linear;
+        }
+
+        /* Buttons & Instructions */
+        .btn-action {
+            background: linear-gradient(135deg, var(--neon-blue), #00a8ff);
+            color: #000;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
             font-weight: bold;
-            letter-spacing: 0.5px;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
-        }
-        
-        #level-title { color: var(--neon-yellow); }
-        #score-display { color: var(--neon-green); }
-
-        /* Progress Bar */
-        .progress-container {
-            width: 100%;
-            background: #090f1e;
-            height: 6px;
-            border-radius: 3px;
-            margin-bottom: 15px;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .progress-bar {
-            height: 100%;
-            width: 2%;
-            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-green));
-            box-shadow: 0 0 10px var(--neon-cyan);
-            transition: width 0.3s ease;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0, 240, 255, 0.3);
         }
 
-        /* Question Console */
-        #question-box {
-            width: 100%;
-            font-size: 17px;
-            margin-bottom: 20px;
-            background: #050811;
-            padding: 18px;
-            border-radius: 12px;
-            border-left: 5px solid var(--neon-pink);
-            text-align: left;
+        .btn-action:hover {
+            background: #fff;
+            box-shadow: 0 0 25px #fff;
+            transform: scale(1.02);
+        }
+
+        .instructions {
+            font-size: 0.85rem;
             line-height: 1.6;
-            min-height: 70px;
-            box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+            color: #94a3b8;
+            background: rgba(0,0,0,0.3);
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px dashed rgba(255,255,255,0.1);
         }
 
-        #question-text {
-            color: #e2e8f0;
-        }
+        svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+        line { stroke: rgba(255, 255, 255, 0.15); stroke-width: 2; transition: all 0.5s; }
+        line.active-path { stroke: var(--neon-blue); stroke-width: 3; stroke-dasharray: 8; animation: dash 1s linear infinite; }
 
-        canvas {
-            border: 2px solid rgba(0, 255, 245, 0.3);
-            background: #03060f;
-            border-radius: 14px;
-            box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
-            display: block;
-        }
+        @keyframes dash { to { stroke-dashoffset: -16; } }
+        @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.05); } }
 
-        .controls-hint {
-            margin-top: 15px;
-            font-size: 13px;
-            color: #475569;
-            font-weight: 500;
+        @media (max-width: 900px) {
+            .game-layout { flex-direction: column; }
+            .network-container { height: 450px; }
         }
     </style>
 </head>
 <body>
 
-<div id="game-container">
-    <h1>🤖 CYBERQUEST: 50 CODE KINGDOMS</h1>
-    <div class="sub-title">Advanced Data Packet Routing Terminal</div>
-    
-    <div id="info-panel">
-        <div class="stat-box">NETWORK NODE: <span id="level-title">1 / 50</span></div>
-        <div class="stat-box">ROUTED PACKETS (SCORE): <span id="score-display">0</span></div>
+    <header>
+        <h1>CYBERDEFENDERS: DATA PACKETS - PRO</h1>
+        <p class="sub">ලෙවල් 50 කින් යුත් සංකීර්ණ ජාලකරණ තාක්ෂණික අභියෝගය</p>
+    </header>
+
+    <div class="game-layout">
+        
+        <div class="network-container">
+            <div class="network-map" id="network-map">
+                <svg id="network-lines"></svg>
+                <div id="moving-packet"></div>
+            </div>
+        </div>
+
+        <div class="side-panel">
+            <div class="stats-grid">
+                <div class="stat-box level">
+                    <span class="stat-label">LEVEL</span>
+                    <span class="stat-value" id="level-val" style="color: var(--neon-gold);">1 / 50</span>
+                </div>
+                <div class="stat-box score">
+                    <span class="stat-label">SCORE</span>
+                    <span class="stat-value" id="score-val" style="color: var(--neon-green);">0</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">TTL (Hop Limit)</span>
+                    <span class="stat-value" id="ttl-val" style="color: #fff;">8</span>
+                </div>
+                <div class="stat-box lives">
+                    <span class="stat-label">LIVES</span>
+                    <span class="stat-value" id="lives-val" style="color: var(--neon-red);">❤️❤️❤️</span>
+                </div>
+            </div>
+
+            <div class="packet-info">
+                <div style="font-size: 0.8rem; color: #94a3b8; text-transform: uppercase;">Incoming Packet Header</div>
+                <div class="packet-display" id="packet-data">010110</div>
+                <div style="border-top: 1px solid rgba(255,255,255,0.1); margin-top: 10px; padding-top: 10px;">
+                    <span style="font-size: 0.8rem; color: #94a3b8;">DESTINATION IP:</span><br>
+                    <strong id="target-ip-display" style="color: var(--neon-green); font-size: 1.2rem;">192.168.1.5</strong>
+                </div>
+            </div>
+
+            <div class="instructions">
+                <strong>🛡️ NETWORK FIREWALL MISSION:</strong>
+                <p style="margin-top: 5px;">1. පැකට්ටුවේ <strong>Destination IP</strong> එක පරීක්ෂා කරන්න.</p>
+                <p>2. එය යා යුතු නිවැරදි අවසාන පරිගණකය (Target PC) හඳුනා ගන්න.</p>
+                <p>3. Routers මත ක්ලික් කරමින්, <strong>TTL අගය 0 වීමට පෙර</strong> පැකට්ටුව ගමනාන්තය වෙත මෙහෙයවන්න!</p>
+            </div>
+
+            <button class="btn-action" id="next-btn" onclick="triggerNextPacket()" style="display: none;">ඊළඟ පැකට්ටුව සූදානම් කරන්න ⚡</button>
+        </div>
+
     </div>
 
-    <div class="progress-container">
-        <div class="progress-bar" id="game-progress"></div>
-    </div>
+    <script>
+        // Audio Synth Engine
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSound(freq, duration, type="sine") {
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e){}
+        }
 
-    <div id="question-box">
-        <strong style="color: var(--neon-pink);">⚡ DATAPACKET INSPECTION:</strong> <span id="question-text">Loading secure gateway protocols...</span>
-    </div>
+        // Game State Variables
+        let currentLevel = 1;
+        let score = 0;
+        let lives = 3;
+        let ttl = 8;
+        let nodes = [];
+        let connections = [];
+        let currentTargetNode = null;
+        let packetLocation = 'S';
+        let isMoving = false;
 
-    <canvas id="gameCanvas" width="810" height="420"></canvas>
-    
-    <div class="controls-hint">🎮 CONTROL ENGINE: Use ARROW KEYS or W, A, S, D to route the Neon Packet. Avoid Firewalls (Red Walls)!</div>
-</div>
-
-<script>
-    const canvas = document.getElementById("gameCanvas");
-    const ctx = canvas.getContext("2d");
-
-    let currentLevel = 0;
-    let score = 0;
-    let keys = {};
-    
-    // Player Packet Configuration
-    let player = { x: 40, y: 210, width: 22, height: 22, speed: 4.5 };
-    let particles = [];
-    let obstacles = [];
-    let routers = [];
-
-    // 50 Comprehensive ICT & Networking Levels
-    const levelsData = [
-        { title: "1/50 - Hardware Forest", question: "පරිගණක පද්ධතියකට දත්ත ඇතුළත් කිරීමට ගන්නා Input Device එකක් තෝරන්න.", answers: [{ text: "A. Monitor (මොනිටරය)", isCorrect: false, x: 540, y: 70 }, { text: "B. Keyboard (කීබෝඩය)", isCorrect: true, x: 540, y: 280 }] },
-        { title: "2/50 - Output Engine", question: "පරිගණකයෙන් සකස් කළ තොරතුරු බාහිරට ලබා දෙන Output Device එකක් වන්නේ?", answers: [{ text: "A. Printer (මුද්‍රණ යන්ත්‍රය)", isCorrect: true, x: 540, y: 70 }, { text: "B. Microphone (මයික්‍රෆෝනය)", isCorrect: false, x: 540, y: 280 }] },
-        { title: "3/50 - The Brain of Computer", question: "පරිගණකයේ සියලුම ගණනය කිරීම් සහ පාලනයන් සිදු කරන ප්‍රධාන මොළය කුමක්ද?", answers: [{ text: "A. RAM", isCorrect: false, x: 540, y: 70 }, { text: "B. CPU (මධ්‍ය සැකසුම් ඒකකය)", isCorrect: true, x: 540, y: 280 }] },
-        { title: "4/50 - Storage Hub", question: "පරිගණකයේ දත්ත සහ මෘදුකාංග ස්ථිරවම තැන්පත් කර තබන ප්‍රධාන ද්විතීයික ගබඩාව?", answers: [{ text: "A. Hard Disk Drive (HDD)", isCorrect: true, x: 540, y: 70 }, { text: "B. RAM", isCorrect: false, x: 540, y: 280 }] },
-        { title: "5/50 - Core Parts", question: "මවුපුවරුව (Motherboard) යනු කුමන කොටසට අයත් උපාංගයක්ද?", answers: [{ text: "A. මෘදුකාංග (Software)", isCorrect: false, x: 540, y: 70 }, { text: "B. දෘඪාංග (Hardware)", isCorrect: true, x: 540, y: 280 }] },
-        { title: "6/50 - Audio Input", question: "අපගේ හඬ පරිගණකයට ඇතුළත් කිරීමට භාවිත කරන්නේ කුමක්ද?", answers: [{ text: "A. Microphone", isCorrect: true, x: 540, y: 70 }, { text: "B. Speaker", isCorrect: false, x: 540, y: 280 }] },
-        { title: "7/50 - Hard Copy", question: "තිරය මත ඇති දෙයක් කඩදාසියක මුද්‍රණය කර ගත් පසු එය හඳුන්වන්නේ?", answers: [{ text: "A. Soft Copy", isCorrect: false, x: 540, y: 70 }, { text: "B. Hard Copy", isCorrect: true, x: 540, y: 280 }] },
-        { title: "8/50 - Smart Touch", question: "ස්මාර්ට් ජංගම දුරකථනයක තිරය (Touch Screen) අයත් වන්නේ කුමන ගණයටද?", answers: [{ text: "A. Input & Output දෙකම", isCorrect: true, x: 540, y: 70 }, { text: "B. Input පමණි", isCorrect: false, x: 540, y: 280 }] },
-        { title: "9/50 - Flash Memory", question: "පහසුවෙන් සාක්කුවේ රැගෙන යා හැකි කුඩා ගබඩා උපාංගයක් වන්නේ?", answers: [{ text: "A. CD-ROM", isCorrect: false, x: 540, y: 70 }, { text: "B. Flash Drive (Pen drive)", isCorrect: true, x: 540, y: 280 }] },
-        { title: "10/50 - Optical Discs", question: "දත්ත කියවීම සඳහා ලේසර් කිරණ (Laser) භාවිතා කරන උපාංගය?", answers: [{ text: "A. DVD / Blu-ray Disc", isCorrect: true, x: 540, y: 70 }, { text: "B. Floppy Disk", isCorrect: false, x: 540, y: 280 }] },
-        { title: "11/50 - Binary Bridge", question: "පරිගණකයට තේරුම් ගත හැකි එකම භාෂාව කුමක්ද?", answers: [{ text: "A. ඉංග්‍රීසි භාෂාව", isCorrect: false, x: 540, y: 70 }, { text: "B. ද්විමය භාෂාව (0 සහ 1)", isCorrect: true, x: 540, y: 280 }] },
-        { title: "12/50 - Bits and Bytes", question: "ද්විමය පද්ධතියේ එක 0ක් හෝ 1ක් හඳුන්වන කුඩාම ඒකකය කුමක්ද?", answers: [{ text: "A. Bit (බිට්)", isCorrect: true, x: 540, y: 70 }, { text: "B. Byte (බයිට්)", isCorrect: false, x: 540, y: 280 }] },
-        { title: "13/50 - Byte Scale", question: "එක් බයිටයක් (1 Byte) සෑදීමට බිටු (Bits) කීයක් අවශ්‍යද?", answers: [{ text: "A. බිටු 4ක්", isCorrect: false, x: 540, y: 70 }, { text: "B. බිටු 8ක්", isCorrect: true, x: 540, y: 280 }] },
-        { title: "14/50 - Value of 2", question: "දශමක පද්ධතියේ '2' අගය ද්විමය (Binary) වලින් ලියන්නේ කෙසේද?", answers: [{ text: "A. 10", isCorrect: true, x: 540, y: 70 }, { text: "B. 11", isCorrect: false, x: 540, y: 280 }] },
-        { title: "15/50 - Value of 3", question: "දශමක පද්ධතියේ '3' අගය ද්විමය (Binary) වලින් දක්වන්න.", answers: [{ text: "A. 100", isCorrect: false, x: 540, y: 70 }, { text: "B. 11", isCorrect: true, x: 540, y: 280 }] },
-        { title: "16/50 - KiloByte Size", question: "කිලෝබයිට් එකක් (1 KB) යනු බයිට් (Bytes) කීයක එකතුවක්ද?", answers: [{ text: "A. 1024 Bytes", isCorrect: true, x: 540, y: 70 }, { text: "B. 1000 Bytes", isCorrect: false, x: 540, y: 280 }] },
-        { title: "17/50 - MegaByte Expansion", question: "1024 Megabytes (MB) වලට සමාන වන විශාලත්වය කුමක්ද?", answers: [{ text: "A. 1 Terabyte (TB)", isCorrect: false, x: 540, y: 70 }, { text: "B. 1 Gigabyte (GB)", isCorrect: true, x: 540, y: 280 }] },
-        { title: "18/50 - Binary 100", question: "Binary වලින් '100' ලෙස දැක්වෙන්නේ දශමක පද්ධතියේ කුමන අගයද?", answers: [{ text: "A. 4", isCorrect: true, x: 540, y: 70 }, { text: "B. 5", isCorrect: false, x: 540, y: 280 }] },
-        { title: "19/50 - Off State", question: "පරිගණක පරිපථයක 'විදුලිය නොමැති' හෝ 'අක්‍රිය' (OFF) තත්ත්වය නිරූපණය කරන්නේ?", answers: [{ text: "A. 1 ඉලක්කමෙන්", isCorrect: false, x: 540, y: 70 }, { text: "B. 0 ඉලක්කමෙන්", isCorrect: true, x: 540, y: 280 }] },
-        { title: "20/50 - Decimal Base", question: "අප එදිනෙදා ගණන් කිරීමට ගන්නා දශමක සංඛ්‍යා පද්ධතියේ පදනම (Base) කුමක්ද?", answers: [{ text: "A. 10", isCorrect: true, x: 540, y: 70 }, { text: "B. 2", isCorrect: false, x: 540, y: 280 }] },
-        { title: "21/50 - OS System", question: "පරිගණකයේ දෘඪාංග පාලනය කරමින් අපට වැඩ කිරීමට ඉඩ සලසන ප්‍රධාන මෘදුකාංගය?", answers: [{ text: "A. Application Software", isCorrect: false, x: 540, y: 70 }, { text: "B. Operating System (මෙහෙයුම් පද්ධතිය)", isCorrect: true, x: 540, y: 280 }] },
-        { title: "22/50 - Open Source", question: "නොමිලේ ලබාගත හැකි, කේත වෙනස් කළ හැකි විවෘත මෙහෙයුම් පද්ධතියක් (Open Source OS) වන්නේ?", answers: [{ text: "A. Linux", isCorrect: true, x: 540, y: 70 }, { text: "B. MS Windows", isCorrect: false, x: 540, y: 280 }] },
-        { title: "23/50 - Document Tool", question: "ලියකියවිලි, නිබන්ධන සකස් කිරීමට ගන්නා මෘදුකාංගය කුමක්ද?", answers: [{ text: "A. MS Paint", isCorrect: false, x: 540, y: 70 }, { text: "B. MS Word", isCorrect: true, x: 540, y: 280 }] },
-        { title: "24/50 - Mobile OS", question: "ලෝකයේ බහුතරයක් ස්මාර්ට් ජංගම දුරකථන වල ඇති මෙහෙයුම් පද්ධතිය කුමක්ද?", answers: [{ text: "A. Android", isCorrect: true, x: 540, y: 70 }, { text: "B. Windows", isCorrect: false, x: 540, y: 280 }] },
-        { title: "25/50 - Presentation Pro", question: "පාසලේ හෝ කාර්යාලයේ ස්ලයිඩ් දර්ශන (Presentations) පෙන්වීමට සුදුසුම මෘදුකාංගය?", answers: [{ text: "A. MS Excel", isCorrect: false, x: 540, y: 70 }, { text: "B. MS PowerPoint", isCorrect: true, x: 540, y: 280 }] },
-        { title: "26/50 - Spreadsheet Core", question: "ගණකාධිකාරී වැඩ සහ ලකුණු ලේඛන (Spreadsheets) හැදීමට ගැලපෙන්නේ?", answers: [{ text: "A. MS Excel", isCorrect: true, x: 540, y: 70 }, { text: "B. Notepad", isCorrect: false, x: 540, y: 280 }] },
-        { title: "27/50 - Utility Software", question: "පරිගණකය පිරිසිදුව සහ සුරක්ෂිතව තබා ගැනීමට උදව් වන Utilities ගණයට අයිති වන්නේ?", answers: [{ text: "A. MS Word", isCorrect: false, x: 540, y: 70 }, { text: "B. Disk Defragmenter", isCorrect: true, x: 540, y: 280 }] },
-        { title: "28/50 - Proprietary OS", question: "Apple සමාගමේ පරිගණක (Mac) සඳහාම පමණක් වෙන්වූ මෙහෙයුම් පද්ධතිය?", answers: [{ text: "A. macOS", isCorrect: true, x: 540, y: 70 }, { text: "B. Ubuntu", isCorrect: false, x: 540, y: 280 }] },
-        { title: "29/50 - Web Browser", question: "අන්තර්ජාලයේ වෙබ් අඩවි නැරඹීම සඳහා අප භාවිතා කරන මෘදුකාංගය හඳුන්වන්නේ?", answers: [{ text: "A. Web Browser (Google Chrome)", isCorrect: true, x: 540, y: 70 }, { text: "B. Search Engine", isCorrect: false, x: 540, y: 280 }] },
-        { title: "30/50 - Free Software", question: "කිසිදු මුදලක් නොගෙවා අන්තර්ජාලයෙන් බාගත කර ගත හැකි මෘදුකාංග හඳුන්වන්නේ?", answers: [{ text: "A. Commercial Software", isCorrect: false, x: 540, y: 70 }, { text: "B. Freeware", isCorrect: true, x: 540, y: 280 }] },
-        { title: "31/50 - Local Network", question: "එකම ගොඩනැගිල්ලක් තුළ පරිගණක සම්බන්ධ කර සාදන කුඩා ජාලය කුමක්ද?", answers: [{ text: "A. LAN (Local Area Network)", isCorrect: true, x: 540, y: 70 }, { text: "B. WAN (Wide Area Network)", isCorrect: false, x: 540, y: 280 }] },
-        { title: "32/50 - Global Network", question: "මුළු ලෝකයම එකට යා කරන ලොකුම පරිගණක ජාලය කුමක්ද?", answers: [{ text: "A. Intranet", isCorrect: false, x: 540, y: 70 }, { text: "B. Internet (අන්තර්ජාලය)", isCorrect: true, x: 540, y: 280 }] },
-        { title: "33/50 - Network Router", question: "දත්ත පැකට් නිවැරදි මාර්ගය ඔස්සේ වෙනත් ජාල වෙත යොමු කරන උපකරණය?", answers: [{ text: "A. Router", isCorrect: true, x: 540, y: 70 }, { text: "B. Hub", isCorrect: false, x: 540, y: 280 }] },
-        { title: "34/50 - Web Address Finder", question: "වෙබ් අඩවි වල නම් පරිගණකයට වැටහෙන IP ලිපින බවට හරවන්නේ කවුද?", answers: [{ text: "A. FTP", isCorrect: false, x: 540, y: 70 }, { text: "B. DNS (Domain Name System)", isCorrect: true, x: 540, y: 280 }] },
-        { title: "35/50 - Safe Website", question: "ආරක්ෂිතව දත්ත හුවමාරු වන වෙබ් අඩවියක ලිපිනය ආරම්භ වන්නේ කුමකින්ද?", answers: [{ text: "A. https://", isCorrect: true, x: 540, y: 70 }, { text: "B. http://", isCorrect: false, x: 540, y: 280 }] },
-        { title: "36/50 - IP Identification", question: "ජාලයක ඇති සෑම පරිගණකයකටම හිමිවන අනන්‍ය සංඛ්‍යාත්මක ලිපිනය කුමක්ද?", answers: [{ text: "A. MAC Address", isCorrect: false, x: 540, y: 70 }, { text: "B. IP Address", isCorrect: true, x: 540, y: 280 }] },
-        { title: "37/50 - Wi-Fi Signal", question: "වයර් රහිතව (Wireless) කෙටි දුරක් ඇතුළත උපාංග ජාලගත කිරීමට ගන්නා TAක්ෂණය?", answers: [{ text: "A. Wi-Fi", isCorrect: true, x: 540, y: 70 }, { text: "B. Fiber Optics", isCorrect: false, x: 540, y: 280 }] },
-        { title: "38/50 - Network Topology", question: "ප්‍රධාන මැද උපාංගයකට (Switch/Hub) සියලුම පරිගණක තරු හැඩයට සම්බන්ධ වන Topology එක?", answers: [{ text: "A. Ring Topology", isCorrect: false, x: 540, y: 70 }, { text: "B. Star Topology", isCorrect: true, x: 540, y: 280 }] },
-        { title: "39/50 - Email Protocol", question: "අන්තර්ජාලය හරහා විද්‍යුත් තැපැල් (Emails) පිටත් කර යැවීමට ගන්නා Protocol එක?", answers: [{ text: "A. SMTP", isCorrect: true, x: 540, y: 70 }, { text: "B. POP3", isCorrect: false, x: 540, y: 280 }] },
-        { title: "40/50 - Network NIC", question: "පරිගණකයකට ජාල කේබලයක් (Network Cable) සවි කිරීමට තිබිය යුතු කාඩ්පත?", answers: [{ text: "A. Sound Card", isCorrect: false, x: 540, y: 70 }, { text: "B. NIC (Network Interface Card)", isCorrect: true, x: 540, y: 280 }] },
-        { title: "41/50 - Logic Gates (AND)", question: "ආදාන (Inputs) සියල්ලම 1 වුවහොත් පමණක් ප්‍රතිදානය (Output) 1 වන ද්වාරය?", answers: [{ text: "A. AND Gate", isCorrect: true, x: 540, y: 70 }, { text: "B. OR Gate", isCorrect: false, x: 540, y: 280 }] },
-        { title: "42/50 - Logic Gates (OR)", question: "ඕනෑම එක ආදානයක් (Input) 1 වුවත් ප්‍රතිදානය 1 වන Logic Gate එක?", answers: [{ text: "A. NOT Gate", isCorrect: false, x: 540, y: 70 }, { text: "B. OR Gate", isCorrect: true, x: 540, y: 280 }] },
-        { title: "43/50 - Inverter Gate", question: "ලැබෙන ආදානය සම්පූර්ණයෙන්ම කණපිට හරවන (0 -> 1, 1 -> 0) ද්වාරය කුමක්ද?", answers: [{ text: "A. NOT Gate", isCorrect: true, x: 540, y: 70 }, { text: "B. AND Gate", isCorrect: false, x: 540, y: 280 }] },
-        { title: "44/50 - Flowchart Start", question: "ප්‍රවාහ සටහනක (Flowchart) ආරම්භය සහ අවසානය දැක්වීමට ගන්නා රූපය?", answers: [{ text: "A. ඍජුකෝණාස්‍රය", isCorrect: false, x: 540, y: 70 }, { text: "B. ඕවලාකාරය (Oval)", isCorrect: true, x: 540, y: 280 }] },
-        { title: "45/50 - Flowchart Input", question: "ප්‍රවාහ සටහනක දත්ත ඇතුළත් කිරීම (Input) නිරූපණය කරන ජ්‍යාමිතික රූපය?", answers: [{ text: "A. සමාන්තරාස්‍රය (Parallelogram)", isCorrect: true, x: 540, y: 70 }, { text: "B. රොම්බසය", isCorrect: false, x: 540, y: 280 }] },
-        { title: "46/50 - Pseudo-Code", question: "පරිගණක භාෂාවකට සමානව මිනිස් බසින් ලියන පියවරෙන් පියවර විසඳුම් මාලාව?", answers: [{ text: "A. Flowchart", isCorrect: false, x: 540, y: 70 }, { text: "B. Pseudocode (ව්‍යාජ කේත)", isCorrect: true, x: 540, y: 280 }] },
-        { title: "47/50 - Pascal Code", question: "Pascal ක්‍රමලේඛන භාෂාවේ විචල්‍යයන් (Variables) හඳුන්වා දීමට ගන්නා Keyword එක?", answers: [{ text: "A. VAR", isCorrect: true, x: 540, y: 70 }, { text: "B. BEGIN", isCorrect: false, x: 540, y: 280 }] },
-        { title: "48/50 - Pascal Output", question: "Pascal වලදී තිරය මත යමක් මුද්‍රණය/ප්‍රදර්ශනය කිරීමට ගන්නා විධානය?", answers: [{ text: "A. Readln;", isCorrect: false, x: 540, y: 70 }, { text: "B. Writeln;", isCorrect: true, x: 540, y: 280 }] },
-        { title: "49/50 - Cyber Security Threat", question: "අපගේ අනුමැතියකින් තොරව පරිගණකයට ඇතුල් වී දත්ත විනාශ කරන මෘදුකාංග?", answers: [{ text: "A. Computer Virus / Malware", isCorrect: true, x: 540, y: 70 }, { text: "B. Firmware", isCorrect: false, x: 540, y: 280 }] },
-        { title: "50/50 - Strong Password", question: "සයිබර් හොරුන්ගෙන් ගිණුම් බේරා ගැනීමට තැබිය යුතු වඩාත්ම ආරක්ෂිත මුරපදය (Password)?", answers: [{ text: "A. 12345678", isCorrect: false, x: 540, y: 70 }, { text: "B. P@ss12#Wd (අකුරු, ඉලක්කම්, සංකේත සහිත)", isCorrect: true, x: 540, y: 280 }] }
-    ];
-
-    window.addEventListener("keydown", e => { keys[e.code] = true; });
-    window.addEventListener("keyup", e => { keys[e.code] = false; });
-
-    // Generate Dynamic Obstacle Maze Patterns based on level number
-    function generatePathHazards(levelIdx) {
-        obstacles = [];
-        routers = [];
-        let difficulty = Math.min(Math.floor(levelIdx / 5) + 2, 7); // Increases walls with levels
-
-        // Always build a safe path framework around starting node
-        // Let's add vertical segment gates inside center arena
-        for (let i = 0; i < difficulty; i++) {
-            let wallX = 180 + (i * 45);
-            let h = 130 + Math.random() * 110;
-            let wallY = (i % 2 === 0) ? 0 : canvas.height - h;
+        // Dynamic Level Map Generator Logic
+        function generateProceduralLevel(level) {
+            nodes = [];
+            connections = [];
             
-            obstacles.push({ x: wallX, y: wallY, width: 14, height: h });
+            // Determine size based on level progression (Max 50)
+            let numRouters = 2 + Math.floor(level / 7); // 2 to 9 Routers
+            if (numRouters > 9) numRouters = 9;
+            
+            let numReceivers = 2 + Math.floor(level / 15); // 2 to 5 Receivers
+            if (numReceivers > 5) numReceivers = 5;
+
+            // 1. Add Sender Always
+            nodes.push({ id: 'S', name: 'Sender', icon: '💻', x: 40, y: 240, ip: '192.168.1.1', type: 'sender' });
+
+            // 2. Add Routers in columns dynamically
+            let colCount = Math.ceil(numRouters / 2);
+            let routerIdx = 1;
+            
+            for(let c=0; c<colCount; c++) {
+                let xPos = 180 + (c * 130);
+                let nodesInCol = (c === colCount-1 && numRouters % 2 !== 0) ? 1 : 2;
+                
+                for(let r=0; r<nodesInCol; r++) {
+                    let yPos = (nodesInCol === 1) ? 240 : 110 + (r * 240);
+                    // Add slight random offset for realism
+                    yPos += Math.floor(Math.random() * 30) - 15;
+                    xPos += Math.floor(Math.random() * 20) - 10;
+
+                    let ipOctet = 10 + level + routerIdx;
+                    nodes.push({
+                        id: `R${routerIdx}`,
+                        name: `Router ${String.fromCharCode(64 + routerIdx)}`,
+                        icon: '🌐',
+                        x: xPos,
+                        y: yPos,
+                        ip: `10.0.${c}.${ipOctet}`,
+                        type: 'router'
+                    });
+                    routerIdx++;
+                }
+            }
+
+            // 3. Add Receivers
+            let lastX = 220 + (colCount * 130);
+            for(let i=0; i<numReceivers; i++) {
+                let ySpace = 500 / (numReceivers + 1);
+                let yPos = ySpace * (i + 1);
+                let finalOctet = 5 + (i * 12) + Math.floor(Math.random() * 5);
+                
+                nodes.push({
+                    id: `D${i+1}`,
+                    name: `PC ${String.fromCharCode(65 + i)}`,
+                    icon: '🖥️',
+                    x: lastX,
+                    y: yPos,
+                    ip: `192.168.${level}.${finalOctet}`,
+                    type: 'receiver'
+                });
+            }
+
+            // 4. Build Smart Procedural Cable Connections (Paths)
+            // Connect Sender to first column routers
+            if(nodes.find(n => n.id === 'R1')) connections.push(['S', 'R1']);
+            if(nodes.find(n => n.id === 'R2')) connections.push(['S', 'R2']);
+
+            // Interconnect Routers sequentially to guarantee a solved path
+            for(let i=1; i<routerIdx-2; i++) {
+                connections.push([`R${i}`, `R${i+1}`]);
+                if(i+2 < routerIdx) connections.push([`R${i}`, `R${i+2}`]);
+            }
+
+            // Connect last routers to specific receivers
+            let totalRouters = routerIdx - 1;
+            for(let j=1; j<=numReceivers; j++) {
+                let associatedRouter = 1 + ((j - 1) % totalRouters);
+                connections.push([`R${associatedRouter}`, `D${j}`]);
+                
+                // For high levels, cross-connect routers for complexity
+                if(level > 15 && j > 1) {
+                    let randRouter = Math.ceil(Math.random() * totalRouters);
+                    if(`R${randRouter}` !== `R${associatedRouter}`) {
+                        connections.push([`R${randRouter}`, `D${j}`]);
+                    }
+                }
+            }
+
+            // Remove structural duplicates if any
+            connections = connections.filter((v,i,a)=>a.findIndex(v2=>(v2[0]===v[0]&&v2[1]===v[1]))===i);
         }
 
-        // Add Decorative Cyber Routers/Nodes that pulse
-        for (let i = 0; i < difficulty - 1; i++) {
-            routers.push({
-                x: 200 + (i * 55),
-                y: 100 + Math.random() * 200,
-                radius: 6,
-                pulse: Math.random() * Math.PI
+        function renderNetworkGraph() {
+            const mapEl = document.getElementById('network-map');
+            const svgEl = document.getElementById('network-lines');
+
+            // Clear old dynamic nodes & paths
+            mapEl.querySelectorAll('.node').forEach(n => n.remove());
+            svgEl.innerHTML = '';
+
+            // Draw Paths (Lines)
+            connections.forEach(conn => {
+                const n1 = nodes.find(n => n.id === conn[0]);
+                const n2 = nodes.find(n => n.id === conn[1]);
+                if(!n1 || !n2) return;
+                
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', n1.x + 32);
+                line.setAttribute('y1', n1.y + 32);
+                line.setAttribute('x2', n2.x + 32);
+                line.setAttribute('y2', n2.y + 32);
+                line.id = `line-${n1.id}-${n2.id}`;
+                svgEl.appendChild(line);
+            });
+
+            // Draw Devices (Nodes)
+            nodes.forEach(node => {
+                const div = document.createElement('div');
+                div.className = `node ${node.type}`;
+                div.style.left = `${node.x}px`;
+                div.style.top = `${node.y}px`;
+                div.id = `node-${node.id}`;
+                div.innerHTML = `<span class="node-icon">${node.icon}</span>
+                                 <span class="node-label">${node.name} (${node.ip})</span>`;
+                
+                div.onclick = () => onNodeInteraction(node.id);
+                mapEl.appendChild(div);
             });
         }
-    }
 
-    function initLevel() {
-        keys = {}; 
-        if (currentLevel >= levelsData.length) {
-            alert("🏆 CONGRATULATIONS! ඔයා CyberQuest මට්ටම් 50ම සාර්ථකව නිමකර මහා සයිබර් ජාල අධිපති බවට පත්වුණා! 💎");
-            currentLevel = 0; 
-            score = 0;
+        function setupPacketMission() {
+            if (lives <= 0) return;
+
+            // Filter out available receivers for this level
+            const receivers = nodes.filter(n => n.type === 'receiver');
+            currentTargetNode = receivers[Math.floor(Math.random() * receivers.length)];
+
+            // Generate random binary hash
+            let binaryHead = "";
+            for(let i=0; i<8; i++) binaryHead += Math.floor(Math.random()*2);
+            
+            // Set UI updates
+            document.getElementById('packet-data').innerText = binaryHead;
+            document.getElementById('target-ip-display').innerText = currentTargetNode.ip;
+            
+            // Dynamic Hop Limit based on difficulty
+            ttl = Math.max(5, 10 - Math.floor(currentLevel / 10));
+            document.getElementById('ttl-val').innerText = ttl;
+            document.getElementById('ttl-val').style.color = '#fff';
+
+            // Reset positioning
+            packetLocation = 'S';
+            const packetDot = document.getElementById('moving-packet');
+            const sender = nodes.find(n => n.id === 'S');
+            
+            packetDot.style.left = `${sender.x + 25}px`;
+            packetDot.style.top = `${sender.y + 25}px`;
+            packetDot.style.display = 'block';
+
+            // Glow active node
+            highlightActiveNode('S');
+            document.getElementById('next-btn').style.display = 'none';
+            isMoving = false;
+
+            playSound(520, 0.15);
         }
-        
-        document.getElementById("level-title").innerText = `${currentLevel + 1} / 50`;
-        document.getElementById("question-text").innerText = levelsData[currentLevel].question;
-        document.getElementById("score-display").innerText = score;
-        
-        // Progress update
-        let progPercent = ((currentLevel + 1) / levelsData.length) * 100;
-        document.getElementById("game-progress").style.width = `${progPercent}%`;
 
-        // Reset Data packet location
-        player.x = 40;
-        player.y = 200;
-
-        // Build unique path complexity map
-        generatePathHazards(currentLevel);
-    }
-
-    function checkCollision(rect1, rect2, rect2Width = 240, rect2Height = 80) {
-        return rect1.x < rect2.x + rect2Width && 
-               rect1.x + rect1.width > rect2.x &&
-               rect1.y < rect2.y + rect2Height && 
-               rect1.y + rect1.height > rect2.y;
-    }
-
-    function triggerSuccessParticles(x, y) {
-        for(let i=0; i<30; i++) {
-            particles.push({
-                x: x, y: y,
-                vx: (Math.random() - 0.5) * 8,
-                vy: (Math.random() - 0.5) * 8,
-                size: Math.random() * 4 + 2,
-                color: "#39ff14",
-                alpha: 1
+        function highlightActiveNode(nodeId) {
+            nodes.forEach(n => {
+                const el = document.getElementById(`node-${n.id}`);
+                if(el) el.classList.remove('active-route');
             });
-        }
-    }
-
-    function update() {
-        let prevX = player.x;
-        let prevY = player.y;
-
-        // Handle Input Controllers
-        if ((keys["ArrowUp"] || keys["KeyW"]) && player.y > 10) player.y -= player.speed;
-        if ((keys["ArrowDown"] || keys["KeyS"]) && player.y < canvas.height - player.height - 10) player.y += player.speed;
-        if ((keys["ArrowLeft"] || keys["KeyA"]) && player.x > 10) player.x -= player.speed;
-        if ((keys["ArrowRight"] || keys["KeyD"]) && player.x < canvas.width - player.width - 10) player.x += player.speed;
-
-        // Packet Trail Particles
-        if(Math.random() < 0.4) {
-            particles.push({
-                x: player.x + player.width/2,
-                y: player.y + player.height/2,
-                vx: (Math.random() - 0.8) * 2,
-                vy: (Math.random() - 0.5) * 2,
-                size: Math.random() * 3 + 1,
-                color: "#00fff5",
-                alpha: 0.8
-            });
+            document.getElementById(`node-${nodeId}`).classList.add('active-route');
         }
 
-        // Firewall Wall Collision Logic (Restricts pathway traversal)
-        for (let wall of obstacles) {
-            if (checkCollision(player, wall, wall.width, wall.height)) {
-                // Flash packet warning reset
-                player.x = 40;
-                player.y = 200;
-                keys = {};
+        function onNodeInteraction(targetNodeId) {
+            if (isMoving || lives <= 0 || packetLocation === targetNodeId) return;
+
+            // Route Validation Check
+            const validConnection = connections.some(c => 
+                (c[0] === packetLocation && c[1] === targetNodeId) || 
+                (c[1] === packetLocation && c[0] === targetNodeId)
+            );
+
+            if (!validConnection) {
+                playSound(130, 0.4, 'sawtooth');
+                alert("⚡ LINK ERROR: එම උපාංග අතර ඍජු භෞතික සන්නිවේදන කේබලයක් නොමැත!");
                 return;
             }
+
+            // Start Packet Movement Animation
+            isMoving = true;
+            ttl--;
+            document.getElementById('ttl-val').innerText = ttl;
+            if(ttl <= 3) document.getElementById('ttl-val').style.color = var(--neon-red);
+
+            const targetNode = nodes.find(n => n.id === targetNodeId);
+            const packetDot = document.getElementById('moving-packet');
+            
+            packetDot.style.left = `${targetNode.x + 25}px`;
+            packetDot.style.top = `${targetNode.y + 25}px`;
+
+            playSound(400, 0.1, 'sine');
+
+            setTimeout(() => {
+                packetLocation = targetNodeId;
+                isMoving = false;
+                highlightActiveNode(packetLocation);
+
+                // Check TTL Exhaustion
+                if (ttl <= 0 && targetNode.type !== 'receiver') {
+                    playSound(120, 0.5, 'triangle');
+                    alert("💀 TTL EXPIRED: පැකට්ටුවේ කාලය (Time to Live) අවසන් වී ජාලය තුළදී විනාශ විය! (Packet Dropped)");
+                    deductLife();
+                    return;
+                }
+
+                // Hit Final Client PC Destination
+                if (targetNode.type === 'receiver') {
+                    if (packetLocation === currentTargetNode.id) {
+                        // Level cleared!
+                        score += 10 + currentLevel * 2;
+                        document.getElementById('score-val').innerText = score;
+                        playSound(880, 0.3, 'sine');
+                        
+                        if(currentLevel >= 50) {
+                            alert("🏆 සුභ පැතුම්! ඔබ CyberDefenders මට්ටම් 50ම සාර්ථකව අවසන් කර ප්‍රධාන ජාල පරිපාලකයෙකු බවට පත් විය!");
+                            return;
+                        }
+
+                        alert(`🎉 SUCCESS: දත්ත පැකට්ටුව නිවැරදිව ලැබුණි! ලෙවල් ${currentLevel} ජයග්‍රහණය කලා.`);
+                        currentLevel++;
+                        document.getElementById('level-val').innerText = `${currentLevel} / 50`;
+                        
+                        // Progress to next dynamic build
+                        startNewGameLevel();
+                    } else {
+                        // Bad Route Destination
+                        playSound(180, 0.5, 'triangle');
+                        alert("💥 IP MISMATCH: දත්ත පැකට්ටුව වැරදි IP ලිපිනයක් සහිත උපාංගයකට යොමු කර ඇත! (Firewall Blocked)");
+                        deductLife();
+                    }
+                }
+            }, 500);
         }
 
-        // Evaluate Answer Block Collision Metrics
-        let lvl = levelsData[currentLevel];
-        for (let ans of lvl.answers) {
-            if (checkCollision(player, ans, 240, 80)) {
-                if (ans.isCorrect) {
-                    score += 10;
-                    triggerSuccessParticles(player.x, player.y);
-                    currentLevel++;
-                    setTimeout(() => { initLevel(); }, 300);
-                } else {
-                    score = Math.max(0, score - 5); 
-                    player.x = 40; 
-                    player.y = 200;
-                    keys = {};
-                    document.getElementById("score-display").innerText = score;
-                }
-                break;
+        function deductLife() {
+            lives--;
+            let hearts = "";
+            for(let i=0; i<lives; i++) hearts += "❤️";
+            if(lives === 0) hearts = "💀 SYSTEM CRASHED";
+            document.getElementById('lives-val').innerText = hearts;
+
+            document.getElementById('moving-packet').style.display = 'none';
+
+            if (lives <= 0) {
+                alert(`🏁 GAME OVER: ජාලය හැකර්වරුන් විසින් අඩපණ කරන ලදී! ඔබේ අවසන් ලකුණු සංඛ්‍යාව: ${score}`);
+                document.getElementById('next-btn').style.display = 'block';
+                document.getElementById('next-btn').innerText = "නැවත මුල සිට ක්‍රීඩා කරන්න 🔄";
+            } else {
+                setupPacketMission();
             }
         }
 
-        // Update active background particle matrix arrays
-        for(let i = particles.length - 1; i >= 0; i--) {
-            let p = particles[i];
-            p.x += p.vx;
-            p.y += p.vy;
-            p.alpha -= 0.02;
-            if(p.alpha <= 0) particles.splice(i, 1);
-        }
-    }
-
-    function draw() {
-        // Clear frame grid canvas
-        ctx.fillStyle = "#040814";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // Grid Lines Overlay Matrix
-        ctx.strokeStyle = "rgba(0, 255, 245, 0.03)";
-        ctx.lineWidth = 1;
-        for (let i = 0; i < canvas.width; i += 30) {
-            ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height); ctx.stroke();
-        }
-        for (let j = 0; j < canvas.height; j += 30) {
-            ctx.beginPath(); ctx.moveTo(0, j); ctx.lineTo(canvas.width, j); ctx.stroke();
+        function triggerNextPacket() {
+            // Full Reset
+            currentLevel = 1;
+            score = 0;
+            lives = 3;
+            document.getElementById('level-val').innerText = "1 / 50";
+            document.getElementById('score-val').innerText = "0";
+            document.getElementById('lives-val').innerText = "❤️❤️❤️";
+            startNewGameLevel();
         }
 
-        // Draw Network Firewall Barriers (Red Neon Barriers)
-        obstacles.forEach(wall => {
-            ctx.fillStyle = "rgba(255, 0, 127, 0.15)";
-            ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
-            ctx.strokeStyle = "var(--neon-pink)";
-            ctx.lineWidth = 2;
-            ctx.shadowBlur = 10;
-            ctx.shadowColor = "var(--neon-pink)";
-            ctx.strokeRect(wall.x, wall.y, wall.width, wall.height);
-        });
+        function startNewGameLevel() {
+            generateProceduralLevel(currentLevel);
+            renderNetworkGraph();
+            setTimeout(setupPacketMission, 400);
+        }
 
-        // Draw Cyber Router Nodes (Intermediary Network Nodes)
-        routers.forEach(node => {
-            node.pulse += 0.05;
-            let rPulse = node.radius + Math.sin(node.pulse) * 4;
-            ctx.beginPath();
-            ctx.arc(node.x, node.y, rPulse, 0, Math.PI * 2);
-            ctx.fillStyle = "rgba(0, 255, 245, 0.2)";
-            ctx.fill();
-            ctx.strokeStyle = "var(--neon-cyan)";
-            ctx.lineWidth = 1;
-            ctx.stroke();
-        });
-        ctx.shadowBlur = 0; // Reset blur
-
-        // Draw Trails/Sparks
-        particles.forEach(p => {
-            ctx.save();
-            ctx.globalAlpha = p.alpha;
-            ctx.fillStyle = p.color;
-            ctx.fillRect(p.x, p.y, p.size, p.size);
-            ctx.restore();
-        });
-
-        // Draw Data Packet Player (Neon Cyan Hyper Cube)
-        ctx.fillStyle = "var(--neon-cyan)";
-        ctx.shadowBlur = 15;
-        ctx.shadowColor = "var(--neon-cyan)";
-        ctx.fillRect(player.x, player.y, player.width, player.height);
-        
-        // Inner Core of Core Packet Data Layer
-        ctx.fillStyle = "#ffffff";
-        ctx.fillRect(player.x + 4, player.y + 4, player.width - 8, player.height - 8);
-        ctx.shadowBlur = 0; // standard reset
-
-        // Draw Answer Gate Arrays
-        let lvl = levelsData[currentLevel];
-        lvl.answers.forEach(ans => {
-            // Main structure container box
-            ctx.fillStyle = "#0a1124";
-            ctx.strokeStyle = "rgba(0, 255, 245, 0.2)";
-            ctx.lineWidth = 2;
-            ctx.shadowBlur = 12;
-            ctx.shadowColor = "rgba(0,0,0,0.6)";
-            
-            ctx.fillRect(ans.x, ans.y, 240, 80);
-            ctx.strokeRect(ans.x, ans.y, 240, 80);
-
-            // Left Sidebar Terminal Indicator Tags
-            ctx.fillStyle = ans.text.startsWith("A") ? "var(--neon-pink)" : "var(--neon-yellow)";
-            ctx.fillRect(ans.x, ans.y, 6, 80);
-
-            // Print Text Labels Wrap Configuration
-            ctx.fillStyle = "#f8fafc";
-            ctx.font = "bold 13px 'Segoe UI', system-ui, sans-serif";
-            
-            // Text Wrapping for long Sinhala descriptions inside standard gates
-            let words = ans.text.split(" ");
-            let line = "";
-            let startY = ans.y + 32;
-            
-            for(let n = 0; n < words.length; n++) {
-                let testLine = line + words[n] + " ";
-                let metrics = ctx.measureText(testLine);
-                if (metrics.width > 210 && n > 0) {
-                    ctx.fillText(line, ans.x + 16, startY);
-                    line = words[n] + " ";
-                    startY += 22;
-                } else {
-                    line = testLine;
-                }
-            }
-            ctx.fillText(line, ans.x + 16, startY);
-        });
-    }
-
-    function gameLoop() {
-        update();
-        draw();
-        requestAnimationFrame(gameLoop);
-    }
-
-    // Launch secure system nodes
-    initLevel();
-    gameLoop();
-</script>
-
+        // Initialize Pro System Grid
+        window.onload = startNewGameLevel;
+    </script>
 </body>
 </html>
