@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C-TECH - Logic Gate Builder Pro V2</title>
+    <style>
+        :root {
+            --neon-cyan: #00f0ff;
+            --neon-orange: #ff7300;
+            --neon-green: #39ff14;
+            --dark-bg: #060b19;
+            --panel-bg: rgba(15, 23, 42, 0.9);
+            --border-color: rgba(0, 240, 255, 0.25);
+            --text-color: #f8fafc;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 50% 20%, rgba(0, 240, 255, 0.1), transparent 60%),
+                linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+            background-size: 100% 100%, 25px 25px, 25px 25px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 950px;
+            background: var(--panel-bg);
+            border: 2px solid var(--neon-cyan);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 0 35px rgba(0, 240, 255, 0.15);
+            text-align: center;
+            backdrop-filter: blur(8px);
+        }
+
+        .header h2 { font-size: 2.1rem; text-shadow: 0 0 12px var(--neon-cyan); margin-bottom: 5px; }
+        .header p { color: #94a3b8; font-size: 0.95rem; margin-bottom: 20px; }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 800px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
+
+        /* 📋 MISSION BOX */
+        .mission-panel {
+            background: rgba(2, 6, 23, 0.8);
+            border: 1px solid var(--neon-orange);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: left;
+            box-shadow: inset 0 0 15px rgba(255, 115, 0, 0.1);
+        }
+        .level-badge {
+            background: var(--neon-orange);
+            color: #000;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+        .expression-text {
+            font-size: 1.5rem;
+            font-family: 'Consolas', monospace;
+            color: #fff;
+            margin-top: 5px;
+            text-shadow: 0 0 8px rgba(255,255,255,0.2);
+        }
+
+        /* 🔬 WORKSPACE LAB */
+        .workspace {
+            background: #020617;
+            border: 1px solid #1e293b;
+            border-radius: 12px;
+            padding: 30px 15px;
+            position: relative;
+            min-height: 380px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            overflow-x: auto;
+        }
+
+        .bus-column {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            z-index: 5;
+        }
+        .bus-node {
+            background: #1e293b;
+            border: 2px solid #475569;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-family: monospace;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        /* 🔲 CIRCUITS ARCHITECTURE SCHEMATIC */
+        .schematic-layer {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+        }
+
+        .gate-stage {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            align-items: center;
+        }
+
+        /* 🛠️ REALISTIC LOGIC GATE STYLING (IEEE SIMULATION) */
+        .gate-slot {
+            width: 90px;
+            height: 65px;
+            background: rgba(30, 41, 59, 0.5);
+            border: 2px dashed #475569;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            user-select: none;
+        }
+        .gate-slot:hover {
+            border-color: var(--neon-cyan);
+            background: rgba(0, 240, 255, 0.05);
+        }
+
+        /* Styled Gate Blocks */
+        .gate-block {
+            width: 100%;
+            height: 100%;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #fff;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        }
+        
+        /* IEEE Symbolic Colors & Pseudo Shapes */
+        .gate-block.AND  { background: linear-gradient(135deg, #1e3a8a, #3b82f6); border: 2px solid #60a5fa; border-radius: 4px 25px 25px 4px; }
+        .gate-block.OR   { background: linear-gradient(135deg, #7c2d12, #ea580c); border: 2px solid #f97316; border-radius: 4px 30px 30px 4px; }
+        .gate-block.NOT  { background: linear-gradient(135deg, #581c87, #a855f7); border: 2px solid #c084fc; width: 0; height: 0; border-top: 30px solid transparent; border-bottom: 30px solid transparent; border-left: 65px solid #a855f7; background: transparent; border-radius: 0; }
+        .gate-block.NOT .gate-label { position: absolute; left: -55px; top: -10px; font-size: 0.8rem; }
+        .gate-block.NAND { background: linear-gradient(135deg, #115e59, #14b8a6); border: 2px solid #2dd4bf; border-radius: 4px 20px 20px 4px; }
+        .gate-block.NOR  { background: linear-gradient(135deg, #9d174d, #ec4899); border: 2px solid #f472b6; border-radius: 4px 25px 25px 4px; }
+        .gate-block.XOR  { background: linear-gradient(135deg, #065f46, #10b981); border: 2px solid #34d399; border-radius: 4px 30px 30px 4px; border-left: 5px double #34d399; }
+
+        .gate-block::after {
+            content: ''; position: absolute; right: -8px; width: 6px; height: 6px; background: #94a3b8; border-radius: 50%; top: calc(50% - 3px);
+        }
+        .gate-block.NAND::after, .gate-block.NOR::after {
+            background: #fff; border: 1px solid #000; width: 8px; height: 8px; right: -10px; top: calc(50% - 4px);
+        }
+
+        .output-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            min-width: 80px;
+        }
+        .bulb { font-size: 3.5rem; filter: drop-shadow(0 0 0px transparent); transition: 0.3s; }
+        .bulb.glow { filter: drop-shadow(0 0 25px #ffeb3b); text-shadow: 0 0 10px #ffeb3b; }
+
+        /* 🎛️ MODAL DIALOG POPUP FOR SELECTION */
+        .gate-selector-modal {
+            display: none; position: absolute; background: #1e293b; border: 2px solid var(--neon-cyan);
+            border-radius: 8px; padding: 10px; grid-template-columns: repeat(3, 1fr); gap: 8px;
+            z-index: 100; box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+        }
+        .selector-btn {
+            background: #0f172a; border: 1px solid #475569; padding: 8px; border-radius: 4px;
+            color: #fff; font-weight: bold; cursor: pointer; font-size: 0.8rem;
+        }
+        .selector-btn:hover { background: var(--neon-cyan); color: #000; }
+
+        /* 📊 TRUTH TABLE SIDEBAR */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .panel-title { font-size: 1rem; color: var(--neon-cyan); text-align: left; font-weight: 600; margin-bottom: 5px; }
+        .truth-card {
+            background: rgba(2, 6, 23, 0.6); border: 1px solid var(--border-color);
+            border-radius: 8px; padding: 12px; height: 100%; overflow-y: auto;
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        th, td { padding: 6px; border: 1px solid rgba(255,255,255,0.08); text-align: center; }
+        th { background: #0f172a; color: #38bdf8; }
+        tr.active-row { background: rgba(57, 255, 20, 0.15); color: var(--neon-green); font-weight: bold; }
+
+        /* CONTROL SYSTEM INTERFACE */
+        .control-bar {
+            margin-top: 25px;
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        .btn {
+            padding: 12px 24px; font-weight: bold; border-radius: 6px; cursor: pointer;
+            transition: 0.2s; border: none; font-size: 0.95rem; display: flex; align-items: center; gap: 8px;
+        }
+        .btn-run { background: linear-gradient(90deg, #ff7300, #ff9100); color: #000; width: 65%; justify-content: center; font-size: 1.05rem; }
+        .btn-run:hover { box-shadow: 0 0 20px rgba(255, 115, 0, 0.4); }
+        .btn-reset { background: #334155; color: #fff; width: 35%; justify-content: center;}
+        .btn-reset:hover { background: #475569; }
+
+        .status-banner {
+            margin-top: 15px; padding: 12px; border-radius: 6px; font-weight: bold; font-size: 1.1rem;
+            display: none; text-align: center;
+        }
+        .status-success { background: rgba(34, 197, 94, 0.2); border: 1px solid var(--neon-green); color: var(--neon-green); }
+        .status-fail { background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #f87171; }
+
+        .nav-links { margin-top: 20px; display: inline-block; color: var(--neon-cyan); text-decoration: none; font-size: 0.9rem; }
+        .nav-links:hover { text-shadow: 0 0 8px var(--neon-cyan); }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h2>⚡ Logic Circuit Designer PRO</h2>
+            <p>ලබාදෙන තර්කන ප්‍රකාශනයට (Logic Statement) සරිලන පරිපථය නිවැරදි ද්වාර යොදා නිර්මාණය කරන්න.</p>
+        </div>
+
+        <div class="mission-panel">
+            <span class="level-badge" id="levelBadge">STAGE 01/50</span>
+            <div style="color: #cbd5e1; font-size: 0.9rem;">පහත ප්‍රකාශනය සඳහා පරිපථ සැලැස්ම සම්පූර්ණ කරන්න:</div>
+            <div class="expression-text" id="targetExpression">X = A AND B</div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div>
+                <div class="workspace" id="labWorkspace">
+                    <div class="bus-column" id="inputBus">
+                        <div class="bus-node">A</div>
+                        <div class="bus-node">B</div>
+                    </div>
+
+                    <div class="schematic-layer" id="schematicLayer">
+                        </div>
+
+                    <div class="output-column">
+                        <div class="bulb" id="circuitBulb">💡</div>
+                        <div style="font-size: 0.8rem; color:#94a3b8;">Output (X)</div>
+                        <div id="finalOutVal" style="font-weight:bold; font-size:1.2rem; color:var(--neon-orange)">?</div>
+                    </div>
+                </div>
+
+                <div class="control-bar">
+                    <button class="btn btn-reset" onclick="clearDesign()">පරිපථය හිස් කරන්න 🔄</button>
+                    <button class="btn btn-run" onclick="simulateAndValidate()">පරිපථය ක්‍රියාත්මක කරන්න (Run Circuit) ⚡</button>
+                </div>
+
+                <div class="status-banner" id="statusBanner"></div>
+            </div>
+
+            <div class="sidebar">
+                <div class="truth-card">
+                    <div class="panel-title">📊 Expected System Truth Table</div>
+                    <table id="truthTableDisplay">
+                        </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="gate-selector-modal" id="gateSelector">
+            <button class="selector-btn" onclick="selectGate('AND')">AND</button>
+            <button class="selector-btn" onclick="selectGate('OR')">OR</button>
+            <button class="selector-btn" onclick="selectGate('NOT')">NOT</button>
+            <button class="selector-btn" onclick="selectGate('NAND')">NAND</button>
+            <button class="selector-btn" onclick="selectGate('NOR')">NOR</button>
+            <button class="selector-btn" onclick="selectGate('XOR')">XOR</button>
+            <button class="selector-btn" onclick="selectGate('CLEAR')" style="background:#7f1d1d; grid-column: span 3;">REMOVE</button>
+        </div>
+
+        <a href="games.html" class="nav-links">← ආපසු ප්‍රධාන මෙනුවට</a>
+    </div>
+
+    <script>
+        // PROCEDURAL GENERATED LEVEL ENGINE METADATA (50 LEVELS)
+        const levelsDatabase = [];
+        
+        // Helper to populate levels automatically with scaling complexity
+        function buildLevelsDatabase() {
+            // Level 1-10: 2 Inputs, 1 Gate
+            const basicGates = ['AND', 'OR', 'NAND', 'NOR', 'XOR'];
+            for(let i=1; i<=10; i++) {
+                let gate = basicGates[(i-1) % basicGates.length];
+                levelsDatabase.push({
+                    id: i, inputs: ['A', 'B'], slotsCount: 1, 
+                    expression: `X = A ${gate} B`,
+                    validator: (a, b) => evaluateGate(gate, a, b)
+                });
+            }
+            // Level 11-20: 2-3 Inputs, Compound Gate (1 structural path fixed with 2 gate sequential check)
+            for(let i=11; i<=20; i++) {
+                levelsDatabase.push({
+                    id: i, inputs: ['A', 'B', 'C'], slotsCount: 2,
+                    expression: i%2===0 ? `X = (A AND B) OR C` : `X = (A OR B) AND NOT(C)`,
+                    validator: (a, b, c) => i%2===0 ? ((a && b) || c ? 1:0) : ((a || b) && (!c) ? 1:0)
+                });
+            }
+            // Level 21-35: 3 Inputs, Multi-Bracket Calculations
+            for(let i=21; i<=35; i++) {
+                levelsDatabase.push({
+                    id: i, inputs: ['A', 'B', 'C'], slotsCount: 2,
+                    expression: i%2===0 ? `X = (A NAND B) XOR C` : `X = (A NOR B) AND C`,
+                    validator: (a, b, c) => i%2===0 ? ((!(a && b)?1:0) !== c ? 1:0) : ((!(a || b)?1:0) && c ? 1:0)
+                });
+            }
+            // Level 36-50: 4 Inputs Expert Systems
+            for(let i=36; i<=50; i++) {
+                levelsDatabase.push({
+                    id: i, inputs: ['A', 'B', 'C', 'D'], slotsCount: 3,
+                    expression: i%2===0 ? `X = (A AND B) OR (C AND D)` : `X = (A XOR B) NAND (C OR D)`,
+                    validator: (a, b, c, d) => i%2===0 ? (((a && b) || (c && d)) ? 1:0) : (!((a !== b ? 1:0) && (c || d)) ? 1:0)
+                });
+            }
+        }
+        buildLevelsDatabase();
+
+        let activeLevelIdx = 0;
+        let selectedSlotElement = null;
+        let circuitDesignMap = {}; // User chosen architecture mapped by slot index
+
+        function evaluateGate(type, a, b) {
+            if (type === 'AND') return a && b ? 1 : 0;
+            if (type === 'OR')  return a || b ? 1 : 0;
+            if (type === 'NOT') return !a ? 1 : 0;
+            if (type === 'NAND') return !(a && b) ? 1 : 0;
+            if (type === 'NOR')  return !(a || b) ? 1 : 0;
+            if (type === 'XOR')  return a !== b ? 1 : 0;
+            return 0;
+        }
+
+        function loadLevel() {
+            const lvl = levelsDatabase[activeLevelIdx];
+            document.getElementById('levelBadge').innerText = `STAGE ${String(lvl.id).padStart(2, '0')}/50`;
+            document.getElementById('targetExpression').innerText = lvl.expression;
+            document.getElementById('statusBanner').style.display = 'none';
+            document.getElementById('circuitBulb').classList.remove('glow');
+            document.getElementById('finalOutVal').innerText = "?";
+            
+            circuitDesignMap = {};
+
+            // Render Input Bus Lines
+            const bus = document.getElementById('inputBus');
+            bus.innerHTML = '';
+            lvl.inputs.forEach(inp => {
+                bus.innerHTML += `<div class="bus-node">${inp}</div>`;
+            });
+
+            // Render Slots to build Circuit
+            const layer = document.getElementById('schematicLayer');
+            layer.innerHTML = '';
+            for (let s = 0; s < lvl.slotsCount; s++) {
+                layer.innerHTML += `
+                    <div class="gate-slot" data-slot-id="${s}" onclick="openGatePicker(event, this)">
+                        <span style="font-size:0.75rem; color:#64748b;">+ CLICK GATE</span>
+                    </div>
+                    ${s < lvl.slotsCount - 1 ? '<div style="width:20px; height:2px; background:#475569;"></div>' : ''}
+                `;
+            }
+
+            generateTruthTableUI(lvl);
+        }
+
+        function generateTruthTableUI(lvl) {
+            const table = document.getElementById('truthTableDisplay');
+            table.innerHTML = "";
+            
+            // Header Setup
+            let headerHTML = "<tr>";
+            lvl.inputs.forEach(inp => headerHTML += `<th>${inp}</th>`);
+            headerHTML += "<th>Expected X</th></tr>";
+            table.innerHTML += headerHTML;
+
+            // Compute Rows dynamically
+            let rowsCount = Math.pow(2, lvl.inputs.length);
+            for(let i=0; i < rowsCount; i++) {
+                let rowVals = [];
+                for(let j = lvl.inputs.length - 1; j >= 0; j--) {
+                    rowVals.push((i >> j) & 1);
+                }
+                
+                let expectedOut = lvl.validator(...rowVals);
+                let rowHTML = `<tr>`;
+                rowVals.forEach(v => rowHTML += `<td>${v}</td>`);
+                rowHTML += `<td style="color:var(--neon-orange); font-weight:bold;">${expectedOut}</td></tr>`;
+                table.innerHTML += rowHTML;
+            }
+        }
+
+        function openGatePicker(e, element) {
+            e.stopPropagation();
+            selectedSlotElement = element;
+            const picker = document.getElementById('gateSelector');
+            picker.style.display = 'grid';
+            picker.style.top = `${element.offsetTop + element.offsetHeight + 10}px`;
+            picker.style.left = `${element.offsetLeft}px`;
+        }
+
+        function selectGate(gateType) {
+            const picker = document.getElementById('gateSelector');
+            picker.style.display = 'none';
+            if (!selectedSlotElement) return;
+
+            let slotId = selectedSlotElement.dataset.slotId;
+
+            if(gateType === 'CLEAR') {
+                delete circuitDesignMap[slotId];
+                selectedSlotElement.innerHTML = `<span style="font-size:0.75rem; color:#64748b;">+ CLICK GATE</span>`;
+            } else {
+                circuitDesignMap[slotId] = gateType;
+                selectedSlotElement.innerHTML = `
+                    <div class="gate-block ${gateType}">
+                        <span class="gate-label">${gateType}</span>
+                    </div>`;
+            }
+        }
+
+        function clearDesign() {
+            loadLevel();
+        }
+
+        function simulateAndValidate() {
+            const lvl = levelsDatabase[activeLevelIdx];
+            const banner = document.getElementById('statusBanner');
+            
+            // Check if all slots are filled by student
+            for(let s=0; s < lvl.slotsCount; s++) {
+                if(!circuitDesignMap[s]) {
+                    banner.innerText = "❌ කරුණාකර සියලුම හිස් කුටීර සඳහා Logic Gates තෝරා පරිපථය සම්පූර්ණ කරන්න.";
+                    banner.className = "status-banner status-fail";
+                    banner.style.display = "block";
+                    return;
+                }
+            }
+
+            // Simple heuristic simulation checking structural node output mapping matches target validator
+            // To make it look highly realistic, let's process truth validation mapping arrays
+            let isPerfectMatch = true;
+            let rowsCount = Math.pow(2, lvl.inputs.length);
+
+            for(let i=0; i < rowsCount; i++) {
+                let rowVals = [];
+                for(let j = lvl.inputs.length - 1; j >= 0; j--) {
+                    rowVals.push((i >> j) & 1);
+                }
+                let targetExpected = lvl.validator(...rowVals);
+                
+                // Student Design Logic validation simulation
+                let studentEvaluation = simulateStudentCircuit(rowVals, lvl.slotsCount);
+                if(studentEvaluation !== targetExpected) {
+                    isPerfectMatch = false;
+                    break;
+                }
+            }
+
+            if(isPerfectMatch) {
+                document.getElementById('circuitBulb').classList.add('glow');
+                document.getElementById('finalOutVal').innerText = "SUCCESS";
+                document.getElementById('finalOutVal').style.color = "var(--neon-green)";
+                banner.innerText = "🏆 විශිෂ්ටයි! ඔබ නිර්මාණය කළ පරිපථය තාර්කිකව 100%ක් නිවැරදියි. මීළඟ මට්ටම විවෘතයි!";
+                banner.className = "status-banner status-success";
+                banner.style.display = "block";
+                
+                setTimeout(() => {
+                    if(activeLevelIdx < levelsDatabase.length - 1) {
+                        activeLevelIdx++;
+                        loadLevel();
+                    } else {
+                        alert("🎉 සුභ පැතුම්! ඔබ සියලුම තාර්කික පරිපථ මට්ටම් 50 සාර්ථකව නිම කළා!");
+                    }
+                }, 2500);
+
+            } else {
+                document.getElementById('circuitBulb').classList.remove('glow');
+                document.getElementById('finalOutVal').innerText = "ERR";
+                document.getElementById('finalOutVal').style.color = "red";
+                banner.innerText = "❌ පරිපථයේ දෝෂයක් පවතී! නිපදවන ප්‍රතිදානය සත්‍යතා වගුවට නොගැලපේ. නැවත උත්සාහ කරන්න.";
+                banner.className = "status-banner status-fail";
+                banner.style.display = "block";
+            }
+        }
+
+        // Simulates the array of logic configurations created by student
+        function simulateStudentCircuit(inputs, slotsCount) {
+            // Evaluates based on slot configurations mapped matching standard combinations rules
+            let gate1 = circuitDesignMap[0];
+            let gate2 = circuitDesignMap[1];
+            let gate3 = circuitDesignMap[2];
+
+            if(slotsCount === 1) {
+                return evaluateGate(gate1, inputs[0], inputs[1]);
+            }
+            if(slotsCount === 2) {
+                let res1 = evaluateGate(gate1, inputs[0], inputs[1]);
+                return evaluateGate(gate2, res1, inputs[2]);
+            }
+            if(slotsCount === 3) {
+                let res1 = evaluateGate(gate1, inputs[0], inputs[1]);
+                let res2 = evaluateGate(gate2, inputs[2], inputs[3]);
+                return evaluateGate(gate3, res1, res2);
+            }
+            return 0;
+        }
+
+        // Close selector popup on backdrop click
+        document.addEventListener('click', () => {
+            document.getElementById('gateSelector').style.display = 'none';
+        });
+
+        window.onload = loadLevel;
+    </script>
+</body>
+</html>
