@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C-TECH - IMAX Technology Insight</title>
+    <style>
+        :root {
+            --light-blue: #00a4e4; 
+            --orange: #ff7300; 
+            --dark-bg: #0b132b; 
+            --card-bg: #1c2541; 
+            --text-light: #f4f7f6;
+            --text-muted: #a0aec0;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+        }
+
+        body {
+            background-color: var(--dark-bg); 
+            color: var(--text-light);
+            line-height: 1.8;
+            padding: 15px;
+            min-height: 100vh;
+            background-image: radial-gradient(at 0% 0%, rgba(0, 164, 228, 0.15) 0px, transparent 50%);
+        }
+
+        /* 📦 Main Container */
+        .article-container {
+            width: 100%;
+            max-width: 850px;
+            margin: 20px auto;
+            background-color: rgba(28, 37, 65, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 164, 228, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* 🏷️ Meta Info */
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+        }
+
+        .category-badge {
+            background: var(--orange);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .article-date {
+            color: var(--text-muted);
+        }
+
+        /* ✍️ Typography */
+        .article-title {
+            font-size: 2rem;
+            color: #fff;
+            line-height: 1.4;
+            margin-bottom: 25px;
+            text-shadow: 0 0 10px rgba(0, 164, 228, 0.2);
+        }
+
+        /* 🖼️ RESPONSIVE FEATURED IMAGE BOX */
+        .featured-image-container {
+            width: 100%;
+            max-height: 400px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            border: 2px solid rgba(0, 164, 228, 0.3);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            display: block; 
+        }
+
+        .featured-image-container img {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: cover; 
+            display: block;
+        }
+
+        /* 📄 Content Area */
+        .article-content p {
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+            color: #e2e8f0;
+            text-align: justify;
+        }
+
+        .article-content h3 {
+            color: var(--light-blue);
+            margin: 35px 0 15px 0;
+            font-size: 1.35rem;
+            border-left: 4px solid var(--orange);
+            padding-left: 10px;
+        }
+
+        /* 💡 Highlight Box */
+        .highlight-callout {
+            background: rgba(255, 115, 0, 0.1);
+            border-left: 4px solid var(--orange);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 25px 0;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #fff;
+            text-align: center;
+        }
+
+        /* 📊 RESPONSIVE DATA TABLE STYLES */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            margin: 30px 0;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 164, 228, 0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            text-align: left;
+            min-width: 550px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        th {
+            background-color: #0f172a;
+            color: var(--light-blue);
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        tr:hover {
+            background-color: rgba(0, 164, 228, 0.05);
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .article-container { padding: 20px; margin: 10px auto; }
+            .article-title { font-size: 1.6rem; }
+            .featured-image-container { max-height: 230px; }
+            .featured-image-container img { max-height: 230px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="article-container">
+        <div class="article-meta">
+            <span class="category-badge">CINEMA TECH</span>
+            <span class="article-date">📅 2026 ජූනි 24</span>
+        </div>
+
+        <h1 class="article-title">සාමාන්‍ය සිනමාවෙන් එහා ගිය මහා විෂ්මය: IMAX තාක්ෂණය ඔබේ සිනමා අත්දැකීම උඩුයටිකුරු කරන්නේ කොහොමද?</h1>
+
+        <div class="featured-image-container">
+            <img src="imax.jpg" alt="IMAX Cinema Technology">
+        </div>
+
+        <div class="article-content">
+            <p>ඔබ කවදා හෝ සිනමා ශාලාවක චිත්‍රපටයක් බලද්දී, "මම මේ චිත්‍රපටය නිකන්ම බලාගෙන ඉන්නවා නෙවෙයි, මමත් මේ කතාව ඇතුළේ ජීවත් වෙනවා" වැනි හැඟීමක් දැනී තිබෙනවාද? නැත්නම් තිරය මත දිවෙන සුපිරි සටන් ජවනිකාවක හෝ අභ්‍යවකාශ චාරිකාවක සැබෑ කොටස්කරුවෙක් වුණා වැනි ඇඩ්‍රිනලින් පිම්මක් දැනිලා තියෙනවාද?</p>
+            
+            <p>ඔබට ඒ අත්දැකීම විඳගන්න ලැබුණා නම්, එය අනිවාර්යයෙන්ම IMAX තාක්ෂණයේ විෂ්මයකි. අද වන විට ලෝකයේ සිනමා ලෝලීන් අතර තිබෙන ලොකුම උන්මාදයක් තමයි "IMAX වලින්ම ෆිල්ම් එක බලන්න ඕනෑ" කියන එකයි. සාමාන්‍ය සිනමා ශාලාවකට වඩා IMAX එකක් මෙතරම් විශේෂ වෙන්නේ ඇයි? හොලිවුඩයේ සුපිරි අධ්‍යක්ෂවරුන් පවා මේ තාක්ෂණයට මේ තරම් ආදරය කරන්නේ ඇයි? අපි ඒ සිනමා විප්ලවයේ සැඟවුණු රහස් සොයා යමු!</p>
+
+            <h3>මොකක්ද මේ IMAX කියන්නේ?</h3>
+            <p><strong>IMAX</strong> කියන වචනය හැදිලා තියෙන්නේ <strong>Image Maximum (උපරිම රූප ප්‍රක්ෂේපණය)</strong> කියන අදහසින්. සරලවම කිව්වොත්, සිනමා පටයක තියෙන රූප රාමුවක්, එහි උපරිම ගුණාත්මකභාවයෙන් (Quality) සහ දැවැන්තම ප්‍රමාණයෙන් ප්‍රේක්ෂකයාට පෙන්වීම තමයි මේ තාක්ෂණයෙන් කරන්නේ.</p>
+            <p>කැනේඩියානු සමාගමක් විසින් 1970 ගණන්වලදී මුලින්ම හඳුන්වා දුන් මේ තාක්ෂණය, අද වන විට සිනමාවේ අනාගතය තීරණය කරන ප්‍රධානම සාධකයක් බවට පත්වෙලා තිබෙනවා.</p>
+
+            <h3>සාමාන්‍ය සිනමාව සහ IMAX අතර ඇති සැබෑ වෙනස</h3>
+            <p>IMAX එකකට ගිය කෙනෙක් ආයේ සාමාන්‍ය හෝල් එකකට යන්න අදිමදි කරන්නේ එහි ඇති තාක්ෂණික උසස් බව නිසයි. ප්‍රධානම වෙනස්කම් මෙන්න:</p>
+
+            <p><strong>1. අහස උසට විහිදුණු දැවැන්ත තිරය (The Giant Screen):</strong> සාමාන්‍ය සිනමා ශාලාවක තියෙන්නේ දිගටි (Rectangular) හැඩයේ තිරයක්. නමුත් IMAX තිරයක් ජ්‍යාමිතිකව සම්පූර්ණයෙන්ම වෙනස්. එය තට්ටු කිහිපයක් උස, තරමක් වක්‍රාකාර (Curved) දැවැන්ත තිරයකි. එය කෙතරම් විශාලද යත්, ඔබ ආසනයේ වාඩි වූ විට ඔබේ ඇස් පරාසය (Field of View) සම්පූර්ණයෙන්ම වසා ගැනීමට මේ තිරයට පුළුවන්. මේ නිසා තිරයේ සීමාවන් ඔබට පෙනෙන්නේ නැහැ.</p>
+            
+            <p><strong>2. සාමාන්‍ය කැමරාවලට වඩා වටිනාකමින් සහ තාක්ෂණයෙන් ඉහළ කැමරා:</strong> IMAX චිත්‍රපට රූගත කරන්නේ සාමාන්‍ය කැමරාවලින් නෙවෙයි. ඒ සඳහා 70mm පටල (Film) සහිත හෝ සුවිශේෂී උසස් ඩිජිටල් කැමරා භාවිත කරනවා. සාමාන්‍ය සිනමා පටයකට වඩා 26% ක වැඩි රූප රාමු ප්‍රමාණයක් (වැඩි ඉහළ සහ පහළ දර්ශන පරාසයක්) IMAX කැමරාවලට අසු කරගත හැකියි. එනම්, සාමාන්‍ය හෝල් එකකදී කපා හැරෙන රූප කොටස් IMAX තිරයේදී ඔබට සම්පූර්ණයෙන්ම දැකගත හැක.</p>
+            
+            <p><strong>3. පපුව ගැහෙන සවුන්ඩ් සිස්ටම් එක (Laser-Aligned Audio):</strong> IMAX ශබ්ද පරිපථය ක්‍රියා කරන්නේ ලේසර් තාක්ෂණයෙනි. ශාලාවේ සිටින හැමදෙනාටම එක හා සමානව, ඉතාම සියුම් ශබ්දයක් පවා (හුස්ම ගන්නා හඬක සිට මහා පිපිරුමක් දක්වා) උපරිම තාත්විකත්වයෙන් ඇසෙන පරිදි මෙහි ස්පීකර් පද්ධතිය සකසා ඇත. එහි බේස් (Bass) ශබ්දය කෙතරම් ප්‍රබලද යත්, ශබ්දය ඔබට ඇසෙන්නේ කන්වලින් විතරක් නෙවෙයි, මුළු ඇඟටම ඒ කම්පනය දැනෙනවා!</p>
+
+            <h3 style="border-left-color: var(--light-blue);">IMAX තාක්ෂණයේ ප්‍රධාන අංග 3ක් බැලූ බැල්මට</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ලක්ෂණය</th>
+                            <th>සාමාන්‍ය සිනමා ශාලාව</th>
+                            <th>IMAX සිනමා ශාලාව</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>තිරයේ හැඩය සහ ප්‍රමාණය</strong></td>
+                            <td>සීමිත පළලක් සහිත, පැතලි තිරයකි.</td>
+                            <td>අහස උසට විහිදුණු, වක්‍රාකාර (Curved) දැවැන්ත තිරයකි.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Aspect Ratio (දර්ශන අනුපාතය)</strong></td>
+                            <td>2.39:1 (තිරය දෙපසට දිගටි වේ)</td>
+                            <td>1.90:1 හෝ 1.43:1 (සිරස්ව ඉතා විශාල තිරයකි)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ප්‍රක්ෂේපණ තාක්ෂණය (Projector)</strong></td>
+                            <td>සාමාන්‍ය Digital / Xenon බල්බ</td>
+                            <td>ද්විත්ව 4K ලේසර් ප්‍රක්ෂේපණ (Dual 4K Laser)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>හොලිවුඩ් අධ්‍යක්ෂවරුන්ගේ "ප්‍රියතම සෙල්ලම් බඩුව"</h3>
+            <p>The Dark Knight, Inception, Interstellar, Oppenheimer වැනි සුපිරි චිත්‍රපට අධ්‍යක්ෂණය කළ Christopher Nolan මෙන්ම Dune චිත්‍රපට මාලාව හැදූ Denis Villeneuve වැනි සිනමා දැවැන්තයන් තමන්ගේ චිත්‍රපට සඳහා IMAX කැමරා අනිවාර්යයෙන්ම භාවිත කරනවා.</p>
+
+            <div class="highlight-callout">
+                "IMAX කියන්නේ චිත්‍රපටයක් බලන්න තියෙන හොඳම ආකෘතියයි. එය ප්‍රේක්ෂකයා සහ තිරය අතර තියෙන වීදුරු පවුර බිඳ දමා, ඔවුන්ව සැබෑ ලෙසම කතාව ඇතුළට රැගෙන යනවා."
+            </div>
+            <p style="text-align: center; font-size: 0.95rem; color: var(--text-muted); margin-top: -15px; margin-bottom: 25px;">- සුපිරි හොලිවුඩ් අධ්‍යක්ෂ Christopher Nolan</p>
+
+            <p>ඔවුන් මේ කැමරා පාවිච්චි කරන්නේ සිනමාවේ තියෙන උපරිම දෘශ්‍ය සුන්දරත්වය (Visual Grandeur) ප්‍රේක්ෂකයාට ඒ ආකාරයෙන්ම දායාද කරන්නයි.</p>
+
+            <h3>අවසාන අදහස (Conclusion)</h3>
+            <p>තාක්ෂණයේ දියුණුවත් සමඟ අද අපිට Netflix, Amazon Prime හරහා ගෙදර ඉඳන්ම ඕනෑම චිත්‍රපටයක් බලන්න පුළුවන්. නමුත් සිනමා ශාලාවකට ගොස් චිත්‍රපටයක් නැරඹීමේ සැබෑ කලාව අදටත් පණපිටින් තබාගෙන ඉන්නේ IMAX වැනි සුපිරි තාක්ෂණයන් නිසයි. නිවසේ ඇති කිසිම හෝම් තියටර් පද්ධතියකට IMAX දෙන ඒ දැවැන්ත, විශ්මයජනක අත්දැකීම සම කරන්න බැහැ.</p>
+            
+            <p>ඉතින්, ඊළඟ වතාවේ ලෝකය හොල්ලන සුපිරි හොලිවුඩ් බ්ලොක්බස්ටර් (Blockbuster) චිත්‍රපටයක් නිකුත් වුණු ගමන්, එය නිකන්ම බලන්නේ නැතුව, ළඟම تියෙන IMAX සිනමා ශාලාවකට ගිහින් ඒ මහා තාක්ෂණික විෂ්මය ඔබේ ඇස් දෙකෙන්ම අත්විඳගන්න! සිනමාවේ සැබෑ රසය තියෙන්නේ එතැනයි!</p>
+        </div>
+
+        <div class="nav-footer">
+            <a href="tech-updates.html" class="back-link">← Tech Updates පිටුවට පසුපසට</a>
+            <span style="font-size: 0.85rem; color: var(--text-muted);">C-TECH Education</span>
+        </div>
+    </div>
+
+</body>
+</html>
