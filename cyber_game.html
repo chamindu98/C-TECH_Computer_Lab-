@@ -52,25 +52,27 @@
             width: 100%;
         }
 
-        /* 🗺️ Interactive Network Map */
+        /* 🗺️ Network Map Container Fixed */
         .network-container {
             flex: 2;
-            position: relative;
             background: rgba(7, 11, 22, 0.9);
             border-radius: 16px;
             border: 2px solid rgba(0, 240, 255, 0.3);
             box-shadow: 0 0 30px rgba(0, 240, 255, 0.1);
             height: 550px;
+            position: relative;
             overflow: hidden;
         }
 
         .network-map {
-            position: relative;
+            position: absolute;
             width: 100%;
             height: 100%;
+            top: 0;
+            left: 0;
         }
 
-        /* HUD & Side Panel */
+        /* HUD Panel */
         .side-panel {
             flex: 1;
             display: flex;
@@ -123,7 +125,7 @@
             letter-spacing: 3px;
         }
 
-        /* Nodes Styling */
+        /* Nodes Styling Fixed */
         .node {
             position: absolute;
             width: 65px;
@@ -149,12 +151,13 @@
         .node .node-label {
             font-size: 0.65rem;
             position: absolute;
-            bottom: -20px;
+            bottom: -22px;
             white-space: nowrap;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85);
             padding: 2px 6px;
             border-radius: 4px;
             border: 1px solid rgba(255,255,255,0.1);
+            pointer-events: none;
         }
 
         .node.sender { border-color: var(--neon-blue); box-shadow: 0 0 15px rgba(0, 240, 255, 0.4); background: #0c2540;}
@@ -164,22 +167,21 @@
         .node.active-route {
             border-color: #fff;
             box-shadow: 0 0 25px #fff;
-            animation: pulse 1s infinite alternate;
         }
 
-        .node-icon { font-size: 1.3rem; }
+        .node-icon { font-size: 1.3rem; pointer-events: none; }
 
         /* Packet Dot */
         #moving-packet {
             position: absolute;
-            width: 14px;
-            height: 14px;
+            width: 16px;
+            height: 16px;
             background: #fff;
             border-radius: 50%;
             box-shadow: 0 0 15px #fff, 0 0 30px var(--neon-blue);
             z-index: 100;
             display: none;
-            transition: all 0.5s linear;
+            transition: all 0.4s linear;
         }
 
         /* Buttons & Instructions */
@@ -213,17 +215,8 @@
             border: 1px dashed rgba(255,255,255,0.1);
         }
 
-        svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
-        line { stroke: rgba(255, 255, 255, 0.15); stroke-width: 2; transition: all 0.5s; }
-        line.active-path { stroke: var(--neon-blue); stroke-width: 3; stroke-dasharray: 8; animation: dash 1s linear infinite; }
-
-        @keyframes dash { to { stroke-dashoffset: -16; } }
-        @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.05); } }
-
-        @media (max-width: 900px) {
-            .game-layout { flex-direction: column; }
-            .network-container { height: 450px; }
-        }
+        svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        line { stroke: rgba(255, 255, 255, 0.25); stroke-width: 2; }
     </style>
 </head>
 <body>
@@ -235,11 +228,10 @@
 
     <div class="game-layout">
         
-        <div class="network-container">
-            <div class="network-map" id="network-map">
-                <svg id="network-lines"></svg>
-                <div id="moving-packet"></div>
-            </div>
+        <div class="network-container" id="network-container">
+            <svg id="network-lines"></svg>
+            <div class="network-map" id="network-map"></div>
+            <div id="moving-packet"></div>
         </div>
 
         <div class="side-panel">
@@ -254,7 +246,7 @@
                 </div>
                 <div class="stat-box">
                     <span class="stat-label">TTL (Hop Limit)</span>
-                    <span class="stat-value" id="ttl-val" style="color: #fff;">8</span>
+                    <span class="stat-value" id="ttl-val" id="ttl-container" style="color: #fff;">8</span>
                 </div>
                 <div class="stat-box lives">
                     <span class="stat-label">LIVES</span>
@@ -278,29 +270,12 @@
                 <p>3. Routers මත ක්ලික් කරමින්, <strong>TTL අගය 0 වීමට පෙර</strong> පැකට්ටුව ගමනාන්තය වෙත මෙහෙයවන්න!</p>
             </div>
 
-            <button class="btn-action" id="next-btn" onclick="triggerNextPacket()" style="display: none;">ඊළඟ පැකට්ටුව සූදානම් කරන්න ⚡</button>
+            <button class="btn-action" id="next-btn" onclick="triggerNextPacket()" style="display: none;">නැවත මුල සිට ක්‍රීඩා කරන්න 🔄</button>
         </div>
 
     </div>
 
     <script>
-        // Audio Synth Engine
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        function playSound(freq, duration, type="sine") {
-            try {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = type;
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
-                osc.stop(audioCtx.currentTime + duration);
-            } catch(e){}
-        }
-
         // Game State Variables
         let currentLevel = 1;
         let score = 0;
@@ -317,29 +292,26 @@
             nodes = [];
             connections = [];
             
-            // Determine size based on level progression (Max 50)
-            let numRouters = 2 + Math.floor(level / 7); // 2 to 9 Routers
-            if (numRouters > 9) numRouters = 9;
+            let numRouters = 2 + Math.floor(level / 7); 
+            if (numRouters > 8) numRouters = 8;
             
-            let numReceivers = 2 + Math.floor(level / 15); // 2 to 5 Receivers
-            if (numReceivers > 5) numReceivers = 5;
+            let numReceivers = 2 + Math.floor(level / 15); 
+            if (numReceivers > 4) numReceivers = 4;
 
             // 1. Add Sender Always
-            nodes.push({ id: 'S', name: 'Sender', icon: '💻', x: 40, y: 240, ip: '192.168.1.1', type: 'sender' });
+            nodes.push({ id: 'S', name: 'Sender', icon: '💻', x: 30, y: 240, ip: '192.168.1.1', type: 'sender' });
 
-            // 2. Add Routers in columns dynamically
+            // 2. Add Routers dynamically
             let colCount = Math.ceil(numRouters / 2);
             let routerIdx = 1;
             
             for(let c=0; c<colCount; c++) {
-                let xPos = 180 + (c * 130);
+                let xPos = 160 + (c * 140);
                 let nodesInCol = (c === colCount-1 && numRouters % 2 !== 0) ? 1 : 2;
                 
                 for(let r=0; r<nodesInCol; r++) {
-                    let yPos = (nodesInCol === 1) ? 240 : 110 + (r * 240);
-                    // Add slight random offset for realism
-                    yPos += Math.floor(Math.random() * 30) - 15;
-                    xPos += Math.floor(Math.random() * 20) - 10;
+                    let yPos = (nodesInCol === 1) ? 240 : 100 + (r * 260);
+                    yPos += Math.floor(Math.random() * 20) - 10;
 
                     let ipOctet = 10 + level + routerIdx;
                     nodes.push({
@@ -356,7 +328,7 @@
             }
 
             // 3. Add Receivers
-            let lastX = 220 + (colCount * 130);
+            let lastX = 180 + (colCount * 140);
             for(let i=0; i<numReceivers; i++) {
                 let ySpace = 500 / (numReceivers + 1);
                 let yPos = ySpace * (i + 1);
@@ -373,33 +345,27 @@
                 });
             }
 
-            // 4. Build Smart Procedural Cable Connections (Paths)
-            // Connect Sender to first column routers
+            // 4. Cables Connections
             if(nodes.find(n => n.id === 'R1')) connections.push(['S', 'R1']);
             if(nodes.find(n => n.id === 'R2')) connections.push(['S', 'R2']);
 
-            // Interconnect Routers sequentially to guarantee a solved path
             for(let i=1; i<routerIdx-2; i++) {
                 connections.push([`R${i}`, `R${i+1}`]);
                 if(i+2 < routerIdx) connections.push([`R${i}`, `R${i+2}`]);
             }
 
-            // Connect last routers to specific receivers
             let totalRouters = routerIdx - 1;
             for(let j=1; j<=numReceivers; j++) {
                 let associatedRouter = 1 + ((j - 1) % totalRouters);
                 connections.push([`R${associatedRouter}`, `D${j}`]);
                 
-                // For high levels, cross-connect routers for complexity
-                if(level > 15 && j > 1) {
+                if(level > 10 && j > 1) {
                     let randRouter = Math.ceil(Math.random() * totalRouters);
                     if(`R${randRouter}` !== `R${associatedRouter}`) {
                         connections.push([`R${randRouter}`, `D${j}`]);
                     }
                 }
             }
-
-            // Remove structural duplicates if any
             connections = connections.filter((v,i,a)=>a.findIndex(v2=>(v2[0]===v[0]&&v2[1]===v[1]))===i);
         }
 
@@ -407,11 +373,10 @@
             const mapEl = document.getElementById('network-map');
             const svgEl = document.getElementById('network-lines');
 
-            // Clear old dynamic nodes & paths
-            mapEl.querySelectorAll('.node').forEach(n => n.remove());
+            mapEl.innerHTML = '';
             svgEl.innerHTML = '';
 
-            // Draw Paths (Lines)
+            // Render Paths
             connections.forEach(conn => {
                 const n1 = nodes.find(n => n.id === conn[0]);
                 const n2 = nodes.find(n => n.id === conn[1]);
@@ -422,11 +387,10 @@
                 line.setAttribute('y1', n1.y + 32);
                 line.setAttribute('x2', n2.x + 32);
                 line.setAttribute('y2', n2.y + 32);
-                line.id = `line-${n1.id}-${n2.id}`;
                 svgEl.appendChild(line);
             });
 
-            // Draw Devices (Nodes)
+            // Render Nodes
             nodes.forEach(node => {
                 const div = document.createElement('div');
                 div.className = `node ${node.type}`;
@@ -444,24 +408,19 @@
         function setupPacketMission() {
             if (lives <= 0) return;
 
-            // Filter out available receivers for this level
             const receivers = nodes.filter(n => n.type === 'receiver');
             currentTargetNode = receivers[Math.floor(Math.random() * receivers.length)];
 
-            // Generate random binary hash
             let binaryHead = "";
             for(let i=0; i<8; i++) binaryHead += Math.floor(Math.random()*2);
             
-            // Set UI updates
             document.getElementById('packet-data').innerText = binaryHead;
             document.getElementById('target-ip-display').innerText = currentTargetNode.ip;
             
-            // Dynamic Hop Limit based on difficulty
             ttl = Math.max(5, 10 - Math.floor(currentLevel / 10));
             document.getElementById('ttl-val').innerText = ttl;
             document.getElementById('ttl-val').style.color = '#fff';
 
-            // Reset positioning
             packetLocation = 'S';
             const packetDot = document.getElementById('moving-packet');
             const sender = nodes.find(n => n.id === 'S');
@@ -470,12 +429,9 @@
             packetDot.style.top = `${sender.y + 25}px`;
             packetDot.style.display = 'block';
 
-            // Glow active node
             highlightActiveNode('S');
             document.getElementById('next-btn').style.display = 'none';
             isMoving = false;
-
-            playSound(520, 0.15);
         }
 
         function highlightActiveNode(nodeId) {
@@ -483,29 +439,27 @@
                 const el = document.getElementById(`node-${n.id}`);
                 if(el) el.classList.remove('active-route');
             });
-            document.getElementById(`node-${nodeId}`).classList.add('active-route');
+            const activeEl = document.getElementById(`node-${nodeId}`);
+            if(activeEl) activeEl.classList.add('active-route');
         }
 
         function onNodeInteraction(targetNodeId) {
             if (isMoving || lives <= 0 || packetLocation === targetNodeId) return;
 
-            // Route Validation Check
             const validConnection = connections.some(c => 
                 (c[0] === packetLocation && c[1] === targetNodeId) || 
                 (c[1] === packetLocation && c[0] === targetNodeId)
             );
 
             if (!validConnection) {
-                playSound(130, 0.4, 'sawtooth');
                 alert("⚡ LINK ERROR: එම උපාංග අතර ඍජු භෞතික සන්නිවේදන කේබලයක් නොමැත!");
                 return;
             }
 
-            // Start Packet Movement Animation
             isMoving = true;
             ttl--;
             document.getElementById('ttl-val').innerText = ttl;
-            if(ttl <= 3) document.getElementById('ttl-val').style.color = var(--neon-red);
+            if(ttl <= 3) document.getElementById('ttl-val').style.color = '#ff3131';
 
             const targetNode = nodes.find(n => n.id === targetNodeId);
             const packetDot = document.getElementById('moving-packet');
@@ -513,48 +467,37 @@
             packetDot.style.left = `${targetNode.x + 25}px`;
             packetDot.style.top = `${targetNode.y + 25}px`;
 
-            playSound(400, 0.1, 'sine');
-
             setTimeout(() => {
                 packetLocation = targetNodeId;
                 isMoving = false;
                 highlightActiveNode(packetLocation);
 
-                // Check TTL Exhaustion
                 if (ttl <= 0 && targetNode.type !== 'receiver') {
-                    playSound(120, 0.5, 'triangle');
                     alert("💀 TTL EXPIRED: පැකට්ටුවේ කාලය (Time to Live) අවසන් වී ජාලය තුළදී විනාශ විය! (Packet Dropped)");
                     deductLife();
                     return;
                 }
 
-                // Hit Final Client PC Destination
                 if (targetNode.type === 'receiver') {
                     if (packetLocation === currentTargetNode.id) {
-                        // Level cleared!
                         score += 10 + currentLevel * 2;
                         document.getElementById('score-val').innerText = score;
-                        playSound(880, 0.3, 'sine');
                         
                         if(currentLevel >= 50) {
-                            alert("🏆 සුභ පැතුම්! ඔබ CyberDefenders මට්ටම් 50ම සාර්ථකව අවසන් කර ප්‍රධාන ජාල පරිපාලකයෙකු බවට පත් විය!");
+                            alert("🏆 සුභ පැතුම්! ඔබ CyberDefenders මට්ටම් 50ම සාර්ථකව අවසන් කළා!");
                             return;
                         }
 
                         alert(`🎉 SUCCESS: දත්ත පැකට්ටුව නිවැරදිව ලැබුණි! ලෙවල් ${currentLevel} ජයග්‍රහණය කලා.`);
                         currentLevel++;
                         document.getElementById('level-val').innerText = `${currentLevel} / 50`;
-                        
-                        // Progress to next dynamic build
                         startNewGameLevel();
                     } else {
-                        // Bad Route Destination
-                        playSound(180, 0.5, 'triangle');
-                        alert("💥 IP MISMATCH: දත්ත පැකට්ටුව වැරදි IP ලිපිනයක් සහිත උපාංගයකට යොමු කර ඇත! (Firewall Blocked)");
+                        alert("💥 IP MISMATCH: දත්ත පැකට්ටුව වැරදි IP ලිපිනයක් සහිත උපාංගයකට යොමු කර ඇත!");
                         deductLife();
                     }
                 }
-            }, 500);
+            }, 450);
         }
 
         function deductLife() {
@@ -563,20 +506,17 @@
             for(let i=0; i<lives; i++) hearts += "❤️";
             if(lives === 0) hearts = "💀 SYSTEM CRASHED";
             document.getElementById('lives-val').innerText = hearts;
-
             document.getElementById('moving-packet').style.display = 'none';
 
             if (lives <= 0) {
-                alert(`🏁 GAME OVER: ජාලය හැකර්වරුන් විසින් අඩපණ කරන ලදී! ඔබේ අවසන් ලකුණු සංඛ්‍යාව: ${score}`);
+                alert(`🏁 GAME OVER: ඔබේ අවසන් ලකුණු සංඛ්‍යාව: ${score}`);
                 document.getElementById('next-btn').style.display = 'block';
-                document.getElementById('next-btn').innerText = "නැවත මුල සිට ක්‍රීඩා කරන්න 🔄";
             } else {
                 setupPacketMission();
             }
         }
 
         function triggerNextPacket() {
-            // Full Reset
             currentLevel = 1;
             score = 0;
             lives = 3;
@@ -589,10 +529,9 @@
         function startNewGameLevel() {
             generateProceduralLevel(currentLevel);
             renderNetworkGraph();
-            setTimeout(setupPacketMission, 400);
+            setTimeout(setupPacketMission, 300);
         }
 
-        // Initialize Pro System Grid
         window.onload = startNewGameLevel;
     </script>
 </body>
