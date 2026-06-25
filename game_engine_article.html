@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C-TECH - Game Engines Insight</title>
+    <style>
+        :root {
+            --light-blue: #00a4e4; 
+            --orange: #ff7300; 
+            --dark-bg: #0b132b; 
+            --card-bg: #1c2541; 
+            --text-light: #f4f7f6;
+            --text-muted: #a0aec0;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+        }
+
+        body {
+            background-color: var(--dark-bg); 
+            color: var(--text-light);
+            line-height: 1.8;
+            padding: 15px;
+            min-height: 100vh;
+            background-image: radial-gradient(at 0% 0%, rgba(0, 164, 228, 0.15) 0px, transparent 50%);
+        }
+
+        /* 📦 Main Container */
+        .article-container {
+            width: 100%;
+            max-width: 850px;
+            margin: 20px auto;
+            background-color: rgba(28, 37, 65, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 164, 228, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* 🏷️ Meta Info */
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+        }
+
+        .category-badge {
+            background: var(--orange);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .article-date {
+            color: var(--text-muted);
+        }
+
+        /* ✍️ Typography */
+        .article-title {
+            font-size: 2rem;
+            color: #fff;
+            line-height: 1.4;
+            margin-bottom: 25px;
+            text-shadow: 0 0 10px rgba(0, 164, 228, 0.2);
+        }
+
+        /* 🖼️ RESPONSIVE FEATURED IMAGE BOX */
+        .featured-image-container {
+            width: 100%;
+            max-height: 400px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            border: 2px solid rgba(0, 164, 228, 0.3);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            display: block; 
+        }
+
+        .featured-image-container img {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: cover; 
+            display: block;
+        }
+
+        /* 📄 Content Area */
+        .article-content p {
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+            color: #e2e8f0;
+            text-align: justify;
+        }
+
+        .article-content h3 {
+            color: var(--light-blue);
+            margin: 35px 0 15px 0;
+            font-size: 1.35rem;
+            border-left: 4px solid var(--orange);
+            padding-left: 10px;
+        }
+
+        /* 💡 Highlight Box */
+        .highlight-callout {
+            background: rgba(255, 115, 0, 0.1);
+            border-left: 4px solid var(--orange);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 25px 0;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #fff;
+            text-align: center;
+        }
+
+        /* 📊 RESPONSIVE DATA TABLE STYLES */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            margin: 30px 0;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 164, 228, 0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            text-align: left;
+            min-width: 650px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        th {
+            background-color: #0f172a;
+            color: var(--light-blue);
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        tr:hover {
+            background-color: rgba(0, 164, 228, 0.05);
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .article-container { padding: 20px; margin: 10px auto; }
+            .article-title { font-size: 1.6rem; }
+            .featured-image-container { max-height: 230px; }
+            .featured-image-container img { max-height: 230px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="article-container">
+        <div class="article-meta">
+            <span class="category-badge">GAME DEVELOPMENT</span>
+            <span class="article-date">📅 2026 ජූනි 25</span>
+        </div>
+
+        <h1 class="article-title">මනඃකල්පිත ලෝකයන් සැබෑ කරන අදෘශ්‍යමාන බලවේගය: මොනවාද මේ ගේම් එන්ජින් (Game Engines)?</h1>
+
+        <div class="featured-image-container">
+            <img src="game-engine.png" alt="Game Engine Technology">
+        </div>
+
+        <div class="article-content">
+            <p>Grand Theft Auto (GTA) හි වීදි දිගේ රථයක් පදවන විට, Cyberpunk හි අනාගත නගරයක ආලෝක රටා දෙස බලා සිටින විට, නැත්නම් PUBG හෝ Free Fire හි සතුරන් සමඟ සටන් වදින විට ඔබ මොහොතකටවත් සිතුවාද මේ හැම විස්මිත දෘශ්‍ය පථයක්ම, ශබ්දයක්ම සහ චලනයක්ම පිටුපස ඇති සැබෑ රහස කුමක්ද කියා?</p>
+            
+            <p>බොහෝ දෙනෙක් සිතන්නේ මේ හැම දෙයක්ම කරන්නේ පරිගණක කේත (Coding) mගින් පමණක් කියායි. නමුත් ඇත්තම කතාව නම්, ඒ හැම සුපිරි වීඩියෝ ක්‍රීඩාවකටම පණ දෙන්න පිටුපසින් සිටින අදෘශ්‍යමාන මහා මොළකරුවෙකු සිටී. තාක්ෂණික ලෝකයේ අප එය හඳුන්වන්නේ <strong>ගේම් එන්ජින් (Game Engine)</strong> එකක් කියායි. සැබෑ ලෝකයේ මෝටර් රථයකට එන්ජිමක් කොතරම් වැදගත්ද, වීඩියෝ ක්‍රීඩාවකට ගේම් එන්ජිමකුත් ඒ හා සමානවම වැදගත් වේ. අද අපි කතා කරන්නේ ගේමර් කෙනෙක් වගේම ගේම් ඩිවලොපර් කෙනෙක් (Game Developer) අනිවාර්යයෙන්ම දැනගත යුතු මේ සුපිරි තාක්ෂණය ගැනයි.</p>
+
+            <h3>මොකක්ද මේ ගේම් එන්ජිමක් කියන්නේ?</h3>
+            <p>සරලවම කිව්වොත්, ගේම් එන්ජිමක් කියන්නේ වීඩියෝ ක්‍රීඩාවක් මුල සිට අගට නිර්මාණය කිරීම සඳහා අවශ්‍ය සියලුම මෘදුකාංග මෙවලම් (Software Tools) එකම තැනකින් ලබා දෙන දැවැන්ත රාමුවකටයි (Framework).</p>
+            <p>මීට වසර තිහකට පෙර, එක ගේම් එකක් හදපු කේතයන් (Code) තවත් ගේම් එකකට පාවිච්චි කරන්න බැරි වුණා. හැම ගේම් එකකටම මුල ඉඳන්ම අලුතින්ම කෝඩ් කරන්න සිද්ධ වුණා. නමුත් ගේම් එන්ජින් පැමිණීමත් සමඟ, ගේම් එකක් ඇතුළේ තියෙන්න ඕන mූලික නීති රීති පද්ධතියක් දැනටමත් හදලා නිම කරලයි තියෙන්නේ. ගේම් නිර්මාණකරුවන්ට තියෙන්නේ තමන්ගේ කතාව, චරිත සහ චිත්‍ර (3D Models) ඒ ඇතුළට දමා හැඩගස්වා ගැනීම පමණයි.</p>
+
+            <h3>ගේම් එන්ජිමකින් කෙරෙන ප්‍රධානම වැඩ කොටස් 3</h3>
+            <p>ගේම් එන්ජිමක ක්‍රියාකාරීත්වය ප්‍රධාන කොටස් කිහිපයකට බෙදා දක්වන්න පුළුවන්:</p>
+            <p><strong>1. Graphics Renderer (දෘශ්‍ය පථය මැවීම):</strong> 2D හෝ 3D චිත්‍ර, ආලෝකය (Lighting), හෙවනැලි (Shadows) සහ වර්ණ තිරය මත ඉතාම තාත්විකව දර්ශනය කරන්නේ මේ කොටසින්.</p>
+            <p><strong>2. Physics Engine (භෞතික විද්‍යා නීති):</strong> ගේම් එකක් ඇතුළේ වාහනයක් හැප්පුණාම කුඩු වෙන්නේ කොහොමද? උඩ පැනපු චරිතයක් ගුරුත්වාකර්ෂණය නිසා බිමට වැටෙන්නේ කොහොමද? මේ හැම සැබෑ ලෝකයේ භෞතික නීතියක්ම ගේම් එක ඇතුළේ ක්‍රියාත්මක කරවන්නේ මේ කොටසයි.</p>
+            <p><strong>3. Audio & AI (ශබ්දය සහ කෘත්‍රිම බුද්ධිය):</strong> සතුරන් අප පසුපස හඹා එන ආකාරය (AI) පාලනය කිරීම සහ පරිසරයට ගැළපෙන ත්‍රිමාණ ශබ්ද රටා (3D Audio) නිපදවීම සිදුකරයි.</p>
+
+            <h3 style="border-left-color: var(--light-blue);">ලෝකය හොල්ලන ප්‍රධානතම ගේම් එන්ජින් ද්විත්වය</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ලක්ෂණය</th>
+                            <th>Unreal Engine (Epic Games)</th>
+                            <th>Unity (Unity Technologies)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ග්‍රැෆික්ස් තත්ත්වය</strong></td>
+                            <td>අතිශය තාත්විකයි (Photorealistic / AAA Games).</td>
+                            <td>ඉතා හොඳයි (විශේෂයෙන්ම 2D සහ ජංගම දුරකථන සඳහා).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>භාවිත වන කේත භාෂාව</strong></td>
+                            <td>C++ සහ Blueprint (Visual Scripting).</td>
+                            <td>C# (C-Sharp).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ප්‍රසිද්ධ ක්‍රීඩා</strong></td>
+                            <td>Fortnite, Matrix Awakens, GTA V (RAGE), Witcher 4</td>
+                            <td>PUBG Mobile, Pokemon Go, Temple Run, Genshin Impact</td>
+                        </tr>
+                        <tr>
+                            <td><strong>කා සඳහාද?</strong></td>
+                            <td>මහා පරිමාණ පරිගණක සහ Console ගේම්ස් සඳහා.</td>
+                            <td>ස්වාධීන (Indie) නිෂ්පාදකයන් සහ Mobile ගේම්ස් සඳහා.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>1. Unreal Engine: සැබෑ ලෝකය සහ ඩිජිටල් ලෝකය අතර වෙනස නැති කිරීම</h3>
+            <p>Epic Games සමාගමේ Unreal Engine (විශේෂයෙන්ම එහි නවතම සන්දර්භය වන Unreal Engine 5) කියන්නේ ගේම් ලෝකයේ විප්ලවයකි. මෙහි ඇති Lumen සහ Nanite වැනි තාක්ෂණයන් නිසා, සිනමා පටයක පෙනෙන ආකාරයේම අතිශය තාත්වික (Hyper-realistic) පරිසරයන් ගේම් ඇතුළේ නිර්මාණය කරන්න පුළුවන්.</p>
+            <p>අද වන විට හොලිවුඩ් සිනමා පටවල පසුබිම් දර්ශන (Virtual Production) නිර්මාණය කරන්නත් ගේම්ස්වලින් එහා ගොස් Unreal Engine එක භාවිත කරනවා.</p>
+
+            <h3>2. Unity: හැමෝගෙම අතට ගේම්ස් රැගෙන ආ මිතුරා</h3>
+            <p>ඔබේ ස්මාර්ට් ජංගම දුරකථනයේ (Android / iOS) ඔබ ක්‍රීඩා කරන ගේම්ස්වලින් 50%කට වඩා හදලා තියෙන්නේ Unity එන්ජිමෙන්. මෙය ඉගෙන ගැනීමට ඉතාම පහසු, පරිගණකයේ ධාරිතාවය අඩුවෙන් වැය වන, ආරම්භකයින්ට කියාපු මෙවලමකි. ලෝකයේ ඉන්න ස්වාධීන (Indie Developers) ගේම් නිර්මාණකරුවන්ගේ ලොකුම සෙවණැල්ල තමයි Unity කියන්නේ.</p>
+
+            <h3>ඔබටත් ගේම් ඩිවලොපර් කෙනෙක් වෙන්න පුළුවන්ද?</h3>
+            <p>"මටත් puළුවන්ද මගේම කියලා ගේම් එකක් හදන්න?" පිළිතුර <strong>"ඔව්, අනිවාර්යයෙන්ම පුළුවන්!"</strong> යන්නයි. අද වන විට ඉහත සඳහන් කළ Unreal Engine සහ Unity යන එන්ජින් දෙකම ඕනෑම කෙනෙකුට නොමිලේ (Free) භාගත කරගෙන පාවිච්චි කරන්න පුළුවන්.</p>
+            <p>ඔබට කෝඩින් (Coding) ගැන ලොකු දැනුමක් නැතත්, Unreal Engine හි ඇති Blueprint වැනි Visual Scripting තාක්ෂණය ඔස්සේ කොටස් එකිනෙකට ගැටගැසීමෙන් (Drag and Drop) සරල ගේම් එකක් නිර්මාණය කිරීමේ ගමන අදම වුවත් ආරම්භ කළ හැකියි.</p>
+
+            <div class="highlight-callout">
+                "වීඩියෝ ක්‍රීඩා ක්ෂේත්‍රය කියන්නේ අද වෙනකොට ලෝකයේ සිනමාව සහ සංගීතය යන ක්ෂේත්‍ර දෙකම එකතු කළත් ඒකට වඩා වැඩි ආදායමක් උපයන දැවැන්තම කර්මාන්තයයි. ඒ මහා කර්මාන්තයේ හදවත තමයි ගේම් එන්ජින් කියන්නේ."
+            </div>
+
+            <h3>අවසාන අදහස (Conclusion)</h3>
+            <p>තාක්ෂණය දිනෙන් දින දියුණු වෙද්දී, තව වසර කිහිපයකින් සැබෑ ලෝකය සහ ගේම් එකක් ඇතුළේ තියෙන ලෝකය වෙන් කර හඳුනාගන්න බැරි තරමටම මේ ගේම් එන්ජින් අපව විස්මයට පත් කරනු නිසැකයි.</p>
+            <p>ඉතින්, නිකන්ම ගේම් එකක් ප්ලේ කරලා කාලය කා දමන කෙනෙක් වෙන්නේ නැතුව, මේ අපූරු ගේම් එන්ජින්වල ක්‍රියාකාරීත්වය ඉගෙන ගෙන ඔයාගේම මනඃකල්පිත ලෝකයක් ඩිජිටල් තිරය මත මවන්න අදම උත්සාහ කරන්න!</p>
+        </div>
+
+        <div class="nav-footer">
+            <a href="tech-updates.html" class="back-link">← Tech Updates පිටුවට පසුපසට</a>
+            <span style="font-size: 0.85rem; color: var(--text-muted);">C-TECH Education</span>
+        </div>
+    </div>
+
+</body>
+</html>
