@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>C-TECH - Flowchart Logic Quest Pro</title>
+    <style>
+        :root {
+            --light-blue: #00a4e4; 
+            --orange: #ff7300; 
+            --dark-bg: #0b132b; 
+            --card-bg: #1c2541; 
+            --text-light: #f4f7f6;
+            --text-muted: #a0aec0;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--dark-bg); 
+            color: var(--text-light);
+            line-height: 1.5;
+            padding: 10px;
+            min-height: 100vh;
+            background-image: radial-gradient(at 0% 0%, rgba(0, 164, 228, 0.15) 0px, transparent 50%);
+        }
+
+        .article-container {
+            width: 100%;
+            max-width: 950px;
+            margin: 10px auto;
+            background-color: rgba(28, 37, 65, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 164, 228, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .article-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .category-badge {
+            background: var(--orange);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .level-badge {
+            background: var(--light-blue);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .article-title {
+            font-size: 1.6rem;
+            color: #fff;
+            line-height: 1.3;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(0, 164, 228, 0.2);
+            text-align: center;
+        }
+
+        .challenge-card {
+            background: rgba(0, 164, 228, 0.1);
+            border: 1px dashed var(--light-blue);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        /* 🎮 Game Layout - Responsive Mobile-First Grid */
+        .game-zone {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .game-zone { grid-template-columns: 1fr; }
+        }
+
+        .panel {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-title {
+            color: var(--light-blue);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            border-bottom: 2px solid rgba(0, 164, 228, 0.2);
+            padding-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .flowchart-canvas, .block-pool {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            min-height: 320px;
+            padding: 10px 0;
+            overflow-y: auto;
+        }
+
+        /* 🟢 Mobile friendly click-to-move Blocks */
+        .fc-block {
+            padding: 10px 15px;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+            width: 85%;
+            max-width: 240px;
+            font-size: 0.85rem;
+            color: #fff;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .fc-block:active {
+            transform: scale(0.97);
+        }
+
+        /* Symbol Shapes with strict layout dimensions */
+        .shape-start-end { border-radius: 25px; background: #2563eb; border: 2px solid #60a5fa; }
+        .shape-io { transform: skewX(-12px); background: #d97706; border: 2px solid #fbbf24; }
+        .shape-io span { display: block; transform: skewX(12px); }
+        .shape-process { background: #059669; border: 2px solid #34d399; }
+        .shape-decision { 
+            background: #db2777; 
+            border: 2px solid #f472b6;
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            padding: 18px 10px;
+            width: 75%;
+        }
+
+        /* Arrow Line */
+        .arrow-line {
+            width: 2px;
+            height: 15px;
+            background: var(--text-muted);
+            position: relative;
+        }
+        .arrow-line::after {
+            content: '▼';
+            position: absolute;
+            bottom: -6px;
+            left: -4px;
+            font-size: 8px;
+            color: var(--text-muted);
+        }
+
+        /* Controls UI */
+        .game-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        @media (min-width: 600px) {
+            .game-controls { display: flex; justify-content: center; }
+        }
+
+        .btn {
+            background: var(--orange);
+            color: #fff;
+            border: none;
+            padding: 12px 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: 0.2s;
+            text-align: center;
+        }
+
+        .btn:hover { background: #ff8826; }
+        .btn-secondary { background: #475569; }
+        .btn-success { background: #059669; grid-column: span 2; }
+
+        @media (min-width: 600px) { .btn-success { grid-column: auto; } }
+
+        .status-message {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 12px;
+            font-size: 1rem;
+            min-height: 24px;
+        }
+
+        .nav-footer {
+            margin-top: 25px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+        }
+
+        .back-link { color: var(--light-blue); text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+    <div class="article-container">
+        <div class="article-header">
+            <span class="category-badge" id="structure-badge">පාලන ව්‍යුහය: අනුක්‍රමය</span>
+            <span class="level-badge" id="level-title">මට්ටම: 1 / 50</span>
+        </div>
+
+        <h1 class="article-title">Flowchart Logic Quest Pro</h1>
+        
+        <div class="challenge-card">
+            <p><strong>අභියෝගය:</strong> <span id="challenge-text">ලෝඩ් වෙමින් පවතී...</span></p>
+        </div>
+
+        <div class="game-zone">
+            <div class="panel">
+                <div class="panel-title">ඔබේ ගැලීම් සටහන (Canvas)</div>
+                <div id="canvas" class="flowchart-canvas"></div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-title">කොටස් (ගිලිස්සන්න / තෝරන්න)</div>
+                <div id="pool" class="block-pool"></div>
+            </div>
+        </div>
+
+        <div id="status" class="status-message"></div>
+
+        <div class="game-controls">
+            <button class="btn" onclick="checkLogic()">පරීක්ෂා කරන්න (Verify)</button>
+            <button class="btn btn-secondary" onclick="resetLevel()">නැවත මුල සිට</button>
+            <button class="btn btn-success" id="next-btn" onclick="nextLevel()" style="display:none;">ඊළඟ මට්ටම ➔</button>
+        </div>
+
+        <div class="nav-footer">
+            <a href="#" class="back-link">← C-TECH නිවසට</a>
+            <span style="color: var(--text-muted);">C-TECH Smart Mobile Learning 2026</span>
+        </div>
+    </div>
+
+    <script>
+        // 50 Levels Procedural Generation Configuration 
+        let currentLevel = 1;
+        let userSequence = [];
+        let currentLevelData = {};
+
+        function generateLevelData(lvl) {
+            let type = "අනුක්‍රමය (Sequence)";
+            let challenge = "";
+            let correctOrder = [];
+            let poolBlocks = [];
+
+            if (lvl <= 15) {
+                // 1-15: Sequence Structure
+                type = "පාලන ව්‍යුහය: අනුක්‍රමය (Sequence)";
+                let factor = lvl;
+                challenge = `සංඛ්‍යා දෙකක් ඇතුළත් කර, ඒවායේ එකතුව ${factor} න් ගුණ කර අවසන් ප්‍රතිඵලය (Result) මුද්‍රණය කරන්න.`;
+                correctOrder = ["START", "INPUT A, B", "SUM = A + B", `RESULT = SUM * ${factor}`, "PRINT RESULT", "END"];
+                poolBlocks = [
+                    { text: "START", shape: "shape-start-end" },
+                    { text: "INPUT A, B", shape: "shape-io" },
+                    { text: "SUM = A + B", shape: "shape-process" },
+                    { text: `RESULT = SUM * ${factor}`, shape: "shape-process" },
+                    { text: "PRINT RESULT", shape: "shape-io" },
+                    { text: "END", shape: "shape-start-end" },
+                    { text: "IS SUM > 100?", shape: "shape-decision" }
+                ];
+            } else if (lvl <= 35) {
+                // 16-35: Selection Structure
+                type = "පාලන ව්‍යුහය: තේරීම (Selection)";
+                let passingMark = 40 + (lvl - 15);
+                challenge = `ශිෂ්‍යයෙකුගේ ලකුණු (Marks) ලබාගෙන, ලකුණු ${passingMark} ට සමාන හෝ වැඩි නම් 'PASS' ද, නැත්නම් 'FAIL' ද මුද්‍රණය කරන්න.`;
+                correctOrder = ["START", "INPUT MARKS", `MARKS >= ${passingMark}?`, "PRINT 'PASS'", "PRINT 'FAIL'", "END"];
+                poolBlocks = [
+                    { text: "START", shape: "shape-start-end" },
+                    { text: "INPUT MARKS", shape: "shape-io" },
+                    { text: `MARKS >= ${passingMark}?`, shape: "shape-decision" },
+                    { text: "PRINT 'PASS'", shape: "shape-io" },
+                    { text: "PRINT 'FAIL'", shape: "shape-io" },
+                    { text: "END", shape: "shape-start-end" },
+                    { text: "MARKS = MARKS + 1", shape: "shape-process" }
+                ];
+            } else {
+                // 36-50: Iteration Structure
+                type = "පාලන ව්‍යුහය: පුනර්කරණය (Loop / Iteration)";
+                let maxCount = lvl - 30; // Around 6 to 20 loops
+                challenge = `කවුන්ටරය (Count) 1 ලෙස ගෙන, එය ${maxCount} වන තෙක් එක බැගින් වැඩි කරමින් (Count = Count + 1) පුනර්කරණය කර අවසන් කරන්න.`;
+                correctOrder = ["START", "COUNT = 1", `COUNT <= ${maxCount}?`, "COUNT = COUNT + 1", "END"];
+                poolBlocks = [
+                    { text: "START", shape: "shape-start-end" },
+                    { text: "COUNT = 1", shape: "shape-process" },
+                    { text: `COUNT <= ${maxCount}?`, shape: "shape-decision" },
+                    { text: "COUNT = COUNT + 1", shape: "shape-process" },
+                    { text: "END", shape: "shape-start-end" },
+                    { text: "INPUT COUNT", shape: "shape-io" }
+                ];
+            }
+
+            return { type, challenge, correctOrder, blocks: poolBlocks };
+        }
+
+        function loadLevel(lvl) {
+            currentLevelData = generateLevelData(lvl);
+            
+            document.getElementById("structure-badge").innerText = currentLevelData.type;
+            document.getElementById("level-title").innerText = `මට්ටම: ${lvl} / 50`;
+            document.getElementById("challenge-text").innerText = currentLevelData.challenge;
+            document.getElementById("status").innerText = "";
+            document.getElementById("next-btn").style.display = "none";
+            
+            userSequence = [];
+            renderCanvas();
+
+            // Shuffle blocks for the selection pool
+            let shuffled = [...currentLevelData.blocks].sort(() => Math.random() - 0.5);
+            const pool = document.getElementById("pool");
+            pool.innerHTML = "";
+
+            shuffled.forEach((block, idx) => {
+                const bEl = document.createElement("div");
+                bEl.className = `fc-block ${block.shape}`;
+                bEl.innerHTML = `<span>${block.text}</span>`;
+                bEl.onclick = () => addToCanvas(block, bEl);
+                pool.appendChild(bEl);
+            });
+        }
+
+        function addToCanvas(block, element) {
+            userSequence.push(block);
+            element.style.display = "none"; // Hide from options
+            renderCanvas();
+        }
+
+        function renderCanvas() {
+            const canvas = document.getElementById("canvas");
+            canvas.innerHTML = "";
+
+            if (userSequence.length === 0) {
+                canvas.innerHTML = '<p style="color: var(--text-muted); margin-top: 80px; text-align:center; font-size:0.9rem;">කොටස් එකතු කිරීමට දකුණු පස ඇති හැඩතල මත ක්ලික් කරන්න.</p>';
+                return;
+            }
+
+            userSequence.forEach((block, index) => {
+                if (index > 0) {
+                    const arrow = document.createElement("div");
+                    arrow.className = "arrow-line";
+                    canvas.appendChild(arrow);
+                }
+
+                const cBlock = document.createElement("div");
+                cBlock.className = `fc-block ${block.shape}`;
+                cBlock.innerHTML = `<span>${block.text}</span>`;
+                // Click on canvas item to remove it
+                cBlock.onclick = () => removeFromCanvas(index);
+                canvas.appendChild(cBlock);
+            });
+        }
+
+        function removeFromCanvas(index) {
+            userSequence.splice(index, 1);
+            // Quick approach: reset pool based on remaining elements
+            renderCanvas();
+            rebuildPool();
+        }
+
+        function rebuildPool() {
+            const pool = document.getElementById("pool");
+            pool.innerHTML = "";
+            
+            // Find blocks that are not currently in the userSequence
+            currentLevelData.blocks.forEach(block => {
+                let inCanvas = userSequence.some(b => b.text === block.text);
+                if (!inCanvas) {
+                    const bEl = document.createElement("div");
+                    bEl.className = `fc-block ${block.shape}`;
+                    bEl.innerHTML = `<span>${block.text}</span>`;
+                    bEl.onclick = () => addToCanvas(block, bEl);
+                    pool.appendChild(bEl);
+                }
+            });
+        }
+
+        function checkLogic() {
+            const status = document.getElementById("status");
+            let userTexts = userSequence.map(b => b.text);
+            let targetOrder = currentLevelData.correctOrder;
+
+            // Simple check: For Selection, we accept variations of Branch paths, so we evaluate base inclusion
+            let match = userTexts.length === targetOrder.length;
+            
+            if (match) {
+                // Special check for selection branches logic order flexibility
+                for(let i=0; i<targetOrder.length; i++) {
+                    if (currentLevel <= 15 || currentLevel > 35) {
+                        if (userTexts[i] !== targetOrder[i]) match = false;
+                    } else {
+                        // For selection structure: Print PASS and Print FAIL can be in any relative order before END
+                        if (i < 3 && userTexts[i] !== targetOrder[i]) match = false;
+                        if (i === 5 && userTexts[i] !== targetOrder[i]) match = false;
+                    }
+                }
+            }
+
+            if (match) {
+                status.innerText = "🎉 නිවැරදියි! තාර්කික පියවර සාර්ථකයි.";
+                status.style.color = "var(--success)";
+                document.getElementById("next-btn").style.display = "inline-block";
+            } else {
+                status.innerText = "❌ වැරදියි! පාලන ව්‍යුහයේ ගැලීම නැවත පරීක්ෂා කරන්න.";
+                status.style.color = "var(--danger)";
+            }
+        }
+
+        function resetLevel() {
+            loadLevel(currentLevel);
+        }
+
+        function nextLevel() {
+            if (currentLevel < 50) {
+                currentLevel++;
+                loadLevel(currentLevel);
+            } else {
+                document.getElementById("status").innerText = "🏆 සුභ පැතුම්! ඔබ මට්ටම් 50ම සාර්ථකව අවසන් කර Logic Champion කෙනෙක් විය!";
+                currentLevel = 1;
+            }
+        }
+
+        window.onload = () => loadLevel(1);
+    </script>
+</body>
+</html>
