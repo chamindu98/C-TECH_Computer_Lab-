@@ -301,7 +301,7 @@
     </div>
 
     <script>
-        // 🚀 Comprehensive 20 Levels Web Development Dataset (HTML, CSS, JS)
+        // 🚀 Fixed & Escape-safe 20 Levels Web Development Dataset
         const webLevels = [
             {
                 topic: "HTML මූලික ව්‍යුහය",
@@ -336,14 +336,14 @@
             {
                 topic: "ලින්ක් එකක් සෑදීම (Hyperlink)",
                 mission: "Google වෙත යොමු වන සක්‍රීය ලින්ක් එකක් (Anchor Tag) සෑදීමට අවශ්‍ය ගුණාංගය (Attribute) යොදන්න.",
-                correct: ["<a href=\"https://google.com\">", "Visit Google", "</a>"],
-                pool: ["Visit Google", "</a>", "<a href=\"https://google.com\">", "<a link=\"google.com\">"]
+                correct: ["<a href='https://google.com'>", "Visit Google", "</a>"],
+                pool: ["Visit Google", "</a>", "<a href='https://google.com'>", "<a link='google.com'>"]
             },
             {
                 topic: "පින්තූරයක් ඇතුළත් කිරීම (Image)",
                 mission: "'logo.png' නමැති පින්තූරය පිටුවට එක් කරන වැසීමේ ටැගයක් නොමැති (Empty) කේතය සාදන්න.",
-                correct: ["<img src=\"logo.png\" />"],
-                pool: ["<img src=\"logo.png\" />", "<img href=\"logo.png\">", "</img>"]
+                correct: ["<img src='logo.png' />"],
+                pool: ["<img src='logo.png' />", "<img href='logo.png'>", "</img>"]
             },
             {
                 topic: "අනුපිළිවෙළක් රහිත ලැයිස්තු (Unordered List)",
@@ -360,20 +360,20 @@
             {
                 topic: "CSS මඟින් වර්ණ ගැන්වීම (Inline CSS)",
                 mission: "ඡේදයක අකුරු වල වර්ණය රතු (Red) කිරීමට style ගුණාංගය නිවැරදිව යොදන්න.",
-                correct: ["<p style=\"color: red;\">", "Alert", "</p>"],
-                pool: ["<p style=\"color: red;\">", "Alert", "</p>", "<p font=\"red\">"]
+                correct: ["<p style='color: red;'>", "Alert", "</p>"],
+                pool: ["<p style='color: red;'>", "Alert", "</p>", "<p font='red'>"]
             },
             {
                 topic: "CSS පසුබිම් වර්ණය (Background Color)",
                 mission: "මුළු වෙබ් පිටුවේම පසුබිම් වර්ණය කළු (Black) කිරීමට body එකට අදාළ CSS විලාසිතාව යොදන්න.",
-                correct: ["<body style=\"background-color: black;\">", "</body>"],
-                pool: ["<body style=\"background-color: black;\">", "</body>", "<body bg=\"black\">"]
+                correct: ["<body style='background-color: black;'>", "</body>"],
+                pool: ["<body style='background-color: black;'>", "</body>", "<body bg='black'>"]
             },
             {
                 topic: "CSS අකුරු ප්‍රමාණය (Font Size)",
                 mission: "මාතෘකාවක අකුරු ප්‍රමාණය 30px දක්වා විශාල කිරීමට අවශ්‍ය CSS කේතය සකසන්න.",
-                correct: ["<h2 style=\"font-size: 30px;\">", "Heading", "</h2>"],
-                pool: ["<h2 style=\"font-size: 30px;\">", "Heading", "</h2>", "<h2 size=\"30\">"]
+                correct: ["<h2 style='font-size: 30px;'>", "Heading", "</h2>"],
+                pool: ["<h2 style='font-size: 30px;'>", "Heading", "</h2>", "<h2 size='30'>"]
             },
             {
                 topic: "කොටස් වෙන් කිරීම (Div Tag)",
@@ -384,8 +384,8 @@
             {
                 topic: "CSS මායිම් සකස් කිරීම (Border)",
                 mission: "යම් කොටසකට වටේට 2px ක ඝනකම ඇති සුදු පැහැති මායිමක් (Border) ලබා දෙන්න.",
-                correct: ["<div style=\"border: 2px solid white;\">", "</div>"],
-                pool: ["<div style=\"border: 2px solid white;\">", "</div>", "<div outline=\"white\">"]
+                correct: ["<div style='border: 2px solid white;'>", "</div>"],
+                pool: ["<div style='border: 2px solid white;'>", "</div>", "<div outline='white'>"]
             },
             {
                 topic: "JavaScript හැඳින්වීම (Script Tag)",
@@ -408,8 +408,8 @@
             {
                 topic: "HTML මූලද්‍රව්‍ය හඳුනාගැනීම (ID Attribute)",
                 mission: "JavaScript මඟින් පාලනය කිරීම සඳහා div එකකට 'main' නමින් සුවිශේෂී හැඳුනුම් අංකයක් (id) ලබා දෙන්න.",
-                correct: ["<div id=\"main\">", "</div>"],
-                pool: ["<div id=\"main\">", "</div>", "<div class=\"main\">", "<div name=\"main\">"]
+                correct: ["<div id='main'>", "</div>"],
+                pool: ["<div id='main'>", "</div>", "<div class='main'>", "<div name='main'>"]
             },
             {
                 topic: "JS මඟින් අභ්‍යන්තර වෙනස්කම් කිරීම",
@@ -439,8 +439,8 @@
 
         function loadLevel(index) {
             const lvl = webLevels[index];
-            document.getElementById("topic-badge").innerText = `මාතෘකාව: ${lvl.topic}`;
-            document.getElementById("level-indicator").innerText = `Level: ${index + 1} / 20`;
+            document.getElementById("topic-badge").innerText = "මාතෘකාව: " + lvl.topic;
+            document.getElementById("level-indicator").innerText = "Level: " + (index + 1) + " / 20";
             document.getElementById("mission-text").innerText = lvl.mission;
             document.getElementById("feedback-msg").innerText = "";
             document.getElementById("feedback-msg").style.color = "";
@@ -449,7 +449,6 @@
             userSelection = [];
             renderWorkspace();
 
-            // Shuffle pool items
             let shuffledPool = [...lvl.pool].sort(() => Math.random() - 0.5);
             const poolEl = document.getElementById("pool");
             poolEl.innerHTML = "";
