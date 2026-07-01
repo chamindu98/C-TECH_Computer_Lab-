@@ -301,29 +301,29 @@
     </div>
 
     <script>
-        // 🚀 Fixed & Escape-safe 20 Levels Web Development Dataset
+        // ආරක්ෂිතව Quotes හැසිරවීම සඳහා සරල කරන ලද දත්ත පද්ධතිය
         const webLevels = [
             {
                 topic: "HTML මූලික ව්‍යුහය",
-                mission: "ඕනෑම වෙබ් පිටුවක අනිවාර්යයෙන්ම තිබිය යුතු මූලිකම HTML ටැග් (Tags) ව්‍යුහය පිළිවෙළට සකසන්න.",
+                mission: "ඕනෑම වෙබ් පිටුවක අනිවාර්යයෙන්ම තිබිය යුතු මූලිකම HTML ටැග් ව්‍යුහය පිළිවෙළට සකසන්න.",
                 correct: ["<html>", "<body>", "</body>", "</html>"],
                 pool: ["<body>", "</html>", "<html>", "</body>", "<head>"]
             },
             {
                 topic: "ප්‍රධාන මාතෘකාව (Heading)",
-                mission: "වෙබ් පිටුවට විශාලම ප්‍රමාණයේ මාතෘකාවක් (Heading 1) ලෙස 'C-TECH' යන්න ඇතුළත් කරන්න.",
+                mission: "වෙබ් පිටුවට විශාලම ප්‍රමාණයේ මාතෘකාවක් ලෙස 'C-TECH' යන්න ඇතුළත් කරන්න.",
                 correct: ["<h1>", "C-TECH", "</h1>"],
                 pool: ["</h1>", "<h1>", "C-TECH", "<p>", "</p>"]
             },
             {
                 topic: "ඡේදයක් ඇතුළත් කිරීම (Paragraph)",
-                mission: "වෙබ් පිටුවක් තුළ සාමාන්‍ය ඡේදයක් (Paragraph) නිර්මාණය කරන නිවැරදි කේතය පෙළගස්වන්න.",
+                mission: "වෙබ් පිටුවක් තුළ සාමාන්‍ය ඡේදයක් නිර්මාණය කරන නිවැරදි කේතය පෙළගස්වන්න.",
                 correct: ["<p>", "Welcome to Logic World", "</p>"],
                 pool: ["Welcome to Logic World", "</p>", "<p>", "<h1>", "</div>"]
             },
             {
                 topic: "වෙබ් පිටුවේ මාතෘකාව (Title)",
-                mission: "බ්‍රවුසරයේ ඉහළ Tab එකේ පෙනෙන පිටුවේ මාතෘකාව (Title) Head එක තුළ ප්‍රකාශ කරන්න.",
+                mission: "බ්‍රවුසරයේ ඉහළ Tab එකේ පෙනෙන පිටුවේ මාතෘකාව Head එක තුළ ප්‍රකාශ කරන්න.",
                 correct: ["<head>", "<title> My Page </title>", "</head>"],
                 pool: ["<title> My Page </title>", "<head>", "</head>", "<body>", "</html>"]
             },
@@ -335,13 +335,13 @@
             },
             {
                 topic: "ලින්ක් එකක් සෑදීම (Hyperlink)",
-                mission: "Google වෙත යොමු වන සක්‍රීය ලින්ක් එකක් (Anchor Tag) සෑදීමට අවශ්‍ය ගුණාංගය (Attribute) යොදන්න.",
-                correct: ["<a href='https://google.com'>", "Visit Google", "</a>"],
-                pool: ["Visit Google", "</a>", "<a href='https://google.com'>", "<a link='google.com'>"]
+                mission: "Google වෙත යොමු වන සක්‍රීය ලින්ක් එකක් සෑදීමට අවශ්‍ය ගුණාංගය යොදන්න.",
+                correct: ["<a href='url'>", "Visit Google", "</a>"],
+                pool: ["Visit Google", "</a>", "<a href='url'>", "<a link='url'>"]
             },
             {
                 topic: "පින්තූරයක් ඇතුළත් කිරීම (Image)",
-                mission: "'logo.png' නමැති පින්තූරය පිටුවට එක් කරන වැසීමේ ටැගයක් නොමැති (Empty) කේතය සාදන්න.",
+                mission: "'logo.png' නමැති පින්තූරය පිටුවට එක් කරන වැසීමේ ටැගයක් නොමැති කේතය සාදන්න.",
                 correct: ["<img src='logo.png' />"],
                 pool: ["<img src='logo.png' />", "<img href='logo.png'>", "</img>"]
             },
@@ -353,39 +353,39 @@
             },
             {
                 topic: "අනුපිළිවෙළක් සහිත ලැයිස්තු (Ordered List)",
-                mission: "1, 2, 3 ලෙස අංකනය කළ ලැයිස්තුවක් (ol) ඇතුළත 'Step 1' පෙන්වන්න.",
+                mission: "1, 2, 3 ලෙස අංකනය කළ ලැයිස්තුවක් ඇතුළත 'Step 1' පෙන්වන්න.",
                 correct: ["<ol>", "<li>Step 1</li>", "</ol>"],
                 pool: ["<li>Step 1</li>", "<ol>", "</ol>", "<ul>", "</ul>"]
             },
             {
                 topic: "CSS මඟින් වර්ණ ගැන්වීම (Inline CSS)",
                 mission: "ඡේදයක අකුරු වල වර්ණය රතු (Red) කිරීමට style ගුණාංගය නිවැරදිව යොදන්න.",
-                correct: ["<p style='color: red;'>", "Alert", "</p>"],
-                pool: ["<p style='color: red;'>", "Alert", "</p>", "<p font='red'>"]
+                correct: ["<p style='color:red;'>", "Alert", "</p>"],
+                pool: ["<p style='color:red;'>", "Alert", "</p>", "<p font='red'>"]
             },
             {
                 topic: "CSS පසුබිම් වර්ණය (Background Color)",
-                mission: "මුළු වෙබ් පිටුවේම පසුබිම් වර්ණය කළු (Black) කිරීමට body එකට අදාළ CSS විලාසිතාව යොදන්න.",
-                correct: ["<body style='background-color: black;'>", "</body>"],
-                pool: ["<body style='background-color: black;'>", "</body>", "<body bg='black'>"]
+                mission: "මුළු වෙබ් පිටුවේම පසුබිම් වර්ණය කළු කිරීමට body එකට අදාළ CSS විලාසිතාව යොදන්න.",
+                correct: ["<body style='background:black;'>", "</body>"],
+                pool: ["<body style='background:black;'>", "</body>", "<body bg='black'>"]
             },
             {
                 topic: "CSS අකුරු ප්‍රමාණය (Font Size)",
                 mission: "මාතෘකාවක අකුරු ප්‍රමාණය 30px දක්වා විශාල කිරීමට අවශ්‍ය CSS කේතය සකසන්න.",
-                correct: ["<h2 style='font-size: 30px;'>", "Heading", "</h2>"],
-                pool: ["<h2 style='font-size: 30px;'>", "Heading", "</h2>", "<h2 size='30'>"]
+                correct: ["<h2 style='font-size:30px;'>", "Heading", "</h2>"],
+                pool: ["<h2 style='font-size:30px;'>", "Heading", "</h2>", "<h2 size='30'>"]
             },
             {
                 topic: "කොටස් වෙන් කිරීම (Div Tag)",
-                mission: "වෙබ් පිටුවක හැඩතල සහ කොටස් වෙන් කිරීමට බහුලවම භාවිත වන Division (div) බ්ලොක් එක පෙළගස්වන්න.",
+                mission: "වෙබ් පිටුවක හැඩතල සහ කොටස් වෙන් කිරීමට බහුලවම භාවිත වන Division බ්ලොක් එක පෙළගස්වන්න.",
                 correct: ["<div>", "Content Here", "</div>"],
                 pool: ["<div>", "Content Here", "</div>", "<span>", "<section>"]
             },
             {
                 topic: "CSS මායිම් සකස් කිරීම (Border)",
-                mission: "යම් කොටසකට වටේට 2px ක ඝනකම ඇති සුදු පැහැති මායිමක් (Border) ලබා දෙන්න.",
-                correct: ["<div style='border: 2px solid white;'>", "</div>"],
-                pool: ["<div style='border: 2px solid white;'>", "</div>", "<div outline='white'>"]
+                mission: "div කොටසකට වටේට 2px ಕ ඝනකම ඇති සුදු පැහැති මායිමක් (Border) ලබා දෙන්න.",
+                correct: ["<div style='border:2px;'>", "</div>"],
+                pool: ["<div style='border:2px;'>", "</div>", "<div outline='white'>"]
             },
             {
                 topic: "JavaScript හැඳින්වීම (Script Tag)",
@@ -395,27 +395,27 @@
             },
             {
                 topic: "JS මඟින් පණිවිඩයක් නිකුත් කිරීම",
-                mission: "පරිශීලකයා පිටුවට පැමිණි විට 'Welcome' කියා Pop-up Alert පණිවිඩයක් පෙන්වන JS කේතය සකසන්න.",
+                mission: "පරිශීලකයා පිටුවට පැමිණි විට 'Welcome' කියා Pop-up Alert එකක් පෙන්වන JS කේතය සකසන්න.",
                 correct: ["<script>", "alert('Welcome');", "</script>"],
                 pool: ["alert('Welcome');", "<script>", "</script>", "msg('Welcome');"]
             },
             {
                 topic: "JavaScript විචල්‍යයන් (Variables)",
-                mission: "JS කේතයක් තුළ 'X' නමින් විචල්‍යයක් සාදා එයට 10 අගය ලබා දෙන (Assign) කේතය සකසන්න.",
+                mission: "JS කේතයක් තුළ 'X' නමින් විචල්‍යයක් සාදා එයට 10 අගය ලබා දෙන කේතය සකසන්න.",
                 correct: ["let X = 10;"],
                 pool: ["let X = 10;", "X := 10;", "int X = 10;"]
             },
             {
                 topic: "HTML මූලද්‍රව්‍ය හඳුනාගැනීම (ID Attribute)",
-                mission: "JavaScript මඟින් පාලනය කිරීම සඳහා div එකකට 'main' නමින් සුවිශේෂී හැඳුනුම් අංකයක් (id) ලබා දෙන්න.",
+                mission: "JavaScript මඟින් පාලනය කිරීම සඳහා div එකකට 'main' නමින් සුවිශේෂී id එකක් ලබා දෙන්න.",
                 correct: ["<div id='main'>", "</div>"],
                 pool: ["<div id='main'>", "</div>", "<div class='main'>", "<div name='main'>"]
             },
             {
                 topic: "JS මඟින් අභ්‍යන්තර වෙනස්කම් කිරීම",
-                mission: "ID එක 'demo' වන මූලද්‍රව්‍යයක ඇතුළත පවතින අකුරු (innerHTML) 'Done' ලෙස JS මඟින් වෙනස් කරන්න.",
-                correct: ["document.getElementById('demo').innerHTML =", "'Done';"],
-                pool: ["document.getElementById('demo').innerHTML =", "'Done';", "document.text = 'Done';"]
+                mission: "ID එක 'demo' වන මූලද්‍රව්‍යයක ඇතුළත පවතින අකුරු 'Done' ලෙස JS මඟින් වෙනස් කරන්න.",
+                correct: ["document.getElementById('demo')", ".innerHTML = 'Done';"],
+                pool: ["document.getElementById('demo')", ".innerHTML = 'Done';", "document.text = 'Done';"]
             },
             {
                 topic: "සංකීර්ණ වෙබ් පිටු ව්‍යුහය",
@@ -430,34 +430,34 @@
 
         function initiatePortal() {
             const feedback = document.getElementById("feedback-msg");
-            feedback.innerText = "🔮 Cyber Portal Activated! Glitch King ගේ සයිබර් වෛරස් මර්දනය වෙමින් පවතී...";
+            feedback.innerText = "🔮 Cyber Portal Activated! සූදානම් වන්න...";
             feedback.style.color = "var(--gold)";
-            setTimeout(() => {
+            setTimeout(function() {
                 loadLevel(0);
             }, 1000);
         }
 
         function loadLevel(index) {
+            currentLevelIndex = index;
             const lvl = webLevels[index];
             document.getElementById("topic-badge").innerText = "මාතෘකාව: " + lvl.topic;
             document.getElementById("level-indicator").innerText = "Level: " + (index + 1) + " / 20";
             document.getElementById("mission-text").innerText = lvl.mission;
             document.getElementById("feedback-msg").innerText = "";
-            document.getElementById("feedback-msg").style.color = "";
             document.getElementById("next-level-btn").style.display = "none";
             
             userSelection = [];
             renderWorkspace();
 
-            let shuffledPool = [...lvl.pool].sort(() => Math.random() - 0.5);
+            let shuffledPool = [...lvl.pool].sort(function() { return Math.random() - 0.5; });
             const poolEl = document.getElementById("pool");
             poolEl.innerHTML = "";
 
-            shuffledPool.forEach(codeText => {
+            shuffledPool.forEach(function(codeText) {
                 const block = document.createElement("div");
                 block.className = "code-block";
                 block.innerText = codeText;
-                block.onclick = () => blockClicked(codeText, block);
+                block.onclick = function() { blockClicked(codeText, block); };
                 poolEl.appendChild(block);
             });
         }
@@ -473,15 +473,15 @@
             slotsEl.innerHTML = "";
 
             if (userSelection.length === 0) {
-                slotsEl.innerHTML = '<p style="color:var(--text-muted); text-align:center; margin-top:60px; font-size:0.85rem;">දකුණු පස ඇති HTML/CSS/JS බ්ලොක්ස් නිවැරදි පිළිවෙළට ටැප් (Click) කරන්න.</p>';
+                slotsEl.innerHTML = '<p style="color:var(--text-muted); text-align:center; margin-top:60px; font-size:0.85rem;">දකුණු පස ඇති බ්ලොක්ස් නිවැරදි පිළිවෙළට ක්ලික් කරන්න.</p>';
                 return;
             }
 
-            userSelection.forEach((text, idx) => {
+            userSelection.forEach(function(text, idx) {
                 const block = document.createElement("div");
                 block.className = "code-block selected";
                 block.innerText = text;
-                block.onclick = () => removeBlock(idx);
+                block.onclick = function() { removeBlock(idx); };
                 slotsEl.appendChild(block);
             });
         }
@@ -497,12 +497,12 @@
             const poolEl = document.getElementById("pool");
             poolEl.innerHTML = "";
 
-            lvl.pool.forEach(codeText => {
+            lvl.pool.forEach(function(codeText) {
                 if (!userSelection.includes(codeText)) {
                     const block = document.createElement("div");
                     block.className = "code-block";
                     block.innerText = codeText;
-                    block.onclick = () => blockClicked(codeText, block);
+                    block.onclick = function() { blockClicked(codeText, block); };
                     poolEl.appendChild(block);
                 }
             });
@@ -518,15 +518,15 @@
                 return;
             }
 
-            let correct = userSelection.length === lvl.correct.length &&
-                          userSelection.every((val, i) => val === lvl.correct[i]);
+            let isCorrect = userSelection.length === lvl.correct.length &&
+                            userSelection.every(function(val, i) { return val === lvl.correct[i]; });
 
-            if (correct) {
+            if (isCorrect) {
                 feedback.innerText = "🎉 🌟 විශිෂ්ටයි! වෙබ් පිටුවේ කොටස සාර්ථකව නිර්මාණය වුණා!";
                 feedback.style.color = "var(--success)";
                 document.getElementById("next-level-btn").style.display = "inline-block";
             } else {
-                feedback.innerText = "❌ Code Error! ටැග් වල පිළිවෙළ හෝ ව්‍යුහය වැරදියි. නැවත උත්සාහ කරන්න.";
+                feedback.innerText = "❌ Code Error! නැවත උත්සාහ කරන්න.";
                 feedback.style.color = "var(--danger)";
             }
         }
@@ -537,16 +537,16 @@
 
         function goToNextLevel() {
             if (currentLevelIndex < webLevels.length - 1) {
-                currentLevelIndex++;
-                loadLevel(currentLevelIndex);
+                loadLevel(currentLevelIndex + 1);
             } else {
-                document.getElementById("feedback-msg").innerText = "🏆👑 සර්වප්‍රකාරයෙන්ම සාර්ථකයි! ඔබ සියලු සයිබර් නගර ප්‍රතිසංස්කරණය කර මහා Cyber Architect වරයෙකු වුණා!";
-                document.getElementById("feedback-msg").style.color = "var(--gold)";
+                const feedback = document.getElementById("feedback-msg");
+                feedback.innerText = "🏆👑 ඔබ සියලු සයිබර් නගර ප්‍රතිසංස්කරණය කර මහා Cyber Architect වරයෙකු වුණා!";
+                feedback.style.color = "var(--gold)";
                 currentLevelIndex = 0; 
             }
         }
 
-        window.onload = () => loadLevel(0);
+        window.onload = function() { loadLevel(0); };
     </script>
 </body>
 </html>
