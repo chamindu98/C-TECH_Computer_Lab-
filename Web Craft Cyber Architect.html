@@ -301,7 +301,7 @@
     </div>
 
     <script>
-        // ආරක්ෂිතව Quotes හැසිරවීම සඳහා සරල කරන ලද දත්ත පද්ධතිය
+        // 🔮 script ටැග් එක බ්‍රවුසරයට මැදින් කියවීම වැළැක්වීමට script ලෙස Escape කර ඇත.
         const webLevels = [
             {
                 topic: "HTML මූලික ව්‍යුහය",
@@ -383,21 +383,21 @@
             },
             {
                 topic: "CSS මායිම් සකස් කිරීම (Border)",
-                mission: "div කොටසකට වටේට 2px ಕ ඝනකම ඇති සුදු පැහැති මායිමක් (Border) ලබා දෙන්න.",
+                mission: "div කොටසකට වටේට 2px ක ඝනකම ඇති සුදු පැහැති මායිමක් (Border) ලබා දෙන්න.",
                 correct: ["<div style='border:2px;'>", "</div>"],
                 pool: ["<div style='border:2px;'>", "</div>", "<div outline='white'>"]
             },
             {
                 topic: "JavaScript හැඳින්වීම (Script Tag)",
                 mission: "වෙබ් පිටුවක් ඇතුළත JavaScript කේත ලිවීම ආරම්භ කරන සහ අවසන් කරන ටැග් පෙළගස්වන්න.",
-                correct: ["<script>", "alert('Hello');", "</script>"],
-                pool: ["<script>", "alert('Hello');", "</script>", "<javascript>", "</javascript>"]
+                correct: ["<script>", "alert('Hello');", "<\/script>"],
+                pool: ["<script>", "alert('Hello');", "<\/script>", "<javascript>", "<\/javascript>"]
             },
             {
                 topic: "JS මඟින් පණිවිඩයක් නිකුත් කිරීම",
                 mission: "පරිශීලකයා පිටුවට පැමිණි විට 'Welcome' කියා Pop-up Alert එකක් පෙන්වන JS කේතය සකසන්න.",
-                correct: ["<script>", "alert('Welcome');", "</script>"],
-                pool: ["alert('Welcome');", "<script>", "</script>", "msg('Welcome');"]
+                correct: ["<script>", "alert('Welcome');", "<\/script>"],
+                pool: ["alert('Welcome');", "<script>", "<\/script>", "msg('Welcome');"]
             },
             {
                 topic: "JavaScript විචල්‍යයන් (Variables)",
@@ -427,6 +427,7 @@
 
         let currentLevelIndex = 0;
         let userSelection = [];
+        let currentPoolItems = [];
 
         function initiatePortal() {
             const feedback = document.getElementById("feedback-msg");
@@ -447,25 +448,25 @@
             document.getElementById("next-level-btn").style.display = "none";
             
             userSelection = [];
+            currentPoolItems = [...lvl.pool].sort(function() { return Math.random() - 0.5; });
+            
             renderWorkspace();
-
-            let shuffledPool = [...lvl.pool].sort(function() { return Math.random() - 0.5; });
-            const poolEl = document.getElementById("pool");
-            poolEl.innerHTML = "";
-
-            shuffledPool.forEach(function(codeText) {
-                const block = document.createElement("div");
-                block.className = "code-block";
-                block.innerText = codeText;
-                block.onclick = function() { blockClicked(codeText, block); };
-                poolEl.appendChild(block);
-            });
+            renderPool();
         }
 
-        function blockClicked(text, element) {
+        function blockClicked(text, indexInPool) {
             userSelection.push(text);
-            element.style.display = "none"; 
+            currentPoolItems.splice(indexInPool, 1);
             renderWorkspace();
+            renderPool();
+        }
+
+        function removeBlock(idx) {
+            const removedText = userSelection[idx];
+            userSelection.splice(idx, 1);
+            currentPoolItems.push(removedText);
+            renderWorkspace();
+            renderPool();
         }
 
         function renderWorkspace() {
@@ -486,25 +487,16 @@
             });
         }
 
-        function removeBlock(idx) {
-            userSelection.splice(idx, 1);
-            renderWorkspace();
-            rebuildPool();
-        }
-
-        function rebuildPool() {
-            const lvl = webLevels[currentLevelIndex];
+        function renderPool() {
             const poolEl = document.getElementById("pool");
             poolEl.innerHTML = "";
 
-            lvl.pool.forEach(function(codeText) {
-                if (!userSelection.includes(codeText)) {
-                    const block = document.createElement("div");
-                    block.className = "code-block";
-                    block.innerText = codeText;
-                    block.onclick = function() { blockClicked(codeText, block); };
-                    poolEl.appendChild(block);
-                }
+            currentPoolItems.forEach(function(codeText, idx) {
+                const block = document.createElement("div");
+                block.className = "code-block";
+                block.innerText = codeText;
+                block.onclick = function() { blockClicked(codeText, idx); };
+                poolEl.appendChild(block);
             });
         }
 
