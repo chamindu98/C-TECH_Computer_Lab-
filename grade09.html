@@ -160,6 +160,10 @@
         .video-link { background-color: #ff0000; color: white; }
         .video-link:hover { background-color: #cc0000; }
 
+        /* ප්‍රතිඵල නැරඹීමේ (View) බොත්තම සඳහා විශේෂ වර්ණයක් */
+        .view-link { background-color: #00bb77; color: white; }
+        .view-link:hover { background-color: #009955; }
+
         /* ආපසු යන බොත්තම */
         .back-btn { margin-top: 15px; background-color: rgba(0, 164, 228, 0.1); border: 1px solid var(--light-blue); color: var(--light-blue); padding: 12px 24px; font-weight: bold; border-radius: 6px; cursor: pointer; text-decoration: none; display: inline-block; transition: 0.3s; }
         .back-btn:hover { background-color: var(--light-blue); color: #0b132b; transform: translateX(-4px); }
@@ -207,6 +211,7 @@
                 <button class="term-btn active" onclick="openTerm(event, 'term1')">පලමු වාරය (Term 1)</button>
                 <button class="term-btn" onclick="openTerm(event, 'term2')">දෙවන වාරය (Term 2)</button>
                 <button class="term-btn" onclick="openTerm(event, 'term3')">තෙවන වාරය (Term 3)</button>
+                <button class="term-btn" onclick="openTerm(event, 'result')">ප්‍රතිඵල (Result)</button>
                  <a href="other_subjects9.html" style="
     display: inline-block;
     padding: 10px 20px;
@@ -294,6 +299,8 @@
                     </div>
                 </div>
             </div>
+
+        
 
             <a href="index.html" class="back-btn">← ආපසු Home වෙත</a>
         </div>
