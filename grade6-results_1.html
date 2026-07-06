@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C-TECH - Student Performance Analytics Portal</title>
+    <style>
+        :root {
+            --light-blue: #00a4e4; 
+            --orange: #ff7300; 
+            --dark-bg: #0b132b; 
+            --card-bg: #1c2541; 
+            --text-light: #f4f7f6;
+            --text-muted: #a0aec0;
+            --success: #10b981;
+            --danger: #ef4444;
+            --gold: #f59e0b;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+        }
+
+        body {
+            background-color: var(--dark-bg); 
+            color: var(--text-light);
+            line-height: 1.5;
+            padding: 15px;
+            background-image: radial-gradient(at 0% 0%, rgba(0, 164, 228, 0.12) 0px, transparent 50%),
+                              radial-gradient(at 100% 100%, rgba(255, 115, 0, 0.08) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        .portal-container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 10px auto;
+        }
+
+        /* Top Header Board */
+        .portal-header {
+            background: linear-gradient(135deg, rgba(28, 37, 65, 0.85), rgba(11, 19, 43, 0.95));
+            border: 1px solid rgba(0, 164, 228, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portal-header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--light-blue), var(--orange));
+        }
+
+        .portal-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0, 164, 228, 0.5);
+            letter-spacing: 1px;
+        }
+
+        .portal-subtitle {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        .class-badge {
+            display: inline-block;
+            background: rgba(255, 115, 0, 0.15);
+            border: 1px solid var(--orange);
+            color: var(--orange);
+            padding: 4px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        /* 🏆 Auto-Generated Congratulation Post Banner */
+        .champion-banner {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(255, 115, 0, 0.15));
+            border: 2px dashed var(--gold);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+            display: none; /* Will be shown via JS */
+            animation: pulse Glow 2s infinite alternate;
+        }
+
+        .champion-badge {
+            font-size: 3rem;
+            margin-bottom: 5px;
+            display: inline-block;
+        }
+
+        .champion-name {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 0 0 8px var(--gold);
+            margin: 5px 0;
+        }
+
+        .champion-wish {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto 10px auto;
+        }
+
+        .champion-stats {
+            display: inline-flex;
+            gap: 20px;
+            background: rgba(0,0,0,0.3);
+            padding: 8px 20px;
+            border-radius: 30px;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            font-weight: bold;
+            color: var(--gold);
+        }
+
+        /* Interactive Section: Search & Individual Analytics */
+        .search-section {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .search-title {
+            font-size: 1.1rem;
+            color: var(--light-blue);
+            margin-bottom: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-input {
+            flex-grow: 1;
+            background: rgba(11, 19, 43, 0.8);
+            border: 1px solid rgba(0, 164, 228, 0.4);
+            border-radius: 8px;
+            padding: 12px;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: var(--orange);
+            box-shadow: 0 0 10px rgba(255, 115, 0, 0.2);
+        }
+
+        /* 📊 Individual Progress Analytics Panel */
+        .analytics-panel {
+            margin-top: 20px;
+            background: rgba(11, 19, 43, 0.6);
+            border: 1px solid rgba(0, 164, 228, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            display: none;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .analytics-grid { grid-template-columns: 1fr; }
+        }
+
+        .student-info-summary {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .stat-line {
+            font-size: 1.05rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 5px;
+        }
+
+        .stat-line span { color: var(--light-blue); font-weight: bold; }
+
+        /* Custom pure SVG CSS Generated Chart Frame */
+        .chart-frame {
+            background: #0b132b;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .chart-title {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            align-self: flex-start;
+        }
+
+        .svg-chart {
+            width: 100%;
+            height: 160px;
+        }
+
+        /* 📋 Main Results Sheet Table Container */
+        .results-container {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            overflow-x: auto;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            min-width: 650px;
+        }
+
+        .results-table th {
+            background-color: rgba(0, 164, 228, 0.15);
+            color: var(--light-blue);
+            padding: 12px 15px;
+            font-weight: 600;
+            border-bottom: 2px solid rgba(0, 164, 228, 0.3);
+            font-size: 0.95rem;
+        }
+
+        .results-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.95rem;
+        }
+
+        .results-table tr:hover {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        /* Dynamic Highlighting for Row 1 */
+        .results-table tr.rank-1 {
+            background: linear-gradient(90deg, rgba(245, 158, 11, 0.1), transparent);
+        }
+        .results-table tr.rank-1 td {
+            color: var(--gold);
+            font-weight: bold;
+        }
+
+        .badge-pos {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            background: rgba(255,255,255,0.08);
+            color: var(--text-light);
+        }
+
+        .badge-pos.pos-1 { background: var(--gold); color: #000; }
+        .badge-pos.pos-2 { background: #e2e8f0; color: #000; }
+        .badge-pos.pos-3 { background: #cd7f32; color: #fff; }
+
+        .grade-pill {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+        .grade-A { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+        .grade-B { background: rgba(0, 164, 228, 0.2); color: var(--light-blue); }
+        .grade-C { background: rgba(245, 158, 11, 0.2); color: var(--gold); }
+        .grade-S { background: rgba(255, 115, 0, 0.2); color: var(--orange); }
+        .grade-W { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+
+        .no-data {
+            text-align: center;
+            color: var(--danger);
+            padding: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="portal-container">
+        
+        <div class="portal-header">
+            <div class="portal-title">💻 C-TECH PERFORMANCE PORTAL</div>
+            <div class="portal-subtitle">Student Term Examination Analytics Console</div>
+            <div class="class-badge" id="class-title-badge">GRADE 06 - RESULTS SHEET</div>
+        </div>
+
+        <div id="champion-post" class="champion-banner">
+            <span class="champion-badge">👑</span>
+            <div style="color: var(--gold); font-weight: bold; font-size: 0.9rem; letter-spacing: 2px;">TOP PERFORMANCE CONGRATULATIONS</div>
+            <div class="champion-name" id="champ-name">ළමයාගේ නම</div>
+            <div class="champion-wish" id="champ-wish">පන්තියේ ප්‍රථම ස්ථානය ලබා ගනිමින් විශිෂ්ට දක්ෂතා දැක්වූ ඔබ හට C-TECH වෙතින් උණුසුම් සුභ පැතුම්!</div>
+            <div class="champion-stats">
+                <span>Total Marks: <span id="champ-total" style="color:#fff;">0</span></span>
+                <span>Grade: <span id="champ-grade" style="color:#fff;">A</span></span>
+            </div>
+        </div>
+
+        <div class="search-section">
+            <div class="search-title">🔍 ඔබගේ ප්‍රගති වාර්තාව (Personal Progress Dashboard)</div>
+            <div class="search-box">
+                <input type="text" id="student-search" class="search-input" placeholder="ප්‍රගති ප්‍රස්තාරය බැලීමට සිසුවාගේ නම මෙතන Type කරන්න..." oninput="generateIndividualAnalytics()">
+            </div>
+
+            <div id="analytics-view" class="analytics-panel">
+                <div class="analytics-grid">
+                    <div class="student-info-summary">
+                        <div class="stat-line">සිසුවාගේ නම: <span id="an-name">-</span></div>
+                        <div class="stat-line">වර්තමාන ස්ථානය (Position): <span id="an-pos">-</span></div>
+                        <div class="stat-line">මුළු ලකුණු (Total Marks): <span id="an-total">-</span></div>
+                        <div class="stat-line">සාමාර්ථය (Grade): <span id="an-grade">-</span></div>
+                    </div>
+                    <div class="chart-frame">
+                        <div class="chart-title">📈 වාර තුනේ ප්‍රගතිය (Term-on-Term Progress History)</div>
+                        <div id="svg-graph-wrapper" style="width:100%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-container">
+            <div style="margin-bottom: 15px; font-weight: bold; color: var(--light-blue); font-size: 1.1rem;">📊 පන්ති ප්‍රතිඵල ලේඛනය (Class Results Sheet)</div>
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>ස්ථානය (Position)</th>
+                        <th>සිසුවාගේ නම (Student Name)</th>
+                        <th style="text-align: center;">1st Paper Marks</th>
+                        <th style="text-align: center;">2nd Paper Marks</th>
+                        <th style="text-align: center;">Total Marks</th>
+                        <th style="text-align: center;">සාමාර්ථය (Grade)</th>
+                    </tr>
+                </thead>
+                <tbody id="results-table-body">
+                    </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+        // ==========================================
+        // ✍️ මෙතනට ළමයින්ගේ දත්ත ඇතුලත් කරන්න (DATA INPUT AREA)
+        // ==========================================
+        // history: [පළමු වාරය, දෙවන වාරය, වර්තමාන වාරය] ලෙස ලකුණු දමන්න (ප්‍රස්තාරය ඇඳීමට)
+        const studentData = [
+            { name: "Janith Lakshan", paper1: 45, paper2: 50, history: [82, 88, 95] },
+            { name: "Kavindu Dilshan", paper1: 42, paper2: 46, history: [70, 75, 88] },
+            { name: "Chethani Buddhika", paper1: 38, paper2: 42, history: [78, 74, 80] },
+            { name: "Pathum Nimsara", paper1: 30, paper2: 35, history: [60, 58, 65] },
+            { name: "Dinithi Nisansala", paper1: 22, paper2: 26, history: [45, 42, 48] },
+            { name: "Sahan Perera", paper1: 15, paper2: 18, history: [30, 28, 33] }
+        ];
+
+        // ==========================================
+        // ⚙️ AUTOMATED CORE LOGIC SYSTEM (DO NOT ALTER)
+        // ==========================================
+        
+        // 1. Calculate Total & Determine Grade Function
+        function calculateGradesAndTotals() {
+            studentData.forEach(student => {
+                student.total = student.paper1 + student.paper2;
+                
+                // Update current term test mark to history array dynamically
+                if(student.history && student.history.length === 3) {
+                    student.history[2] = student.total;
+                }
+
+                // Grading Criteria
+                if (student.total >= 75) student.grade = "A";
+                else if (student.total >= 65) student.grade = "B";
+                else if (student.total >= 55) student.grade = "C";
+                else if (student.total >= 35) student.grade = "S";
+                else student.grade = "W";
+            });
+
+            // Rank Sorting (Descending Order based on Total)
+            studentData.sort((a, b) => b.total - a.total);
+
+            // Assign Positions taking care of identical scores
+            let currentRank = 1;
+            for(let i = 0; i < studentData.length; i++) {
+                if (i > 0 && studentData[i].total < studentData[i-1].total) {
+                    currentRank = i + 1;
+                }
+                studentData[i].position = currentRank;
+            }
+        }
+
+        // 2. Render Main Results Sheet Table
+        function renderResultsTable() {
+            const tbody = document.getElementById("results-table-body");
+            tbody.innerHTML = "";
+
+            studentData.forEach(student => {
+                const tr = document.createElement("tr");
+                if(student.position === 1) tr.className = "rank-1";
+
+                // Position styling class
+                let posBadgeClass = `badge-pos`;
+                if(student.position <= 3) posBadgeClass += ` pos-${student.position}`;
+
+                tr.innerHTML = `
+                    <td><span class="${posBadgeClass}">${student.position}</span></td>
+                    <td><strong>${student.name}</strong></td>
+                    <td style="text-align: center; font-family: monospace;">${student.paper1}</td>
+                    <td style="text-align: center; font-family: monospace;">${student.paper2}</td>
+                    <td style="text-align: center; font-family: monospace; font-weight: bold;">${student.total}</td>
+                    <td style="text-align: center;"><span class="grade-pill grade-${student.grade}">${student.grade}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // 3. Automated First Place Spotlight Post Generator
+        function generateChampionPost() {
+            if(studentData.length === 0) return;
+            
+            // First student after sorting is the champion
+            const champion = studentData[0];
+            
+            document.getElementById("champ-name").innerText = champion.name;
+            document.getElementById("champ-total").innerText = champion.total;
+            document.getElementById("champ-grade").innerText = champion.grade;
+            
+            // Show the generated banner
+            document.getElementById("champion-post").style.display = "block";
+        }
+
+        // 4. Search and Auto Dynamic Progress SVG Graph Generation
+        function generateIndividualAnalytics() {
+            const searchVal = document.getElementById("student-search").value.toLowerCase().trim();
+            const panel = document.getElementById("analytics-view");
+
+            if(searchVal === "") {
+                panel.style.display = "none";
+                return;
+            }
+
+            // Find matching student
+            const student = studentData.find(s => s.name.toLowerCase().includes(searchVal));
+
+            if(student) {
+                panel.style.display = "block";
+                document.getElementById("an-name").innerText = student.name;
+                document.getElementById("an-pos").innerText = `${student.position} වන ස්ථානය`;
+                document.getElementById("an-total").innerText = `${student.total} / 100`;
+                document.getElementById("an-grade").innerText = student.grade;
+
+                // Create SVG Line Graph Dynamically based on history marks
+                const h = student.history || [0, 0, student.total];
+                
+                // Map marks to SVG coordinates (Height 160px, Width 300px)
+                // Mark 100 -> Y=20, Mark 0 -> Y=140
+                const getY = (mark) => 140 - (mark * 1.2);
+                const y1 = getY(h[0]);
+                const y2 = getY(h[1]);
+                const y3 = getY(h[2]);
+
+                const graphWrapper = document.getElementById("svg-graph-wrapper");
+                graphWrapper.innerHTML = `
+                    <svg class="svg-chart" viewBox="0 0 300 160">
+                        <line x1="40" y1="20" x2="280" y2="20" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4"/>
+                        <line x1="40" y1="80" x2="280" y2="80" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4"/>
+                        <line x1="40" y1="140" x2="280" y2="140" stroke="rgba(255,255,255,0.2)"/>
+                        
+                        <text x="35" y="25" fill="#a0aec0" font-size="9" text-anchor="end">100</text>
+                        <text x="35" y="85" fill="#a0aec0" font-size="9" text-anchor="end">50</text>
+                        <text x="35" y="145" fill="#a0aec0" font-size="9" text-anchor="end">0</text>
+                        
+                        <text x="60" y="155" fill="#00a4e4" font-size="9" text-anchor="middle" font-weight="bold">1 වාරය</text>
+                        <text x="160" y="155" fill="#00a4e4" font-size="9" text-anchor="middle" font-weight="bold">2 වාරය</text>
+                        <text x="260" y="155" fill="#ff7300" font-size="9" text-anchor="middle" font-weight="bold">වර්තමාන</text>
+
+                        <path d="M 60 ${y1} L 160 ${y2} L 260 ${y3}" fill="none" stroke="rgba(0, 164, 228, 0.2)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M 60 ${y1} L 160 ${y2} L 260 ${y3}" fill="none" stroke="#00a4e4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        
+                        <circle cx="60" cy="${y1}" r="5" fill="#fff" stroke="#00a4e4" stroke-width="2"/>
+                        <circle cx="160" cy="${y2}" r="5" fill="#fff" stroke="#00a4e4" stroke-width="2"/>
+                        <circle cx="260" cy="${y3}" r="6" fill="#ff7300" stroke="#fff" stroke-width="2"/>
+
+                        <text x="60" y="${y1 - 10}" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">${h[0]}</text>
+                        <text x="160" y="${y2 - 10}" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">${h[1]}</text>
+                        <text x="260" y="${y3 - 10}" fill="#ff7300" font-size="11" font-weight="bold" text-anchor="middle">${h[2]}</text>
+                    </svg>
+                `;
+            } else {
+                // If typed name doesn't match
+                document.getElementById("an-name").innerText = "සිසුවා සොයාගත නොහැක";
+                document.getElementById("an-pos").innerText = "-";
+                document.getElementById("an-total").innerText = "-";
+                document.getElementById("an-grade").innerText = "-";
+                document.getElementById("svg-graph-wrapper").innerHTML = "<p class='no-data'>ඇතුලත් කල නම නිවැරදිදැයි නැවත පරීක්ෂා කරන්න.</p>";
+            }
+        }
+
+        // Initialize execution setup on script load
+        window.onload = function() {
+            calculateGradesAndTotals();
+            renderResultsTable();
+            generateChampionPost();
+        };
+    </script>
+</body>
+</html>
