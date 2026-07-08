@@ -23,7 +23,7 @@
         .logo-text { font-size: 1.8rem; font-weight: bold; color: #fff; text-shadow: 0 0 10px var(--primary-blue); margin-bottom: 10px; }
         .header-box p { font-size: 0.95rem; color: #a0aec0; }
 
-        /* Subject Navigation Tabs - Responsive Grid for Mobiles */
+        /* Subject Navigation Tabs */
         .subject-tabs { 
             display: grid; 
             grid-template-columns: repeat(2, 1fr); 
@@ -45,7 +45,6 @@
         /* Content Grid */
         .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-bottom: 20px; }
         
-        /* UPDATED: Resource card එකෙහි උස සහ අභ්‍යන්තර හැඩසවි ගැන්වීම් පාලනය කිරීම */
         .resource-card { 
             background: var(--card-bg); 
             border-radius: 12px; 
@@ -60,19 +59,35 @@
         
         .resource-title { font-size: 1rem; font-weight: bold; color: #fff; line-height: 1.4; }
         
-        /* UPDATED: PDF පූර්ව දර්ශනය සඳහා වූ නව CSS ශෛලිය */
-        .pdf-preview-box {
+        /* UPDATED: PDF එක Thumbnail එකක් වගේ පෙන්වන්න හදපු නව CSS */
+        .paper-thumbnail-container {
             width: 100%;
-            height: 220px; /* පූර්ව දර්ශන තිරයේ උස */
+            height: 180px; /* Thumbnail එකේ උස */
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 6px;
             overflow: hidden;
             background: #0b132b;
+            position: relative;
+            cursor: pointer;
         }
-        .pdf-preview-box iframe {
+        
+        /* iframe එක ඇතුලේ scrollbar හැංගීම සහ click කිරීම වැලැක්වීම */
+        .paper-thumbnail-container iframe {
             width: 100%;
             height: 100%;
             border: none;
+            pointer-events: none; /* ළමයින්ට iframe එක ඇතුල ක්ලික් කරන්න බෑ */
+        }
+
+        /* Thumbnail එක උඩින් වැටෙන අර්ධ විනිවිද පෙනෙන ලස්සන Hover බලපෑම */
+        .thumbnail-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 164, 228, 0.05);
+            transition: 0.3s;
+        }
+        .paper-thumbnail-container:hover .thumbnail-overlay {
+            background: rgba(0, 164, 228, 0.2);
         }
         
         .download-btn { display: block; width: 100%; text-align: center; background: var(--primary-blue); color: #0b132b; padding: 11px; border-radius: 6px; font-weight: bold; text-decoration: none; border: none; cursor: pointer; transition: 0.3s; font-size: 0.95rem; }
@@ -115,15 +130,17 @@
         <div class="grid-container">
             <div class="resource-card">
                 <div class="resource-title">📄 10 ශ්‍රේණිය - විද්‍යාව - දෙවන වාර පරීක්ෂණය - 03</div>
-                <div class="pdf-preview-box">
-                    <iframe src="g10_t2_sci3.pdf#toolbar=0&navpanes=0"></iframe>
+                <div class="paper-thumbnail-container" onclick="openAd('g10_t2_sci3.pdf')">
+                    <iframe src="g10_t2_sci3.pdf#toolbar=0&navpanes=0&scrollbar=0"></iframe>
+                    <div class="thumbnail-overlay"></div>
                 </div>
                 <button class="download-btn" onclick="openAd('g10_t2_sci3.pdf')">Download</button>
             </div>
             <div class="resource-card">
                 <div class="resource-title">📄 10 ශ්‍රේණිය - විද්‍යාව - දෙවන වාර පරීක්ෂණය - 04</div>
-                <div class="pdf-preview-box">
-                    <iframe src="g10_t2_sci4.pdf#toolbar=0&navpanes=0"></iframe>
+                <div class="paper-thumbnail-container" onclick="openAd('g10_t2_sci4.pdf')">
+                    <iframe src="g10_t2_sci4.pdf#toolbar=0&navpanes=0&scrollbar=0"></iframe>
+                    <div class="thumbnail-overlay"></div>
                 </div>
                 <button class="download-btn" onclick="openAd('g10_t2_sci4.pdf')">Download</button>
             </div>
@@ -134,15 +151,17 @@
         <div class="grid-container">
             <div class="resource-card">
                 <div class="resource-title">📄 10 ශ්‍රේණිය - ගණිතය I, II පත්‍ර - 03</div>
-                <div class="pdf-preview-box">
-                    <iframe src="g10_t2_maths3.pdf#toolbar=0&navpanes=0"></iframe>
+                <div class="paper-thumbnail-container" onclick="openAd('g10_t2_maths3.pdf')">
+                    <iframe src="g10_t2_maths3.pdf#toolbar=0&navpanes=0&scrollbar=0"></iframe>
+                    <div class="thumbnail-overlay"></div>
                 </div>
                 <button class="download-btn" onclick="openAd('g10_t2_maths3.pdf')">Download Paper</button>
             </div>
             <div class="resource-card">
                 <div class="resource-title">📄 10 ශ්‍රේණිය - ගණිතය I, II පත්‍ර - 04</div>
-                <div class="pdf-preview-box">
-                    <iframe src="g10_t2_maths4.pdf#toolbar=0&navpanes=0"></iframe>
+                <div class="paper-thumbnail-container" onclick="openAd('g10_t2_maths4.pdf')">
+                    <iframe src="g10_t2_maths4.pdf#toolbar=0&navpanes=0&scrollbar=0"></iframe>
+                    <div class="thumbnail-overlay"></div>
                 </div>
                 <button class="download-btn" onclick="openAd('g10_t2_maths4.pdf')">Download Paper</button>
             </div>
@@ -153,15 +172,17 @@
         <div class="grid-container">
             <div class="resource-card">
                 <div class="resource-title">📄 10 ශ්‍රේණිය - සිංහල භාෂාව සහ සාහිත්‍යය ප්‍රශ්න පත්‍රය -03</div>
-                <div class="pdf-preview-box">
-                    <iframe src="g10_t2_sin3.pdf#toolbar=0&navpanes=0"></iframe>
+                <div class="paper-thumbnail-container" onclick="openAd('g10_t2_sin3.pdf')">
+                    <iframe src="g10_t2_sin3.pdf#toolbar=0&navpanes=0&scrollbar=0"></iframe>
+                    <div class="thumbnail-overlay"></div>
                 </div>
                 <button class="download-btn" onclick="openAd('g10_t2_sin3.pdf')">Download Paper</button>
             </div>
             <div class="resource-card">
                 <div class="resource-title">📄 10 ශ්‍රේණිය - සිංහල භාෂාව සහ සාහිත්‍යය ප්‍රශ්න පත්‍රය -04</div>
-                <div class="pdf-preview-box">
-                    <iframe src="g10_t2_sin4.pdf#toolbar=0&navpanes=0"></iframe>
+                <div class="paper-thumbnail-container" onclick="openAd('g10_t2_sin4.pdf')">
+                    <iframe src="g10_t2_sin4.pdf#toolbar=0&navpanes=0&scrollbar=0"></iframe>
+                    <div class="thumbnail-overlay"></div>
                 </div>
                 <button class="download-btn" onclick="openAd('g10_t2_sin4.pdf')">Download Paper</button>
             </div>
@@ -172,15 +193,17 @@
         <div class="grid-container">
             <div class="resource-card">
                 <div class="resource-title">📄 11 ශ්‍රේණිය - English - 03</div>
-                <div class="pdf-preview-box">
-                    <iframe src="g10_t2_eng3.pdf#toolbar=0&navpanes=0"></iframe>
+                <div class="paper-thumbnail-container" onclick="openAd('g10_t2_eng3.pdf')">
+                    <iframe src="g10_t2_eng3.pdf#toolbar=0&navpanes=0&scrollbar=0"></iframe>
+                    <div class="thumbnail-overlay"></div>
                 </div>
                 <button class="download-btn" onclick="openAd('g10_t2_eng3.pdf')">Download Paper</button>
             </div>
             <div class="resource-card">
                 <div class="resource-title">📄 11 ශ්‍රේණිය - English - 04</div>
-                <div class="pdf-preview-box">
-                    <iframe src="g10_t2_eng4.pdf#toolbar=0&navpanes=0"></iframe>
+                <div class="paper-thumbnail-container" onclick="openAd('g10_t2_eng4.pdf')">
+                    <iframe src="g10_t2_eng4.pdf#toolbar=0&navpanes=0&scrollbar=0"></iframe>
+                    <div class="thumbnail-overlay"></div>
                 </div>
                 <button class="download-btn" onclick="openAd('g10_t2_eng4.pdf')">Download Paper</button>
             </div>
@@ -191,15 +214,17 @@
         <div class="grid-container">
             <div class="resource-card">
                 <div class="resource-title">📄 10 ශ්‍රේණිය - ඉතිහාසය ආදර්ශ ප්‍රශ්න පත්‍රය - 03</div>
-                <div class="pdf-preview-box">
-                    <iframe src="g10_t2_his3.pdf#toolbar=0&navpanes=0"></iframe>
+                <div class="paper-thumbnail-container" onclick="openAd('g10_t2_his3.pdf')">
+                    <iframe src="g10_t2_his3.pdf#toolbar=0&navpanes=0&scrollbar=0"></iframe>
+                    <div class="thumbnail-overlay"></div>
                 </div>
                 <button class="download-btn" onclick="openAd('g10_t2_his3.pdf')">Download Paper</button>
             </div>
             <div class="resource-card">
                 <div class="resource-title">📄 10 ශ්‍රේණිය - ඉතිහාසය ආදර්ශ ප්‍රශ්න පත්‍රය - 04</div>
-                <div class="pdf-preview-box">
-                    <iframe src="g10_t2_his4.pdf#toolbar=0&navpanes=0"></iframe>
+                <div class="paper-thumbnail-container" onclick="openAd('g10_t2_his4.pdf')">
+                    <iframe src="g10_t2_his4.pdf#toolbar=0&navpanes=0&scrollbar=0"></iframe>
+                    <div class="thumbnail-overlay"></div>
                 </div>
                 <button class="download-btn" onclick="openAd('g10_t2_his4.pdf')">Download Paper</button>
             </div>
@@ -210,15 +235,17 @@
         <div class="grid-container">
             <div class="resource-card">
                 <div class="resource-title">📄 10 ශ්‍රේණිය - බුද්ධාගම ප්‍රශ්න පත්‍රය - 03</div>
-                <div class="pdf-preview-box">
-                    <iframe src="g10_t2_b3.pdf#toolbar=0&navpanes=0"></iframe>
+                <div class="paper-thumbnail-container" onclick="openAd('g10_t2_b3.pdf')">
+                    <iframe src="g10_t2_b3.pdf#toolbar=0&navpanes=0&scrollbar=0"></iframe>
+                    <div class="thumbnail-overlay"></div>
                 </div>
                 <button class="download-btn" onclick="openAd('g10_t2_b3.pdf')">Download Paper</button>
             </div>
             <div class="resource-card">
                 <div class="resource-title">📄 10 ශ්‍රේණිය - බුද්ධාගම ප්‍රශ්න පත්‍රය - 04</div>
-                <div class="pdf-preview-box">
-                    <iframe src="g10_t2_b4.pdf#toolbar=0&navpanes=0"></iframe>
+                <div class="paper-thumbnail-container" onclick="openAd('g10_t2_b4.pdf')">
+                    <iframe src="g10_t2_b4.pdf#toolbar=0&navpanes=0&scrollbar=0"></iframe>
+                    <div class="thumbnail-overlay"></div>
                 </div>
                 <button class="download-btn" onclick="openAd('g10_t2_b4.pdf')">Download Paper</button>
             </div>
@@ -233,7 +260,7 @@
     <div class="modal-box">
         <img src="add.jpg" alt="C-TECH Special Classes" class="ad-image">
         
-        <div class="ad-title">Smart විදියට ICT - ජනිත් ලක්ෂාන්</div>
+        <div class="ad-title">Smart විදියට ICT - ජනිත් ลක්ෂාන්</div>
         <div class="ad-subtitle">06 වසරේ සිට 11 වසර දක්වා </br>සම්බන්ධ වීම සදහා අමතන්න -<B>071 26 75 988</B></div>
         
         <div class="timer-text" id="popupTimer">ඔබේ ගොනුව සූදානම් වෙමින් පවතී... තත්පර <span id="secs">10</span></div>
