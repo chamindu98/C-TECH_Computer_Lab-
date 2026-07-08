@@ -26,13 +26,13 @@
         /* Subject Navigation Tabs - Responsive Grid for Mobiles */
         .subject-tabs { 
             display: grid; 
-            grid-template-columns: repeat(2, 1fr); /* මොබයිල් එකේ පේළියට 2 බැගින් ලස්සනට පෙනේ */
+            grid-template-columns: repeat(2, 1fr); 
             gap: 10px; 
             margin-bottom: 25px; 
         }
         
         @media (min-width: 600px) {
-            .subject-tabs { grid-template-columns: repeat(4, 1fr); } /* පරිගණක තිර සඳහා පේළියට 4ක් */
+            .subject-tabs { grid-template-columns: repeat(4, 1fr); } 
         }
 
         .sub-tab { padding: 12px 10px; background: rgba(255,255,255,0.05); border: 1px solid #2e3856; border-radius: 8px; color: #fff; cursor: pointer; font-weight: bold; transition: 0.3s; text-align: center; font-size: 0.9rem; }
@@ -44,8 +44,36 @@
 
         /* Content Grid */
         .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .resource-card { background: var(--card-bg); border-radius: 12px; padding: 20px; border-left: 4px solid var(--primary-blue); box-shadow: 0 4px 15px rgba(0,0,0,0.2); display: flex; flex-direction: column; justify-content: space-between; }
-        .resource-title { font-size: 1rem; font-weight: bold; margin-bottom: 15px; color: #fff; line-height: 1.5; }
+        
+        /* UPDATED: Resource card එකෙහි උස සහ අභ්‍යන්තර හැඩසවි ගැන්වීම් පාලනය කිරීම */
+        .resource-card { 
+            background: var(--card-bg); 
+            border-radius: 12px; 
+            padding: 15px; 
+            border-left: 4px solid var(--primary-blue); 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between;
+            gap: 12px;
+        }
+        
+        .resource-title { font-size: 1rem; font-weight: bold; color: #fff; line-height: 1.4; }
+        
+        /* UPDATED: PDF පූර්ව දර්ශනය සඳහා වූ නව CSS ශෛලිය */
+        .pdf-preview-box {
+            width: 100%;
+            height: 220px; /* පූර්ව දර්ශන තිරයේ උස */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+            background: #0b132b;
+        }
+        .pdf-preview-box iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
         
         .download-btn { display: block; width: 100%; text-align: center; background: var(--primary-blue); color: #0b132b; padding: 11px; border-radius: 6px; font-weight: bold; text-decoration: none; border: none; cursor: pointer; transition: 0.3s; font-size: 0.95rem; }
         .download-btn:hover { background: var(--orange); color: #fff; }
@@ -85,27 +113,37 @@
 
     <div id="sec-science" class="subject-section active">
         <div class="grid-container">
-            
             <div class="resource-card">
                 <div class="resource-title">📄 10 ශ්‍රේණිය - විද්‍යාව - දෙවන වාර පරීක්ෂණය - 03</div>
-                <button class="download-btn" onclick="openAd('g10_t2_sci3.pdf')">Download </button>
+                <div class="pdf-preview-box">
+                    <iframe src="g10_t2_sci3.pdf#toolbar=0&navpanes=0"></iframe>
+                </div>
+                <button class="download-btn" onclick="openAd('g10_t2_sci3.pdf')">Download</button>
             </div>
             <div class="resource-card">
                 <div class="resource-title">📄 10 ශ්‍රේණිය - විද්‍යාව - දෙවන වාර පරීක්ෂණය - 04</div>
-                <button class="download-btn" onclick="openAd('g10_t2_sci4.pdf')">Download </button>
+                <div class="pdf-preview-box">
+                    <iframe src="g10_t2_sci4.pdf#toolbar=0&navpanes=0"></iframe>
+                </div>
+                <button class="download-btn" onclick="openAd('g10_t2_sci4.pdf')">Download</button>
             </div>
         </div>
     </div>
 
     <div id="sec-maths" class="subject-section">
         <div class="grid-container">
-            
             <div class="resource-card">
                 <div class="resource-title">📄 10 ශ්‍රේණිය - ගණිතය I, II පත්‍ර - 03</div>
+                <div class="pdf-preview-box">
+                    <iframe src="g10_t2_maths3.pdf#toolbar=0&navpanes=0"></iframe>
+                </div>
                 <button class="download-btn" onclick="openAd('g10_t2_maths3.pdf')">Download Paper</button>
             </div>
             <div class="resource-card">
                 <div class="resource-title">📄 10 ශ්‍රේණිය - ගණිතය I, II පත්‍ර - 04</div>
+                <div class="pdf-preview-box">
+                    <iframe src="g10_t2_maths4.pdf#toolbar=0&navpanes=0"></iframe>
+                </div>
                 <button class="download-btn" onclick="openAd('g10_t2_maths4.pdf')">Download Paper</button>
             </div>
         </div>
@@ -113,13 +151,18 @@
 
     <div id="sec-sinhala" class="subject-section">
         <div class="grid-container">
-           
             <div class="resource-card">
                 <div class="resource-title">📄 10 ශ්‍රේණිය - සිංහල භාෂාව සහ සාහිත්‍යය ප්‍රශ්න පත්‍රය -03</div>
+                <div class="pdf-preview-box">
+                    <iframe src="g10_t2_sin3.pdf#toolbar=0&navpanes=0"></iframe>
+                </div>
                 <button class="download-btn" onclick="openAd('g10_t2_sin3.pdf')">Download Paper</button>
             </div>
             <div class="resource-card">
                 <div class="resource-title">📄 10 ශ්‍රේණිය - සිංහල භාෂාව සහ සාහිත්‍යය ප්‍රශ්න පත්‍රය -04</div>
+                <div class="pdf-preview-box">
+                    <iframe src="g10_t2_sin4.pdf#toolbar=0&navpanes=0"></iframe>
+                </div>
                 <button class="download-btn" onclick="openAd('g10_t2_sin4.pdf')">Download Paper</button>
             </div>
         </div>
@@ -127,13 +170,18 @@
 
     <div id="sec-english" class="subject-section">
         <div class="grid-container">
-           
             <div class="resource-card">
                 <div class="resource-title">📄 11 ශ්‍රේණිය - English - 03</div>
+                <div class="pdf-preview-box">
+                    <iframe src="g10_t2_eng3.pdf#toolbar=0&navpanes=0"></iframe>
+                </div>
                 <button class="download-btn" onclick="openAd('g10_t2_eng3.pdf')">Download Paper</button>
             </div>
             <div class="resource-card">
                 <div class="resource-title">📄 11 ශ්‍රේණිය - English - 04</div>
+                <div class="pdf-preview-box">
+                    <iframe src="g10_t2_eng4.pdf#toolbar=0&navpanes=0"></iframe>
+                </div>
                 <button class="download-btn" onclick="openAd('g10_t2_eng4.pdf')">Download Paper</button>
             </div>
         </div>
@@ -141,13 +189,18 @@
 
     <div id="sec-history" class="subject-section">
         <div class="grid-container">
-           
             <div class="resource-card">
                 <div class="resource-title">📄 10 ශ්‍රේණිය - ඉතිහාසය ආදර්ශ ප්‍රශ්න පත්‍රය - 03</div>
+                <div class="pdf-preview-box">
+                    <iframe src="g10_t2_his3.pdf#toolbar=0&navpanes=0"></iframe>
+                </div>
                 <button class="download-btn" onclick="openAd('g10_t2_his3.pdf')">Download Paper</button>
             </div>
             <div class="resource-card">
                 <div class="resource-title">📄 10 ශ්‍රේණිය - ඉතිහාසය ආදර්ශ ප්‍රශ්න පත්‍රය - 04</div>
+                <div class="pdf-preview-box">
+                    <iframe src="g10_t2_his4.pdf#toolbar=0&navpanes=0"></iframe>
+                </div>
                 <button class="download-btn" onclick="openAd('g10_t2_his4.pdf')">Download Paper</button>
             </div>
         </div>
@@ -155,13 +208,18 @@
 
     <div id="sec-buddhist" class="subject-section">
         <div class="grid-container">
-            
             <div class="resource-card">
                 <div class="resource-title">📄 10 ශ්‍රේණිය - බුද්ධාගම ප්‍රශ්න පත්‍රය - 03</div>
+                <div class="pdf-preview-box">
+                    <iframe src="g10_t2_b3.pdf#toolbar=0&navpanes=0"></iframe>
+                </div>
                 <button class="download-btn" onclick="openAd('g10_t2_b3.pdf')">Download Paper</button>
             </div>
             <div class="resource-card">
                 <div class="resource-title">📄 10 ශ්‍රේණිය - බුද්ධාගම ප්‍රශ්න පත්‍රය - 04</div>
+                <div class="pdf-preview-box">
+                    <iframe src="g10_t2_b4.pdf#toolbar=0&navpanes=0"></iframe>
+                </div>
                 <button class="download-btn" onclick="openAd('g10_t2_b4.pdf')">Download Paper</button>
             </div>
         </div>
@@ -184,23 +242,19 @@
 </div>
 
 <script>
-    // 🔄 Tabs මාරු කිරීමේ සරල පද්ධතිය
     function switchTab(subjectId) {
-        // සියලුම සෙක්ෂන් සහ ටැබ් අක්‍රීය කරන්න
         const sections = document.querySelectorAll('.subject-section');
         const tabs = document.querySelectorAll('.sub-tab');
         
         sections.forEach(s => s.classList.remove('active'));
         tabs.forEach(t => t.classList.remove('active'));
 
-        // තෝරාගත් සෙක්ෂන් එක පමණක් සක්‍රීය කරන්න
         document.getElementById('sec-' + subjectId).classList.add('active');
         document.getElementById('tab-' + subjectId).classList.add('active');
     }
 
     let adInterval = null;
 
-    // 💥 ඇඩ් එක විවෘත කිරීම සහ තත්පර 10 කවුන්ටරය
     function openAd(fileUrl) {
         const modal = document.getElementById('adModal');
         const timerText = document.getElementById('popupTimer');
@@ -212,7 +266,7 @@
         secsSpan.innerText = timeLeft;
         timerText.style.display = 'block';
         dlBtn.style.display = 'none';
-        dlBtn.href = fileUrl; // ඩවුන්ලෝඩ් ලින්ක් එක බොත්තමට සම්බන්ධ කිරීම
+        dlBtn.href = fileUrl; 
         
         modal.style.display = 'flex';
 
@@ -224,7 +278,7 @@
             if (timeLeft <= 0) {
                 clearInterval(adInterval);
                 timerText.style.display = 'none';
-                dlBtn.style.display = 'block'; // තත්පර 10 පසු බොත්තම පෙන්වයි
+                dlBtn.style.display = 'block'; 
             }
         }, 1000);
     }
@@ -238,4 +292,3 @@
 
 </body>
 </html>
-
