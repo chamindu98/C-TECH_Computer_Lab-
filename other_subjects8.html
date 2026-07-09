@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>C-TECH - අනෙක් විෂයන් (Other Subjects)</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+
     <style>
         :root {
             --primary-blue: #00a4e4;
@@ -23,16 +26,16 @@
         .logo-text { font-size: 1.8rem; font-weight: bold; color: #fff; text-shadow: 0 0 10px var(--primary-blue); margin-bottom: 10px; }
         .header-box p { font-size: 0.95rem; color: #a0aec0; }
 
-        /* Subject Navigation Tabs - Responsive Grid for Mobiles */
+        /* Subject Navigation Tabs */
         .subject-tabs { 
             display: grid; 
-            grid-template-columns: repeat(2, 1fr); /* මොබයිල් එකේ පේළියට 2 බැගින් ලස්සනට පෙනේ */
+            grid-template-columns: repeat(2, 1fr); 
             gap: 10px; 
             margin-bottom: 25px; 
         }
         
         @media (min-width: 600px) {
-            .subject-tabs { grid-template-columns: repeat(4, 1fr); } /* පරිගණක තිර සඳහා පේළියට 4ක් */
+            .subject-tabs { grid-template-columns: repeat(4, 1fr); } 
         }
 
         .sub-tab { padding: 12px 10px; background: rgba(255,255,255,0.05); border: 1px solid #2e3856; border-radius: 8px; color: #fff; cursor: pointer; font-weight: bold; transition: 0.3s; text-align: center; font-size: 0.9rem; }
@@ -44,9 +47,39 @@
 
         /* Content Grid */
         .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .resource-card { background: var(--card-bg); border-radius: 12px; padding: 20px; border-left: 4px solid var(--primary-blue); box-shadow: 0 4px 15px rgba(0,0,0,0.2); display: flex; flex-direction: column; justify-content: space-between; }
-        .resource-title { font-size: 1rem; font-weight: bold; margin-bottom: 15px; color: #fff; line-height: 1.5; }
+        .resource-card { background: var(--card-bg); border-radius: 12px; padding: 20px; border-left: 4px solid var(--primary-blue); box-shadow: 0 4px 15px rgba(0,0,0,0.2); display: flex; flex-direction: column; justify-content: space-between; gap: 15px; }
+        .resource-title { font-size: 1rem; font-weight: bold; color: #fff; line-height: 1.5; min-height: 45px; }
         
+        /* 📸 Auto Generated Thumbnail Container Styling */
+        .paper-thumbnail {
+            cursor: pointer; 
+            width: 100%; 
+            height: 160px; 
+            overflow: hidden; 
+            border-radius: 6px; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            background: #fff; /* පේපර් එක සුදු නිසා පසුබිම සුදු කිරීම ලස්සනයි */
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-start; /* Header එක උඩින්ම පෙනෙන්න ඉහළට පෙළගැස්වීම */
+            position: relative;
+        }
+        
+        /* PDF එක Render වන Canvas එක */
+        .paper-thumbnail canvas {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* පේපරේ ලෝඩ් වෙනකම් පෙන්වන Loading Text එක */
+        .loading-thumb {
+            position: absolute;
+            color: #0b132b;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
         .download-btn { display: block; width: 100%; text-align: center; background: var(--primary-blue); color: #0b132b; padding: 11px; border-radius: 6px; font-weight: bold; text-decoration: none; border: none; cursor: pointer; transition: 0.3s; font-size: 0.95rem; }
         .download-btn:hover { background: var(--orange); color: #fff; }
 
@@ -85,13 +118,18 @@
 
     <div id="sec-science" class="subject-section active">
         <div class="grid-container">
-            
             <div class="resource-card">
                 <div class="resource-title">📄 08 ශ්‍රේණිය - විද්‍යාව- දෙවන වාර පරීක්ෂණය 03</div>
+                <div class="paper-thumbnail" data-pdf="g8_t2_sci3.pdf" onclick="openAd('g8_t2_sci3.pdf')">
+                    <span class="loading-thumb">Loading Preview...</span>
+                </div>
                 <button class="download-btn" onclick="openAd('g8_t2_sci3.pdf')">Download </button>
             </div>
             <div class="resource-card">
                 <div class="resource-title">📄 08 ශ්‍රේණිය - විද්‍යාව- දෙවන වාර පරීක්ෂණය 04</div>
+                <div class="paper-thumbnail" data-pdf="g8_t2_sci4.pdf" onclick="openAd('g8_t2_sci4.pdf')">
+                    <span class="loading-thumb">Loading Preview...</span>
+                </div>
                 <button class="download-btn" onclick="openAd('g8_t2_sci4.pdf')">Download </button>
             </div>
         </div>
@@ -99,13 +137,18 @@
 
     <div id="sec-maths" class="subject-section">
         <div class="grid-container">
-           
             <div class="resource-card">
                 <div class="resource-title">📄 08 ශ්‍රේණිය - ගණිතය I, II පත්‍ර - 03</div>
+                <div class="paper-thumbnail" data-pdf="g8_t2_maths3.pdf" onclick="openAd('g8_t2_maths3.pdf')">
+                    <span class="loading-thumb">Loading Preview...</span>
+                </div>
                 <button class="download-btn" onclick="openAd('g8_t2_maths3.pdf')">Download Paper</button>
             </div>
             <div class="resource-card">
                 <div class="resource-title">📄 08 ශ්‍රේණිය - ගණිතය I, II පත්‍ර - 04</div>
+                <div class="paper-thumbnail" data-pdf="g8_t2_maths4.pdf" onclick="openAd('g8_t2_maths4.pdf')">
+                    <span class="loading-thumb">Loading Preview...</span>
+                </div>
                 <button class="download-btn" onclick="openAd('g8_t2_maths4.pdf')">Download Paper</button>
             </div>
         </div>
@@ -114,26 +157,36 @@
     <div id="sec-sinhala" class="subject-section">
         <div class="grid-container">
             <div class="resource-card">
-                    <div class="resource-title">📄 08 ශ්‍රේණිය - සිංහල භාෂාව සහ සාහිත්‍යය ප්‍රශ්න පත්‍රය - 03</div>
-                    <button class="download-btn" onclick="openAd('g8_t2_sin3.pdf')">Download Paper</button>
+                <div class="resource-title">📄 08 ශ්‍රේණිය - සිංහල භාෂාව සහ සාහිත්‍යය ප්‍රශ්න පත්‍රය - 03</div>
+                <div class="paper-thumbnail" data-pdf="g8_t2_sin3.pdf" onclick="openAd('g8_t2_sin3.pdf')">
+                    <span class="loading-thumb">Loading Preview...</span>
                 </div>
-        
-                <div class="resource-card">
-                    <div class="resource-title">📄 08 ශ්‍රේණිය - සිංහල භාෂාව සහ සාහිත්‍යය ප්‍රශ්න පත්‍රය - 04</div>
-                    <button class="download-btn" onclick="openAd('g8_t2_sin4.pdf')">Download Paper</button>
+                <button class="download-btn" onclick="openAd('g8_t2_sin3.pdf')">Download Paper</button>
+            </div>
+            <div class="resource-card">
+                <div class="resource-title">📄 08 ශ්‍රේණිය - සිංහල භාෂාව සහ සාහිත්‍යය ප්‍රශ්න පත්‍රය - 04</div>
+                <div class="paper-thumbnail" data-pdf="g8_t2_sin4.pdf" onclick="openAd('g8_t2_sin4.pdf')">
+                    <span class="loading-thumb">Loading Preview...</span>
                 </div>
+                <button class="download-btn" onclick="openAd('g8_t2_sin4.pdf')">Download Paper</button>
+            </div>
         </div>
     </div>
 
     <div id="sec-english" class="subject-section">
         <div class="grid-container">
-            
             <div class="resource-card">
                 <div class="resource-title">📄 08 ශ්‍රේණිය - English - 03</div>
+                <div class="paper-thumbnail" data-pdf="g8_t2_eng3.pdf" onclick="openAd('g8_t2_eng3.pdf')">
+                    <span class="loading-thumb">Loading Preview...</span>
+                </div>
                 <button class="download-btn" onclick="openAd('g8_t2_eng3.pdf')">Download Paper</button>
             </div>
             <div class="resource-card">
                 <div class="resource-title">📄 08 ශ්‍රේණිය - English - 04</div>
+                <div class="paper-thumbnail" data-pdf="g8_t2_eng4.pdf" onclick="openAd('g8_t2_eng4.pdf')">
+                    <span class="loading-thumb">Loading Preview...</span>
+                </div>
                 <button class="download-btn" onclick="openAd('g8_t2_eng4.pdf')">Download Paper</button>
             </div>
         </div>
@@ -141,13 +194,18 @@
     
     <div id="sec-history" class="subject-section">
         <div class="grid-container">
-           
             <div class="resource-card">
                 <div class="resource-title">📄 08 ශ්‍රේණිය - ඉතිහාසය ආදර්ශ ප්‍රශ්න පත්‍රය - 03</div>
+                <div class="paper-thumbnail" data-pdf="g8_t2_his3.pdf" onclick="openAd('g8_t2_his3.pdf')">
+                    <span class="loading-thumb">Loading Preview...</span>
+                </div>
                 <button class="download-btn" onclick="openAd('g8_t2_his3.pdf')">Download Paper</button>
             </div>
             <div class="resource-card">
                 <div class="resource-title">📄 08 ශ්‍රේණිය - ඉතිහාසය ආදර්ශ ප්‍රශ්න පත්‍රය - 04</div>
+                <div class="paper-thumbnail" data-pdf="g8_t2_his4.pdf" onclick="openAd('g8_t2_his4.pdf')">
+                    <span class="loading-thumb">Loading Preview...</span>
+                </div>
                 <button class="download-btn" onclick="openAd('g8_t2_his4.pdf')">Download Paper</button>
             </div>
         </div>
@@ -155,13 +213,18 @@
 
     <div id="sec-buddhist" class="subject-section">
         <div class="grid-container">
-           
             <div class="resource-card">
                 <div class="resource-title">📄 08 ශ්‍රේණිය - බුද්ධාගම  ප්‍රශ්න පත්‍රය - 03</div>
+                <div class="paper-thumbnail" data-pdf="g8_t2_b3.pdf" onclick="openAd('g8_t2_b3.pdf')">
+                    <span class="loading-thumb">Loading Preview...</span>
+                </div>
                 <button class="download-btn" onclick="openAd('g8_t2_b3.pdf')">Download Paper</button>
             </div>
             <div class="resource-card">
                 <div class="resource-title">📄 08 ශ්‍රේණිය - බුද්ධාගම  ප්‍රශ්න පත්‍රය - 04</div>
+                <div class="paper-thumbnail" data-pdf="g8_t2_b4.pdf" onclick="openAd('g8_t2_b4.pdf')">
+                    <span class="loading-thumb">Loading Preview...</span>
+                </div>
                 <button class="download-btn" onclick="openAd('g8_t2_b4.pdf')">Download Paper</button>
             </div>
         </div>
@@ -184,23 +247,63 @@
 </div>
 
 <script>
-    // 🔄 Tabs මාරු කිරීමේ සරල පද්ධතිය
+    // ⚙️ PDF.js Worker එක Configure කිරීම
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+
+    // 🔄 පිටුව පූරණය වන විට සියලුම PDF වල පළමු පිටුව Auto-Capture කරන පද්ධතිය
+    document.addEventListener("DOMContentLoaded", function() {
+        const containers = document.querySelectorAll('.paper-thumbnail');
+        
+        containers.forEach(container => {
+            const pdfUrl = container.getAttribute('data-pdf');
+            if (!pdfUrl) return;
+
+            // PDF ගොනුව කියවීම ආරම්භ කිරීම
+            pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
+                // පළමු පිටුව (Page 1) ලබා ගැනීම
+                return pdf.getPage(1);
+            }).then(page => {
+                const scale = 1.5; // ගුණාත්මකභාවය වැඩි කිරීමට scale එක 1.5 ක් ලෙස ගෙන ඇත
+                const viewport = page.getViewport({ scale: scale });
+
+                // Canvas එකක් සාදා එය Container එක ඇතුළට එකතු කිරීම
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                const renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+
+                // Render කිරීම අවසන් වූ පසු "Loading..." text එක ඉවත් කිරීම
+                page.render(renderContext).promise.then(() => {
+                    const loadingText = container.querySelector('.loading-thumb');
+                    if (loadingText) loadingText.remove();
+                    container.appendChild(canvas);
+                });
+            }).catch(error => {
+                console.error("Error generating thumbnail for " + pdfUrl, error);
+                const loadingText = container.querySelector('.loading-thumb');
+                if (loadingText) loadingText.innerText = "Preview Unavailable";
+            });
+        });
+    });
+
     function switchTab(subjectId) {
-        // සියලුම සෙක්ෂන් සහ ටැබ් අක්‍රීය කරන්න
         const sections = document.querySelectorAll('.subject-section');
         const tabs = document.querySelectorAll('.sub-tab');
         
         sections.forEach(s => s.classList.remove('active'));
         tabs.forEach(t => t.classList.remove('active'));
 
-        // තෝරාගත් සෙක්ෂන් එක පමණක් සක්‍රීය කරන්න
         document.getElementById('sec-' + subjectId).classList.add('active');
         document.getElementById('tab-' + subjectId).classList.add('active');
     }
 
     let adInterval = null;
 
-    // 💥 ඇඩ් එක විවෘත කිරීම සහ තත්පර 10 කවුන්ටරය
     function openAd(fileUrl) {
         const modal = document.getElementById('adModal');
         const timerText = document.getElementById('popupTimer');
@@ -212,7 +315,7 @@
         secsSpan.innerText = timeLeft;
         timerText.style.display = 'block';
         dlBtn.style.display = 'none';
-        dlBtn.href = fileUrl; // ඩවුන්ලෝඩ් ලින්ක් එක බොත්තමට සම්බන්ධ කිරීම
+        dlBtn.href = fileUrl; 
         
         modal.style.display = 'flex';
 
@@ -224,7 +327,7 @@
             if (timeLeft <= 0) {
                 clearInterval(adInterval);
                 timerText.style.display = 'none';
-                dlBtn.style.display = 'block'; // තත්පර 10 පසු බොත්තම පෙන්වයි
+                dlBtn.style.display = 'block'; 
             }
         }, 1000);
     }
@@ -238,4 +341,3 @@
 
 </body>
 </html>
-
