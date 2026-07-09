@@ -86,7 +86,7 @@
             font-size: 0.9rem;
         }
 
-        /* 🏆 Auto-Generated Congratulation Post Banner */
+        /* 🏆 Champion Banner */
         .champion-banner {
             background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(255, 115, 0, 0.15));
             border: 2px dashed var(--gold);
@@ -114,7 +114,7 @@
             color: var(--gold);
         }
 
-        /* Interactive Section: Search & Individual Analytics */
+        /* Search Section */
         .search-section {
             background: var(--card-bg);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -152,7 +152,7 @@
             box-shadow: 0 0 10px rgba(255, 115, 0, 0.2);
         }
 
-        /* 📊 Individual Progress Analytics Panel */
+        /* Analytics Panel */
         .analytics-panel {
             margin-top: 20px;
             background: rgba(11, 19, 43, 0.6);
@@ -194,6 +194,7 @@
             border-radius: 12px;
             padding: 20px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            overflow-x: auto;
         }
 
         .results-table { width: 100%; border-collapse: collapse; text-align: left; }
@@ -215,7 +216,7 @@
         .results-table tr:hover { background-color: rgba(255, 255, 255, 0.02); }
         .results-table tr.rank-1 td { color: var(--gold); font-weight: bold; }
 
-        /* 🎖️ Badges & Pills */
+        /* Badges & Pills */
         .badge-pos {
             display: inline-block;
             padding: 3px 8px;
@@ -229,7 +230,6 @@
         .badge-pos.pos-2 { background: #e2e8f0; color: #000; }
         .badge-pos.pos-3 { background: #cd7f32; color: #fff; }
 
-        /* 🔥 කැපී පෙනෙන මුළු ලකුණු පෙට්ටිය */
         .total-score-box {
             background: rgba(0, 164, 228, 0.15);
             border: 1px solid var(--light-blue);
@@ -241,7 +241,6 @@
             display: inline-block;
         }
 
-        /* 🔥 කැපී පෙනෙන සාමාර්ථය */
         .grade-pill {
             display: inline-block;
             padding: 4px 12px;
@@ -259,12 +258,28 @@
 
         .no-data { text-align: center; color: var(--danger); padding: 15px; font-weight: bold; }
 
+        /* 🛠️ ඩෙසිග්න් එක ඩෙස්ක්ටොප් එකේදී මොබයිල් කෝඩ් හංගන කොටස */
+        .mobile-row-layout { display: none; }
+
         /* =======================================================
            📱 MOBILE RESPONSIVE UI ARCHITECTURE WITH EXPAND SYSTEM
            ======================================================= */
         @media (max-width: 650px) {
-            /* Hide traditional table head */
-            .results-table evils, .results-table th { display: none; }
+            /* 🛠️ FIXED: මොබයිල් එකේදී සාමාන්‍ය table cells හංගනවා */
+            .desktop-cell { display: none !important; }
+            
+            /* 🛠️ FIXED: මොබයිල් එකේදී හෙඩින්ස් ලස්සනට පේන්න සකස් කිරීම */
+            .results-table thead, .results-table th { 
+                display: block; 
+                width: 100%;
+            }
+            .results-table th {
+                text-align: center;
+                font-size: 1.1rem;
+                border-radius: 8px;
+                margin-bottom: 15px;
+                padding: 10px;
+            }
             
             .results-table, .results-table tbody, .results-table tr, .results-table td { 
                 display: block; 
@@ -277,10 +292,11 @@
                 border-radius: 10px;
                 padding: 12px;
                 margin-bottom: 12px;
-                position: relative;
             }
 
-            /* Primary Row layout */
+            /* මොබයිල් එකේදී පමණක් මේ Layout එක පෙන්වනවා */
+            .mobile-row-layout { display: block; }
+
             .mobile-primary-row {
                 display: flex;
                 align-items: center;
@@ -311,7 +327,6 @@
                 gap: 8px;
             }
 
-            /* Hide extended fields by default in mobile */
             .mobile-expand-details {
                 display: none;
                 margin-top: 12px;
@@ -338,7 +353,6 @@
                 font-family: monospace;
             }
 
-            /* Expand Action Button */
             .expand-btn {
                 background: rgba(255, 255, 255, 0.05);
                 border: 1px solid rgba(255, 255, 255, 0.1);
@@ -351,13 +365,6 @@
                 transition: 0.2s;
             }
             .expand-btn:hover { background: var(--light-blue); color: #000; }
-            
-            /* Disable normal table padding in mobile */
-            .results-table td { padding: 0 !important; border: none !important; }
-        }
-
-        @media (min-width: 651px) {
-            .expand-btn { display: none; }
         }
     </style>
 </head>
@@ -405,32 +412,26 @@
         </div>
 
         <div class="results-container">
-            <div style="margin-bottom: 15px; font-weight: bold; color: var(--light-blue); font-size: 1.1rem;">📊 පන්ති ප්‍රතිඵල ලේඛනය (Class Results Sheet)</div>
             <table class="results-table">
                 <thead>
                     <tr>
-                        <th>ස්ථානය (Position)</th>
-                        <th>සිසුවාගේ නම (Student Name)</th>
-                        <th style="text-align: center;">1st Paper Marks</th>
-                        <th style="text-align: center;">2nd Paper Marks</th>
-                        <th style="text-align: center;">Total Marks</th>
-                        <th style="text-align: center;">සාමාර්ථය (Grade)</th>
+                        <th class="desktop-cell">ස්ථානය (Position)</th>
+                        <th class="desktop-cell">සිසුවාගේ නම (Student Name)</th>
+                        <th class="desktop-cell" style="text-align: center;">1st Paper Marks</th>
+                        <th class="desktop-cell" style="text-align: center;">2nd Paper Marks</th>
+                        <th class="desktop-cell" style="text-align: center;">Total Marks</th>
+                        <th class="desktop-cell" style="text-align: center;">සාමාර්ථය (Grade)</th>
+                        <th class="mobile-row-layout" style="text-align: center;">📊 පන්ති ප්‍රතිඵල ලේඛනය (Results Sheet)</th>
                     </tr>
                 </thead>
                 <tbody id="results-table-body"></tbody>
             </table>
         </div>
          <br>
-        <a href="index.html" class="back-btn">← ආපසු මුල් පිටුවට (Home)</a>
+        <a href="index.html" class="back-btn">← ਆਪਸੁ ਮੁਲ ਪਿਟੁਵਟ (Home)</a>
     </div>
 
     <script>
-        // =========================================================================
-        // ✍️ ළමයින්ගේ දත්ත ඇතුලත් කිරීම මෙතනින් කරන්න (DATA INPUT MANAGEMENT)
-        // =========================================================================
-        // ඔබට අවශ්‍ය ඕනෑම ළමයින් සංඛ්‍යාවක් පහත රටාවට (Array Format) ඇතුළත් කරන්න.
-        // history: ඇතුළත [Exam 1 ලකුණු, Exam 2 ලකුණු, Exam 3 ලකුණු] ලෙස අනුපිළිවෙලින් දමන්න.
-        // =========================================================================
         const studentData = [
             { name: "Sanara Wathsadi", paper1: 45, paper2: 50, history: [33, 88, 95] },
             { name: "Miheli Ranudima", paper1: 42, paper2: 46, history: [69, 75, 88] },
@@ -453,28 +454,19 @@
             { name: "Sadasi Savindya", paper1: 15, paper2: 18, history: [0, 28, 33] }
         ];
 
-        // Core Calculation Engine
         function calculateGradesAndTotals() {
             studentData.forEach(student => {
                 student.total = student.paper1 + student.paper2;
-                
-                // Automatically assign current exam total to the final history slot if arrays match
                 if(student.history && student.history.length === 3) {
                     student.history[2] = student.total;
                 }
-
-                // High-visibility Grading Criteria
                 if (student.total >= 75) student.grade = "A";
                 else if (student.total >= 65) student.grade = "B";
                 else if (student.total >= 55) student.grade = "C";
                 else if (student.total >= 35) student.grade = "S";
                 else student.grade = "W";
             });
-
-            // Sorting Algorithm (Highest total first)
             studentData.sort((a, b) => b.total - a.total);
-
-            // Handle identical rank points tie-breaker
             let currentRank = 1;
             for(let i = 0; i < studentData.length; i++) {
                 if (i > 0 && studentData[i].total < studentData[i-1].total) {
@@ -484,7 +476,6 @@
             }
         }
 
-        // Render Data Generator (Hybrid Desktop & Mobile View Architecture)
         function renderResultsTable() {
             const tbody = document.getElementById("results-table-body");
             tbody.innerHTML = "";
@@ -496,7 +487,7 @@
                 let posBadgeClass = `badge-pos`;
                 if(student.position <= 3) posBadgeClass += ` pos-${student.position}`;
 
-                // Injecting structured DOM layout with class definitions for Desktop & Mobile views
+                // 🛠️ FIXED: Desktop cells වෙනම තබා, මොබයිල් layout එක වෙනම div එකක් ඇතුලට දැමීම.
                 tr.innerHTML = `
                     <td class="desktop-cell"><span class="${posBadgeClass}">${student.position}</span></td>
                     <td class="desktop-cell"><strong>${student.name}</strong></td>
@@ -505,56 +496,42 @@
                     <td class="desktop-cell" style="text-align: center;"><span class="total-score-box">${student.total}</span></td>
                     <td class="desktop-cell" style="text-align: center;"><span class="grade-pill grade-${student.grade}">${student.grade}</span></td>
                     
-                    <div class="mobile-primary-row">
-                        <div class="mobile-left">
-                            <span class="${posBadgeClass}">${student.position}</span>
-                            <div class="mobile-student-name">${student.name}</div>
+                    <td class="mobile-row-layout">
+                        <div class="mobile-primary-row">
+                            <div class="mobile-left">
+                                <span class="${posBadgeClass}">${student.position}</span>
+                                <div class="mobile-student-name">${student.name}</div>
+                            </div>
+                            <div class="mobile-right">
+                                <span class="total-score-box">${student.total}</span>
+                                <span class="grade-pill grade-${student.grade}">${student.grade}</span>
+                                <button class="expand-btn" onclick="toggleMobileExpand(${index})">Expand</button>
+                            </div>
                         </div>
-                        <div class="mobile-right">
-                            <span class="total-score-box">${student.total}</span>
-                            <span class="grade-pill grade-${student.grade}">${student.grade}</span>
-                            <button class="expand-btn" onclick="toggleMobileExpand(${index})">Expand</button>
+                        <div class="mobile-expand-details" id="mobile-details-${index}">
+                            <div class="detail-item">1st Paper Marks: <span>${student.paper1}</span></div>
+                            <div class="detail-item">2nd Paper Marks: <span>${student.paper2}</span></div>
                         </div>
-                    </div>
-                    
-                    <div class="mobile-expand-details" id="mobile-details-${index}">
-                        <div class="detail-item">1st Paper Marks: <span>${student.paper1}</span></div>
-                        <div class="detail-item">2nd Paper Marks: <span>${student.paper2}</span></div>
-                    </div>
+                    </td>
                 `;
                 tbody.appendChild(tr);
             });
-            
-            // Clean dynamic cell styles based on layout width bounds
-            applyResponsivenessCSS();
         }
 
-        // Expand Mechanism Configuration for Smartphone screen triggers
         function toggleMobileExpand(index) {
             const element = document.getElementById(`mobile-details-${index}`);
             element.classList.toggle('show');
         }
 
-        function applyResponsivenessCSS() {
-            const isMobile = window.innerWidth <= 650;
-            document.querySelectorAll('.desktop-cell').forEach(el => {
-                el.style.display = isMobile ? 'none' : 'table-cell';
-            });
-        }
-
-        window.addEventListener('resize', applyResponsivenessCSS);
-
         function generateChampionPost() {
             if(studentData.length === 0) return;
             const champion = studentData[0];
-            
             document.getElementById("champ-name").innerText = champion.name;
             document.getElementById("champ-total").innerText = champion.total;
             document.getElementById("champ-grade").innerText = champion.grade;
             document.getElementById("champion-post").style.display = "block";
         }
 
-        // Graph Generator Core Engine
         function generateIndividualAnalytics() {
             const searchVal = document.getElementById("student-search").value.toLowerCase().trim();
             const panel = document.getElementById("analytics-view");
