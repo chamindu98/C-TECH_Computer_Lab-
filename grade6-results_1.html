@@ -96,31 +96,13 @@
             text-align: center;
             position: relative;
             box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
-            display: none; /* Will be shown via JS */
-            animation: pulse Glow 2s infinite alternate;
+            display: none;
         }
 
-        .champion-badge {
-            font-size: 3rem;
-            margin-bottom: 5px;
-            display: inline-block;
-        }
-
-        .champion-name {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: #fff;
-            text-shadow: 0 0 8px var(--gold);
-            margin: 5px 0;
-        }
-
-        .champion-wish {
-            font-size: 1.1rem;
-            color: var(--text-light);
-            max-width: 600px;
-            margin: 0 auto 10px auto;
-        }
-
+        .champion-badge { font-size: 3rem; margin-bottom: 5px; display: inline-block; }
+        .champion-name { font-size: 1.8rem; font-weight: 800; color: #fff; text-shadow: 0 0 8px var(--gold); margin: 5px 0; }
+        .champion-wish { font-size: 1.1rem; color: var(--text-light); max-width: 600px; margin: 0 auto 10px auto; }
+        
         .champion-stats {
             display: inline-flex;
             gap: 20px;
@@ -152,11 +134,7 @@
             gap: 8px;
         }
 
-        .search-box {
-            display: flex;
-            gap: 10px;
-        }
-
+        .search-box { display: flex; gap: 10px; }
         .search-input {
             flex-grow: 1;
             background: rgba(11, 19, 43, 0.8);
@@ -184,37 +162,18 @@
             display: none;
         }
 
-        .analytics-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-         /* ආපසු යන බොත්තම */
+        .analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .back-btn { margin-top: 15px; background-color: rgba(0, 164, 228, 0.1); border: 1px solid var(--light-blue); color: var(--light-blue); padding: 12px 24px; font-weight: bold; border-radius: 6px; cursor: pointer; text-decoration: none; display: inline-block; transition: 0.3s; }
         .back-btn:hover { background-color: var(--light-blue); color: #0b132b; transform: translateX(-4px); }
-
 
         @media (max-width: 768px) {
             .analytics-grid { grid-template-columns: 1fr; }
         }
 
-        .student-info-summary {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .stat-line {
-            font-size: 1.05rem;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            padding-bottom: 5px;
-        }
-
+        .student-info-summary { display: flex; flex-direction: column; justify-content: center; gap: 8px; }
+        .stat-line { font-size: 1.05rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
         .stat-line span { color: var(--light-blue); font-weight: bold; }
 
-        /* Custom pure SVG CSS Generated Chart Frame */
         .chart-frame {
             background: #0b132b;
             border: 1px solid rgba(255,255,255,0.1);
@@ -225,35 +184,19 @@
             align-items: center;
         }
 
-        .chart-title {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-            align-self: flex-start;
-        }
+        .chart-title { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px; align-self: flex-start; }
+        .svg-chart { width: 100%; height: 160px; }
 
-        .svg-chart {
-            width: 100%;
-            height: 160px;
-        }
-
-        /* 📋 Main Results Sheet Table Container */
+        /* 📋 Results Section */
         .results-container {
             background: var(--card-bg);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 12px;
             padding: 20px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            overflow-x: auto;
         }
 
-        .results-table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-            min-width: 650px;
-        }
-
+        .results-table { width: 100%; border-collapse: collapse; text-align: left; }
         .results-table th {
             background-color: rgba(0, 164, 228, 0.15);
             color: var(--light-blue);
@@ -269,19 +212,10 @@
             font-size: 0.95rem;
         }
 
-        .results-table tr:hover {
-            background-color: rgba(255, 255, 255, 0.02);
-        }
+        .results-table tr:hover { background-color: rgba(255, 255, 255, 0.02); }
+        .results-table tr.rank-1 td { color: var(--gold); font-weight: bold; }
 
-        /* Dynamic Highlighting for Row 1 */
-        .results-table tr.rank-1 {
-            background: linear-gradient(90deg, rgba(245, 158, 11, 0.1), transparent);
-        }
-        .results-table tr.rank-1 td {
-            color: var(--gold);
-            font-weight: bold;
-        }
-
+        /* 🎖️ Badges & Pills */
         .badge-pos {
             display: inline-block;
             padding: 3px 8px;
@@ -291,32 +225,140 @@
             background: rgba(255,255,255,0.08);
             color: var(--text-light);
         }
-
         .badge-pos.pos-1 { background: var(--gold); color: #000; }
         .badge-pos.pos-2 { background: #e2e8f0; color: #000; }
         .badge-pos.pos-3 { background: #cd7f32; color: #fff; }
 
+        /* 🔥 කැපී පෙනෙන මුළු ලකුණු පෙට්ටිය */
+        .total-score-box {
+            background: rgba(0, 164, 228, 0.15);
+            border: 1px solid var(--light-blue);
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-weight: 800;
+            font-size: 1.05rem;
+            display: inline-block;
+        }
+
+        /* 🔥 කැපී පෙනෙන සාමාර්ථය */
         .grade-pill {
             display: inline-block;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-            font-size: 0.85rem;
-        }
-        .grade-A { background: rgba(16, 185, 129, 0.2); color: var(--success); }
-        .grade-B { background: rgba(0, 164, 228, 0.2); color: var(--light-blue); }
-        .grade-C { background: rgba(245, 158, 11, 0.2); color: var(--gold); }
-        .grade-S { background: rgba(255, 115, 0, 0.2); color: var(--orange); }
-        .grade-W { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
-
-        .no-data {
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-weight: 900;
+            font-size: 1rem;
             text-align: center;
-            color: var(--danger);
-            padding: 15px;
-            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .grade-A { background: var(--success); color: #000; }
+        .grade-B { background: var(--light-blue); color: #000; }
+        .grade-C { background: var(--gold); color: #000; }
+        .grade-S { background: var(--orange); color: #fff; }
+        .grade-W { background: var(--danger); color: #fff; }
+
+        .no-data { text-align: center; color: var(--danger); padding: 15px; font-weight: bold; }
+
+        /* =======================================================
+           📱 MOBILE RESPONSIVE UI ARCHITECTURE WITH EXPAND SYSTEM
+           ======================================================= */
+        @media (max-width: 650px) {
+            /* Hide traditional table head */
+            .results-table evils, .results-table th { display: none; }
+            
+            .results-table, .results-table tbody, .results-table tr, .results-table td { 
+                display: block; 
+                width: 100%; 
+            }
+
+            .results-table tr {
+                background: rgba(255,255,255,0.02);
+                border: 1px solid rgba(255,255,255,0.05);
+                border-radius: 10px;
+                padding: 12px;
+                margin-bottom: 12px;
+                position: relative;
+            }
+
+            /* Primary Row layout */
+            .mobile-primary-row {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                gap: 10px;
+            }
+
+            .mobile-left {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                max-width: 60%;
+            }
+
+            .mobile-student-name {
+                font-weight: bold;
+                font-size: 1rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                color: #fff;
+            }
+
+            .mobile-right {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            /* Hide extended fields by default in mobile */
+            .mobile-expand-details {
+                display: none;
+                margin-top: 12px;
+                padding-top: 12px;
+                border-top: 1px dashed rgba(255,255,255,0.1);
+                background: rgba(0,0,0,0.15);
+                border-radius: 6px;
+                padding: 10px;
+            }
+
+            .mobile-expand-details.show {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+
+            .detail-item {
+                font-size: 0.85rem;
+                color: var(--text-muted);
+            }
+            .detail-item span {
+                color: #fff;
+                font-weight: bold;
+                font-family: monospace;
+            }
+
+            /* Expand Action Button */
+            .expand-btn {
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                color: var(--light-blue);
+                padding: 4px 8px;
+                border-radius: 4px;
+                font-size: 0.8rem;
+                font-weight: bold;
+                cursor: pointer;
+                transition: 0.2s;
+            }
+            .expand-btn:hover { background: var(--light-blue); color: #000; }
+            
+            /* Disable normal table padding in mobile */
+            .results-table td { padding: 0 !important; border: none !important; }
         }
 
-        
+        @media (min-width: 651px) {
+            .expand-btn { display: none; }
+        }
     </style>
 </head>
 <body>
@@ -355,7 +397,7 @@
                         <div class="stat-line">සාමාර්ථය (Grade): <span id="an-grade">-</span></div>
                     </div>
                     <div class="chart-frame">
-                        <div class="chart-title">📈 වාර තුනේ ප්‍රගතිය (Term-on-Term Progress History)</div>
+                        <div class="chart-title">📈 විභාග අනුව ප්‍රගතිය (Exam-on-Exam Progress History)</div>
                         <div id="svg-graph-wrapper" style="width:100%;"></div>
                     </div>
                 </div>
@@ -375,58 +417,53 @@
                         <th style="text-align: center;">සාමාර්ථය (Grade)</th>
                     </tr>
                 </thead>
-                <tbody id="results-table-body">
-                    </tbody>
+                <tbody id="results-table-body"></tbody>
             </table>
         </div>
          <br>
-    <a href="index.html" class="back-btn">← ආපසු මුල් පිටුවට (Home)</a>
-
+        <a href="index.html" class="back-btn">← ආපසු මුල් පිටුවට (Home)</a>
     </div>
 
     <script>
-        // ==========================================
-        // ✍️ මෙතනට ළමයින්ගේ දත්ත ඇතුලත් කරන්න (DATA INPUT AREA)
-        // ==========================================
-        // history: [පළමු වාරය, දෙවන වාරය, වර්තමාන වාරය] ලෙස ලකුණු දමන්න (ප්‍රස්තාරය ඇඳීමට)
+        // =========================================================================
+        // ✍️ ළමයින්ගේ දත්ත ඇතුලත් කිරීම මෙතනින් කරන්න (DATA INPUT MANAGEMENT)
+        // =========================================================================
+        // ඔබට අවශ්‍ය ඕනෑම ළමයින් සංඛ්‍යාවක් පහත රටාවට (Array Format) ඇතුළත් කරන්න.
+        // history: ඇතුළත [Exam 1 ලකුණු, Exam 2 ලකුණු, Exam 3 ලකුණු] ලෙස අනුපිළිවෙලින් දමන්න.
+        // =========================================================================
         const studentData = [
-            { name: "Sanara Wathsadi", paper1: 45, paper2: 50, ICT: [33, 88, 95] },
-            { name: "Miheli Ranudima", paper1: 42, paper2: 46, ICT: [69, 75, 88] },
-            { name: "Ranuk Lakshitha", paper1: 38, paper2: 42, ICT: [61, 74, 80] },
-            { name: "Abiru Manumitha", paper1: 30, paper2: 35, ICT: [0, 58, 65] },
-            { name: "Dinupama Sankamali", paper1: 22, paper2: 26, ICT: [0, 42, 48] },
-            { name: "Anup Ransara", paper1: 15, paper2: 18, ICT: [75, 28, 33] }
-            { name: "Dinuja Amasha", paper1: 15, paper2: 18, ICT: [84.5, 28, 33] }
-            { name: "Thinuthi Senaya", paper1: 15, paper2: 18, ICT: [80, 28, 33] }
-            { name: "Gihansa Danuddara", paper1: 15, paper2: 18, ICT: [69, 28, 33] }
-             { name: "Gayuka Senul", paper1: 15, paper2: 18, ICT: [80.5, 28, 33] }
-             { name: "Nethmi Thinaya", paper1: 15, paper2: 18, ICT: [66, 28, 33] }
-             { name: "Mohomad Arham", paper1: 15, paper2: 18, ICT: [14, 28, 33] }
-             { name: "Pahan Prabu Dewmina", paper1: 15, paper2: 18, ICT: [60.5, 28, 33] }
-             { name: "Nawya Tharudeneth", paper1: 15, paper2: 18, ICT: [54, 28, 33] }
-            { name: "Sahandi Uhansa", paper1: 15, paper2: 18, ICT: [42, 28, 33] }
-            { name: "Nilesha Ranundi", paper1: 15, paper2: 18, ICT: [69, 28, 33] }
-            { name: "Sayuri Amaya", paper1: 15, paper2: 18, ICT: [56, 28, 33] }
-            { name: "Tamasha Thathsarani", paper1: 15, paper2: 18, ICT: [42, 28, 33] }
-            { name: "Sadasi Savindya", paper1: 15, paper2: 18, ICT: [0, 28, 33] }
-            
+            { name: "Sanara Wathsadi", paper1: 45, paper2: 50, history: [33, 88, 95] },
+            { name: "Miheli Ranudima", paper1: 42, paper2: 46, history: [69, 75, 88] },
+            { name: "Ranuk Lakshitha", paper1: 38, paper2: 42, history: [61, 74, 80] },
+            { name: "Abiru Manumitha", paper1: 30, paper2: 35, history: [0, 58, 65] },
+            { name: "Dinupama Sankamali", paper1: 22, paper2: 26, history: [0, 42, 48] },
+            { name: "Anup Ransara", paper1: 15, paper2: 18, history: [75, 28, 33] },
+            { name: "Dinuja Amasha", paper1: 15, paper2: 18, history: [84.5, 28, 33] },
+            { name: "Thinuthi Senaya", paper1: 15, paper2: 18, history: [80, 28, 33] },
+            { name: "Gihansa Danuddara", paper1: 15, paper2: 18, history: [69, 28, 33] },
+            { name: "Gayuka Senul", paper1: 15, paper2: 18, history: [80.5, 28, 33] },
+            { name: "Nethmi Thinaya", paper1: 15, paper2: 18, history: [66, 28, 33] },
+            { name: "Mohomad Arham", paper1: 15, paper2: 18, history: [14, 28, 33] },
+            { name: "Pahan Prabu Dewmina", paper1: 15, paper2: 18, history: [60.5, 28, 33] },
+            { name: "Nawya Tharudeneth", paper1: 15, paper2: 18, history: [54, 28, 33] },
+            { name: "Sahandi Uhansa", paper1: 15, paper2: 18, history: [42, 28, 33] },
+            { name: "Nilesha Ranundi", paper1: 15, paper2: 18, history: [69, 28, 33] },
+            { name: "Sayuri Amaya", paper1: 15, paper2: 18, history: [56, 28, 33] },
+            { name: "Tamasha Thathsarani", paper1: 15, paper2: 18, history: [42, 28, 33] },
+            { name: "Sadasi Savindya", paper1: 15, paper2: 18, history: [0, 28, 33] }
         ];
 
-        // ==========================================
-        // ⚙️ AUTOMATED CORE LOGIC SYSTEM (DO NOT ALTER)
-        // ==========================================
-        
-        // 1. Calculate Total & Determine Grade Function
+        // Core Calculation Engine
         function calculateGradesAndTotals() {
             studentData.forEach(student => {
                 student.total = student.paper1 + student.paper2;
                 
-                // Update current term test mark to history array dynamically
-                if(student.ICT && student.ICT.length === 3) {
-                    student.ICT[2] = student.total;
+                // Automatically assign current exam total to the final history slot if arrays match
+                if(student.history && student.history.length === 3) {
+                    student.history[2] = student.total;
                 }
 
-                // Grading Criteria
+                // High-visibility Grading Criteria
                 if (student.total >= 75) student.grade = "A";
                 else if (student.total >= 65) student.grade = "B";
                 else if (student.total >= 55) student.grade = "C";
@@ -434,10 +471,10 @@
                 else student.grade = "W";
             });
 
-            // Rank Sorting (Descending Order based on Total)
+            // Sorting Algorithm (Highest total first)
             studentData.sort((a, b) => b.total - a.total);
 
-            // Assign Positions taking care of identical scores
+            // Handle identical rank points tie-breaker
             let currentRank = 1;
             for(let i = 0; i < studentData.length; i++) {
                 if (i > 0 && studentData[i].total < studentData[i-1].total) {
@@ -447,57 +484,83 @@
             }
         }
 
-        // 2. Render Main Results Sheet Table
+        // Render Data Generator (Hybrid Desktop & Mobile View Architecture)
         function renderResultsTable() {
             const tbody = document.getElementById("results-table-body");
             tbody.innerHTML = "";
 
-            studentData.forEach(student => {
+            studentData.forEach((student, index) => {
                 const tr = document.createElement("tr");
                 if(student.position === 1) tr.className = "rank-1";
 
-                // Position styling class
                 let posBadgeClass = `badge-pos`;
                 if(student.position <= 3) posBadgeClass += ` pos-${student.position}`;
 
+                // Injecting structured DOM layout with class definitions for Desktop & Mobile views
                 tr.innerHTML = `
-                    <td><span class="${posBadgeClass}">${student.position}</span></td>
-                    <td><strong>${student.name}</strong></td>
-                    <td style="text-align: center; font-family: monospace;">${student.paper1}</td>
-                    <td style="text-align: center; font-family: monospace;">${student.paper2}</td>
-                    <td style="text-align: center; font-family: monospace; font-weight: bold;">${student.total}</td>
-                    <td style="text-align: center;"><span class="grade-pill grade-${student.grade}">${student.grade}</span></td>
+                    <td class="desktop-cell"><span class="${posBadgeClass}">${student.position}</span></td>
+                    <td class="desktop-cell"><strong>${student.name}</strong></td>
+                    <td class="desktop-cell" style="text-align: center; font-family: monospace;">${student.paper1}</td>
+                    <td class="desktop-cell" style="text-align: center; font-family: monospace;">${student.paper2}</td>
+                    <td class="desktop-cell" style="text-align: center;"><span class="total-score-box">${student.total}</span></td>
+                    <td class="desktop-cell" style="text-align: center;"><span class="grade-pill grade-${student.grade}">${student.grade}</span></td>
+                    
+                    <div class="mobile-primary-row">
+                        <div class="mobile-left">
+                            <span class="${posBadgeClass}">${student.position}</span>
+                            <div class="mobile-student-name">${student.name}</div>
+                        </div>
+                        <div class="mobile-right">
+                            <span class="total-score-box">${student.total}</span>
+                            <span class="grade-pill grade-${student.grade}">${student.grade}</span>
+                            <button class="expand-btn" onclick="toggleMobileExpand(${index})">Expand</button>
+                        </div>
+                    </div>
+                    
+                    <div class="mobile-expand-details" id="mobile-details-${index}">
+                        <div class="detail-item">1st Paper Marks: <span>${student.paper1}</span></div>
+                        <div class="detail-item">2nd Paper Marks: <span>${student.paper2}</span></div>
+                    </div>
                 `;
                 tbody.appendChild(tr);
             });
+            
+            // Clean dynamic cell styles based on layout width bounds
+            applyResponsivenessCSS();
         }
 
-        // 3. Automated First Place Spotlight Post Generator
+        // Expand Mechanism Configuration for Smartphone screen triggers
+        function toggleMobileExpand(index) {
+            const element = document.getElementById(`mobile-details-${index}`);
+            element.classList.toggle('show');
+        }
+
+        function applyResponsivenessCSS() {
+            const isMobile = window.innerWidth <= 650;
+            document.querySelectorAll('.desktop-cell').forEach(el => {
+                el.style.display = isMobile ? 'none' : 'table-cell';
+            });
+        }
+
+        window.addEventListener('resize', applyResponsivenessCSS);
+
         function generateChampionPost() {
             if(studentData.length === 0) return;
-            
-            // First student after sorting is the champion
             const champion = studentData[0];
             
             document.getElementById("champ-name").innerText = champion.name;
             document.getElementById("champ-total").innerText = champion.total;
             document.getElementById("champ-grade").innerText = champion.grade;
-            
-            // Show the generated banner
             document.getElementById("champion-post").style.display = "block";
         }
 
-        // 4. Search and Auto Dynamic Progress SVG Graph Generation
+        // Graph Generator Core Engine
         function generateIndividualAnalytics() {
             const searchVal = document.getElementById("student-search").value.toLowerCase().trim();
             const panel = document.getElementById("analytics-view");
 
-            if(searchVal === "") {
-                panel.style.display = "none";
-                return;
-            }
+            if(searchVal === "") { panel.style.display = "none"; return; }
 
-            // Find matching student
             const student = studentData.find(s => s.name.toLowerCase().includes(searchVal));
 
             if(student) {
@@ -507,18 +570,13 @@
                 document.getElementById("an-total").innerText = `${student.total} / 100`;
                 document.getElementById("an-grade").innerText = student.grade;
 
-                // Create SVG Line Graph Dynamically based on history marks
-                const h = student.ICT || [0, 0, student.total];
-                
-                // Map marks to SVG coordinates (Height 160px, Width 300px)
-                // Mark 100 -> Y=20, Mark 0 -> Y=140
+                const h = student.history || [0, 0, student.total];
                 const getY = (mark) => 140 - (mark * 1.2);
                 const y1 = getY(h[0]);
                 const y2 = getY(h[1]);
                 const y3 = getY(h[2]);
 
-                const graphWrapper = document.getElementById("svg-graph-wrapper");
-                graphWrapper.innerHTML = `
+                document.getElementById("svg-graph-wrapper").innerHTML = `
                     <svg class="svg-chart" viewBox="0 0 300 160">
                         <line x1="40" y1="20" x2="280" y2="20" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4"/>
                         <line x1="40" y1="80" x2="280" y2="80" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4"/>
@@ -528,9 +586,9 @@
                         <text x="35" y="85" fill="#a0aec0" font-size="9" text-anchor="end">50</text>
                         <text x="35" y="145" fill="#a0aec0" font-size="9" text-anchor="end">0</text>
                         
-                        <text x="60" y="155" fill="#00a4e4" font-size="9" text-anchor="middle" font-weight="bold">1 වාරය</text>
-                        <text x="160" y="155" fill="#00a4e4" font-size="9" text-anchor="middle" font-weight="bold">2 වාරය</text>
-                        <text x="260" y="155" fill="#ff7300" font-size="9" text-anchor="middle" font-weight="bold">වර්තමාන</text>
+                        <text x="60" y="155" fill="#00a4e4" font-size="9" text-anchor="middle" font-weight="bold">Exam 1</text>
+                        <text x="160" y="155" fill="#00a4e4" font-size="9" text-anchor="middle" font-weight="bold">Exam 2</text>
+                        <text x="260" y="155" fill="#ff7300" font-size="9" text-anchor="middle" font-weight="bold">Exam 3</text>
 
                         <path d="M 60 ${y1} L 160 ${y2} L 260 ${y3}" fill="none" stroke="rgba(0, 164, 228, 0.2)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M 60 ${y1} L 160 ${y2} L 260 ${y3}" fill="none" stroke="#00a4e4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
@@ -545,7 +603,6 @@
                     </svg>
                 `;
             } else {
-                // If typed name doesn't match
                 document.getElementById("an-name").innerText = "සිසුවා සොයාගත නොහැක";
                 document.getElementById("an-pos").innerText = "-";
                 document.getElementById("an-total").innerText = "-";
@@ -554,7 +611,6 @@
             }
         }
 
-        // Initialize execution setup on script load
         window.onload = function() {
             calculateGradesAndTotals();
             renderResultsTable();
