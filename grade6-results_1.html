@@ -390,12 +390,26 @@
         // ==========================================
         // history: [පළමු වාරය, දෙවන වාරය, වර්තමාන වාරය] ලෙස ලකුණු දමන්න (ප්‍රස්තාරය ඇඳීමට)
         const studentData = [
-            { name: "Janith Lakshan", paper1: 45, paper2: 50, history: [82, 88, 95] },
-            { name: "Kavindu Dilshan", paper1: 42, paper2: 46, history: [70, 75, 88] },
-            { name: "Chethani Buddhika", paper1: 38, paper2: 42, history: [78, 74, 80] },
-            { name: "Pathum Nimsara", paper1: 30, paper2: 35, history: [60, 58, 65] },
-            { name: "Dinithi Nisansala", paper1: 22, paper2: 26, history: [45, 42, 48] },
-            { name: "Sahan Perera", paper1: 15, paper2: 18, history: [30, 28, 33] }
+            { name: "Sanara Wathsadi", paper1: 45, paper2: 50, ICT: [33, 88, 95] },
+            { name: "Miheli Ranudima", paper1: 42, paper2: 46, ICT: [69, 75, 88] },
+            { name: "Ranuk Lakshitha", paper1: 38, paper2: 42, ICT: [61, 74, 80] },
+            { name: "Abiru Manumitha", paper1: 30, paper2: 35, ICT: [0, 58, 65] },
+            { name: "Dinupama Sankamali", paper1: 22, paper2: 26, ICT: [0, 42, 48] },
+            { name: "Anup Ransara", paper1: 15, paper2: 18, ICT: [75, 28, 33] }
+            { name: "Dinuja Amasha", paper1: 15, paper2: 18, ICT: [84.5, 28, 33] }
+            { name: "Thinuthi Senaya", paper1: 15, paper2: 18, ICT: [80, 28, 33] }
+            { name: "Gihansa Danuddara", paper1: 15, paper2: 18, ICT: [69, 28, 33] }
+             { name: "Gayuka Senul", paper1: 15, paper2: 18, ICT: [80.5, 28, 33] }
+             { name: "Nethmi Thinaya", paper1: 15, paper2: 18, ICT: [66, 28, 33] }
+             { name: "Mohomad Arham", paper1: 15, paper2: 18, ICT: [14, 28, 33] }
+             { name: "Pahan Prabu Dewmina", paper1: 15, paper2: 18, ICT: [60.5, 28, 33] }
+             { name: "Nawya Tharudeneth", paper1: 15, paper2: 18, ICT: [54, 28, 33] }
+            { name: "Sahandi Uhansa", paper1: 15, paper2: 18, ICT: [42, 28, 33] }
+            { name: "Nilesha Ranundi", paper1: 15, paper2: 18, ICT: [69, 28, 33] }
+            { name: "Sayuri Amaya", paper1: 15, paper2: 18, ICT: [56, 28, 33] }
+            { name: "Tamasha Thathsarani", paper1: 15, paper2: 18, ICT: [42, 28, 33] }
+            { name: "Sadasi Savindya", paper1: 15, paper2: 18, ICT: [0, 28, 33] }
+            
         ];
 
         // ==========================================
@@ -408,8 +422,8 @@
                 student.total = student.paper1 + student.paper2;
                 
                 // Update current term test mark to history array dynamically
-                if(student.history && student.history.length === 3) {
-                    student.history[2] = student.total;
+                if(student.ICT && student.ICT.length === 3) {
+                    student.ICT[2] = student.total;
                 }
 
                 // Grading Criteria
@@ -494,7 +508,7 @@
                 document.getElementById("an-grade").innerText = student.grade;
 
                 // Create SVG Line Graph Dynamically based on history marks
-                const h = student.history || [0, 0, student.total];
+                const h = student.ICT || [0, 0, student.total];
                 
                 // Map marks to SVG coordinates (Height 160px, Width 300px)
                 // Mark 100 -> Y=20, Mark 0 -> Y=140
