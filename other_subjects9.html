@@ -46,6 +46,31 @@
         .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-bottom: 20px; }
         .resource-card { background: var(--card-bg); border-radius: 12px; padding: 20px; border-left: 4px solid var(--primary-blue); box-shadow: 0 4px 15px rgba(0,0,0,0.2); display: flex; flex-direction: column; justify-content: space-between; }
         .resource-title { font-size: 1rem; font-weight: bold; margin-bottom: 15px; color: #fff; line-height: 1.5; }
+
+        /* UPDATED: Image Thumbnail සඳහා පොදු CSS පන්තිය (Class) */
+        .paper-thumbnail {
+            cursor: pointer; 
+            width: 100%; 
+            height: 190px; 
+            overflow: hidden; 
+            border-radius: 6px; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            background: #0b132b; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            position: relative;
+        }
+        .paper-thumbnail img {
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            object-position: top;
+            transition: 0.3s;
+        }
+        .paper-thumbnail:hover img {
+            transform: scale(1.03); /* Hover කරද්දී කුඩාවට Zoom වන ලස්සන effect එකක් */
+        }
         
         .download-btn { display: block; width: 100%; text-align: center; background: var(--primary-blue); color: #0b132b; padding: 11px; border-radius: 6px; font-weight: bold; text-decoration: none; border: none; cursor: pointer; transition: 0.3s; font-size: 0.95rem; }
         .download-btn:hover { background: var(--orange); color: #fff; }
@@ -88,15 +113,15 @@
            
             <div class="resource-card">
                 <div class="resource-title">📄 09 ශ්‍රේණිය - විද්‍යාව- දෙවන වාර පරීක්ෂණය 03</div>
-                <div class="paper-thumbnail" onclick="openAd('g9_t2_sci3.pdf')" style="cursor: pointer; width: 100%; height: 200px; overflow: hidden; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: #0b132b; display: flex; justify-content: center; align-items: center;">
-                    <img src="science.jpeg" alt="Paper Preview" style="width: 100%; height: 100%; object-fit: cover; object-position: top;">
+                <div class="paper-thumbnail" onclick="openAd('g9_t2_sci3.pdf')">
+                    <img src="science.jpeg" alt="Paper Preview">
                 </div>
                 <button class="download-btn" onclick="openAd('g9_t2_sci3.pdf')">Download </button>
             </div>
             <div class="resource-card">
                 <div class="resource-title">📄 09 ශ්‍රේණිය - විද්‍යාව- දෙවන වාර පරීක්ෂණය 04</div>
-                <div class="paper-thumbnail" onclick="openAd('g9_t2_sci4.pdf')" style="cursor: pointer; width: 100%; height: 200px; overflow: hidden; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: #0b132b; display: flex; justify-content: center; align-items: center;">
-                    <img src="science.jpeg" alt="Paper Preview" style="width: 100%; height: 100%; object-fit: cover; object-position: top;">
+                <div class="paper-thumbnail" onclick="openAd('g9_t2_sci4.pdf')">
+                    <img src="science.jpeg" alt="Paper Preview">
                 </div>
                 <button class="download-btn" onclick="openAd('g9_t2_sci4.pdf')">Download </button>
             </div>
@@ -108,15 +133,15 @@
             
             <div class="resource-card">
                 <div class="resource-title">📄 09 ශ්‍රේණිය - ගණිතය I, II පත්‍ර - 03</div>
-                <div class="paper-thumbnail" onclick="openAd('g9_t2_maths3.pdf')" style="cursor: pointer; width: 100%; height: 200px; overflow: hidden; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: #0b132b; display: flex; justify-content: center; align-items: center;">
-                    <img src="maths.jpeg" alt="Paper Preview" style="width: 100%; height: 100%; object-fit: cover; object-position: top;">
+                <div class="paper-thumbnail" onclick="openAd('g9_t2_maths3.pdf')" >
+                    <img src="maths.jpeg" alt="Paper Preview">
                 </div>
                 <button class="download-btn" onclick="openAd('g9_t2_maths3.pdf')">Download Paper</button>
             </div>
             <div class="resource-card">
                 <div class="resource-title">📄 09 ශ්‍රේණිය - ගණිතය I, II පත්‍ර - 04</div>
-                <div class="paper-thumbnail" onclick="openAd('g9_t2_maths4.pdf')" style="cursor: pointer; width: 100%; height: 200px; overflow: hidden; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: #0b132b; display: flex; justify-content: center; align-items: center;">
-                    <img src="maths.jpeg" alt="Paper Preview" style="width: 100%; height: 100%; object-fit: cover; object-position: top;">
+                <div class="paper-thumbnail" onclick="openAd('g9_t2_maths4.pdf')" >
+                    <img src="maths.jpeg" alt="Paper Preview">
                 </div>
                 <button class="download-btn" onclick="openAd('g9_t2_maths4.pdf')">Download Paper</button>
             </div>
@@ -128,14 +153,14 @@
             
              <div class="resource-card">
                 <div class="resource-title">📄 09 ශ්‍රේණිය - සිංහල භාෂාව සහ සාහිත්‍යය ප්‍රශ්න පත්‍රය - 03</div>
-                  <div class="paper-thumbnail" onclick="openAd('g9_t2_sin3.pdf')" style="cursor: pointer; width: 100%; height: 200px; overflow: hidden; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: #0b132b; display: flex; justify-content: center; align-items: center;">
-                    <img src="sinhala.jpeg" alt="Paper Preview" style="width: 100%; height: 100%; object-fit: cover; object-position: top;">
+                  <div class="paper-thumbnail" onclick="openAd('g9_t2_sin3.pdf')" >
+                    <img src="sinhala.jpeg" alt="Paper Preview">
                 <button class="download-btn" onclick="openAd('g9_t2_sin3.pdf')">Download Paper</button>
             </div>
              <div class="resource-card">
                 <div class="resource-title">📄 09 ශ්‍රේණිය - සිංහල භාෂාව සහ සාහිත්‍යය ප්‍රශ්න පත්‍රය - 04</div>
-                  <div class="paper-thumbnail" onclick="openAd('g9_t2_sin4.pdf')" style="cursor: pointer; width: 100%; height: 200px; overflow: hidden; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: #0b132b; display: flex; justify-content: center; align-items: center;">
-                    <img src="sinhala.jpeg" alt="Paper Preview" style="width: 100%; height: 100%; object-fit: cover; object-position: top;">
+                  <div class="paper-thumbnail" onclick="openAd('g9_t2_sin4.pdf')">
+                    <img src="sinhala.jpeg" alt="Paper Preview">
                 <button class="download-btn" onclick="openAd('g9_t2_sin4.pdf')">Download Paper</button>
             </div>
         </div>
@@ -146,14 +171,14 @@
             
             <div class="resource-card">
                 <div class="resource-title">📄 09 ශ්‍රේණිය - English - 03</div>
-                 <div class="paper-thumbnail" onclick="openAd('g9_t2_eng3.pdf')" style="cursor: pointer; width: 100%; height: 200px; overflow: hidden; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: #0b132b; display: flex; justify-content: center; align-items: center;">
-                    <img src="english.jpeg" alt="Paper Preview" style="width: 100%; height: 100%; object-fit: cover; object-position: top;">
+                 <div class="paper-thumbnail" onclick="openAd('g9_t2_eng3.pdf')" >
+                    <img src="english.jpeg" alt="Paper Preview" >
                 <button class="download-btn" onclick="openAd('g9_t2_eng3.pdf')">Download Paper</button>
             </div>
             <div class="resource-card">
                 <div class="resource-title">📄 09 ශ්‍රේණිය - English - 04</div>
-                 <div class="paper-thumbnail" onclick="openAd('g9_t2_eng4.pdf')" style="cursor: pointer; width: 100%; height: 200px; overflow: hidden; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: #0b132b; display: flex; justify-content: center; align-items: center;">
-                    <img src="english.jpeg" alt="Paper Preview" style="width: 100%; height: 100%; object-fit: cover; object-position: top;">
+                 <div class="paper-thumbnail" onclick="openAd('g9_t2_eng4.pdf')" >
+                    <img src="english.jpeg" alt="Paper Preview" >
                 <button class="download-btn" onclick="openAd('g9_t2_eng4.pdf')">Download Paper</button>
             </div>
         </div>
@@ -164,14 +189,14 @@
            
             <div class="resource-card">
                 <div class="resource-title">📄 09 ශ්‍රේණිය - ඉතිහාසය ආදර්ශ ප්‍රශ්න පත්‍රය - 03</div>
-                 <div class="paper-thumbnail" onclick="openAd('g9_t2_his3.pdf')" style="cursor: pointer; width: 100%; height: 200px; overflow: hidden; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: #0b132b; display: flex; justify-content: center; align-items: center;">
-                    <img src="histry.jpeg" alt="Paper Preview" style="width: 100%; height: 100%; object-fit: cover; object-position: top;">
+                 <div class="paper-thumbnail" onclick="openAd('g9_t2_his3.pdf')" >
+                    <img src="histry.jpeg" alt="Paper Preview">
                 <button class="download-btn" onclick="openAd('g9_t2_his3.pdf')">Download Paper</button>
             </div>
             <div class="resource-card">
                 <div class="resource-title">📄 09 ශ්‍රේණිය - ඉතිහාසය ආදර්ශ ප්‍රශ්න පත්‍රය - 04</div>
-                 <div class="paper-thumbnail" onclick="openAd('g9_t2_his4.pdf')" style="cursor: pointer; width: 100%; height: 200px; overflow: hidden; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: #0b132b; display: flex; justify-content: center; align-items: center;">
-                    <img src="histry.jpeg" alt="Paper Preview" style="width: 100%; height: 100%; object-fit: cover; object-position: top;">
+                 <div class="paper-thumbnail" onclick="openAd('g9_t2_his4.pdf')" >
+                    <img src="histry.jpeg" alt="Paper Preview">
                 <button class="download-btn" onclick="openAd('g9_t2_his4.pdf')">Download Paper</button>
             </div>
         </div>
@@ -182,14 +207,14 @@
            
             <div class="resource-card">
                 <div class="resource-title">📄 09 ශ්‍රේණිය - බුද්ධාගම  ප්‍රශ්න පත්‍රය - 03</div>
-                 <div class="paper-thumbnail" onclick="openAd('g9_t2_b3.pdf')" style="cursor: pointer; width: 100%; height: 200px; overflow: hidden; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: #0b132b; display: flex; justify-content: center; align-items: center;">
-                    <img src="buddhist.jpeg" alt="Paper Preview" style="width: 100%; height: 100%; object-fit: cover; object-position: top;">
+                 <div class="paper-thumbnail" onclick="openAd('g9_t2_b3.pdf')" >
+                    <img src="buddhist.jpeg" alt="Paper Preview" >
                 <button class="download-btn" onclick="openAd('g9_t2_b3.pdf')">Download Paper</button>
             </div>
             <div class="resource-card">
                 <div class="resource-title">📄 09 ශ්‍රේණිය - බුද්ධාගම  ප්‍රශ්න පත්‍රය - 04</div>
-                 <div class="paper-thumbnail" onclick="openAd('g9_t2_b4.pdf')" style="cursor: pointer; width: 100%; height: 200px; overflow: hidden; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: #0b132b; display: flex; justify-content: center; align-items: center;">
-                    <img src="buddist.jpeg" alt="Paper Preview" style="width: 100%; height: 100%; object-fit: cover; object-position: top;">
+                 <div class="paper-thumbnail" onclick="openAd('g9_t2_b4.pdf')" >
+                    <img src="buddist.jpeg" alt="Paper Preview" >
                 <button class="download-btn" onclick="openAd('g9_t2_b4.pdf')">Download Paper</button>
             </div>
         </div>
