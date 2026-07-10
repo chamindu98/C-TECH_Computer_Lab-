@@ -956,9 +956,18 @@ window.onload = function() {
     });
 
    <script>
-    // වැඩමුළුව පැවැත්වෙන නිශ්චිත දිනය සහ වේලාව මෙතනට ලබා දෙන්න (YYYY-MM-DDTHH:MM:SS)
-    // දැනට හරියටම මාසයකින් එන දිනය (2026 අගෝස්තු 10 පෙ.ව. 9.00) සකසා ඇත.
-    const targetDate = new Date('2026-08-10T09:00:00').getTime(); 
+   // මුලින්ම ආපු දවසේ ඉඳන් හරියටම දින 30ක් ඉදිරියට දිනය තබා එය Browser එකේ Save කරගනී (Refresh කරත් වෙනස් නොවේ)
+    let targetDate = localStorage.getItem('workshopTargetDate');
+
+    if (!targetDate) {
+        // පළමු වතාවට පිටුවට පිවිසෙන විට අද දිනට දින 30ක් එකතු කර දිනය සාදයි
+        const futureDate = new Date();
+        futureDate.setDate(futureDate.getDate() + 30);
+        targetDate = futureDate.getTime();
+        localStorage.setItem('workshopTargetDate', targetDate);
+    } else {
+        targetDate = parseInt(targetDate);
+    }
 
     function updateCountdown() {
         const now = new Date().getTime();
@@ -970,14 +979,14 @@ window.onload = function() {
         const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
         const s = Math.floor((difference % (1000 * 60)) / 1000);
 
-        // Countdown එක අවසන් වී නොමැති නම් අගයන් වෙබ් පිටුවට ඇතුළත් කිරීම
+        // අගයන් වෙබ් පිටුවට ඇතුළත් කිරීම
         if (difference > 0) {
             document.getElementById('days').innerText = d < 10 ? '0' + d : d;
             document.getElementById('hours').innerText = h < 10 ? '0' + h : h;
             document.getElementById('minutes').innerText = m < 10 ? '0' + m : m;
             document.getElementById('seconds').innerText = s < 10 ? '0' + s : s;
         } else {
-            // Countdown එක අවසන් වූ විට සිදුකළ යුතු දේ
+            // Countdown එක අවසන් වූ විට
             clearInterval(interval);
             document.getElementById('days').innerText = '00';
             document.getElementById('hours').innerText = '00';
@@ -989,7 +998,7 @@ window.onload = function() {
 
     // සෑම තත්පරයකදීම Update වීමට සකස් කිරීම
     const interval = setInterval(updateCountdown, 1000);
-    updateCountdown(); // මුලින්ම Run වීමට
+    updateCountdown();
 </script>
 </script>
 </body>
