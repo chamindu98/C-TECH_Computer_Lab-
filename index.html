@@ -547,6 +547,84 @@
 .orange-text { color: #ff7300; }
 .dash { color: #a0aec0; margin: 0 5px; }
 
+        /* Countdown Container */
+        .countdown-container {
+            text-align: center;
+            background: rgba(20, 24, 33, 0.8);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.15);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .countdown-title {
+            color: #ffffff;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .countdown-title span {
+            color: #00f2fe; /* Tech Blue */
+        }
+
+        /* Timer Grid */
+        .timer-grid {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        /* Individual Time Box */
+        .time-box {
+            background: linear-gradient(145deg, #161b22, #0d1117);
+            border: 2px solid #4facfe;
+            border-radius: 12px;
+            padding: 20px;
+            min-width: 100px;
+            box-shadow: 0 0 15px rgba(79, 172, 254, 0.4);
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .time-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.7);
+            border-color: #00f2fe;
+        }
+
+        /* Tech HUD corner lines */
+        .time-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 10px; height: 10px;
+            border-top: 2px solid #00f2fe; border-left: 2px solid #00f2fe;
+        }
+
+        .number {
+            font-family: 'Courier New', Courier, monospace; /* Digital/Tech vibe */
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #00f2fe;
+            text-shadow: 0 0 20px rgba(0, 242, 254, 0.6);
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        .label {
+            color: #8b949e;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+       
+           
+
 
 
 
@@ -616,6 +694,11 @@
     .brand-text-v2 {
         font-size: 1.05rem;
     }
+     .timer-grid { gap: 10px; }
+            .time-box { min-width: 70px; padding: 15px 10px; }
+            .number { font-size: 2.2rem; }
+            .label { font-size: 0.7rem; }
+            .countdown-title { font-size: 1.3rem; }
 }
     </style>
 </head>
@@ -668,6 +751,32 @@
         </div>
     </div>
 </div>
+            <div class="countdown-container">
+        <div class="countdown-title">📸 NEXT-GEN CAMERA WORKSHOP <span>LAUNCHING IN</span></div>
+        
+        <div class="timer-grid">
+            <!-- Days -->
+            <div class="time-box">
+                <div class="number" id="days">00</div>
+                <div class="label">දින (Days)</div>
+            </div>
+            <!-- Hours -->
+            <div class="time-box">
+                <div class="number" id="hours">00</div>
+                <div class="label">පැය (Hours)</div>
+            </div>
+            <!-- Minutes -->
+            <div class="time-box">
+                <div class="number" id="minutes">00</div>
+                <div class="label">මිනිත්තු (Mins)</div>
+            </div>
+            <!-- Seconds -->
+            <div class="time-box">
+                <div class="number" id="seconds">00</div>
+                <div class="label">තත්පර (Secs)</div>
+            </div>
+        </div>
+    </div>
         </header>
 
         <nav class="main-tab-bar">
@@ -845,6 +954,37 @@ window.onload = function() {
         const count = snapshot.val() || 0;
         document.getElementById('total-visitors').innerText = count.toLocaleString(); // ලස්සනට කොමා (,) දාලා පෙන්වන්න
     });
+
+    // හරියටම තව මාසයකින් (දින 30 කින්) Target Date එක සකසයි
+        const targetDate = new Date();
+        targetDate.setDate(targetDate.getDate() + 30); 
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const difference = targetDate - now;
+
+            // කාලය ගණනය කිරීම්
+            const d = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((difference % (1000 * 60)) / 1000);
+
+            // ඉලක්කම් 0-9 දක්වා නම් ඉදිරියට 0 එකතු කිරීම (e.g., 05)
+            document.getElementById('days').innerText = d < 10 ? '0' + d : d;
+            document.getElementById('hours').innerText = h < 10 ? '0' + h : h;
+            document.getElementById('minutes').innerText = m < 10 ? '0' + m : m;
+            document.getElementById('seconds').innerText = s < 10 ? '0' + s : s;
+
+            // Countdown එක අවසන් වූ විට සිදුකළ යුතු දේ
+            if (difference < 0) {
+                clearInterval(interval);
+                document.querySelector('.timer-grid').innerHTML = "<h2 style='color: #00f2fe;'>WORKSHOP IS LIVE!</h2>";
+            }
+        }
+
+        // සෑම තත්පරයකදීම Update වීමට සකස් කිරීම
+        const interval = setInterval(updateCountdown, 1000);
+        updateCountdown(); // මුලින්ම Run වීමට
 </script>
 </body>
 </html>
