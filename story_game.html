@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chronicles of the Chrono-Core: Time Warp Edition</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+        body {
+            background-color: #020205;
+            color: #00ffcc;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh; width: 100vw;
+        }
+        #game-container {
+            position: relative;
+            width: 100%; max-width: 960px;
+            height: 100%; max-height: 540px;
+            aspect-ratio: 16/9;
+            border: 2px solid #00ffcc;
+            box-shadow: 0 0 40px rgba(0, 255, 204, 0.15);
+            background: #000;
+            overflow: hidden;
+        }
+        header {
+            position: absolute;
+            top: 0; left: 0; width: 100%;
+            padding: 12px 20px;
+            background: rgba(5, 5, 15, 0.8);
+            backdrop-filter: blur(8px);
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid #ff0055;
+            z-index: 5;
+            transition: all 1s ease;
+        }
+        #story-box {
+            position: absolute;
+            bottom: 15px; left: 5%; width: 90%;
+            background: rgba(5, 5, 15, 0.9);
+            border: 1px solid #00ffcc;
+            border-left: 5px solid #ff0055;
+            padding: 15px 20px; font-size: 14px; line-height: 1.6;
+            border-radius: 6px; z-index: 5; color: #ffffff;
+            text-shadow: 1px 1px 2px #000;
+        }
+        canvas { width: 100%; height: 100%; display: block; }
+        
+        /* Educational Puzzle Styles */
+        #puzzle-modal {
+            display: none; position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9); z-index: 10;
+            align-items: center; justify-content: center;
+        }
+        .modal-content {
+            background: #0d0d26; border: 2px solid #00ffcc;
+            padding: 30px; border-radius: 12px; max-width: 420px; text-align: center;
+            box-shadow: 0 0 30px #00ffcc;
+        }
+        .binary-btn {
+            background: #12123a; color: #00ffcc; border: 2px solid #00ffcc;
+            padding: 10px 20px; margin: 8px; font-size: 22px; font-weight: bold;
+            cursor: pointer; border-radius: 6px;
+        }
+        #submit-btn {
+            background: #ff0055; color: #fff; border: none;
+            padding: 10px 25px; font-size: 14px; font-weight: bold;
+            margin-top: 15px; cursor: pointer; border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <header id="game-header">
+        <h1 id="chapter-title">LOADING...</h1>
+        <div id="status-panel" style="color: #ffaa00;">සොයාගත් දේ: <span id="item-count">0</span>/3</div>
+    </header>
+
+    <canvas id="gameCanvas"></canvas>
+    <div id="story-box">Loading quantum logs...</div>
+
+    <div id="puzzle-modal">
+        <div class="modal-content">
+            <h2 id="puzzle-title" style="color: #ff0055; margin-bottom: 10px;">🔒 SECURITY MATRIX</h2>
+            <p id="puzzle-desc" style="font-size: 14px; margin-bottom: 15px; color: #ccd5ff;"></p>
+            <div id="binary-area">
+                <button class="binary-btn" id="b1" onclick="toggleBit(1)">0</button>
+                <button class="binary-btn" id="b2" onclick="toggleBit(2)">0</button>
+                <button class="binary-btn" id="b3" onclick="toggleBit(3)">0</button>
+            </div>
+            <button id="submit-btn" onclick="checkPuzzle()">තහවුරු කරන්න</button>
+            <p id="puzzle-error" style="color: #ff3366; margin-top: 10px; font-size: 13px;"></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    function resize() { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; }
+    window.addEventListener('resize', resize);
+    setTimeout(resize, 100);
+
+    // CHAPTER DATA DEFINITIONS (Dynamic Environments)
+    const chapters = {
+        1: {
+            title: "CHAPTER 1: THE BROKEN LABORATORY (අනාගතය)",
+            botSpeech: "යාලුවා! කාල-හරය බිඳ වැටිලා! රසායනාගාරයේ විසිරිලා තියෙන **Energy Gears 3** ඉක්මනට හොයන්න!",
+            themeColor: "#00ffcc",
+            bgColor: "#040418",
+            particleColor: "rgba(0, 255, 204, 0.3)",
+            objectName: "Energy Gear",
+            puzzleTitle: "🔒 PASCALINE CORE SPEED",
+            puzzleDesc: "යන්ත්‍රය පණගැන්වීමට '5' සංඛ්‍යාවේ ද්විමය (Binary) අගය බිටු 3කින් ඇතුළත් කරන්න:",
+            correctAnswer: "101",
+            objects: [
+                { id: 1, x: 250, y: 160, r: 22, found: false },
+                { id: 2, x: 700, y: 300, r: 18, found: false },
+                { id: 3, x: 480, y: 120, r: 15, found: false }
+            ]
+        },
+        2: {
+            title: "CHAPTER 2: ALEXANDRIA'S VAULT (පෞරාණික ඊජිප්තුව)",
+            botSpeech: "අපි සාර්ථකව අතීතයට ආවා! බලන්න වටපිටාව රන්වන් පාටයි! පෞරාණික ඊජිප්තු කුටියේ සඟවා ඇති **රන් කාසි (Golden Medals) 3** සොයාගන්න.",
+            themeColor: "#ffaa00",
+            bgColor: "#1f1202",
+            particleColor: "rgba(255, 170, 0, 0.4)",
+            objectName: "Golden Medal",
+            puzzleTitle: "📐 ALEXANDRIA'S GEOMETRY",
+            puzzleDesc: "දොර විවෘත කිරීමට '6' සංඛ්‍යාවේ ද්විමය (Binary) අගය බිටු 3කින් ඇතුළත් කරන්න (ඉඟිය: 4 + 2 + 0):",
+            correctAnswer: "110",
+            objects: [
+                { id: 1, x: 180, y: 280, r: 20, found: false },
+                { id: 2, x: 620, y: 140, r: 25, found: false },
+                { id: 3, x: 400, y: 320, r: 16, found: false }
+            ]
+        }
+    };
+
+    let currentChapter = 1;
+    let gameState = "SEARCHING"; // SEARCHING, PUZZLE, WARPING, END
+    let foundCount = 0;
+    
+    // Animation states
+    let botY = 220, botX = 100, botTargetX = 100;
+    let botAngle = 0;
+    let warpTunnelAlpha = 0;
+
+    // Environmental Particles
+    let particles = Array.from({length: 40}, () => ({ x: Math.random()*800, y: Math.random()*450, s: Math.random()*2+1, sp: Math.random()*0.5+0.2 }));
+
+    function initChapter(chId) {
+        currentChapter = chId;
+        foundCount = 0;
+        gameState = "SEARCHING";
+        document.getElementById('chapter-title').innerText = chapters[chId].title;
+        document.getElementById('item-count').innerText = "0";
+        document.getElementById('game-header').style.borderColor = chapters[chId].themeColor;
+        document.getElementById('game-container').style.borderColor = chapters[chId].themeColor;
+        updateStory(chapters[chId].botSpeech);
+    }
+
+    // MAIN ANIMATION & RENDERING ENGINE
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let ch = chapters[currentChapter];
+        if (!ch) return;
+
+        let scaleX = canvas.width / 800, scaleY = canvas.height / 450, scaleMin = Math.min(scaleX, scaleY);
+
+        // 1. Dynamic Background Render
+        ctx.fillStyle = ch.bgColor;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Ambient Environment Effects (Lines / Tech / Sand depending on chapter)
+        ctx.strokeStyle = ch.themeColor + "15"; 
+        ctx.lineWidth = 1;
+        for (let i = 0; i < 800; i += 50) {
+            ctx.beginPath();
+            if(currentChapter === 1) { // Grid Lines
+                ctx.moveTo(i * scaleX, 0); ctx.lineTo(i * scaleX, canvas.height);
+            } else { // Diagonal Pyramid Lines
+                ctx.moveTo(400 * scaleX, 100 * scaleY); ctx.lineTo(i * scaleX, canvas.height);
+            }
+            ctx.stroke();
+        }
+
+        // 2. Particle System Updates
+        ctx.fillStyle = ch.particleColor;
+        particles.forEach(p => {
+            p.y -= p.sp * (gameState === "WARPING" ? 15 : 1); // Speed up heavily during time travel
+            if (p.y < 0) p.y = 450;
+            ctx.beginPath(); ctx.arc(p.x * scaleX, p.y * scaleY, p.s * scaleMin, 0, Math.PI*2); ctx.fill();
+        });
+
+        // 3. Render Hidden Objects with dynamic styles
+        ch.objects.forEach(obj => {
+            if (!obj.found && gameState === "SEARCHING") {
+                ctx.save();
+                ctx.translate(obj.x * scaleX, obj.y * scaleY);
+                ctx.shadowBlur = 15; ctx.shadowColor = ch.themeColor;
+
+                if (currentChapter === 1) { // Energy Gear Design
+                    ctx.strokeStyle = '#ffaa00'; ctx.lineWidth = 3;
+                    ctx.beginPath(); ctx.arc(0, 0, obj.r * scaleMin, 0, Math.PI * 2); ctx.stroke();
+                    ctx.fillStyle = '#ffcc00'; ctx.beginPath(); ctx.arc(0, 0, (obj.r/2.5) * scaleMin, 0, Math.PI * 2); ctx.fill();
+                } else { // Ancient Medal Design
+                    ctx.fillStyle = '#ffaa00'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1;
+                    ctx.beginPath(); ctx.arc(0, 0, obj.r * scaleMin, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+                    // Draw a little star/hieroglyph inside
+                    ctx.fillStyle = "#1f1202"; ctx.font = "bold 12px Arial"; ctx.fillText("👁", -6*scaleX, 4*scaleY);
+                }
+                ctx.restore();
+            }
+        });
+
+        // 4. Chrono-Bot Floating Logic & Drawing
+        botAngle += 0.05;
+        botY = 220 + Math.sin(botAngle) * 12;
+        // Smooth horizontal bot movement
+        botX += (botTargetX - botX) * 0.05;
+
+        let bx = botX * scaleX, by = botY * scaleY;
+        ctx.save();
+        ctx.shadowBlur = 15; ctx.shadowColor = ch.themeColor;
+        
+        // Thruster flame
+        let flame = ctx.createLinearGradient(bx, by, bx, by + 30*scaleY);
+        flame.addColorStop(0, ch.themeColor); flame.addColorStop(1, 'transparent');
+        ctx.fillStyle = flame; ctx.fillRect(bx - 8*scaleX, by + 20*scaleY, 16*scaleX, 25*scaleY);
+
+        // Body
+        ctx.fillStyle = "#111133"; ctx.strokeStyle = ch.themeColor; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.arc(bx, by, 25 * scaleMin, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        // Screen
+        ctx.fillStyle = "#03030d"; ctx.beginPath(); ctx.roundRect(bx - 16*scaleX, by - 10*scaleY, 32*scaleX, 20*scaleY, 4); ctx.fill(); ctx.stroke();
+        // Eyes
+        ctx.fillStyle = (gameState === "WARPING") ? "#ff0055" : ch.themeColor;
+        ctx.beginPath(); ctx.arc(bx - 7*scaleX, by, 3*scaleMin, 0, Math.PI*2); ctx.arc(bx + 7*scaleX, by, 3*scaleMin, 0, Math.PI*2); ctx.fill();
+        ctx.restore();
+
+        // 5. Cinematic Time Warp Overlay Effect
+        if (gameState === "WARPING") {
+            warpTunnelAlpha += 0.01;
+            ctx.fillStyle = `rgba(0, 255, 204, ${Math.min(warpTunnelAlpha, 0.8)})`;
+            // Draw expanding concentric warp circles
+            for(let r = 10; r < canvas.width; r += 150) {
+                ctx.beginPath(); ctx.arc(canvas.width/2, canvas.height/2, (r + (Date.now()%150)) % canvas.width, 0, Math.PI*2);
+                ctx.strokeStyle = `rgba(255, 0, 85, ${0.8 - warpTunnelAlpha})`; ctx.lineWidth = 3; ctx.stroke();
+            }
+            if(warpTunnelAlpha >= 1) {
+                warpTunnelAlpha = 0;
+                initChapter(2); // Jump to Chapter 2
+            }
+        }
+
+        requestAnimationFrame(draw);
+    }
+
+    // Pointer Handler (PC Mouse + Mobile Touch)
+    function handlePointer(e) {
+        if (gameState !== "SEARCHING") return;
+        let rect = canvas.getBoundingClientRect();
+        let cx = (e.clientX || e.touches[0].clientX) - rect.left;
+        let cy = (e.clientY || e.touches[0].clientY) - rect.top;
+
+        let scaleX = canvas.width / 800, scaleY = canvas.height / 450, scaleMin = Math.min(scaleX, scaleY);
+        let ch = chapters[currentChapter];
+
+        ch.objects.forEach(obj => {
+            if (!obj.found) {
+                let dist = Math.hypot(cx - (obj.x * scaleX), cy - (obj.y * scaleY));
+                if (dist < (obj.r * scaleMin + 20)) {
+                    obj.found = true;
+                    foundCount++;
+                    document.getElementById('item-count').innerText = foundCount;
+                    botTargetX = obj.x; // Move Chrono-Bot to the found item spot live!
+                    updateStory(`"නියමයි! ඔයා <span style='color:${ch.themeColor}; font-weight:bold;'>${ch.objectName}</span> එකක් හොයාගත්තා!"`);
+
+                    if (foundCount === 3) { setTimeout(triggerPuzzle, 1000); }
+                }
+            }
+        });
+    }
+
+    canvas.addEventListener('pointerdown', handlePointer);
+
+    function updateStory(msg) {
+        document.getElementById('story-box').innerHTML = `<strong>[Chrono-Bot]:</strong> ${msg}`;
+    }
+
+    function triggerPuzzle() {
+        gameState = "PUZZLE";
+        let ch = chapters[currentChapter];
+        document.getElementById('puzzle-title').innerText = ch.puzzleTitle;
+        document.getElementById('puzzle-desc').innerText = ch.puzzleDesc;
+        document.getElementById('puzzle-modal').style.display = 'flex';
+    }
+
+    function toggleBit(id) {
+        let btn = document.getElementById(`b${id}`);
+        btn.innerText = btn.innerText === "0" ? "1" : "0";
+    }
+
+    function checkPuzzle() {
+        let b1 = document.getElementById('b1').innerText;
+        let b2 = document.getElementById('b2').innerText;
+        let b3 = document.getElementById('b3').innerText;
+        let ans = b1 + b2 + b3;
+
+        if (ans === chapters[currentChapter].correctAnswer) {
+            document.getElementById('puzzle-modal').style.display = 'none';
+            document.getElementById('puzzle-error').innerText = "";
+            // Reset bit buttons
+            document.getElementById('b1').innerText = "0"; document.getElementById('b2').innerText = "0"; document.getElementById('b3').innerText = "0";
+            
+            if (currentChapter === 1) {
+                executeWarpCutscene();
+            } else {
+                gameState = "END";
+                updateStory("🎉 **විද්‍යුත් ජයග්‍රහණය!** ඔබ ඊජිප්තු ප්‍රහේලිකාවද විසඳුවා! කාල-හරයේ ඊළඟ කොටස සක්‍රීයයි. (පරිච්ඡේද 20 දක්වා මෙලෙස කතාව ගලා යයි)");
+            }
+        } else {
+            document.getElementById('puzzle-error').innerText = "❌ වැරදියි! තාර්කිකව නැවත සිතා බලන්න.";
+        }
+    }
+
+    // LIVE CINAMATIC ANIMATION (Time Warp)
+    function executeWarpCutscene() {
+        gameState = "WARPING";
+        botTargetX = 400; // Move bot to center for warp
+        updateStory("<span style='color:#ff0055; font-weight:bold;'>[අනතුරු ඇඟවීම!]:</span> Quantum Core එක සක්‍රීය වුණා! අපිව දැන් කාලය හරහා පෞරාණික ඊජිප්තුවට (Chapter 2) ඇදලා ගන්නවා! සූදානම් වෙන්න... Hold On!");
+    }
+
+    // Start Game
+    initChapter(1);
+    requestAnimationFrame(draw);
+</script>
+
+</body>
+</html>
