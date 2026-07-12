@@ -817,43 +817,32 @@
 </div>
         </div>
 
-        <div id="notes" class="tab-content inner-page">
-            <h2>පාඩම් සටහන් (Notes)</h2>
-            <p>සියලුම ශ්‍රේණි සඳහා වන කෙටි සටහන් සහ නිබන්ධන ළඟදීම මෙතැනින් ලබාගත හැක...</p>
-        </div>
+       
 
-        <div id="papers" class="tab-content inner-page">
-            <h2>ප්‍රශ්න පත්‍ර ලබාගැනීම (Download Papers)</h2>
-            <div class="download-grid">
-                
-                <div class="download-card">
-                    <div>
-                        <h4>Grade 11 - Term Test Paper</h4>
-                        <p style="font-size:0.9rem; opacity:0.7; margin-top:5px;">ICT පළමු වාර පරීක්ෂණය</p>
-                    </div>
-                    <a href="paper11.pdf" download class="download-btn">Download PDF</a>
-                </div>
-
-                <div class="download-card">
-                    <div>
-                        <h4>Grade 10 - Model Paper</h4>
-                        <p style="font-size:0.9rem; opacity:0.7; margin-top:5px;">Operating Systems පාඩම</p>
-                    </div>
-                    <a href="paper10.pdf" download class="download-btn">Download PDF</a>
-                </div>
-
-            </div>
-        </div>
-
-        <div id="about class" class="tab-content inner-page" id="about">
-            <h2>අප ගැන (About Us)</h2>
-            <p>C-TECH Computer Lab & Education Institute යනු දරුවන්ට ප්‍රායෝගික සහ සෛද්ධාන්තික තොරතුරු තාක්ෂණ අධ්‍යාපනය ලබාදෙන ශ්‍රී ලංකාවේ ප්‍රමුඛතම ආයතනයකි.</p>
-        </div>
+       
 
     </div>
 
-   <script>
-    // ටැබ් එකක් ඕපන් කරන නිවැරදිම ෆන්ක්ෂන් එක
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+<script>
+    // 2. Firebase Config එක මුලින්ම Define කරන්න
+    const firebaseConfig = {
+        apiKey: "AIzaSyAtfTwhOmDOLAxxTdXQKwaMNthLMpRgBjQ",
+        authDomain: "ctech-counter.firebaseapp.com",
+        projectId: "ctech-counter",
+        storageBucket: "ctech-counter.firebasestorage.app",
+        messagingSenderId: "892307263196",
+        appId: "1:892307263196:web:bf443261191503be652e19"
+    };
+
+    // Firebase Initialize කිරීම
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    const visitorRef = database.ref('visitor_count');
+
+    // 3. ටැබ් මාරු කරන ෆන්ක්ෂන් එක
     function openTab(evt, tabName, isInitial = false) {
         var i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName("tab-content");
@@ -866,7 +855,9 @@
             tablinks[i].classList.remove("active");
         }
 
-        document.getElementById(tabName).style.display = "block";
+        if(document.getElementById(tabName)) {
+            document.getElementById(tabName).style.display = "block";
+        }
 
         if (evt && evt.currentTarget) {
             evt.currentTarget.classList.add("active");
@@ -882,7 +873,6 @@
         }
     }
 
-    // බ්‍රවුසර් එකේ Back හෝ Forward බටන් ඔබන කොට ක්‍රියාත්මක වන කොටස
     window.onpopstate = function(event) {
         if (event.state && event.state.tab) {
             openTab(null, event.state.tab, true);
@@ -891,15 +881,14 @@
         }
     };
 
-    // වෙබ් අඩවිය මුලින්ම ලෝඩ් වෙද්දී ක්‍රියාත්මක වන ප්‍රධාන කොටස
-    window.onload = function() {
-        // --- 1. Tab Bar Logic ---
+    // පිටුව ලෝඩ් වූ පසු ක්‍රියාත්මක වන කොටස
+    window.addEventListener('DOMContentLoaded', (event) => {
+        // --- Tab Handling ---
         var hash = window.location.hash.substring(1);
         if (hash && document.getElementById(hash)) {
             var targetBtn = document.querySelector(`button[onclick*="'${hash}'"]`);
             if (targetBtn) {
-                var fakeEvent = { currentTarget: targetBtn };
-                openTab(fakeEvent, hash, true);
+                openTab({ currentTarget: targetBtn }, hash, true);
             } else {
                 openTab(null, hash, true);
             }
@@ -908,13 +897,7 @@
             history.replaceState({ tab: 'home' }, "", "#home");
         }
 
-        // --- 2. Firebase Visitor Counter Logic ---
-        // Firebase Initialize කිරීම (මෙහිදී config එක ආරක්ෂිතව ඇතුළත් කර ඇත)
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        const visitorRef = database.ref('visitor_count');
-
-        // Session එක පරික්ෂා කර කවුන්ට් එක වැඩි කිරීම
+        // --- Firebase Visitor Counter ---
         if (!sessionStorage.getItem('visited')) {
             visitorRef.transaction(currentCount => {
                 return (currentCount || 0) + 1;
@@ -922,53 +905,38 @@
             sessionStorage.setItem('visited', 'true');
         }
 
-        // Real-time අගය සයිට් එකේ පෙන්වීම (Loading එක ඉවත් වී අගය වැටේ)
+        // 🔄 Real-time update (Loading එක ඉවත් කර අගය පෙන්වීම)
         visitorRef.on('value', (snapshot) => {
             const count = snapshot.val() || 0;
             const counterEl = document.getElementById('total-visitors');
-            if(counterEl) {
+            if (counterEl) {
                 counterEl.innerText = count.toLocaleString();
+            } else {
+                console.error("Error: 'total-visitors' කියා ID එකක් සහිත HTML Element එකක් හමු වුණේ නැත.");
             }
+        }, (error) => {
+            console.error("Firebase Error: ", error);
         });
-    };
-</script>
+    });
 
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-
-<script>
-    // 🔴 Firebase Config විස්තර
-    const firebaseConfig = {
-        apiKey: "AIzaSyAtfTwhOmDOLAxxTdXQKwaMNthLMpRgBjQ",
-        authDomain: "ctech-counter.firebaseapp.com",
-        projectId: "ctech-counter",
-        storageBucket: "ctech-counter.firebasestorage.app",
-        messagingSenderId: "892307263196",
-        appId: "1:892307263196:web:bf443261191503be652e19"
-    };
-
-    // --- 3. Real-Time Fixed Countdown Logic ---
-    // අවසන් වන දිනය සහ වෙලාව: 2026 අගෝස්තු 10 පෙ.ව. 09:00 (ශ්‍රී ලංකා වේලාවෙන්)
+    // --- Countdown Logic (2026-08-10 පෙ.ව. 9:00 දක්වා) ---
     const targetDate = new Date("2026-08-10T09:00:00+05:30").getTime();
 
     function updateCountdown() {
         const now = new Date().getTime();
         const difference = targetDate - now;
 
-        // කාලය ගණනය කිරීම්
         const d = Math.floor(difference / (1000 * 60 * 60 * 24));
         const h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
         const s = Math.floor((difference % (1000 * 60)) / 1000);
 
-        // HTML එකට අගයන් ඇතුළත් කිරීම (Elements පවතීදැයි පරික්ෂා කර බලා)
         if (difference > 0) {
             if(document.getElementById('days')) document.getElementById('days').innerText = d < 10 ? '0' + d : d;
             if(document.getElementById('hours')) document.getElementById('hours').innerText = h < 10 ? '0' + h : h;
             if(document.getElementById('minutes')) document.getElementById('minutes').innerText = m < 10 ? '0' + m : m;
             if(document.getElementById('seconds')) document.getElementById('seconds').innerText = s < 10 ? '0' + s : s;
         } else {
-            // Countdown එක අවසන් වූ විට ක්‍රියාත්මක වන කොටස
             clearInterval(interval);
             if(document.getElementById('days')) document.getElementById('days').innerText = '00';
             if(document.getElementById('hours')) document.getElementById('hours').innerText = '00';
@@ -982,7 +950,6 @@
         }
     }
 
-    // සෑම තත්පරයකදීම Update වීමට සකස් කිරීම
     const interval = setInterval(updateCountdown, 1000);
     updateCountdown();
 </script>
