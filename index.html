@@ -852,41 +852,35 @@
 
     </div>
 
-    <script>
+   <script>
     // ටැබ් එකක් ඕපන් කරන නිවැරදිම ෆන්ක්ෂන් එක
     function openTab(evt, tabName, isInitial = false) {
-    // 1. සියලුම ටැබ් කන්ටෙන්ට් (Sections) හංගන්න
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tab-content");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
 
-    // 2. ප්‍රධාන ටැබ් බාර් එකේ තියෙන සියලුම ලින්ක්ස් වලින් 'active' ක්ලාස් එක අයින් කරන්න
-    tablinks = document.querySelectorAll(".main-tab-bar .tab-btn");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].classList.remove("active");
-    }
+        tablinks = document.querySelectorAll(".main-tab-bar .tab-btn");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].classList.remove("active");
+        }
 
-    // 3. දැනට අවශ්‍ය සෙක්ෂන් එක විතරක් පෙන්වන්න
-    document.getElementById(tabName).style.display = "block";
+        document.getElementById(tabName).style.display = "block";
 
-    // 4. ක්ලික් කරපු බටන් එකට හෝ හෝම් පේජ් එක ලෝඩ් වෙද්දී මුල්ම බටන් එකට 'active' ක්ලාස් එක (නිල් පාට) ලබාදීම
-    if (evt && evt.currentTarget) {
-        evt.currentTarget.classList.add("active");
-    } else {
-        // බ්‍රවුසර් එක මුලින්ම ලෝඩ් වෙද්දී Home (මුල්ම ලින්ක් එක) නිල් පාට කරන්න
-        var homeBtn = document.querySelector(".main-tab-bar .tab-btn[href='index.html']") || document.querySelector(".main-tab-bar .tab-btn");
-        if (homeBtn) {
-            homeBtn.classList.add("active");
+        if (evt && evt.currentTarget) {
+            evt.currentTarget.classList.add("active");
+        } else {
+            var homeBtn = document.querySelector(".main-tab-bar .tab-btn[href='index.html']") || document.querySelector(".main-tab-bar .tab-btn");
+            if (homeBtn) {
+                homeBtn.classList.add("active");
+            }
+        }
+
+        if (!isInitial) {
+            history.pushState({ tab: tabName }, "", "#" + tabName);
         }
     }
-
-    // URL එක අප්ඩේට් කිරීම (කලින් තිබූ පරිදිම)
-    if (!isInitial) {
-        history.pushState({ tab: tabName }, "", "#" + tabName);
-    }
-}
 
     // බ්‍රවුසර් එකේ Back හෝ Forward බටන් ඔබන කොට ක්‍රියාත්මක වන කොටස
     window.onpopstate = function(event) {
@@ -897,77 +891,65 @@
         }
     };
 
-    // වෙබ් අඩවිය මුලින්ම ලෝඩ් වෙද්දී සහ වෙනත් පිටුවක URL හැෂ් එකක් (#) හරහා එද්දී ක්‍රියාත්මක වන කොටස
-window.onload = function() {
-    var hash = window.location.hash.substring(1);
-    
-    // URL එකේ #notes, #papers, #about වගේ හැෂ් එකක් තියෙනවා නම්
-    if (hash && document.getElementById(hash)) {
-        // ප්‍රථමයෙන් click event එකක් simulate කිරීමට අදාළ බටන් එක සොයාගන්න
-        var targetBtn = document.querySelector(`button[onclick*="'${hash}'"]`);
-        
-        // කෘතිමව event එකක් නිර්මාණය කර openTab ෆන්ක්ෂන් එක නිවැරදිව ක්‍රියාත්මක කරවීම
-        if (targetBtn) {
-            var fakeEvent = { currentTarget: targetBtn };
-            openTab(fakeEvent, hash, true);
+    // වෙබ් අඩවිය මුලින්ම ලෝඩ් වෙද්දී ක්‍රියාත්මක වන ප්‍රධාන කොටස
+    window.onload = function() {
+        // --- 1. Tab Bar Logic ---
+        var hash = window.location.hash.substring(1);
+        if (hash && document.getElementById(hash)) {
+            var targetBtn = document.querySelector(`button[onclick*="'${hash}'"]`);
+            if (targetBtn) {
+                var fakeEvent = { currentTarget: targetBtn };
+                openTab(fakeEvent, hash, true);
+            } else {
+                openTab(null, hash, true);
+            }
         } else {
-            openTab(null, hash, true);
+            openTab(null, 'home', true);
+            history.replaceState({ tab: 'home' }, "", "#home");
         }
-    } else {
-        // හැෂ් එකක් නැත්නම් සාමාන්‍ය පරිදි Home එක පෙන්වන්න
-        openTab(null, 'home', true);
-        history.replaceState({ tab: 'home' }, "", "#home");
-    }
-};
+
+        // --- 2. Firebase Visitor Counter Logic ---
+        // Firebase Initialize කිරීම (මෙහිදී config එක ආරක්ෂිතව ඇතුළත් කර ඇත)
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const visitorRef = database.ref('visitor_count');
+
+        // Session එක පරික්ෂා කර කවුන්ට් එක වැඩි කිරීම
+        if (!sessionStorage.getItem('visited')) {
+            visitorRef.transaction(currentCount => {
+                return (currentCount || 0) + 1;
+            });
+            sessionStorage.setItem('visited', 'true');
+        }
+
+        // Real-time අගය සයිට් එකේ පෙන්වීම (Loading එක ඉවත් වී අගය වැටේ)
+        visitorRef.on('value', (snapshot) => {
+            const count = snapshot.val() || 0;
+            const counterEl = document.getElementById('total-visitors');
+            if(counterEl) {
+                counterEl.innerText = count.toLocaleString();
+            }
+        });
+    };
 </script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
 <script>
-    // 🔴 ඔයාගේ Firebase Config විස්තර මෙතනට දාන්න (Replace කරන්න)
+    // 🔴 Firebase Config විස්තර
     const firebaseConfig = {
-  apiKey: "AIzaSyAtfTwhOmDOLAxxTdXQKwaMNthLMpRgBjQ",
-  authDomain: "ctech-counter.firebaseapp.com",
-  projectId: "ctech-counter",
-  storageBucket: "ctech-counter.firebasestorage.app",
-  messagingSenderId: "892307263196",
-  appId: "1:892307263196:web:bf443261191503be652e19"
-};
+        apiKey: "AIzaSyAtfTwhOmDOLAxxTdXQKwaMNthLMpRgBjQ",
+        authDomain: "ctech-counter.firebaseapp.com",
+        projectId: "ctech-counter",
+        storageBucket: "ctech-counter.firebasestorage.app",
+        messagingSenderId: "892307263196",
+        appId: "1:892307263196:web:bf443261191503be652e19"
+    };
 
-    // Firebase Initialize කිරීම
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-    const visitorRef = database.ref('visitor_count');
-
-    // 🕵️‍♂️ එකම ළමයා පිටුව Refresh කරද්දී දිගටම Count වෙන එක වැළැක්වීම (Session Check)
-    if (!sessionStorage.getItem('visited')) {
-        // සර්වර් එකේ තියෙන අගය 1 කින් වැඩි කිරීම (Transaction එකක් මඟින් ආරක්ෂිතව)
-        visitorRef.transaction(currentCount => {
-            return (currentCount || 0) + 1;
-        });
-        // මේ සැරේට Count කළා කියලා බ්‍රවුසර් එකේ මතක තබා ගැනීම
-        sessionStorage.setItem('visited', 'true');
-    }
-
-    // 🔄 Database එකේ අගය වෙනස් වන සැම විටම රියල්-ටයිම් සයිට් එකේ අප්ඩේට් කිරීම
-    visitorRef.on('value', (snapshot) => {
-        const count = snapshot.val() || 0;
-        document.getElementById('total-visitors').innerText = count.toLocaleString(); // ලස්සනට කොමා (,) දාලා පෙන්වන්න
-    });
-
-  
-   // මුලින්ම ආපු දවසේ ඉඳන් හරියටම දින 30ක් ඉදිරියට දිනය තබා එය Browser එකේ Save කරගනී (Refresh කරත් වෙනස් නොවේ)
-    let targetDate = localStorage.getItem('workshopTargetDate');
-
-    if (!targetDate) {
-        // පළමු වතාවට පිටුවට පිවිසෙන විට අද දිනට දින 30ක් එකතු කර දිනය සාදයි
-        const futureDate = new Date();
-        futureDate.setDate(futureDate.getDate() + 30);
-        targetDate = futureDate.getTime();
-        localStorage.setItem('workshopTargetDate', targetDate);
-    } else {
-        targetDate = parseInt(targetDate);
-    }
+    // --- 3. Real-Time Fixed Countdown Logic ---
+    // අවසන් වන දිනය සහ වෙලාව: 2026 අගෝස්තු 10 පෙ.ව. 09:00 (ශ්‍රී ලංකා වේලාවෙන්)
+    const targetDate = new Date("2026-08-10T09:00:00+05:30").getTime();
 
     function updateCountdown() {
         const now = new Date().getTime();
@@ -979,27 +961,30 @@ window.onload = function() {
         const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
         const s = Math.floor((difference % (1000 * 60)) / 1000);
 
-        // අගයන් වෙබ් පිටුවට ඇතුළත් කිරීම
+        // HTML එකට අගයන් ඇතුළත් කිරීම (Elements පවතීදැයි පරික්ෂා කර බලා)
         if (difference > 0) {
-            document.getElementById('days').innerText = d < 10 ? '0' + d : d;
-            document.getElementById('hours').innerText = h < 10 ? '0' + h : h;
-            document.getElementById('minutes').innerText = m < 10 ? '0' + m : m;
-            document.getElementById('seconds').innerText = s < 10 ? '0' + s : s;
+            if(document.getElementById('days')) document.getElementById('days').innerText = d < 10 ? '0' + d : d;
+            if(document.getElementById('hours')) document.getElementById('hours').innerText = h < 10 ? '0' + h : h;
+            if(document.getElementById('minutes')) document.getElementById('minutes').innerText = m < 10 ? '0' + m : m;
+            if(document.getElementById('seconds')) document.getElementById('seconds').innerText = s < 10 ? '0' + s : s;
         } else {
-            // Countdown එක අවසන් වූ විට
+            // Countdown එක අවසන් වූ විට ක්‍රියාත්මක වන කොටස
             clearInterval(interval);
-            document.getElementById('days').innerText = '00';
-            document.getElementById('hours').innerText = '00';
-            document.getElementById('minutes').innerText = '00';
-            document.getElementById('seconds').innerText = '00';
-            document.querySelector('.timer-grid').innerHTML = "<h2 style='color: #00f2fe; text-shadow: 0 0 15px #00f2fe;'>WORKSHOP IS LIVE!</h2>";
+            if(document.getElementById('days')) document.getElementById('days').innerText = '00';
+            if(document.getElementById('hours')) document.getElementById('hours').innerText = '00';
+            if(document.getElementById('minutes')) document.getElementById('minutes').innerText = '00';
+            if(document.getElementById('seconds')) document.getElementById('seconds').innerText = '00';
+            
+            const timerGrid = document.querySelector('.timer-grid');
+            if (timerGrid) {
+                timerGrid.innerHTML = "<h2 style='color: #00f2fe; text-shadow: 0 0 15px #00f2fe;'>WORKSHOP IS LIVE!</h2>";
+            }
         }
     }
 
     // සෑම තත්පරයකදීම Update වීමට සකස් කිරීම
     const interval = setInterval(updateCountdown, 1000);
     updateCountdown();
-
 </script>
 </body>
 </html>
