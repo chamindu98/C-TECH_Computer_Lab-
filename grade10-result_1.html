@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C-TECH - Student Performance Analytics Portal</title>
+    <style>
+        :root {
+            --light-blue: #00a4e4; 
+            --orange: #ff7300; 
+            --dark-bg: #0b132b; 
+            --card-bg: #1c2541; 
+            --text-light: #f4f7f6;
+            --text-muted: #a0aec0;
+            --success: #10b981;
+            --danger: #ef4444;
+            --gold: #f59e0b;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+        }
+
+        body {
+            background-color: var(--dark-bg); 
+            color: var(--text-light);
+            line-height: 1.5;
+            padding: 15px;
+            background-image: radial-gradient(at 0% 0%, rgba(0, 164, 228, 0.12) 0px, transparent 50%),
+                              radial-gradient(at 100% 100%, rgba(255, 115, 0, 0.08) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        .portal-container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 10px auto;
+        }
+
+        /* Top Header Board */
+        .portal-header {
+            background: linear-gradient(135deg, rgba(28, 37, 65, 0.85), rgba(11, 19, 43, 0.95));
+            border: 1px solid rgba(0, 164, 228, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portal-header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--light-blue), var(--orange));
+        }
+
+        .portal-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0, 164, 228, 0.5);
+            letter-spacing: 1px;
+        }
+
+        .portal-subtitle {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        .class-badge {
+            display: inline-block;
+            background: rgba(255, 115, 0, 0.15);
+            border: 1px solid var(--orange);
+            color: var(--orange);
+            padding: 4px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        /* 🏆 Champion Banner */
+        .champion-banner {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(255, 115, 0, 0.15));
+            border: 2px dashed var(--gold);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+            display: none;
+        }
+
+        .champion-badge { font-size: 3rem; margin-bottom: 5px; display: inline-block; }
+        
+        /* 📸 Champion Photo Styles */
+        .champion-photo-container {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: 4px solid var(--gold);
+            margin: 15px auto;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+            background: var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .champion-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .champion-placeholder-avatar {
+            font-size: 4rem;
+        }
+
+        .champion-name { font-size: 1.8rem; font-weight: 800; color: #fff; text-shadow: 0 0 8px var(--gold); margin: 5px 0; }
+        .champion-wish { font-size: 1.1rem; color: var(--text-light); max-width: 600px; margin: 0 auto 10px auto; }
+        
+        .champion-stats {
+            display: inline-flex;
+            gap: 20px;
+            background: rgba(0,0,0,0.3);
+            padding: 8px 20px;
+            border-radius: 30px;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            font-weight: bold;
+            color: var(--gold);
+        }
+
+        /* Search Section */
+        .search-section {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .search-title {
+            font-size: 1.1rem;
+            color: var(--light-blue);
+            margin-bottom: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-box { display: flex; gap: 10px; }
+        .search-input {
+            flex-grow: 1;
+            background: rgba(11, 19, 43, 0.8);
+            border: 1px solid rgba(0, 164, 228, 0.4);
+            border-radius: 8px;
+            padding: 12px;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: var(--orange);
+            box-shadow: 0 0 10px rgba(255, 115, 0, 0.2);
+        }
+
+        /* Analytics Panel */
+        .analytics-panel {
+            margin-top: 20px;
+            background: rgba(11, 19, 43, 0.6);
+            border: 1px solid rgba(0, 164, 228, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            display: none;
+        }
+
+        .analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .back-btn { margin-top: 15px; background-color: rgba(0, 164, 228, 0.1); border: 1px solid var(--light-blue); color: var(--light-blue); padding: 12px 24px; font-weight: bold; border-radius: 6px; cursor: pointer; text-decoration: none; display: inline-block; transition: 0.3s; }
+        .back-btn:hover { background-color: var(--light-blue); color: #0b132b; transform: translateX(-4px); }
+
+        @media (max-width: 768px) {
+            .analytics-grid { grid-template-columns: 1fr; }
+        }
+
+        .student-info-summary { display: flex; flex-direction: column; justify-content: center; gap: 8px; }
+        .stat-line { font-size: 1.05rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
+        .stat-line span { color: var(--light-blue); font-weight: bold; }
+
+        .chart-frame {
+            background: #0b132b;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .chart-title { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px; align-self: flex-start; }
+        .svg-chart { width: 100%; height: 160px; }
+
+        /* 📋 Results Section */
+        .results-container {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            overflow-x: auto;
+        }
+
+        .results-table { width: 100%; border-collapse: collapse; text-align: left; }
+        .results-table th {
+            background-color: rgba(0, 164, 228, 0.15);
+            color: var(--light-blue);
+            padding: 12px 15px;
+            font-weight: 600;
+            border-bottom: 2px solid rgba(0, 164, 228, 0.3);
+            font-size: 0.95rem;
+        }
+
+        .results-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.95rem;
+        }
+
+        .results-table tr:hover { background-color: rgba(255, 255, 255, 0.02); }
+        .results-table tr.rank-1 td { color: var(--gold); font-weight: bold; }
+
+        /* Badges & Pills */
+        .badge-pos {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            background: rgba(255,255,255,0.08);
+            color: var(--text-light);
+        }
+        .badge-pos.pos-1 { background: var(--gold); color: #000; }
+        .badge-pos.pos-2 { background: #e2e8f0; color: #000; }
+        .badge-pos.pos-3 { background: #cd7f32; color: #fff; }
+
+        .total-score-box {
+            background: rgba(0, 164, 228, 0.15);
+            border: 1px solid var(--light-blue);
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-weight: 800;
+            font-size: 1.05rem;
+            display: inline-block;
+        }
+
+        .grade-pill {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-weight: 900;
+            font-size: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .grade-A { background: var(--success); color: #000; }
+        .grade-B { background: var(--light-blue); color: #000; }
+        .grade-C { background: var(--gold); color: #000; }
+        .grade-S { background: var(--orange); color: #fff; }
+        .grade-W { background: var(--danger); color: #fff; }
+
+        .no-data { text-align: center; color: var(--danger); padding: 15px; font-weight: bold; }
+
+        /* 🛠️ Mobile Rows Display Configuration */
+        .mobile-row-layout { display: none; }
+
+        /* =======================================================
+           📱 MOBILE RESPONSIVE UI ARCHITECTURE
+           ======================================================= */
+        @media (max-width: 650px) {
+            .desktop-cell { display: none !important; }
+            
+            .results-table thead, .results-table th { 
+                display: block; 
+                width: 100%;
+            }
+            .results-table th {
+                text-align: center;
+                font-size: 1.1rem;
+                border-radius: 8px;
+                margin-bottom: 15px;
+                padding: 10px;
+            }
+            
+            .results-table, .results-table tbody, .results-table tr, .results-table td { 
+                display: block; 
+                width: 100%; 
+            }
+
+            .results-table tr {
+                background: rgba(255,255,255,0.02);
+                border: 1px solid rgba(255,255,255,0.05);
+                border-radius: 10px;
+                padding: 12px;
+                margin-bottom: 12px;
+            }
+
+            .mobile-row-layout { display: block; }
+
+            .mobile-primary-row {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                gap: 10px;
+            }
+
+            .mobile-left {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                max-width: 60%;
+            }
+
+            .mobile-student-name {
+                font-weight: bold;
+                font-size: 1rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                color: #fff;
+            }
+
+            .mobile-right {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .mobile-expand-details {
+                display: none;
+                margin-top: 12px;
+                padding-top: 12px;
+                border-top: 1px dashed rgba(255,255,255,0.1);
+                background: rgba(0,0,0,0.15);
+                border-radius: 6px;
+                padding: 10px;
+            }
+
+            .mobile-expand-details.show {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+
+            .detail-item {
+                font-size: 0.85rem;
+                color: var(--text-muted);
+            }
+            .detail-item span {
+                color: #fff;
+                font-weight: bold;
+                font-family: monospace;
+            }
+
+            .expand-btn {
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                color: var(--light-blue);
+                padding: 4px 8px;
+                border-radius: 4px;
+                font-size: 0.8rem;
+                font-weight: bold;
+                cursor: pointer;
+                transition: 0.2s;
+            }
+            .expand-btn:hover { background: var(--light-blue); color: #000; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="portal-container">
+        
+        <div class="portal-header">
+            <div class="portal-title">💻 C-TECH PERFORMANCE PORTAL</div>
+            <div class="portal-subtitle">Student Term Examination Analytics Console</div>
+            <div class="class-badge" id="class-title-badge">GRADE 10 - RESULTS SHEET</div>
+        </div>
+
+        <!-- 🏆 Champion Banner with Student Photo Container -->
+        <div id="champion-post" class="champion-banner">
+            <span class="champion-badge">👑</span>
+            <div style="color: var(--gold); font-weight: bold; font-size: 0.9rem; letter-spacing: 2px;">TOP PERFORMANCE CONGRATULATIONS</div>
+            
+            <!-- 📸 පලවෙනියගේ Photo එක පෙන්වන තැන -->
+            <div class="champion-photo-container">
+                <img id="champ-photo" src="" alt="Champion Student" class="champion-photo" style="display: none;">
+                <span id="champ-avatar-placeholder" class="champion-placeholder-avatar">👨‍🎓</span>
+            </div>
+
+            <div class="champion-name" id="champ-name">ළමයාගේ නම</div>
+            <div class="champion-wish" id="champ-wish">පන්තියේ ප්‍රථම ස්ථානය ලබා ගනිමින් විශිෂ්ට දක්ෂතා දැක්වූ ඔබ හට C-TECH වෙතින් උණුසුම් සුභ පැතුම්!</div>
+            <div class="champion-stats">
+                <span>Total Marks: <span id="champ-total" style="color:#fff;">0</span></span>
+                <span>Grade: <span id="champ-grade" style="color:#fff;">A</span></span>
+            </div>
+        </div>
+
+        <div class="search-section">
+            <div class="search-title">🔍 ඔබගේ ප්‍රගති වාර්තාව (Personal Progress Dashboard)</div>
+            <div class="search-box">
+                <input type="text" id="student-search" class="search-input" placeholder="ප්‍රගති ප්‍රස්තාරය බැලීමට සිසුවාගේ නම මෙතන Type කරන්න..." oninput="generateIndividualAnalytics()">
+            </div>
+
+            <div id="analytics-view" class="analytics-panel">
+                <div class="analytics-grid">
+                    <div class="student-info-summary">
+                        <div class="stat-line">සිසුවාගේ නම: <span id="an-name">-</span></div>
+                        <div class="stat-line">වර්තමාන ස්ථානය (Position): <span id="an-pos">-</span></div>
+                        <div class="stat-line">මුළු ලකුණු (Total Marks): <span id="an-total">-</span></div>
+                        <div class="stat-line">සාමාර්ථය (Grade): <span id="an-grade">-</span></div>
+                    </div>
+                    <div class="chart-frame">
+                        <div class="chart-title">📈 විභාග අනුව ප්‍රගතිය (Exam-on-Exam Progress History)</div>
+                        <div id="svg-graph-wrapper" style="width:100%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-container">
+            <table class="results-table">
+                <thead id="results-table-header"></thead>
+                <tbody id="results-table-body"></tbody>
+            </table>
+        </div>
+         <br>
+        <a href="index.html" class="back-btn">← ආපසු (Home)</a>
+    </div>
+
+    <script>
+        // 🌟 'photo' කියන කොටසට සිසුවාගේ පින්තූරයේ Link එක හෝ File Name එක (eg: "images/sanara.jpg") ඇතුලත් කරන්න.
+        const studentData = [
+            { name: "Mohomad Nabeel", papers: [45, 50], history: [33, 88], photo: "sanara.jpg" },
+            { name: "Sayumi Sagithma", papers: [42, 46], history: [69, 75], photo: "" },
+            { name: "Himasha Sarindi", papers: [38, 42], history: [61, 74], photo: "" },
+            { name: "Tenugi Mihirangi", papers: [30, 35], history: [0, 58], photo: "" },
+            { name: "Muthuli Pinipa", papers: [22, 26], history: [0, 42], photo: "" },
+            { name: "Janidu Yasasvi", papers: [15, 18], history: [75, 28], photo: "" },
+            { name: "Esuru Daritha", papers: [15, 18], history: [84.5, 28], photo: "" },
+            { name: "Saniru Sathsara", papers: [15, 18], history: [80, 28], photo: "" },
+            { name: "Amashi Dewrangi", papers: [15, 18], history: [69, 28], photo: "" },
+            { name: "Akesha Savindi", papers: [15, 18], history: [80.5, 28], photo: "" },
+            { name: "Oshan Amisha", papers: [15, 18], history: [66, 28], photo: "" },
+            { name: "Tharushi Nawodya", papers: [15, 18], history: [14, 28], photo: "" },
+            { name: "Dilum Charuka", papers: [15, 18], history: [60.5, 28], photo: "" },
+            { name: "Pansilu Nethmina", papers: [15, 18], history: [54, 28], photo: "" },
+            { name: "Ashani Kaushalya", papers: [15, 18], history: [42, 28], photo: "" },
+           { name: "Randima Madushan", papers: [15, 18], history: [42, 28], photo: "" },
+          { name: "Piyumi", papers: [15, 18], history: [42, 28], photo: "" },
+          { name: "Chamudi", papers: [15, 18], history: [42, 28], photo: "" },
+          { name: "Kavindi", papers: [15, 18], history: [42, 28], photo: "" },
+          { name: "Nishi", papers: [15, 18], history: [42, 28], photo: "" },
+          { name: "Biguni", papers: [15, 18], history: [42, 28], photo: "" },
+          { name: "Tharinda", papers: [15, 18], history: [42, 28], photo: "" },
+          { name: "Nesandu", papers: [15, 18], history: [42, 28], photo: "" },
+          { name: "Chanithu", papers: [15, 18], history: [42, 28], photo: "" },
+          { name: "Shehan", papers: [15, 18], history: [42, 28], photo: "" },
+          { name: "Lehansa", papers: [15, 18], history: [42, 28], photo: "" },
+          { name: "Deneth", papers: [15, 18], history: [42, 28], photo: "" },
+          { name: "Okitha", papers: [15, 18], history: [42, 28], photo: "" },
+          { name: "Sasan", papers: [15, 18], history: [42, 28], photo: "" },
+          { name: "Sajitha", papers: [15, 18], history: [42, 28], photo: "" }
+        ];
+
+        let maxPapersCount = 0;
+
+        function calculateGradesAndTotals() {
+            maxPapersCount = Math.max(...studentData.map(s => s.papers.length), 0);
+
+            studentData.forEach(student => {
+                student.total = student.papers.reduce((sum, mark) => sum + mark, 0);
+                
+                if (student.total >= 75) student.grade = "A";
+                else if (student.total >= 65) student.grade = "B";
+                else if (student.total >= 55) student.grade = "C";
+                else if (student.total >= 35) student.grade = "S";
+                else student.grade = "W";
+            });
+
+            studentData.sort((a, b) => b.total - a.total);
+
+            let currentRank = 1;
+            for(let i = 0; i < studentData.length; i++) {
+                if (i > 0 && studentData[i].total < studentData[i-1].total) {
+                    currentRank = i + 1;
+                }
+                studentData[i].position = currentRank;
+            }
+        }
+
+        function renderResultsTable() {
+            const thead = document.getElementById("results-table-header");
+            const tbody = document.getElementById("results-table-body");
+            
+            let headerHtml = `
+                <tr>
+                    <th class="desktop-cell">ස්ථානය (Position)</th>
+                    <th class="desktop-cell">සිසුවාගේ නම (Student Name)</th>
+            `;
+            for(let i = 1; i <= maxPapersCount; i++) {
+                headerHtml += `<th class="desktop-cell" style="text-align: center;">Paper ${i} Marks</th>`;
+            }
+            headerHtml += `
+                    <th class="desktop-cell" style="text-align: center;">Total Marks</th>
+                    <th class="desktop-cell" style="text-align: center;">සාමාර්ථය (Grade)</th>
+                    <th class="mobile-row-layout" style="text-align: center;">📊 පන්ති ප්‍රතිඵල ලේඛනය (Results Sheet)</th>
+                </tr>
+            `;
+            thead.innerHTML = headerHtml;
+
+            tbody.innerHTML = "";
+            studentData.forEach((student, index) => {
+                const tr = document.createElement("tr");
+                if(student.position === 1) tr.className = "rank-1";
+
+                let posBadgeClass = `badge-pos`;
+                if(student.position <= 3) posBadgeClass += ` pos-${student.position}`;
+
+                let desktopPapersHtml = "";
+                for(let i = 0; i < maxPapersCount; i++) {
+                    const mark = student.papers[i] !== undefined ? student.papers[i] : "-";
+                    desktopPapersHtml += `<td class="desktop-cell" style="text-align: center; font-family: monospace;">${mark}</td>`;
+                }
+
+                let mobilePapersHtml = "";
+                student.papers.forEach((mark, i) => {
+                    mobilePapersHtml += `<div class="detail-item">Paper ${i+1} Marks: <span>${mark}</span></div>`;
+                });
+
+                tr.innerHTML = `
+                    <td class="desktop-cell"><span class="${posBadgeClass}">${student.position}</span></td>
+                    <td class="desktop-cell"><strong>${student.name}</strong></td>
+                    ${desktopPapersHtml}
+                    <td class="desktop-cell" style="text-align: center;"><span class="total-score-box">${student.total}</span></td>
+                    <td class="desktop-cell" style="text-align: center;"><span class="grade-pill grade-${student.grade}">${student.grade}</span></td>
+                    
+                    <td class="mobile-row-layout">
+                        <div class="mobile-primary-row">
+                            <div class="mobile-left">
+                                <span class="${posBadgeClass}">${student.position}</span>
+                                <div class="mobile-student-name">${student.name}</div>
+                            </div>
+                            <div class="mobile-right">
+                                <span class="total-score-box">${student.total}</span>
+                                <span class="grade-pill grade-${student.grade}">${student.grade}</span>
+                                <button class="expand-btn" onclick="toggleMobileExpand(${index})">Expand</button>
+                            </div>
+                        </div>
+                        <div class="mobile-expand-details" id="mobile-details-${index}">
+                            ${mobilePapersHtml}
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function toggleMobileExpand(index) {
+            const element = document.getElementById(`mobile-details-${index}`);
+            element.classList.toggle('show');
+        }
+
+        function generateChampionPost() {
+            if(studentData.length === 0) return;
+            
+            // ලකුණු අනුව sorting වී ඇති නිසා සැමවිටම 0 වෙනි ස්ථානයේ සිටින්නේ ප්‍රථමයා ය.
+            const champion = studentData[0]; 
+            
+            document.getElementById("champ-name").innerText = champion.name;
+            document.getElementById("champ-total").innerText = champion.total;
+            document.getElementById("champ-grade").innerText = champion.grade;
+            
+            const imgElement = document.getElementById("champ-photo");
+            const placeholderElement = document.getElementById("champ-avatar-placeholder");
+
+            // පින්තූරයක් ඇතුලත් කර තිබේදැයි පරික්ෂා කිරීම
+            if(champion.photo && champion.photo.trim() !== "") {
+                imgElement.src = champion.photo;
+                imgElement.style.display = "block";
+                placeholderElement.style.display = "none";
+            } else {
+                imgElement.style.display = "none";
+                placeholderElement.style.display = "block";
+            }
+
+            document.getElementById("champion-post").style.display = "block";
+        }
+
+        function generateIndividualAnalytics() {
+            const searchVal = document.getElementById("student-search").value.toLowerCase().trim();
+            const panel = document.getElementById("analytics-view");
+
+            if(searchVal === "") { panel.style.display = "none"; return; }
+
+            const student = studentData.find(s => s.name.toLowerCase().includes(searchVal));
+
+            if(student) {
+                panel.style.display = "block";
+                document.getElementById("an-name").innerText = student.name;
+                document.getElementById("an-pos").innerText = `${student.position} වන ස්ථානය`;
+                document.getElementById("an-total").innerText = `${student.total}`;
+                document.getElementById("an-grade").innerText = student.grade;
+
+                const fullHistory = [...(student.history || []), student.total];
+                const totalPoints = fullHistory.length;
+                
+                let svgContent = `
+                    <svg class="svg-chart" viewBox="0 0 300 160">
+                        <line x1="40" y1="20" x2="280" y2="20" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4"/>
+                        <line x1="40" y1="80" x2="280" y2="80" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4"/>
+                        <line x1="40" y1="140" x2="280" y2="140" stroke="rgba(255,255,255,0.2)"/>
+                        
+                        <text x="35" y="25" fill="#a0aec0" font-size="9" text-anchor="end">100</text>
+                        <text x="35" y="85" fill="#a0aec0" font-size="9" text-anchor="end">50</text>
+                        <text x="35" y="145" fill="#a0aec0" font-size="9" text-anchor="end">0</text>
+                `;
+
+                let pointsCoordinates = [];
+                
+                fullHistory.forEach((mark, idx) => {
+                    let x = 160; 
+                    if (totalPoints > 1) {
+                        x = 60 + idx * (200 / (totalPoints - 1));
+                    }
+                    const y = 140 - (mark * 1.2); 
+                    pointsCoordinates.push({x, y, mark, isCurrent: idx === totalPoints - 1});
+                    
+                    const labelColor = (idx === totalPoints - 1) ? "#ff7300" : "#00a4e4";
+                    const fontWt = (idx === totalPoints - 1) ? "bold" : "normal";
+                    const labelText = (idx === totalPoints - 1) ? "Current" : `Exam ${idx + 1}`;
+                    
+                    svgContent += `<text x="${x}" y="155" fill="${labelColor}" font-size="9" text-anchor="middle" font-weight="${fontWt}">${labelText}</text>`;
+                });
+
+                if (pointsCoordinates.length > 1) {
+                    const linePath = pointsCoordinates.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+                    svgContent += `<path d="${linePath}" fill="none" stroke="rgba(0, 164, 228, 0.2)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>`;
+                    svgContent += `<path d="${linePath}" fill="none" stroke="#00a4e4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
+                }
+
+                pointsCoordinates.forEach(p => {
+                    const circleFill = p.isCurrent ? "#ff7300" : "#fff";
+                    const circleStroke = p.isCurrent ? "#fff" : "#00a4e4";
+                    const radius = p.isCurrent ? 6 : 5;
+                    const textColor = p.isCurrent ? "#ff7300" : "#fff";
+                    
+                    svgContent += `<circle cx="${p.x}" cy="${p.y}" r="${radius}" fill="${circleFill}" stroke="${circleStroke}" stroke-width="2"/>`;
+                    svgContent += `<text x="${p.x}" y="${p.y - 10}" fill="${textColor}" font-size="${p.isCurrent ? 11 : 10}" font-weight="bold" text-anchor="middle">${p.mark}</text>`;
+                });
+
+                svgContent += `</svg>`;
+                document.getElementById("svg-graph-wrapper").innerHTML = svgContent;
+            } else {
+                document.getElementById("an-name").innerText = "සිසුවා සොයාගත නොහැක";
+                document.getElementById("an-pos").innerText = "-";
+                document.getElementById("an-total").innerText = "-";
+                document.getElementById("an-grade").innerText = "-";
+                document.getElementById("svg-graph-wrapper").innerHTML = "<p class='no-data'>ඇතුලත් කල නම නිවැරදිදැයි නැවත පරීක්ෂා කරන්න.</p>";
+            }
+        }
+
+        window.onload = function() {
+            calculateGradesAndTotals();
+            renderResultsTable();
+            generateChampionPost();
+        };
+    </script>
+</body>
+</html>
