@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>micro:bit Practical Examination - Grade 9</title>
+<style>
+  :root {
+    --primary-color: #0084ff;
+    --secondary-color: #ff0055;
+    --dark-bg: #1e1e2f;
+    --card-bg: #2d2d44;
+    --text-color: #ffffff;
+    --accent-color: #00e676;
+  }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--dark-bg);
+    color: var(--text-color);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  .exam-container {
+    background-color: var(--card-bg);
+    border-radius: 16px;
+    padding: 30px;
+    max-width: 650px;
+    width: 100%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+  }
+
+  h1 {
+    color: var(--primary-color);
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  p.subtitle {
+    font-size: 14px;
+    color: #aaa;
+    margin-bottom: 25px;
+  }
+
+  /* 3D Dice Styling */
+  .dice-area {
+    perspective: 600px;
+    margin: 30px auto;
+    height: 100px;
+    width: 100px;
+  }
+
+  .dice {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 1.5s cubic-bezier(0.2, 0.8, 0.3, 1);
+    cursor: pointer;
+  }
+
+  .dice div {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: white;
+    border: 2px solid #ccc;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 36px;
+    font-weight: bold;
+    color: #333;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.1);
+  }
+
+  .front  { transform: rotateY(0deg) translateZ(50px); }
+  .back   { transform: rotateY(180deg) translateZ(50px); }
+  .right  { transform: rotateY(90deg) translateZ(50px); }
+  .left   { transform: rotateY(-90deg) translateZ(50px); }
+  .top    { transform: rotateX(90deg) translateZ(50px); }
+  .bottom { transform: rotateX(-90deg) translateZ(50px); }
+
+  .roll-btn {
+    background: linear-gradient(135deg, var(--primary-color), #0056b3);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 132, 255, 0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .roll-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 132, 255, 0.6);
+  }
+
+  .roll-btn:disabled {
+    background: #555;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  /* Question Box Styling */
+  .question-box {
+    margin-top: 30px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-left: 5px solid var(--accent-color);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: left;
+    display: none;
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .question-title {
+    color: var(--accent-color);
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .question-text {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+  }
+
+  .task-list {
+    margin-left: 20px;
+    font-size: 14px;
+    color: #ddd;
+  }
+
+  .task-list li {
+    margin-bottom: 8px;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="exam-container">
+  <h1>9 වසර - micro:bit ප්‍රායෝගික පරීක්ෂණය</h1>
+  <p class="subtitle">පහත දාදු කැටය (Dice) ක්ලික් කර ඔබට හිමිවන ප්‍රායෝගික ප්‍රශ්නය ලබාගන්න.</p>
+
+  <div class="dice-area" onclick="rollDice()">
+    <div class="dice" id="dice">
+      <div class="front">1</div>
+      <div class="back">6</div>
+      <div class="right">3</div>
+      <div class="left">4</div>
+      <div class="top">5</div>
+      <div class="bottom">2</div>
+    </div>
+  </div>
+
+  <button class="roll-btn" id="rollBtn" onclick="rollDice()">දාදු කැටය කැරකවීම</button>
+
+  <div class="question-box" id="questionBox">
+    <div class="question-title" id="qTitle">ප්‍රශ්න අංකය: -</div>
+    <div class="question-text" id="qText"></div>
+    <ul class="task-list" id="qTasks"></ul>
+  </div>
+</div>
+
+<script>
+  const questions = {
+    1: {
+      title: "ප්‍රශ්න අංක 01: LED Array එක මගින් සංකේත පෙන්වීම",
+      text: "micro:bit පුවරුවේ ඇති A සහ B බොත්තම් (Buttons) භාවිත කරමින් සංකේත තිරය මත පෙන්වීමේ වැඩසටහනක් MakeCode editor හරහා නිර්මාණය කරන්න.",
+      tasks: [
+        "A බොත්තම එබූ විට 'හදවතක' (Heart) රූපයක් LED Matrix එකේ දිස්විය යුතුය.",
+        "B බොත්තම එබූ විට 'මූණක' (Happy Face) රූපයක් දිස්විය යුතුය.",
+        "A සහ B බොත්තම් දෙකම එකවර එබූ විට (A+B) තිරය Clear විය යුතුය."
+      ]
+    },
+    2: {
+      title: "ප්‍රශ්න අංක 02: ඩිජිටල් දාදු කැටයක් නිර්මාණය (Digital Dice)",
+      text: "micro:bit පුවරුව සොලවන විට (On Shake) 1 සිට 6 දක්වා අහඹු අංකයක් (Random Number) තිරය මත පෙන්වන ක්‍රමලේඛයක් සකසන්න.",
+      tasks: [
+        "'On Shake' input ඉවෙන්ට් එක භාවිත කරන්න.",
+        "1 ත් 6 ත් අතර අහඹු අංකයක් (Pick Random) ලබාගෙන එය Variables එකක ගබඩා කරන්න.",
+        "ලැබෙන අංකය micro:bit LED තිරයේ පෙන්වීමට සකසන්න."
+      ]
+    },
+    3: {
+      title: "ප්‍රශ්න අංක 03: උෂ්ණත්වමානයක් නිර්මාණය කිරීම (Temperature Sensor)",
+      text: "micro:bit හි අන්තර්ගත Temperature Sensor එක භාවිත කර උෂ්ණත්වය මැන පෙන්වන පද්ධතියක් සකසන්න.",
+      tasks: [
+        "A බොත්තම එබූ විට පවතින උෂ්ණත්වය සෙල්සියස් (C) අංශක වලින් තිරයේ පෙන්වන්න.",
+        "උෂ්ණත්වය 30°C ට වඩා වැඩි නම් 'HOT' ලෙසද, 30°C ට අඩු නම් 'COOL' ලෙසද පෙන්වීමට Conditional Logic (if-else) භාවිත කරන්න."
+      ]
+    },
+    4: {
+      title: "ප්‍රශ්න අංක 04: ආලෝක සංවේදකය සහ ස්වයංක්‍රීය පහන (Light Sensor)",
+      text: "micro:bit හි Light Level සංවේදකය භාවිත කර පරිසරයේ ආලෝකය අඩු වූ විට දැල්වෙන පහනක ආකෘතියක් නිර්මාණය කරන්න.",
+      tasks: [
+        "ආලෝක මට්ටම (Light Level) නිරන්තරයෙන් පරීක්ෂා කරන්න (Forever Loop).",
+        "Light Level එක 100 ට වඩා අඩු නම් LED Matrix එක සම්පූර්ණයෙන්ම දල්වන්න (ON).",
+        "Light Level එක 100 ට වඩා වැඩි නම් LED Matrix එක නිවා දමන්න (Clear Screen)."
+      ]
+    },
+    5: {
+      title: "ප්‍රශ්න අංක 05: මාලිමාව නිර්මාණය කිරීම (Digital Compass)",
+      text: "micro:bit හි අන්තර්ගත Compass (Magnetometer) සංවේදකය භාවිතයෙන් උතුර දිශාව හඳුනාගන්නා වැඩසටහනක් සකසන්න.",
+      tasks: [
+        "Compass Heading අගය ලබාගන්න.",
+        "අගය 45° ට අඩු හෝ 315° ට වැඩි නම් උතුර දිශාව පෙන්වීමට 'N' අකුර LED තිරයේ දිස්වීමට සකසන්න.",
+        "අනෙක් අවස්ථාවලදී 'X' සලකුණ පෙන්වීමට සකසන්න."
+      ]
+    },
+    6: {
+      title: "ප්‍රශ්න අංක 06: කවුන්ටරයක් නිර්මාණය (Step / Click Counter)",
+      text: "A සහ B බොත්තම් භාවිත කරමින් එකතු වන සහ අඩුවන කවුන්ටරයක් (Counter) නිර්මාණය කරන්න.",
+      tasks: [
+        "ආරම්භක අගය 0 වන පරිදි Variable එකක් නිර්මාණය කරන්න.",
+        "A බොත්තම එබූ විට අගය 1 කින් වැඩි විය යුතුය (Increment).",
+        "B බොත්තම එබූ විට අගය 1 කින් අඩු විය යුතුය (Decrement).",
+        "සෑම විටම නව අගය LED තිරයේ දිස්විය යුතුය."
+      ]
+    }
+  };
+
+  function rollDice() {
+    const dice = document.getElementById('dice');
+    const rollBtn = document.getElementById('rollBtn');
+    const questionBox = document.getElementById('questionBox');
+
+    rollBtn.disabled = true;
+    questionBox.style.display = 'none';
+
+    // Generate random number between 1 and 6
+    const randomNumber = Math.floor(Math.random() * 6) + 1;
+
+    // Define rotation values for each side
+    const rotations = {
+      1: { x: 0, y: 0 },
+      2: { x: 90, y: 0 },
+      3: { x: 0, y: -90 },
+      4: { x: 0, y: 90 },
+      5: { x: -90, y: 0 },
+      6: { x: 0, y: 180 }
+    };
+
+    // Extra spins for animation realism
+    const extraSpinsX = (Math.floor(Math.random() * 2) + 3) * 360;
+    const extraSpinsY = (Math.floor(Math.random() * 2) + 3) * 360;
+
+    const targetRot = rotations[randomNumber];
+    const finalX = targetRot.x + extraSpinsX;
+    const finalY = targetRot.y + extraSpinsY;
+
+    dice.style.transform = `rotateX(${finalX}deg) rotateY(${finalY}deg)`;
+
+    // Display question after animation finishes (1.5 seconds)
+    setTimeout(() => {
+      displayQuestion(randomNumber);
+      rollBtn.disabled = false;
+    }, 1500);
+  }
+
+  function displayQuestion(num) {
+    const qData = questions[num];
+    document.getElementById('qTitle').innerText = qData.title;
+    document.getElementById('qText').innerText = qData.text;
+
+    const taskList = document.getElementById('qTasks');
+    taskList.innerHTML = '';
+    
+    qData.tasks.forEach(task => {
+      const li = document.createElement('li');
+      li.innerText = task;
+      taskList.appendChild(li);
+    });
+
+    document.getElementById('questionBox').style.display = 'block';
+  }
+</script>
+
+</body>
+</html>
