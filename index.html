@@ -1047,7 +1047,7 @@
         // 🔄 Real-time update (Loading එක ඉවත් කර අගය පෙන්වීම)
         visitorRef.on('value', (snapshot) => {
             const count = snapshot.val() || 0;
-            const counterEl = document.getElementById('Visit-counter');
+            const counterEl = document.getElementById('total-visitors');
             if (counterEl) {
                 counterEl.innerText = count.toLocaleString();
             } else {
