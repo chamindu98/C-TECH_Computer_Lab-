@@ -621,6 +621,125 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
+/* Sidebar Layout එක කොටස් 2කට බෙදීම */
+.sidebar-split-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    width: 100%;
+}
+
+.news-section, .birthday-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.news-banner {
+    width: 100%;
+    max-width: 220px;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 10px;
+    border: 1px solid var(--light-blue);
+}
+
+/* Dynamic Birthday Grid (ළමයි 1 හෝ කිහිපදෙනෙක් සිටින විට auto adjust වේ) */
+.birthday-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* Canva Dynamic Style Card */
+.bday-card {
+    background: linear-gradient(135deg, rgba(255,115,0,0.15) 0%, rgba(0,164,228,0.2) 100%);
+    border: 2px solid var(--light-blue);
+    border-radius: 16px;
+    padding: 15px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 0 15px rgba(0, 164, 228, 0.2);
+    animation: pulseGlow 3s infinite alternate;
+}
+
+@keyframes pulseGlow {
+    0% { box-shadow: 0 0 10px rgba(0,164,228,0.3); }
+    100% { box-shadow: 0 0 20px rgba(255,115,0,0.6); }
+}
+
+/* Birthday Frame Image */
+.bday-photo-frame {
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 10px auto;
+    border-radius: 50%;
+    padding: 4px;
+    background: linear-gradient(45deg, var(--orange), var(--light-blue));
+    box-shadow: 0 0 12px rgba(255, 115, 0, 0.8);
+}
+
+.bday-photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.bday-name {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.bday-wish-quote {
+    font-size: 0.82rem;
+    color: #e2e8f0;
+    line-height: 1.3;
+    margin-bottom: 12px;
+    font-style: italic;
+}
+
+/* Wish Button & Counter Style */
+.wish-btn {
+    background: linear-gradient(45deg, #ff7300, #ff4500);
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 10px rgba(255, 115, 0, 0.4);
+}
+
+.wish-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 115, 0, 0.8);
+}
+
+.wish-btn:active {
+    transform: scale(0.95);
+}
+
+.wish-count-tag {
+    font-size: 0.8rem;
+    color: var(--light-blue);
+    margin-top: 6px;
+    font-weight: 600;
+}
+
+/* Mobile Responsiveness */
 
        
            
@@ -699,6 +818,10 @@
             .number { font-size: 2.2rem; }
             .label { font-size: 0.7rem; }
             .countdown-title { font-size: 1.3rem; }
+
+         .sidebar-split-container {
+        grid-template-columns: 1fr; /* Mobile එකේදී එක පිට එක පෙනෙන සේ */
+    }
 }
     </style>
 </head>
@@ -802,11 +925,26 @@
                 <div class="grade-card">Grade 11</div></a>
             </div>
             <div class="sidebar">
-                <div class="sidebar-box top">
-                    <h3>ප්‍රවෘත්ති / නිවේදන</h3>
-                    <p>2026 අගෝස්තු 10 - Camera Workshop (එක් දින වැඩමුලුව) සඳහා සියලුම කටයුතු සුදානම් වෙමින් පවතී </p>
-                    <img src ="camera workshop 2026.jpg" alt ="camera workshop banner" width ="250" height ="250">
-                </div>
+               <div class="sidebar-box top">
+    <div class="sidebar-split-container">
+        
+        <!-- පැත්ත 1: ප්‍රවෘත්ති / නිවේදන -->
+        <div class="news-section">
+            <h3>📢 ප්‍රවෘත්ති / නිවේදන</h3>
+            <p>2026 අගෝස්තු 10 - Camera Workshop (එක් දින වැඩමුලුව) සඳහා සියලුම කටයුතු සුදානම් වෙමින් පවතී</p>
+            <img src="camera workshop 2026.jpg" alt="camera workshop banner" class="news-banner">
+        </div>
+
+        <!-- පැත්ත 2: Birthday Wish Card Engine -->
+        <div class="birthday-section">
+            <h3>🎉 දවසේ උපන්දින සුබපැතුම</h3>
+            <div id="birthday-cards-wrapper" class="birthday-grid">
+                <!-- Javascript හරහා උපන්දින කාඩ්පත් මෙතැනට Auto Upload වේ -->
+            </div>
+        </div>
+
+    </div>
+</div>
                 <div class="sidebar-box">
                     <h3>අප හා සම්බන්ධ වන්න</h3>
                     <p>📞 දුරකථන: 071-2675988<br>📍 ස්ථානය: C-TECH Computer Lab - වැලිපැන්න</p>
@@ -953,6 +1091,100 @@
 
     const interval = setInterval(updateCountdown, 1000);
     updateCountdown();
+
+    // 🎈 උපන්දින දත්ත (Database / Manual Entry)
+// අද දිනට අදාළ ළමයින්ගේ විස්තර මෙතැනට යොදන්න (YYYY-MM-DD)
+const birthdayData = [
+    {
+        id: "student_01",
+        name: "නිලේෂා",
+        photo: "nilesha.jpeg", // දරුවගේ photo එකේ path එක
+        date: "2026-07-27",    // උපන්දින දිනය (අද දිනයට ගැලපෙන සේ)
+        wish: "අනාගත තොරතුරු තාක්ෂණ ලෝකය ජයගන්නා දක්ෂ තාක්ෂණවේදියෙකු වීමට SMART ICT පන්තියෙන් උණුසුම් සුබ පැතුම්! 🚀💻"
+    }
+    /* දවසේ දෙවැනි ළමයා සිටී නම් පහත පරිදි එකතු කරන්න:
+    ,{
+        id: "student_02",
+        name: "සනුලි නෙත්සරා",
+        photo: "student2.jpg",
+        date: "2026-07-27",
+        wish: "ඩිජිටල් තාක්ෂණයෙන් ලොව දිනන විශිෂ්ටතම නිර්මාණකාරිනියක වීමට SMART ICT අපෙන් හදපිරි සුබ පැතුම්! 🎓✨"
+    }
+    */
+];
+
+function renderBirthdayCards() {
+    const container = document.getElementById('birthday-cards-wrapper');
+    const today = new Date().toISOString().split('T')[0]; // අද දිනය (YYYY-MM-DD)
+    
+    if(!container) return;
+    container.innerHTML = "";
+
+    // අද දිනට අදාළ ළමුන් පමණක් Filter කරගැනීම (Auto-Hide logic)
+    const todaysBirthdays = birthdayData.filter(student => student.date === today);
+
+    if (todaysBirthdays.length === 0) {
+        // අද දිනයේ උපන්දින නොමැති නම් Section එක Auto Hide වීම
+        document.querySelector('.birthday-section').style.display = 'none';
+        
+        // News Section එක Full Width කිරීම
+        document.querySelector('.sidebar-split-container').style.gridTemplateColumns = '1fr';
+        return;
+    }
+
+    todaysBirthdays.forEach(student => {
+        // LocalStorage මගින් Wish Count එක ගණනය කිරීම (දවස ඉවර වූ පසු Auto Reset වේ)
+        const storageKey = `wish_${student.id}_${today}`;
+        let currentWishes = parseInt(localStorage.getItem(storageKey)) || 0;
+
+        const card = document.createElement('div');
+        card.className = 'bday-card';
+        card.innerHTML = `
+            <div class="bday-photo-frame">
+                <img src="${student.photo}" alt="${student.name}">
+            </div>
+            <div class="bday-name">🎂 ${student.name}</div>
+            <div class="bday-wish-quote">"${student.wish}"</div>
+            <button class="wish-btn" onclick="addWish('${student.id}', '${today}', this)">
+                ❤️ Wish Happy Birthday
+            </button>
+            <div class="wish-count-tag">
+                🎉 <span id="count-${student.id}">${currentWishes}</span> දෙනෙක් සුබ පතා ඇත!
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+// Wish කරන විට Count එක වැඩිවීම සහ Simple Animation Effect එක
+function addWish(studentId, dateStr, btnElement) {
+    const storageKey = `wish_${studentId}_${dateStr}`;
+    let currentWishes = parseInt(localStorage.getItem(storageKey)) || 0;
+    currentWishes += 1;
+    
+    // Save updated count
+    localStorage.getItem(storageKey);
+    localStorage.setItem(storageKey, currentWishes);
+
+    // Update Counter UI
+    const countSpan = document.getElementById(`count-${studentId}`);
+    if(countSpan) {
+        countSpan.innerText = currentWishes;
+    }
+
+    // Small Heart Jump Animation on Click
+    btnElement.style.transform = 'scale(1.2)';
+    btnElement.innerHTML = '✨ Wished!';
+    setTimeout(() => {
+        btnElement.style.transform = 'scale(1)';
+        btnElement.innerHTML = '❤️ Wish Happy Birthday';
+    }, 400);
+}
+
+// Page Load හිදී Active කිරීම
+window.addEventListener('DOMContentLoaded', () => {
+    renderBirthdayCards();
+});
 </script>
 
 <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
