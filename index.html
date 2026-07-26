@@ -1091,106 +1091,151 @@
 
     const interval = setInterval(updateCountdown, 1000);
     updateCountdown();
+    
+// 🎈 උපන්දින දත්ත
+  // 🎈 1. අද දිනය MM-DD (මාසය සහ දිනය) ලෙස ලබාගැනීමේ Function එක
+function getTodayMonthDay() {
+    const now = new Date();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${month}-${day}`; // e.g. "07-27"
+}
 
-   // 🎈 උපන්දින දත්ත (මෙහි ළමයාගේ විස්තර ඇතුළත් කරන්න)
-const birthdayData = [
-    {
-        id: "student_01",
-        name: "නිලේෂා",                  // ළමයාගේ නම
-        photo: "nilesha.jpeg",                   // ළමයාගේ Photo එකේ path එක
-        date: "2026-07-27",                      // අද දිනය (YYYY-MM-DD format එකෙන්ම තියෙන්න ඕනේ)
-        wish: "අනාගත තොරතුරු තාක්ෂණ ලෝකය ජයගන්නා දක්ෂ තාක්ෂණවේදියෙකු වීමට SMART ICT පන්තියෙන් උණුසුම් සුබ පැතුම්! 🚀💻"
-    }
-    /* තව එක්කෙනෙක් ඉන්නවා නම් මෙහෙම එකතු කරන්න:
-    ,{
-        id: "student_02",
-        name: "සනුලි නෙත්සරා",
-        photo: "student2.jpg",
-        date: "2026-07-27",
-        wish: "ඩිජිටල් තාක්ෂණයෙන් ලොව දිනන විශිෂ්ටතම නිර්මාණකාරිනියක වීමට SMART ICT අපෙන් හදපිරි සුබ පැතුම්! 🎓✨"
-    }
-    */
-];
+// 🎈 2. අද දිනය YYYY-MM-DD (Counter එකට) ලෙස ලබාගැනීමේ Function එක
+function getFullTodayDate() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`; // e.g. "2026-07-27"
+}
 
-function renderBirthdayCards() {
+// 🎈 3. Firebase එකෙන් Auto Data ලබාගෙන Birthday Cards Render කිරීම
+function loadAutomaticBirthdays() {
     const container = document.getElementById('birthday-cards-wrapper');
-    const newsSection = document.querySelector('.news-section');
     const bdaySection = document.querySelector('.birthday-section');
     const splitContainer = document.querySelector('.sidebar-split-container');
     
     if(!container) return;
     container.innerHTML = "";
 
-    // අද දිනය හරියටම YYYY-MM-DD විදියට ලබාගැනීම
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    const today = `${year}-${month}-${day}`;
+    const todayMMDD = getTodayMonthDay();
+    const fullToday = getFullTodayDate();
 
-    // අද උපන්දින තියෙන ළමුන් පමණක් තෝරාගැනීම
-    const todaysBirthdays = birthdayData.filter(student => student.date === today);
+    // Firebase Realtime Database එකේ 'students' වෙතින් දත්ත ලබාගැනීම
+    const studentsRef = firebase.database().ref('students');
 
-    if (todaysBirthdays.length === 0) {
-        // අද කාගෙවත් උපන්දින නැත්නම් Section එක Hide කර News එක Full Width කිරීම
-        if(bdaySection) bdaySection.style.display = 'none';
-        if(splitContainer) splitContainer.style.gridTemplateColumns = '1fr';
-        return;
-    }
+    studentsRef.once('value', (snapshot) => {
+        const studentsData = snapshot.val();
+        
+        if (!studentsData) {
+            hideBirthdaySection(bdaySection, splitContainer);
+            return;
+        }
 
-    // උපන්දින තිබේ නම් Display එක පෙන්වීම
-    if(bdaySection) bdaySection.style.display = 'flex';
-    if(splitContainer && window.innerWidth > 768) {
-        splitContainer.style.gridTemplateColumns = '1fr 1fr';
-    }
+        let todaysBirthdays = [];
 
-    todaysBirthdays.forEach(student => {
-        const storageKey = `wish_${student.id}_${today}`;
-        let currentWishes = parseInt(localStorage.getItem(storageKey)) || 0;
+        // Firebase එකේ ඉන්න සියලුම ළමයින් අතරින් අද උපන්දින තියෙන අය Filter කිරීම
+        Object.keys(studentsData).forEach(studentId => {
+            const student = studentsData[studentId];
+            if (student.dob) {
+                // DOB එකෙන් මාසය සහ දිනය වෙන්කර ගැනීම (e.g. "2010-07-27" -> "07-27")
+                const studentMMDD = student.dob.substring(5); 
 
-        const card = document.createElement('div');
-        card.className = 'bday-card';
-        card.innerHTML = `
-            <div class="bday-photo-frame">
-                <img src="${student.photo}" alt="${student.name}" onerror="this.src='logo.png'">
-            </div>
-            <div class="bday-name">🎂 ${student.name}</div>
-            <div class="bday-wish-quote">"${student.wish}"</div>
-            <button class="wish-btn" onclick="addWish('${student.id}', '${today}', this)">
-                ❤️ Wish Happy Birthday
-            </button>
-            <div class="wish-count-tag">
-                🎉 <span id="count-${student.id}">${currentWishes}</span> දෙනෙක් සුබ පතා ඇත!
-            </div>
-        `;
-        container.appendChild(card);
+                if (studentMMDD === todayMMDD) {
+                    todaysBirthdays.push({
+                        id: studentId,
+                        name: student.name,
+                        photo: student.photo || 'logo.png',
+                        wish: student.wish || 'SMART ICT පන්තියෙන් ඔබට සුබ උපන්දිනයක් වේවා!'
+                    });
+                }
+            }
+        });
+
+        // අද උපන්දින කිසිවෙකුට නැත්නම් Section එක Auto Hide වේ
+        if (todaysBirthdays.length === 0) {
+            hideBirthdaySection(bdaySection, splitContainer);
+            return;
+        }
+
+        // උපන්දින තිබේ නම් UI එක Display කිරීම
+        if(bdaySection) bdaySection.style.display = 'flex';
+        if(splitContainer && window.innerWidth > 768) {
+            splitContainer.style.gridTemplateColumns = '1fr 1fr';
+        }
+
+        // ළමයින්ගේ Cards Auto Create කිරීම
+        todaysBirthdays.forEach(student => {
+            const card = document.createElement('div');
+            card.className = 'bday-card';
+            card.innerHTML = `
+                <div class="bday-photo-frame">
+                    <img src="${student.photo}" alt="${student.name}" onerror="this.src='logo.png'">
+                </div>
+                <div class="bday-name">🎂 ${student.name}</div>
+                <div class="bday-wish-quote">"${student.wish}"</div>
+                <button class="wish-btn" id="btn-${student.id}" onclick="addWish('${student.id}')">
+                    ❤️ Wish Happy Birthday
+                </button>
+                <div class="wish-count-tag">
+                    🎉 <span id="count-${student.id}">0</span> දෙනෙක් සුබ පතා ඇත!
+                </div>
+            `;
+            container.appendChild(card);
+
+            // 🔥 Firebase Realtime Wish Listener (Live Sync)
+            const wishRef = firebase.database().ref(`birthday_wishes/${fullToday}/${student.id}`);
+            wishRef.on('value', (snap) => {
+                const count = snap.val() || 0;
+                const countSpan = document.getElementById(`count-${student.id}`);
+                if (countSpan) {
+                    countSpan.innerText = count.toLocaleString();
+                }
+            });
+        });
     });
 }
 
-// Wish Button Logic
-function addWish(studentId, dateStr, btnElement) {
-    const storageKey = `wish_${studentId}_${dateStr}`;
-    let currentWishes = parseInt(localStorage.getItem(storageKey)) || 0;
-    currentWishes += 1;
-    
-    localStorage.setItem(storageKey, currentWishes);
-
-    const countSpan = document.getElementById(`count-${studentId}`);
-    if(countSpan) {
-        countSpan.innerText = currentWishes;
-    }
-
-    btnElement.style.transform = 'scale(1.1)';
-    btnElement.innerHTML = '✨ Wished!';
-    setTimeout(() => {
-        btnElement.style.transform = 'scale(1)';
-        btnElement.innerHTML = '❤️ Wish Happy Birthday';
-    }, 500);
+// Section එක Hide කිරීමේ Function එක
+function hideBirthdaySection(bdaySection, splitContainer) {
+    if(bdaySection) bdaySection.style.display = 'none';
+    if(splitContainer) splitContainer.style.gridTemplateColumns = '1fr';
 }
 
-// Page එක Load වෙද්දීම සහ Tab Switch වෙද්දී Render වීම
-document.addEventListener('DOMContentLoaded', renderBirthdayCards);
-window.addEventListener('load', renderBirthdayCards);
+// 🔥 4. Firebase Wish Counter Logic
+function addWish(studentId) {
+    const fullToday = getFullTodayDate();
+    const sessionKey = `wished_${fullToday}_${studentId}`;
+
+    if (sessionStorage.getItem(sessionKey)) {
+        alert("ඔබ දැනටමත් සුබ පතා ඇත! ස්තූතියි! ❤️");
+        return;
+    }
+
+    const wishRef = firebase.database().ref(`birthday_wishes/${fullToday}/${studentId}`);
+
+    wishRef.transaction((currentCount) => {
+        return (currentCount || 0) + 1;
+    }, (error, committed) => {
+        if (committed) {
+            sessionStorage.setItem(sessionKey, 'true');
+            
+            const btn = document.getElementById(`btn-${studentId}`);
+            if (btn) {
+                btn.style.transform = 'scale(1.1)';
+                btn.innerHTML = '✨ Wished!';
+                setTimeout(() => {
+                    btn.style.transform = 'scale(1)';
+                    btn.innerHTML = '❤️ Wish Happy Birthday';
+                }, 1000);
+            }
+        }
+    });
+}
+
+// Page එක Load වෙද්දී Auto Run වීම
+document.addEventListener('DOMContentLoaded', loadAutomaticBirthdays);
 </script>
 
 <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
