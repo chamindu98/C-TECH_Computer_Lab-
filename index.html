@@ -1092,17 +1092,16 @@
     const interval = setInterval(updateCountdown, 1000);
     updateCountdown();
 
-    // 🎈 උපන්දින දත්ත (Database / Manual Entry)
-// අද දිනට අදාළ ළමයින්ගේ විස්තර මෙතැනට යොදන්න (YYYY-MM-DD)
+   // 🎈 උපන්දින දත්ත (මෙහි ළමයාගේ විස්තර ඇතුළත් කරන්න)
 const birthdayData = [
     {
         id: "student_01",
-        name: "නිලේෂා",
-        photo: "nilesha.jpeg", // දරුවගේ photo එකේ path එක
-        date: "2026-07-27",    // උපන්දින දිනය (අද දිනයට ගැලපෙන සේ)
+        name: "නිලේෂා",                  // ළමයාගේ නම
+        photo: "nilesha.jpeg",                   // ළමයාගේ Photo එකේ path එක
+        date: "2026-07-27",                      // අද දිනය (YYYY-MM-DD format එකෙන්ම තියෙන්න ඕනේ)
         wish: "අනාගත තොරතුරු තාක්ෂණ ලෝකය ජයගන්නා දක්ෂ තාක්ෂණවේදියෙකු වීමට SMART ICT පන්තියෙන් උණුසුම් සුබ පැතුම්! 🚀💻"
     }
-    /* දවසේ දෙවැනි ළමයා සිටී නම් පහත පරිදි එකතු කරන්න:
+    /* තව එක්කෙනෙක් ඉන්නවා නම් මෙහෙම එකතු කරන්න:
     ,{
         id: "student_02",
         name: "සනුලි නෙත්සරා",
@@ -1115,25 +1114,37 @@ const birthdayData = [
 
 function renderBirthdayCards() {
     const container = document.getElementById('birthday-cards-wrapper');
-    const today = new Date().toISOString().split('T')[0]; // අද දිනය (YYYY-MM-DD)
+    const newsSection = document.querySelector('.news-section');
+    const bdaySection = document.querySelector('.birthday-section');
+    const splitContainer = document.querySelector('.sidebar-split-container');
     
     if(!container) return;
     container.innerHTML = "";
 
-    // අද දිනට අදාළ ළමුන් පමණක් Filter කරගැනීම (Auto-Hide logic)
+    // අද දිනය හරියටම YYYY-MM-DD විදියට ලබාගැනීම
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const today = `${year}-${month}-${day}`;
+
+    // අද උපන්දින තියෙන ළමුන් පමණක් තෝරාගැනීම
     const todaysBirthdays = birthdayData.filter(student => student.date === today);
 
     if (todaysBirthdays.length === 0) {
-        // අද දිනයේ උපන්දින නොමැති නම් Section එක Auto Hide වීම
-        document.querySelector('.birthday-section').style.display = 'none';
-        
-        // News Section එක Full Width කිරීම
-        document.querySelector('.sidebar-split-container').style.gridTemplateColumns = '1fr';
+        // අද කාගෙවත් උපන්දින නැත්නම් Section එක Hide කර News එක Full Width කිරීම
+        if(bdaySection) bdaySection.style.display = 'none';
+        if(splitContainer) splitContainer.style.gridTemplateColumns = '1fr';
         return;
     }
 
+    // උපන්දින තිබේ නම් Display එක පෙන්වීම
+    if(bdaySection) bdaySection.style.display = 'flex';
+    if(splitContainer && window.innerWidth > 768) {
+        splitContainer.style.gridTemplateColumns = '1fr 1fr';
+    }
+
     todaysBirthdays.forEach(student => {
-        // LocalStorage මගින් Wish Count එක ගණනය කිරීම (දවස ඉවර වූ පසු Auto Reset වේ)
         const storageKey = `wish_${student.id}_${today}`;
         let currentWishes = parseInt(localStorage.getItem(storageKey)) || 0;
 
@@ -1141,7 +1152,7 @@ function renderBirthdayCards() {
         card.className = 'bday-card';
         card.innerHTML = `
             <div class="bday-photo-frame">
-                <img src="${student.photo}" alt="${student.name}">
+                <img src="${student.photo}" alt="${student.name}" onerror="this.src='logo.png'">
             </div>
             <div class="bday-name">🎂 ${student.name}</div>
             <div class="bday-wish-quote">"${student.wish}"</div>
@@ -1156,35 +1167,30 @@ function renderBirthdayCards() {
     });
 }
 
-// Wish කරන විට Count එක වැඩිවීම සහ Simple Animation Effect එක
+// Wish Button Logic
 function addWish(studentId, dateStr, btnElement) {
     const storageKey = `wish_${studentId}_${dateStr}`;
     let currentWishes = parseInt(localStorage.getItem(storageKey)) || 0;
     currentWishes += 1;
     
-    // Save updated count
-    localStorage.getItem(storageKey);
     localStorage.setItem(storageKey, currentWishes);
 
-    // Update Counter UI
     const countSpan = document.getElementById(`count-${studentId}`);
     if(countSpan) {
         countSpan.innerText = currentWishes;
     }
 
-    // Small Heart Jump Animation on Click
-    btnElement.style.transform = 'scale(1.2)';
+    btnElement.style.transform = 'scale(1.1)';
     btnElement.innerHTML = '✨ Wished!';
     setTimeout(() => {
         btnElement.style.transform = 'scale(1)';
         btnElement.innerHTML = '❤️ Wish Happy Birthday';
-    }, 400);
+    }, 500);
 }
 
-// Page Load හිදී Active කිරීම
-window.addEventListener('DOMContentLoaded', () => {
-    renderBirthdayCards();
-});
+// Page එක Load වෙද්දීම සහ Tab Switch වෙද්දී Render වීම
+document.addEventListener('DOMContentLoaded', renderBirthdayCards);
+window.addEventListener('load', renderBirthdayCards);
 </script>
 
 <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
