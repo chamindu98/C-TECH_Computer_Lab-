@@ -1181,32 +1181,69 @@
     const interval = setInterval(updateCountdown, 1000);
     updateCountdown();
     
-// 🎈 උපන්දින දත්ත
-  // 🎈 1. අද දිනය MM-DD (මාසය සහ දිනය) ලෙස ලබාගැනීමේ Function එක
+// 🎈 1. අද දිනය MM-DD ලෙස ලබාගැනීමේ Function එක
 function getTodayMonthDay() {
     const now = new Date();
     const month = String(now.getMonth() + 1).padStart(2, '0');
     const day = String(now.getDate()).padStart(2, '0');
-    return `${month}-${day}`; // e.g. "07-27"
+    return `${month}-${day}`; 
 }
 
-// 🎈 2. අද දිනය YYYY-MM-DD (Counter එකට) ලෙස ලබාගැනීමේ Function එක
+// 🎈 2. අද දිනය YYYY-MM-DD ලෙස ලබාගැනීමේ Function එක
 function getFullTodayDate() {
     const now = new Date();
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, '0');
     const day = String(now.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`; // e.g. "2026-07-27"
+    return `${year}-${month}-${day}`; 
 }
 
-// 🎈 3. Firebase එකෙන් Auto Data ලබාගෙන Birthday Cards Render කිරීම
+// 🎈 3. Popup එක Close කරන Function එක
+function closeBirthdayPopup() {
+    const modal = document.getElementById('birthday-popup-modal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// 🎈 4. Firecracker Celebration Animation Function එක
+function triggerFirecrackerEffect() {
+    const colors = ['#ff4757', '#2ed573', '#ffa502', '#1e90ff', '#eccc68', '#ff6b81'];
+    const particleCount = 60;
+
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'firecracker-particle';
+        
+        particle.style.left = '50vw';
+        particle.style.top = '50vh';
+        
+        particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = 100 + Math.random() * 200;
+        const dx = Math.cos(angle) * velocity + 'px';
+        const dy = Math.sin(angle) * velocity + 'px';
+        
+        particle.style.setProperty('--dx', dx);
+        particle.style.setProperty('--dy', dy);
+        
+        document.body.appendChild(particle);
+        
+        setTimeout(() => particle.remove(), 800);
+    }
+}
+
+// 🎈 5. Firebase එකෙන් Auto Data ලබාගෙන Cards සහ Popup එක Render කිරීම
 function loadAutomaticBirthdays() {
-    const container = document.getElementById('birthday-cards-wrapper');
+    const mainContainer = document.getElementById('birthday-cards-wrapper');
+    const popupContainer = document.getElementById('popup-card-container');
+    const popupModal = document.getElementById('birthday-popup-modal');
     const bdaySection = document.querySelector('.birthday-section');
     const splitContainer = document.querySelector('.sidebar-split-container');
     
-    if(!container) return;
-    container.innerHTML = "";
+    if(!mainContainer) return;
+    mainContainer.innerHTML = "";
+    if(popupContainer) popupContainer.innerHTML = "";
 
     const todayMMDD = getTodayMonthDay();
     const fullToday = getFullTodayDate();
@@ -1224,11 +1261,10 @@ function loadAutomaticBirthdays() {
 
         let todaysBirthdays = [];
 
-        // Firebase එකේ ඉන්න සියලුම ළමයින් අතරින් අද උපන්දින තියෙන අය Filter කිරීම
+        // අද උපන්දින තියෙන අය Filter කිරීම
         Object.keys(studentsData).forEach(studentId => {
             const student = studentsData[studentId];
             if (student.dob) {
-                // DOB එකෙන් මාසය සහ දිනය වෙන්කර ගැනීම (e.g. "2010-07-27" -> "07-27")
                 const studentMMDD = student.dob.substring(5); 
 
                 if (studentMMDD === todayMMDD) {
@@ -1242,9 +1278,10 @@ function loadAutomaticBirthdays() {
             }
         });
 
-        // අද උපන්දින කිසිවෙකුට නැත්නම් Section එක Auto Hide වේ
+        // අද උපන්දින නැත්නම් Hide වේ
         if (todaysBirthdays.length === 0) {
             hideBirthdaySection(bdaySection, splitContainer);
+            if (popupModal) popupModal.style.display = 'none';
             return;
         }
 
@@ -1254,35 +1291,54 @@ function loadAutomaticBirthdays() {
             splitContainer.style.gridTemplateColumns = '1fr 1fr';
         }
 
-        // ළමයින්ගේ Cards Auto Create කිරීම
+        // Cards නිර්මාණය කිරීම
         todaysBirthdays.forEach(student => {
-            const card = document.createElement('div');
-            card.className = 'bday-card';
-            card.innerHTML = `
-                <div class="bday-photo-frame">
-                    <img src="${student.photo}" alt="${student.name}" onerror="this.src='logo.png'">
-                </div>
-                <div class="bday-name">🎂 ${student.name}</div>
-                <div class="bday-wish-quote">"${student.wish}"</div>
-                <button class="wish-btn" id="btn-${student.id}" onclick="addWish('${student.id}')">
-                    ❤️ Wish Happy Birthday
-                </button>
-                <div class="wish-count-tag">
-                    🎉 <span id="count-${student.id}">0</span> දෙනෙක් සුබ පතා ඇත!
+            // Card HTML Structure එක
+            const cardHTML = `
+                <div class="bday-card">
+                    <div class="bday-photo-frame">
+                        <img src="${student.photo}" alt="${student.name}" onerror="this.src='logo.png'">
+                    </div>
+                    <div class="bday-name">🎂 ${student.name}</div>
+                    <div class="bday-wish-quote">"${student.wish}"</div>
+                    <button class="wish-btn" id="btn-${student.id}" onclick="addWish('${student.id}')">
+                        ❤️ Wish Happy Birthday
+                    </button>
+                    <div class="wish-count-tag">
+                        🎉 <span id="count-${student.id}">0</span> දෙනෙක් සුබ පතා ඇත!
+                    </div>
                 </div>
             `;
-            container.appendChild(card);
+
+            // 1. පල්ලෙහා Section එකට Card එක දාන්න
+            const mainCardDiv = document.createElement('div');
+            mainCardDiv.innerHTML = cardHTML;
+            mainContainer.appendChild(mainCardDiv.firstElementChild);
+
+            // 2. Popup Modal එකටත් එම Card එකම දාන්න
+            if (popupContainer) {
+                const popupCardDiv = document.createElement('div');
+                popupCardDiv.innerHTML = cardHTML;
+                popupContainer.appendChild(popupCardDiv.firstElementChild);
+            }
 
             // 🔥 Firebase Realtime Wish Listener (Live Sync)
             const wishRef = firebase.database().ref(`birthday_wishes/${fullToday}/${student.id}`);
             wishRef.on('value', (snap) => {
                 const count = snap.val() || 0;
-                const countSpan = document.getElementById(`count-${student.id}`);
-                if (countSpan) {
-                    countSpan.innerText = count.toLocaleString();
-                }
+                
+                // Popup සහ Main Grid දෙකේම Count එක එකපාර Update වීම
+                const countElements = document.querySelectorAll(`#count-${student.id}`);
+                countElements.forEach(span => {
+                    span.innerText = count.toLocaleString();
+                });
             });
         });
+
+        // 3. ළමයින්ගේ දත්ත සාර්ථකව Load වූ පසු Popup එක පෙන්නන්න
+        if (popupModal) {
+            popupModal.style.display = 'flex';
+        }
     });
 }
 
@@ -1292,7 +1348,7 @@ function hideBirthdaySection(bdaySection, splitContainer) {
     if(splitContainer) splitContainer.style.gridTemplateColumns = '1fr';
 }
 
-// 🔥 4. Firebase Wish Counter Logic
+// 🎈 6. Firebase Wish Counter Logic එක සහ Firecracker Trigger වීම
 function addWish(studentId) {
     const fullToday = getFullTodayDate();
     const sessionKey = `wished_${fullToday}_${studentId}`;
@@ -1302,6 +1358,9 @@ function addWish(studentId) {
         return;
     }
 
+    // Firecracker Animation එක Trigger කරන්න
+    triggerFirecrackerEffect();
+
     const wishRef = firebase.database().ref(`birthday_wishes/${fullToday}/${studentId}`);
 
     wishRef.transaction((currentCount) => {
@@ -1310,110 +1369,23 @@ function addWish(studentId) {
         if (committed) {
             sessionStorage.setItem(sessionKey, 'true');
             
-            const btn = document.getElementById(`btn-${studentId}`);
-            if (btn) {
+            // Popup/Grid දෙකේම Buttons වල Visual Feedback
+            const buttons = document.querySelectorAll(`#btn-${studentId}`);
+            buttons.forEach(btn => {
                 btn.style.transform = 'scale(1.1)';
                 btn.innerHTML = '✨ Wished!';
-                setTimeout(() => {
-                    btn.style.transform = 'scale(1)';
-                    btn.innerHTML = '❤️ Wish Happy Birthday';
-                }, 1000);
-            }
+            });
+
+            // තත්පර 1කින් Popup එක auto close වෙනවා
+            setTimeout(() => {
+                closeBirthdayPopup();
+            }, 1000);
         }
     });
 }
 
 // Page එක Load වෙද්දී Auto Run වීම
 document.addEventListener('DOMContentLoaded', loadAutomaticBirthdays);
-
-    // 1. Popup එක Close කරන Function එක
-function closeBirthdayPopup() {
-  const modal = document.getElementById('birthday-popup-modal');
-  if (modal) {
-    modal.style.display = 'none';
-  }
-}
-
-// 2. Firecracker / Celebration Animation Function එක
-function triggerFirecrackerEffect() {
-  const colors = ['#ff4757', '#2ed573', '#ffa502', '#1e90ff', '#eccc68', '#ff6b81'];
-  const particleCount = 60; // එකතු වන කැට ගණන
-
-  for (let i = 0; i < particleCount; i++) {
-    const particle = document.createElement('div');
-    particle.className = 'firecracker-particle';
-    
-    // Screen එකේ මැදින් Start වීම
-    particle.style.left = '50vw';
-    particle.style.top = '50vh';
-    
-    // Random පාටක් සහ ගමන් ගන්නා දිශාවන් සාදා ගැනීම
-    particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-    const angle = Math.random() * Math.PI * 2;
-    const velocity = 100 + Math.random() * 200; // පිපිරෙන දුර
-    const dx = Math.cos(angle) * velocity + 'px';
-    const dy = Math.sin(angle) * velocity + 'px';
-    
-    particle.style.setProperty('--dx', dx);
-    particle.style.setProperty('--dy', dy);
-    
-    document.body.appendChild(particle);
-    
-    // Animation එක ඉවර වූ පසු Element එක Remove කිරීම
-    setTimeout(() => particle.remove(), 800);
-  }
-}
-
-// 3. Birthday Post එක Load වෙන සහ Wish කරද්දී ක්‍රියාත්මක වන කොටස
-function loadBirthdayPosts(birthdayStudents) {
-  const mainContainer = document.getElementById('birthday-posts-container'); // පහළින් තියෙන මුල් container එක
-  const popupContainer = document.getElementById('popup-card-container');
-  const popupModal = document.getElementById('birthday-popup-modal');
-
-  if (!birthdayStudents || birthdayStudents.length === 0) {
-    // උපන්දින නැත්නම් Popup එක පෙන්වන්නේ නැත
-    if (popupModal) popupModal.style.display = 'none';
-    return;
-  }
-
-  // අද උපන්දින තියෙනවා නම් HTML Card එක සාදා ගැනීම
-  let cardsHTML = '';
-  birthdayStudents.forEach(student => {
-    cardsHTML += `
-      <div class="bday-card">
-        <img src="${student.photo}" alt="${student.name}" class="bday-photo">
-        <h3>${student.name}</h3>
-        <p>${student.wish || 'Happy Birthday!'}</p>
-        <button class="wish-btn" onclick="handleWishClick('${student.id}')">
-          ❤️ Wish Happy Birthday (<span id="wish-count-${student.id}">${student.wishes || 0}</span>)
-        </button>
-      </div>
-    `;
-  });
-
-  // 1. පහළ තියෙන මුල් ස්ථානයට HTML එක දෑමීම
-  if (mainContainer) mainContainer.innerHTML = cardsHTML;
-
-  // 2. Popup එකටත් එම HTML එකම දමා Popup එක Display කිරීම
-  if (popupContainer && popupModal) {
-    popupContainer.innerHTML = cardsHTML;
-    popupModal.style.display = 'flex'; // Log වෙද්දිම පෙන්නනවා
-  }
-}
-
-// 4. Wish Button එක Click කළ විට සිදුවන දේ
-function handleWishClick(studentId) {
-  // Firecracker Animation එක වැඩ කිරීම
-  triggerFirecrackerEffect();
-
-  // Firebase Transaction logic එක හරහා Wish Count එක වැඩි කිරීම (ඔබේ පැරණි කෝඩ් එක)
-  incrementWishCounter(studentId);
-
-  // Wish කළ පසු තත්පර 1ක් ඇතුළත Popup එක Close වීම
-  setTimeout(() => {
-    closeBirthdayPopup();
-  }, 1000);
-}
 </script>
 
 <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
