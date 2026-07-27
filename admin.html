@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C-TECH Admin Panel - Student Management</title>
+    
+    <!-- Google Fonts & Firebase SDKs -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .admin-card {
+            background: #1e293b;
+            width: 100%;
+            max-width: 500px;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border: 1px solid #334155;
+        }
+
+        .admin-card h2 {
+            color: #00d2d3;
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            color: #cbd5e1;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .form-group input, 
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, 
+        .form-group textarea:focus {
+            border-color: #00d2d3;
+            box-shadow: 0 0 8px rgba(0, 210, 211, 0.3);
+        }
+
+        .save-btn {
+            width: 100%;
+            padding: 14px;
+            background: #ff4757;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.1s ease;
+            margin-top: 10px;
+        }
+
+        .save-btn:hover {
+            background: #ff6b81;
+        }
+
+        .save-btn:active {
+            transform: scale(0.98);
+        }
+
+        .save-btn:disabled {
+            background: #64748b;
+            cursor: not-allowed;
+        }
+
+        #statusMessage {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            min-height: 20px;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #94a3b8;
+            font-size: 12px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: #00d2d3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="admin-card">
+        <h2>🎓 C-TECH Admin Panel</h2>
+        
+        <form id="addStudentForm">
+            <div class="form-group">
+                <label for="studentId">Student ID (උදා: ST101):</label>
+                <input type="text" id="studentId" placeholder="ST101" required>
+            </div>
+
+            <div class="form-group">
+                <label for="studentName">ශිෂ්‍යයාගේ නම:</label>
+                <input type="text" id="studentName" placeholder="කසුන් පෙරේරා" required>
+            </div>
+
+            <div class="form-group">
+                <label for="studentDob">උපන්දිනය (DOB):</label>
+                <input type="date" id="studentDob" required>
+            </div>
+
+            <div class="form-group">
+                <label for="studentPhoto">ඡායාරූප Link එක / File Name එක:</label>
+                <input type="text" id="studentPhoto" placeholder="st101.jpg හෝ Image URL එක">
+            </div>
+
+            <div class="form-group">
+                <label for="studentWish">Birthday Wish Message එක:</label>
+                <textarea id="studentWish" rows="3" placeholder="SMART ICT පන්තියෙන් ඔබට සුබ උපන්දිනයක් වේවා!"></textarea>
+            </div>
+
+            <button type="submit" id="saveBtn" class="save-btn">💾 Data Auto-Save කරන්න</button>
+        </form>
+
+        <div id="statusMessage"></div>
+        <a href="index.html" class="back-link">← ආපසු Main Web Site එකට</a>
+    </div>
+
+    <script>
+        // 🔒 1. Admin Page Passcode Protection
+        const adminPassword = prompt("Admin Panel එකට පිවිසීමට Passcode එක ඇතුළත් කරන්න:");
+        
+        // මෙතැන ඇති "1234" වෙනුවට ඔබට අවශ්‍ය ඕනෑම Password එකක් යොදන්න
+        if (adminPassword !== "1234") { 
+            alert("කණගාටුයි! මුරපදය වැරදියි.");
+            window.location.href = "index.html"; // වැරදි නම් Main Site එකට Redirect වේ
+        }
+
+        // 🔥 2. Firebase Config (ඔබේ Main Project එකේ Firebase Configuration එක මෙතැනට දාන්න)
+        const firebaseConfig = {
+            databaseURL: "https://console.firebase.google.com/u/0/project/ctech-counter/database/ctech-counter-default-rtdb/data/~2F" // ඔබේ Firebase DB URL එක මෙතැනට යොදන්න
+        };
+
+        // Firebase Initialize කිරීම (මීට පෙර වෙනත් තැනක Init වී නැත්නම් පමණක්)
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+
+        // 💾 3. Data Auto-Save Logic
+        document.getElementById('addStudentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const studentId = document.getElementById('studentId').value.trim();
+            const name = document.getElementById('studentName').value.trim();
+            const dob = document.getElementById('studentDob').value; // YYYY-MM-DD ලෙස ලැබේ
+            const photo = document.getElementById('studentPhoto').value.trim() || 'logo.png';
+            const wish = document.getElementById('studentWish').value.trim() || 'SMART ICT පන්තියෙන් ඔබට සුබ උපන්දිනයක් වේවා!';
+
+            const statusMsg = document.getElementById('statusMessage');
+            const saveBtn = document.getElementById('saveBtn');
+
+            saveBtn.disabled = true;
+            saveBtn.innerText = "Saving... ⏳";
+            statusMsg.style.color = "#ffa502";
+            statusMsg.innerText = "Firebase එකට Data Save වෙමින් පවතියි...";
+
+            // Firebase Realtime Database එකේ 'students' node එකට Auto-Save කිරීම
+            firebase.database().ref('students/' + studentId).set({
+                name: name,
+                dob: dob,
+                photo: photo,
+                wish: wish
+            }, function(error) {
+                saveBtn.disabled = false;
+                saveBtn.innerText = "💾 Data Auto-Save කරන්න";
+
+                if (error) {
+                    statusMsg.style.color = "#ff4757";
+                    statusMsg.innerText = "❌ දත්ත සුරැකීම අසාර්ථකයි: " + error.message;
+                } else {
+                    statusMsg.style.color = "#2ed573";
+                    statusMsg.innerText = "🎉 ශිෂ්‍ය දත්ත සාර්ථකව Auto-Save වුණා!";
+                    
+                    document.getElementById('addStudentForm').reset();
+
+                    setTimeout(() => {
+                        statusMsg.innerText = "";
+                    }, 3000);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
