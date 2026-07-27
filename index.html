@@ -739,6 +739,86 @@
     font-weight: 600;
 }
 
+        /* Modal Background Overlay */
+.bday-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* Modal Box */
+.bday-modal-content {
+  position: relative;
+  max-width: 90%;
+  width: 450px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Close Button */
+.bday-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  font-weight: bold;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.3s ease;
+  z-index: 10000;
+}
+
+.bday-modal-close:hover {
+  background: #ff4757;
+  transform: scale(1.1);
+}
+
+/* Modal Open Animation */
+@keyframes popIn {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Firecracker Particles (CSS-based Animation) */
+.firecracker-particle {
+  position: fixed;
+  pointer-events: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  z-index: 10001;
+  animation: explode 0.8s ease-out forwards;
+}
+
+@keyframes explode {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+}
+
 /* Mobile Responsiveness */
 
        
@@ -944,6 +1024,15 @@
         </div>
 
     </div>
+</div>
+                <!-- Birthday Popup Modal -->
+<div id="birthday-popup-modal" class="bday-modal-overlay" style="display: none;">
+  <div class="bday-modal-content">
+    <button class="bday-modal-close" onclick="closeBirthdayPopup()">&times;</button>
+    <div id="popup-card-container">
+      <!-- Dynamic Birthday Post Card එක JS හරහා මෙතැනට Load වේ -->
+    </div>
+  </div>
 </div>
                 <div class="sidebar-box">
                     <h3>අප හා සම්බන්ධ වන්න</h3>
@@ -1236,6 +1325,95 @@ function addWish(studentId) {
 
 // Page එක Load වෙද්දී Auto Run වීම
 document.addEventListener('DOMContentLoaded', loadAutomaticBirthdays);
+
+    // 1. Popup එක Close කරන Function එක
+function closeBirthdayPopup() {
+  const modal = document.getElementById('birthday-popup-modal');
+  if (modal) {
+    modal.style.display = 'none';
+  }
+}
+
+// 2. Firecracker / Celebration Animation Function එක
+function triggerFirecrackerEffect() {
+  const colors = ['#ff4757', '#2ed573', '#ffa502', '#1e90ff', '#eccc68', '#ff6b81'];
+  const particleCount = 60; // එකතු වන කැට ගණන
+
+  for (let i = 0; i < particleCount; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'firecracker-particle';
+    
+    // Screen එකේ මැදින් Start වීම
+    particle.style.left = '50vw';
+    particle.style.top = '50vh';
+    
+    // Random පාටක් සහ ගමන් ගන්නා දිශාවන් සාදා ගැනීම
+    particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    const angle = Math.random() * Math.PI * 2;
+    const velocity = 100 + Math.random() * 200; // පිපිරෙන දුර
+    const dx = Math.cos(angle) * velocity + 'px';
+    const dy = Math.sin(angle) * velocity + 'px';
+    
+    particle.style.setProperty('--dx', dx);
+    particle.style.setProperty('--dy', dy);
+    
+    document.body.appendChild(particle);
+    
+    // Animation එක ඉවර වූ පසු Element එක Remove කිරීම
+    setTimeout(() => particle.remove(), 800);
+  }
+}
+
+// 3. Birthday Post එක Load වෙන සහ Wish කරද්දී ක්‍රියාත්මක වන කොටස
+function loadBirthdayPosts(birthdayStudents) {
+  const mainContainer = document.getElementById('birthday-posts-container'); // පහළින් තියෙන මුල් container එක
+  const popupContainer = document.getElementById('popup-card-container');
+  const popupModal = document.getElementById('birthday-popup-modal');
+
+  if (!birthdayStudents || birthdayStudents.length === 0) {
+    // උපන්දින නැත්නම් Popup එක පෙන්වන්නේ නැත
+    if (popupModal) popupModal.style.display = 'none';
+    return;
+  }
+
+  // අද උපන්දින තියෙනවා නම් HTML Card එක සාදා ගැනීම
+  let cardsHTML = '';
+  birthdayStudents.forEach(student => {
+    cardsHTML += `
+      <div class="bday-card">
+        <img src="${student.photo}" alt="${student.name}" class="bday-photo">
+        <h3>${student.name}</h3>
+        <p>${student.wish || 'Happy Birthday!'}</p>
+        <button class="wish-btn" onclick="handleWishClick('${student.id}')">
+          ❤️ Wish Happy Birthday (<span id="wish-count-${student.id}">${student.wishes || 0}</span>)
+        </button>
+      </div>
+    `;
+  });
+
+  // 1. පහළ තියෙන මුල් ස්ථානයට HTML එක දෑමීම
+  if (mainContainer) mainContainer.innerHTML = cardsHTML;
+
+  // 2. Popup එකටත් එම HTML එකම දමා Popup එක Display කිරීම
+  if (popupContainer && popupModal) {
+    popupContainer.innerHTML = cardsHTML;
+    popupModal.style.display = 'flex'; // Log වෙද්දිම පෙන්නනවා
+  }
+}
+
+// 4. Wish Button එක Click කළ විට සිදුවන දේ
+function handleWishClick(studentId) {
+  // Firecracker Animation එක වැඩ කිරීම
+  triggerFirecrackerEffect();
+
+  // Firebase Transaction logic එක හරහා Wish Count එක වැඩි කිරීම (ඔබේ පැරණි කෝඩ් එක)
+  incrementWishCounter(studentId);
+
+  // Wish කළ පසු තත්පර 1ක් ඇතුළත Popup එක Close වීම
+  setTimeout(() => {
+    closeBirthdayPopup();
+  }, 1000);
+}
 </script>
 
 <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
