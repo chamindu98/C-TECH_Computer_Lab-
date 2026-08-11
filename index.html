@@ -821,7 +821,122 @@
 
 /* Mobile Responsiveness */
 
-       
+  /* Main Container with Glowing Border */
+        .countdown-card {
+            background: rgba(16, 22, 34, 0.85);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            max-width: 650px;
+            width: 100%;
+            box-shadow: 0 0 40px rgba(0, 242, 254, 0.15), inset 0 0 15px rgba(0, 242, 254, 0.05);
+            backdrop-filter: blur(12px);
+            position: relative;
+        }
+
+        /* Top Tag */
+        .badge {
+            display: inline-block;
+            background: linear-gradient(90deg, #ff0844, #ffb199);
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 6px 16px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 15px;
+            box-shadow: 0 0 15px rgba(255, 8, 68, 0.5);
+        }
+
+        /* Heading Style */
+        .countdown-title {
+            color: #ffffff;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        .countdown-subtitle {
+            color: #8a99ad;
+            font-size: 0.95rem;
+            margin-bottom: 35px;
+        }
+
+        /* Grid for Time Boxes */
+        .timer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        /* Individual Box */
+        .time-box {
+            background: linear-gradient(160deg, #131a26, #0a0d14);
+            border: 1.5px solid #00f2fe;
+            border-radius: 14px;
+            padding: 20px 10px;
+            position: relative;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .time-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.6);
+            border-color: #4facfe;
+        }
+
+        /* Tech corner accents */
+        .time-box::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px;
+            width: 8px; height: 8px;
+            border-top: 2px solid #ff0844;
+            border-left: 2px solid #ff0844;
+            border-top-left-radius: 14px;
+        }
+
+        .number {
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 3rem;
+            font-weight: bold;
+            color: #00f2fe;
+            text-shadow: 0 0 15px rgba(0, 242, 254, 0.7);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .label {
+            color: #a0aec0;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Motivational Message */
+        .footer-note {
+            margin-top: 30px;
+            color: #00f2fe;
+            font-size: 0.9rem;
+            font-style: italic;
+            letter-spacing: 0.5px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 550px) {
+            .timer-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            .number { font-size: 2.3rem; }
+            .countdown-title { font-size: 1.4rem; }
+            .countdown-card { padding: 30px 20px; }
+        }     
            
 
 
@@ -954,10 +1069,12 @@
         </div>
     </div>
 </div>
-            <div class="countdown-container">
-        <div class="countdown-title">📸 NEXT-GEN CAMERA WORKSHOP <span>LAUNCHING IN</span></div>
+          <div class="countdown-card">
+        <div class="badge">MISSION O/L 2026</div>
+        <h1 class="countdown-title">අ.පො.ස. සාමාන්‍ය පෙළ විභාගයට</h1>
+        <div class="countdown-subtitle">තව කොපමණ කාලයක් තියෙනවාද?</div>
         
-        <div class="timer-grid">
+        <div class="timer-grid" id="timerGrid">
             <!-- Days -->
             <div class="time-box">
                 <div class="number" id="days">00</div>
@@ -979,6 +1096,8 @@
                 <div class="label">තත්පර (Secs)</div>
             </div>
         </div>
+
+        <div class="footer-note">⚡ "සෑම තත්පරයක්ම ඔබේ ජයග්‍රහණය වෙනුවෙන් කැප කරන්න!"</div>
     </div>
         </header>
 
@@ -1154,39 +1273,36 @@
         });
     });
 
-    // --- Countdown Logic (2026-08-10 පෙ.ව. 9:00 දක්වා) ---
-    const targetDate = new Date("2026-08-10T09:00:00+05:30").getTime();
+  // Target Date: 2026 දෙසැම්බර් 08 පෙ.ව. 08:00:00
+        const targetDate = new Date('2026-12-08T08:00:00').getTime();
 
-    function updateCountdown() {
-        const now = new Date().getTime();
-        const difference = targetDate - now;
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const difference = targetDate - now;
 
-        const d = Math.floor(difference / (1000 * 60 * 60 * 24));
-        const h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-        const s = Math.floor((difference % (1000 * 60)) / 1000);
+            if (difference > 0) {
+                // කාලය ගණනය කිරීම
+                const d = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((difference % (1000 * 60)) / 1000);
 
-        if (difference > 0) {
-            if(document.getElementById('days')) document.getElementById('days').innerText = d < 10 ? '0' + d : d;
-            if(document.getElementById('hours')) document.getElementById('hours').innerText = h < 10 ? '0' + h : h;
-            if(document.getElementById('minutes')) document.getElementById('minutes').innerText = m < 10 ? '0' + m : m;
-            if(document.getElementById('seconds')) document.getElementById('seconds').innerText = s < 10 ? '0' + s : s;
-        } else {
-            clearInterval(interval);
-            if(document.getElementById('days')) document.getElementById('days').innerText = '00';
-            if(document.getElementById('hours')) document.getElementById('hours').innerText = '00';
-            if(document.getElementById('minutes')) document.getElementById('minutes').innerText = '00';
-            if(document.getElementById('seconds')) document.getElementById('seconds').innerText = '00';
-            
-            const timerGrid = document.querySelector('.timer-grid');
-            if (timerGrid) {
-                timerGrid.innerHTML = "<h2 style='color: #00f2fe; text-shadow: 0 0 15px #00f2fe;'>WORKSHOP IS LIVE!</h2>";
+                // HTML එකට දත්ත ඇතුළත් කිරීම
+                document.getElementById('days').innerText = d < 10 ? '0' + d : d;
+                document.getElementById('hours').innerText = h < 10 ? '0' + h : h;
+                document.getElementById('minutes').innerText = m < 10 ? '0' + m : m;
+                document.getElementById('seconds').innerText = s < 10 ? '0' + s : s;
+            } else {
+                // විභාගය ආරම්භ වූ විට
+                clearInterval(interval);
+                document.getElementById('timerGrid').innerHTML = 
+                    "<h2 style='color: #00f2fe; grid-column: span 4; font-size: 1.8rem; text-shadow: 0 0 15px #00f2fe;'>GOOD LUCK FOR YOUR EXAM! 🎉</h2>";
             }
         }
-    }
 
-    const interval = setInterval(updateCountdown, 1000);
-    updateCountdown();
+        // තත්පරයෙන් තත්පරය Run වීම
+        const interval = setInterval(updateCountdown, 1000);
+        updateCountdown(); // මුලින්ම Run වීමට
     
 // 🎈 1. අද දිනය MM-DD ලෙස ලබාගැනීමේ Function එක
 function getTodayMonthDay() {
