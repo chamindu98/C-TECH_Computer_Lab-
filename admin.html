@@ -6,7 +6,7 @@
     <title>C-TECH Admin Panel - Student Management</title>
     
     <!-- Google Fonts & Firebase SDKs -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -21,32 +21,92 @@
         body {
             background-color: #0f172a;
             color: #f8fafc;
+            min-height: 100vh;
+            padding: 25px 15px;
             display: flex;
             justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
+            align-items: flex-start;
+        }
+
+        .admin-wrapper {
+            width: 100%;
+            max-width: 1100px;
         }
 
         .admin-card {
             background: #1e293b;
             width: 100%;
-            max-width: 500px;
             padding: 30px;
             border-radius: 16px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
             border: 1px solid #334155;
+            margin-bottom: 30px;
         }
 
         .admin-card h2 {
             color: #00d2d3;
             text-align: center;
-            font-size: 22px;
+            font-size: 24px;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .admin-subtitle {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 13px;
+            margin-bottom: 25px;
+        }
+
+        /* 🗂️ Navigation Tabs Header */
+        .tabs-header {
+            display: flex;
+            gap: 10px;
+            border-bottom: 2px solid #334155;
             margin-bottom: 20px;
         }
 
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background: rgba(15, 23, 42, 0.6);
+            border: none;
+            color: #94a3b8;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .tab-btn.active {
+            background: #00d2d3;
+            color: #0f172a;
+        }
+
+        /* 📄 Tab Content Display */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 15px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
         }
 
         .form-group label {
@@ -87,21 +147,12 @@
             font-weight: 600;
             cursor: pointer;
             transition: background 0.3s ease, transform 0.1s ease;
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
-        .save-btn:hover {
-            background: #ff6b81;
-        }
-
-        .save-btn:active {
-            transform: scale(0.98);
-        }
-
-        .save-btn:disabled {
-            background: #64748b;
-            cursor: not-allowed;
-        }
+        .save-btn:hover { background: #ff6b81; }
+        .save-btn:active { transform: scale(0.98); }
+        .save-btn:disabled { background: #64748b; cursor: not-allowed; }
 
         #statusMessage {
             margin-top: 15px;
@@ -111,122 +162,327 @@
             min-height: 20px;
         }
 
+        /* 📊 Table Styles */
+        .table-title {
+            color: #00d2d3;
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .data-table th {
+            background: #0f172a;
+            color: #00d2d3;
+            padding: 12px;
+            font-size: 13px;
+            border-bottom: 2px solid #334155;
+        }
+
+        .data-table td {
+            padding: 12px;
+            border-bottom: 1px solid #334155;
+            font-size: 13px;
+        }
+
+        .badge-total {
+            background: rgba(0, 210, 211, 0.15);
+            color: #00d2d3;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .btn-delete {
+            background: rgba(255, 71, 87, 0.2);
+            color: #ff4757;
+            border: 1px solid #ff4757;
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-delete:hover {
+            background: #ff4757;
+            color: #fff;
+        }
+
         .back-link {
             display: block;
             text-align: center;
             margin-top: 20px;
             color: #94a3b8;
-            font-size: 12px;
+            font-size: 13px;
             text-decoration: none;
             transition: color 0.3s;
         }
 
-        .back-link:hover {
-            color: #00d2d3;
-        }
+        .back-link:hover { color: #00d2d3; }
     </style>
 </head>
 <body>
 
-    <div class="admin-card">
-        <h2>🎓 C-TECH Admin Panel</h2>
-        
-        <form id="addStudentForm">
-            <div class="form-group">
-                <label for="studentId">Student ID (උදා: ST101):</label>
-                <input type="text" id="studentId" placeholder="ST101" required>
+    <div class="admin-wrapper">
+        <div class="admin-card">
+            <h2>🎓 C-TECH Admin Panel</h2>
+            <div class="admin-subtitle">Student Profile, Birthday Wish & Exam Results Management</div>
+            
+            <!-- 🗂️ Navigation Tabs -->
+            <div class="tabs-header">
+                <button class="tab-btn active" onclick="switchTab('birthdayTab')">🎉 Birthday Wish Panel</button>
+                <button class="tab-btn" onclick="switchTab('examTab')">📊 Exam Results Panel</button>
             </div>
 
-            <div class="form-group">
-                <label for="studentName">ශිෂ්‍යයාගේ නම:</label>
-                <input type="text" id="studentName" placeholder="කසුන් පෙරේරා" required>
+            <!-- 📝 TAB 1: Birthday Wish Panel -->
+            <div id="birthdayTab" class="tab-content active">
+                <form id="birthdayForm" onsubmit="saveBirthdayData(event)">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="b_studentId">Student ID (උදා: ST101):</label>
+                            <input type="text" id="b_studentId" placeholder="ST101" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="b_studentName">ශිෂ්‍යයාගේ නම:</label>
+                            <input type="text" id="b_studentName" placeholder="කසුන් පෙරේරා" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="b_studentDob">උපන්දිනය (DOB):</label>
+                            <input type="date" id="b_studentDob" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="b_studentPhoto">ඡායාරූප Link / File Name:</label>
+                            <input type="text" id="b_studentPhoto" placeholder="st101.jpg හෝ URL">
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="b_studentWish">Birthday Wish Message එක:</label>
+                            <textarea id="b_studentWish" rows="3" placeholder="SMART ICT පන්තියෙන් ඔබට සුබ උපන්දිනයක් වේවා!"></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="save-btn">💾 Birthday Data Save කරන්න</button>
+                </form>
             </div>
 
-            <div class="form-group">
-                <label for="studentDob">උපන්දිනය (DOB):</label>
-                <input type="date" id="studentDob" required>
+            <!-- 📝 TAB 2: Exam Results Panel -->
+            <div id="examTab" class="tab-content">
+                <form id="examForm" onsubmit="saveExamData(event)">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="e_studentId">Student Index Number (උදා: EXP-1101):</label>
+                            <input type="text" id="e_studentId" placeholder="EXP-1101" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="e_studentName">ශිෂ්‍යයාගේ නම:</label>
+                            <input type="text" id="e_studentName" placeholder="කසුන් පෙරේරා" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="e_paper1">Paper 01 Marks (MCQ):</label>
+                            <input type="number" id="e_paper1" placeholder="උදා: 38" min="0" max="40" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="e_paper2">Paper 02 Marks (Essay):</label>
+                            <input type="number" id="e_paper2" placeholder="උදා: 48" min="0" max="60" required>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="e_studentHistory">පරණ ලකුණු (Commas වලින් වෙන්කරන්න):</label>
+                            <input type="text" id="e_studentHistory" placeholder="උදා: 55, 62, 70">
+                            <small style="color: #94a3b8; font-size: 11px;">* පසුගිය වාර විභාගවල ලබාගත් මුළු ලකුණු කොමා (,) මගින් වෙන් කර යොදන්න.</small>
+                        </div>
+                    </div>
+                    <button type="submit" class="save-btn" style="background: #00d2d3; color: #0f172a;">📊 Exam Results Save කරන්න</button>
+                </form>
             </div>
 
-            <div class="form-group">
-                <label for="studentPhoto">ඡායාරූප Link එක / File Name එක:</label>
-                <input type="text" id="studentPhoto" placeholder="st101.jpg හෝ Image URL එක">
+            <div id="statusMessage"></div>
+        </div>
+
+        <!-- 📊 Live Realtime Data View Table -->
+        <div class="admin-card">
+            <div class="table-title">📋 Database එකෙහි ඇති සිසුන්ගේ ලැයිස්තුව</div>
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID / Index</th>
+                            <th>නම</th>
+                            <th>DOB</th>
+                            <th>Paper 1</th>
+                            <th>Paper 2</th>
+                            <th>Total</th>
+                            <th>History</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentTableBody">
+                        <tr><td colspan="8" style="text-align: center; color: #94a3b8;">දත්ත Load වෙමින් පවතී... ⏳</td></tr>
+                    </tbody>
+                </table>
             </div>
-
-            <div class="form-group">
-                <label for="studentWish">Birthday Wish Message එක:</label>
-                <textarea id="studentWish" rows="3" placeholder="SMART ICT පන්තියෙන් ඔබට සුබ උපන්දිනයක් වේවා!"></textarea>
-            </div>
-
-            <button type="submit" id="saveBtn" class="save-btn">💾 Data Auto-Save කරන්න</button>
-        </form>
-
-        <div id="statusMessage"></div>
-        <a href="index.html" class="back-link">← ආපසු Main Web Site එකට</a>
+            <a href="index.html" class="back-link">← ආපසු Main Web Site එකට</a>
+        </div>
     </div>
 
     <script>
         // 🔒 1. Admin Page Passcode Protection
         const adminPassword = prompt("Admin Panel එකට පිවිසීමට Passcode එක ඇතුළත් කරන්න:");
-        
-        // මෙතැන ඇති "1234" වෙනුවට ඔබට අවශ්‍ය ඕනෑම Password එකක් යොදන්න
         if (adminPassword !== "1234") { 
             alert("කණගාටුයි! මුරපදය වැරදියි.");
-            window.location.href = "index.html"; // වැරදි නම් Main Site එකට Redirect වේ
+            window.location.href = "index.html";
         }
 
-        // 🔥 2. Firebase Config (ඔබේ Main Project එකේ Firebase Configuration එක මෙතැනට දාන්න)
+        // 🔥 2. Firebase Config
         const firebaseConfig = {
-            databaseURL: "https://ctech-counter-default-rtdb.firebaseio.com/" // ඔබේ Firebase DB URL එක මෙතැනට යොදන්න
+            databaseURL: "https://ctech-counter-default-rtdb.firebaseio.com/"
         };
 
-        // Firebase Initialize කිරීම (මීට පෙර වෙනත් තැනක Init වී නැත්නම් පමණක්)
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
 
-        // 💾 3. Data Auto-Save Logic
-        document.getElementById('addStudentForm').addEventListener('submit', function(e) {
+        const db = firebase.database();
+
+        // 🗂️ 3. Switch Tabs Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+            
+            // Message clear
+            document.getElementById('statusMessage').innerText = "";
+        }
+
+        // 💾 4. Save Birthday Data Logic
+        function saveBirthdayData(e) {
             e.preventDefault();
 
-            const studentId = document.getElementById('studentId').value.trim();
-            const name = document.getElementById('studentName').value.trim();
-            const dob = document.getElementById('studentDob').value; // YYYY-MM-DD ලෙස ලැබේ
-            const photo = document.getElementById('studentPhoto').value.trim() || 'logo.png';
-            const wish = document.getElementById('studentWish').value.trim() || 'SMART ICT පන්තියෙන් ඔබට සුබ උපන්දිනයක් වේවා!';
+            const studentId = document.getElementById('b_studentId').value.trim().toUpperCase();
+            const name = document.getElementById('b_studentName').value.trim();
+            const dob = document.getElementById('b_studentDob').value;
+            const photo = document.getElementById('b_studentPhoto').value.trim() || 'logo.png';
+            const wish = document.getElementById('b_studentWish').value.trim() || 'SMART ICT පන්තියෙන් ඔබට සුබ උපන්දිනයක් වේවා!';
 
-            const statusMsg = document.getElementById('statusMessage');
-            const saveBtn = document.getElementById('saveBtn');
+            showStatus("Firebase එකට Birthday Data Save වෙමින් පවතියි...", "#ffa502");
 
-            saveBtn.disabled = true;
-            saveBtn.innerText = "Saving... ⏳";
-            statusMsg.style.color = "#ffa502";
-            statusMsg.innerText = "Firebase එකට Data Save වෙමින් පවතියි...";
-
-            // Firebase Realtime Database එකේ 'students' node එකට Auto-Save කිරීම
-            firebase.database().ref('students/' + studentId).set({
+            db.ref('students/' + studentId).update({
+                index: studentId,
                 name: name,
                 dob: dob,
                 photo: photo,
                 wish: wish
-            }, function(error) {
-                saveBtn.disabled = false;
-                saveBtn.innerText = "💾 Data Auto-Save කරන්න";
-
+            }, (error) => {
                 if (error) {
-                    statusMsg.style.color = "#ff4757";
-                    statusMsg.innerText = "❌ දත්ත සුරැකීම අසාර්ථකයි: " + error.message;
+                    showStatus("❌ දත්ත සුරැකීම අසාර්ථකයි: " + error.message, "#ff4757");
                 } else {
-                    statusMsg.style.color = "#2ed573";
-                    statusMsg.innerText = "🎉 ශිෂ්‍ය දත්ත සාර්ථකව Auto-Save වුණා!";
-                    
-                    document.getElementById('addStudentForm').reset();
-
-                    setTimeout(() => {
-                        statusMsg.innerText = "";
-                    }, 3000);
+                    showStatus("🎉 Birthday Data සාර්ථකව Auto-Save වුණා!", "#2ed573");
+                    document.getElementById('birthdayForm').reset();
                 }
             });
+        }
+
+        // 💾 5. Save Exam Data Logic
+        function saveExamData(e) {
+            e.preventDefault();
+
+            const studentId = document.getElementById('e_studentId').value.trim().toUpperCase();
+            const name = document.getElementById('e_studentName').value.trim();
+            const paper1 = Number(document.getElementById('e_paper1').value || 0);
+            const paper2 = Number(document.getElementById('e_paper2').value || 0);
+            const historyInput = document.getElementById('e_studentHistory').value.trim();
+
+            let historyArray = [];
+            if (historyInput !== "") {
+                historyArray = historyInput.split(',').map(num => Number(num.trim())).filter(val => !isNaN(val));
+            }
+            const totalCurrent = paper1 + paper2;
+            historyArray.push(totalCurrent);
+
+            showStatus("Firebase එකට Exam Data Save වෙමින් පවතියි...", "#ffa502");
+
+            const examPayload = {
+                index: studentId,
+                name: name,
+                paper1: paper1,
+                paper2: paper2,
+                history: historyArray
+            };
+
+            // Save to both nodes
+            db.ref('students/' + studentId).update(examPayload);
+            db.ref('grade11_results/' + studentId).update(examPayload, (error) => {
+                if (error) {
+                    showStatus("❌ ලකුණු සුරැකීම අසාර්ථකයි: " + error.message, "#ff4757");
+                } else {
+                    showStatus("📊 Exam Marks සාර්ථකව Auto-Save වුණා!", "#2ed573");
+                    document.getElementById('examForm').reset();
+                }
+            });
+        }
+
+        function showStatus(text, color) {
+            const statusMsg = document.getElementById('statusMessage');
+            statusMsg.style.color = color;
+            statusMsg.innerText = text;
+            setTimeout(() => { statusMsg.innerText = ""; }, 3500);
+        }
+
+        // 📊 6. Fetch Realtime Data to Table
+        db.ref('students').on('value', (snapshot) => {
+            const tbody = document.getElementById("studentTableBody");
+            tbody.innerHTML = "";
+            const data = snapshot.val();
+
+            if (data) {
+                for (let key in data) {
+                    const st = data[key];
+                    const total = (Number(st.paper1) || 0) + (Number(st.paper2) || 0);
+                    const historyStr = Array.isArray(st.history) ? st.history.join(', ') : '-';
+
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td><strong>${st.index || key}</strong></td>
+                        <td>${st.name || '-'}</td>
+                        <td>${st.dob || '-'}</td>
+                        <td>${st.paper1 !== undefined ? st.paper1 : '-'}</td>
+                        <td>${st.paper2 !== undefined ? st.paper2 : '-'}</td>
+                        <td><span class="badge-total">${total > 0 ? total : '-'}</span></td>
+                        <td style="color:#94a3b8; font-size:11px;">${historyStr}</td>
+                        <td><button class="btn-delete" onclick="deleteStudent('${st.index || key}')">Delete</button></td>
+                    `;
+                    tbody.appendChild(tr);
+                }
+            } else {
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: #ff4757;">දැනට කිසිදු දත්තයක් ඇතුළත් කර නොමැත.</td></tr>`;
+            }
         });
+
+        // 🗑️ 7. Delete Student Data
+        function deleteStudent(id) {
+            if (confirm(`${id} සිසුවාගේ දත්ත ඉවත් කිරීමට තහවුරු කරන්න?`)) {
+                db.ref('students/' + id).remove();
+                db.ref('grade11_results/' + id).remove();
+            }
+        }
     </script>
 </body>
 </html>
