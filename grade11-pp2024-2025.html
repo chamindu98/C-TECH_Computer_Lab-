@@ -241,7 +241,7 @@
             <div class="portal-subtitle">Grade 11 - Term Examination & Progress Analytics</div>
         </div>
 
-        <!-- 🏆 Top Rank Champion Banner (Top Student Highlight) -->
+        <!-- 🏆 Top Rank Champion Banner -->
         <div id="champion-section" class="champion-card">
             <h3 style="color: var(--accent-gold); letter-spacing: 2px;">👑 CLASS TOPPER ANNOUNCEMENT 👑</h3>
             <img id="champ-img" src="" class="champion-avatar" alt="Class Champion">
@@ -331,7 +331,7 @@
     <script>
         // 1. FIREBASE CONFIGURATION
         const firebaseConfig = {
-            databaseURL: "https://your-database-name-default-rtdb.firebaseio.com" // ⚠️ ඔබේ Firebase Database URL එක මෙතැනට දාන්න
+            databaseURL: "https://ctech-counter-default-rtdb.firebaseio.com"
         };
 
         if (!firebase.apps.length) {
@@ -342,15 +342,26 @@
         let studentDatabase = {};
         let classHighest = 0, classLowest = 100, classAvg = 0;
 
-        // 2. FETCH REALTIME DATA FROM FIREBASE
-        db.ref('grade11_results').on('value', (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                studentDatabase = data;
-                calculateClassAnalytics();
-                showChampionBanner();
-            }
-        });
+        // 2. FETCH REALTIME DATA FROM BOTH NODES (students & grade11_results)
+        function loadAllData() {
+            db.ref().on('value', (snapshot) => {
+                const rootData = snapshot.val() || {};
+                
+                // students සහ grade11_results දෙකෙන් දත්ත ලබාගෙන Merge කිරීම
+                const studentsData = rootData.students || {};
+                const resultsData = rootData.grade11_results || {};
+
+                // Merge objects
+                studentDatabase = Object.assign({}, studentsData, resultsData);
+
+                if (Object.keys(studentDatabase).length > 0) {
+                    calculateClassAnalytics();
+                    showChampionBanner();
+                }
+            });
+        }
+
+        loadAllData();
 
         // 3. CALCULATE CLASS STATS (Highest, Lowest, Average, Rank)
         function calculateClassAnalytics() {
@@ -362,22 +373,28 @@
 
             for (let key in studentDatabase) {
                 let st = studentDatabase[key];
-                let total = Number(st.paper1) + Number(st.paper2);
-                st.totalCalculated = total;
-                studentArray.push(st);
+                
+                // Paper 1 හෝ Paper 2 ඇති සිසුන් පමණක් ගණනයට ගැනීම
+                if (st.paper1 !== undefined || st.paper2 !== undefined) {
+                    let total = (Number(st.paper1) || 0) + (Number(st.paper2) || 0);
+                    st.totalCalculated = total;
+                    studentArray.push(st);
 
-                if (total > classHighest) classHighest = total;
-                if (total < classLowest) classLowest = total;
-                totalClassMarks += total;
+                    if (total > classHighest) classHighest = total;
+                    if (total < classLowest) classLowest = total;
+                    totalClassMarks += total;
+                }
             }
 
-            classAvg = (totalClassMarks / studentArray.length).toFixed(1);
+            if (studentArray.length > 0) {
+                classAvg = (totalClassMarks / studentArray.length).toFixed(1);
 
-            // Sort for Ranking
-            studentArray.sort((a, b) => b.totalCalculated - a.totalCalculated);
-            studentArray.forEach((st, index) => {
-                st.rankCalculated = index + 1;
-            });
+                // Sort for Ranking
+                studentArray.sort((a, b) => b.totalCalculated - a.totalCalculated);
+                studentArray.forEach((st, index) => {
+                    st.rankCalculated = index + 1;
+                });
+            }
         }
 
         // 4. DISPLAY TOPPER CHAMPION BANNER
@@ -387,15 +404,17 @@
 
             for (let key in studentDatabase) {
                 let st = studentDatabase[key];
-                let total = Number(st.paper1) + Number(st.paper2);
-                if (total > maxScore) {
-                    maxScore = total;
-                    topStudent = st;
+                if (st.paper1 !== undefined || st.paper2 !== undefined) {
+                    let total = (Number(st.paper1) || 0) + (Number(st.paper2) || 0);
+                    if (total > maxScore) {
+                        maxScore = total;
+                        topStudent = st;
+                    }
                 }
             }
 
-            if (topStudent) {
-                document.getElementById("champ-name").innerText = topStudent.name;
+            if (topStudent && maxScore > 0) {
+                document.getElementById("champ-name").innerText = topStudent.name || "Student";
                 document.getElementById("champ-img").src = topStudent.photo || "https://via.placeholder.com/120";
                 document.getElementById("champ-total").innerText = maxScore;
                 document.getElementById("champ-grade").innerText = getGrade(maxScore);
@@ -417,17 +436,19 @@
                 }
             }
 
-            if (foundStudent) {
+            if (foundStudent && (foundStudent.paper1 !== undefined || foundStudent.paper2 !== undefined)) {
                 errorMsg.style.display = "none";
                 
-                const totalMarks = Number(foundStudent.paper1) + Number(foundStudent.paper2);
+                const p1 = Number(foundStudent.paper1) || 0;
+                const p2 = Number(foundStudent.paper2) || 0;
+                const totalMarks = p1 + p2;
                 const grade = getGrade(totalMarks);
 
-                document.getElementById("st-name").innerText = foundStudent.name;
+                document.getElementById("st-name").innerText = foundStudent.name || "Student";
                 document.getElementById("st-index").innerText = `INDEX: ${indexInput}`;
                 document.getElementById("st-photo").src = foundStudent.photo || "https://via.placeholder.com/110";
-                document.getElementById("st-p1").innerText = foundStudent.paper1;
-                document.getElementById("st-p2").innerText = foundStudent.paper2;
+                document.getElementById("st-p1").innerText = p1;
+                document.getElementById("st-p2").innerText = p2;
                 document.getElementById("st-total").innerText = totalMarks;
                 
                 const gradeElement = document.getElementById("st-grade");
@@ -439,9 +460,15 @@
                 document.getElementById("cls-avg").innerText = classAvg;
                 document.getElementById("cls-lowest").innerText = classLowest;
 
+                // History data check
+                let historyData = foundStudent.history;
+                if (!Array.isArray(historyData) || historyData.length === 0) {
+                    historyData = [totalMarks];
+                }
+
                 // Render History Graph & AI Feedback
-                renderSVGGraph(foundStudent.history || [totalMarks]);
-                generateAIFeedback(foundStudent.paper1, foundStudent.paper2, totalMarks, grade);
+                renderSVGGraph(historyData);
+                generateAIFeedback(p1, p2, totalMarks, grade);
 
                 resultSheet.style.display = "block";
             } else {
