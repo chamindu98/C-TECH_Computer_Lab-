@@ -323,6 +323,11 @@
                             <input type="number" id="e_paper2" placeholder="උදා: 48" min="0" max="60" required>
                         </div>
 
+                         <div class="form-group">
+                            <label for="b_studentPhoto">ඡායාරූප Link / File Name:</label>
+                            <input type="text" id="b_studentPhoto" placeholder="st101.jpg හෝ URL">
+                        </div>
+
                         <div class="form-group full-width">
                             <label for="e_studentHistory">පරණ ලකුණු (Commas වලින් වෙන්කරන්න):</label>
                             <input type="text" id="e_studentHistory" placeholder="උදා: 55, 62, 70">
@@ -419,6 +424,8 @@ function saveExamData(e) {
     const p2 = Number(document.getElementById('e_paper2').value || 0);
     const totalCurrent = p1 + p2;
 
+    const photoFilename = document.getElementById("student-photo-filename").value;
+
     const historyInput = document.getElementById('e_studentHistory').value.trim();
     let historyArray = historyInput !== "" ? historyInput.split(',').map(n => Number(n.trim())) : [];
     historyArray.push(totalCurrent);
@@ -429,6 +436,7 @@ function saveExamData(e) {
         paper1: p1,
         paper2: p2,
         total: totalCurrent,
+        photo: photoFilename,
         history: historyArray
     }, (error) => {
         if (error) showStatus("❌ අසාර්ථකයි: " + error.message, "#ff4757");
