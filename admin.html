@@ -241,8 +241,8 @@
             
             <!-- 🗂️ Navigation Tabs -->
             <div class="tabs-header">
-                <button class="tab-btn active" onclick="switchTab('birthdayTab')">🎉 Birthday Wish Panel</button>
-                <button class="tab-btn" onclick="switchTab('examTab')">📊 Exam Results Panel</button>
+                <button id="btn-birthdayTab" class="tab-btn active" onclick="switchTab('birthdayTab')">🎉 Birthday Wish Panel</button>
+                <button id="btn-examTab" class="tab-btn" onclick="switchTab('examTab')">📊 Exam Results Panel</button>
             </div>
 
             <!-- 📝 TAB 1: Birthday Wish Panel -->
@@ -276,6 +276,27 @@
                     </div>
                     <button type="submit" class="save-btn">💾 Birthday Data Save කරන්න</button>
                 </form>
+
+                <!-- 📊 Birthday Live Table -->
+                <div style="margin-top: 30px;">
+                    <div class="table-title">📋 Birthday Database (student_birthdays)</div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>නම</th>
+                                    <th>DOB</th>
+                                    <th>Wish Message</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="birthdayTableBody">
+                                <tr><td colspan="5" style="text-align: center; color: #94a3b8;">දත්ත Load වෙමින් පවතී... ⏳</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
             <!-- 📝 TAB 2: Exam Results Panel -->
@@ -283,8 +304,8 @@
                 <form id="examForm" onsubmit="saveExamData(event)">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="e_studentId">Student Index Number (උදා: EXP-1101):</label>
-                            <input type="text" id="e_studentId" placeholder="EXP-1101" required>
+                            <label for="e_studentId">Student Index Number (උදා: 20261001):</label>
+                            <input type="text" id="e_studentId" placeholder="20261001" required>
                         </div>
 
                         <div class="form-group">
@@ -310,33 +331,32 @@
                     </div>
                     <button type="submit" class="save-btn" style="background: #00d2d3; color: #0f172a;">📊 Exam Results Save කරන්න</button>
                 </form>
+
+                <!-- 📊 Exam Results Live Table -->
+                <div style="margin-top: 30px;">
+                    <div class="table-title">📋 Exam Results Database (exam_results)</div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Index Number</th>
+                                    <th>නම</th>
+                                    <th>Paper 1</th>
+                                    <th>Paper 2</th>
+                                    <th>Total</th>
+                                    <th>History</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="examTableBody">
+                                <tr><td colspan="7" style="text-align: center; color: #94a3b8;">දත්ත Load වෙමින් පවතී... ⏳</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
             <div id="statusMessage"></div>
-        </div>
-
-        <!-- 📊 Live Realtime Data View Table -->
-        <div class="admin-card">
-            <div class="table-title">📋 Database එකෙහි ඇති සිසුන්ගේ ලැයිස්තුව</div>
-            <div class="table-responsive">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>ID / Index</th>
-                            <th>නම</th>
-                            <th>DOB</th>
-                            <th>Paper 1</th>
-                            <th>Paper 2</th>
-                            <th>Total</th>
-                            <th>History</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="studentTableBody">
-                        <tr><td colspan="8" style="text-align: center; color: #94a3b8;">දත්ත Load වෙමින් පවතී... ⏳</td></tr>
-                    </tbody>
-                </table>
-            </div>
             <a href="index.html" class="back-link">← ආපසු Main Web Site එකට</a>
         </div>
     </div>
@@ -366,13 +386,12 @@
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
 
             document.getElementById(tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
+            document.getElementById('btn-' + tabId).classList.add('active');
             
-            // Message clear
             document.getElementById('statusMessage').innerText = "";
         }
 
-        // 💾 4. Save Birthday Data Logic
+        // 💾 4. Save Birthday Data Logic (Saves STRICTLY to 'student_birthdays' node)
         function saveBirthdayData(e) {
             e.preventDefault();
 
@@ -384,7 +403,7 @@
 
             showStatus("Firebase එකට Birthday Data Save වෙමින් පවතියි...", "#ffa502");
 
-            db.ref('students/' + studentId).update({
+            db.ref('student_birthdays/' + studentId).set({
                 index: studentId,
                 name: name,
                 dob: dob,
@@ -394,58 +413,47 @@
                 if (error) {
                     showStatus("❌ දත්ත සුරැකීම අසාර්ථකයි: " + error.message, "#ff4757");
                 } else {
-                    showStatus("🎉 Birthday Data සාර්ථකව Auto-Save වුණා!", "#2ed573");
+                    showStatus("🎉 Birthday Data සාර්ථකව student_birthdays node එකට Save වුණා!", "#2ed573");
                     document.getElementById('birthdayForm').reset();
                 }
             });
         }
 
-        // 💾 5. Save Exam Data Logic
-function saveExamData(e) {
-    e.preventDefault();
+        // 💾 5. Save Exam Data Logic (Saves STRICTLY to 'exam_results' node)
+        function saveExamData(e) {
+            e.preventDefault();
 
-    const studentId = document.getElementById('e_studentId').value.trim().toUpperCase();
-    const name = document.getElementById('e_studentName').value.trim();
-    const paper1 = Number(document.getElementById('e_paper1').value || 0);
-    const paper2 = Number(document.getElementById('e_paper2').value || 0);
-    const historyInput = document.getElementById('e_studentHistory').value.trim();
+            const studentId = document.getElementById('e_studentId').value.trim().toUpperCase();
+            const name = document.getElementById('e_studentName').value.trim();
+            const paper1 = Number(document.getElementById('e_paper1').value || 0);
+            const paper2 = Number(document.getElementById('e_paper2').value || 0);
+            const historyInput = document.getElementById('e_studentHistory').value.trim();
 
-    let historyArray = [];
-    if (historyInput !== "") {
-        historyArray = historyInput.split(',').map(num => Number(num.trim())).filter(val => !isNaN(val));
-    }
-    const totalCurrent = paper1 + paper2;
-    historyArray.push(totalCurrent);
+            let historyArray = [];
+            if (historyInput !== "") {
+                historyArray = historyInput.split(',').map(num => Number(num.trim())).filter(val => !isNaN(val));
+            }
+            const totalCurrent = paper1 + paper2;
+            historyArray.push(totalCurrent);
 
-    showStatus("Firebase එකට Exam Data Save වෙමින් පවතියි...", "#ffa502");
+            showStatus("Firebase එකට Exam Data Save වෙමින් පවතියි...", "#ffa502");
 
-    const examPayload = {
-        index: studentId,
-        name: name,
-        paper1: paper1,
-        paper2: paper2,
-        history: historyArray
-    };
-
-    // Nodes දෙකටම එකවර Update කිරීම
-    let updates = {};
-    updates['students/' + studentId + '/index'] = studentId;
-    updates['students/' + studentId + '/name'] = name;
-    updates['students/' + studentId + '/paper1'] = paper1;
-    updates['students/' + studentId + '/paper2'] = paper2;
-    updates['students/' + studentId + '/history'] = historyArray;
-
-    updates['grade11_results/' + studentId] = examPayload;
-
-    db.ref().update(updates, (error) => {
-        if (error) {
-            showStatus("❌ ලකුණු සුරැකීම අසාර්ථකයි: " + error.message, "#ff4757");
-        } else {
-            showStatus("📊 Exam Marks සාර්ථකව Nodes දෙකටම Save වුණා!", "#2ed573");
-            document.getElementById('examForm').reset();
+            db.ref('exam_results/' + studentId).set({
+                index: studentId,
+                name: name,
+                paper1: paper1,
+                paper2: paper2,
+                total: totalCurrent,
+                history: historyArray
+            }, (error) => {
+                if (error) {
+                    showStatus("❌ ලකුණු සුරැකීම අසාර්ථකයි: " + error.message, "#ff4757");
+                } else {
+                    showStatus("📊 Exam Marks සාර්ථකව exam_results node එකට Save වුණා!", "#2ed573");
+                    document.getElementById('examForm').reset();
+                }
+            });
         }
-    });
-}
 
         function showStatus(text, color) {
             const statusMsg = document.getElementById('statusMessage');
@@ -454,41 +462,68 @@ function saveExamData(e) {
             setTimeout(() => { statusMsg.innerText = ""; }, 3500);
         }
 
-        // 📊 6. Fetch Realtime Data to Table
-        db.ref('students').on('value', (snapshot) => {
-            const tbody = document.getElementById("studentTableBody");
+        // 📊 6. Fetch Realtime Birthday Data
+        db.ref('student_birthdays').on('value', (snapshot) => {
+            const tbody = document.getElementById("birthdayTableBody");
             tbody.innerHTML = "";
             const data = snapshot.val();
 
             if (data) {
                 for (let key in data) {
                     const st = data[key];
-                    const total = (Number(st.paper1) || 0) + (Number(st.paper2) || 0);
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td><strong>${st.index || key}</strong></td>
+                        <td>${st.name || '-'}</td>
+                        <td>${st.dob || '-'}</td>
+                        <td style="font-size:12px; color:#cbd5e1;">${st.wish || '-'}</td>
+                        <td><button class="btn-delete" onclick="deleteBirthdayData('${st.index || key}')">Delete</button></td>
+                    `;
+                    tbody.appendChild(tr);
+                }
+            } else {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #ff4757;">Birthday Data කිසිවක් නැත.</td></tr>`;
+            }
+        });
+
+        // 📊 7. Fetch Realtime Exam Data
+        db.ref('exam_results').on('value', (snapshot) => {
+            const tbody = document.getElementById("examTableBody");
+            tbody.innerHTML = "";
+            const data = snapshot.val();
+
+            if (data) {
+                for (let key in data) {
+                    const st = data[key];
                     const historyStr = Array.isArray(st.history) ? st.history.join(', ') : '-';
 
                     const tr = document.createElement("tr");
                     tr.innerHTML = `
                         <td><strong>${st.index || key}</strong></td>
                         <td>${st.name || '-'}</td>
-                        <td>${st.dob || '-'}</td>
                         <td>${st.paper1 !== undefined ? st.paper1 : '-'}</td>
                         <td>${st.paper2 !== undefined ? st.paper2 : '-'}</td>
-                        <td><span class="badge-total">${total > 0 ? total : '-'}</span></td>
+                        <td><span class="badge-total">${st.total !== undefined ? st.total : (st.paper1 + st.paper2)}</span></td>
                         <td style="color:#94a3b8; font-size:11px;">${historyStr}</td>
-                        <td><button class="btn-delete" onclick="deleteStudent('${st.index || key}')">Delete</button></td>
+                        <td><button class="btn-delete" onclick="deleteExamData('${st.index || key}')">Delete</button></td>
                     `;
                     tbody.appendChild(tr);
                 }
             } else {
-                tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: #ff4757;">දැනට කිසිදු දත්තයක් ඇතුළත් කර නොමැත.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #ff4757;">Exam Results කිසිවක් නැත.</td></tr>`;
             }
         });
 
-        // 🗑️ 7. Delete Student Data
-        function deleteStudent(id) {
-            if (confirm(`${id} සිසුවාගේ දත්ත ඉවත් කිරීමට තහවුරු කරන්න?`)) {
-                db.ref('students/' + id).remove();
-                db.ref('grade11_results/' + id).remove();
+        // 🗑️ Delete Functions
+        function deleteBirthdayData(id) {
+            if (confirm(`${id} Birthday දත්ත ඉවත් කිරීමට තහවුරු කරන්න?`)) {
+                db.ref('student_birthdays/' + id).remove();
+            }
+        }
+
+        function deleteExamData(id) {
+            if (confirm(`${id} Exam Result දත්ත ඉවත් කිරීමට තහවුරු කරන්න?`)) {
+                db.ref('exam_results/' + id).remove();
             }
         }
     </script>
