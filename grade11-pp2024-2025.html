@@ -328,209 +328,252 @@
 
     </div>
 
-    <script>
-        // 1. FIREBASE CONFIGURATION
-        const firebaseConfig = {
-            databaseURL: "https://ctech-counter-default-rtdb.firebaseio.com"
-        };
+   <script>
+    // 1. FIREBASE CONFIGURATION
+    const firebaseConfig = {
+        databaseURL: "https://ctech-counter-default-rtdb.firebaseio.com"
+    };
 
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+
+    const db = firebase.database();
+    let studentDatabase = {};
+    let classHighest = 0, classLowest = 100, classAvg = 0;
+
+    // 2. FETCH REALTIME DATA FROM BOTH NODES (students & grade11_results)
+    function loadAllData() {
+        db.ref().on('value', (snapshot) => {
+            const rootData = snapshot.val() || {};
+            
+            const studentsData = rootData.students || {};
+            const resultsData = rootData.grade11_results || {};
+
+            studentDatabase = {};
+
+            // A) මුලින්ම 'students' Node එකේ දත්ත එකතු කිරීම
+            for (let id in studentsData) {
+                const keyUpper = id.toUpperCase();
+                studentDatabase[keyUpper] = { ...studentsData[id] };
+            }
+
+            // B) 'grade11_results' Node එකේ දත්ත Merge කිරීම (Overwrite නොවී එකතු වේ)
+            for (let id in resultsData) {
+                const keyUpper = id.toUpperCase();
+                if (studentDatabase[keyUpper]) {
+                    studentDatabase[keyUpper] = { 
+                        ...studentDatabase[keyUpper], 
+                        ...resultsData[id] 
+                    };
+                } else {
+                    studentDatabase[keyUpper] = { ...resultsData[id] };
+                }
+            }
+
+            if (Object.keys(studentDatabase).length > 0) {
+                calculateClassAnalytics();
+                showChampionBanner();
+            }
+        }, (error) => {
+            console.error("Firebase Read Error:", error);
+        });
+    }
+
+    loadAllData();
+
+    // 3. CALCULATE CLASS STATS (Highest, Lowest, Average, Rank)
+    function calculateClassAnalytics() {
+        let totalClassMarks = 0;
+        let studentArray = [];
+
+        classHighest = 0;
+        classLowest = 100;
+
+        for (let key in studentDatabase) {
+            let st = studentDatabase[key];
+            
+            // Paper 1 හෝ Paper 2 හෝ Total ඇති සිසුන් ගණනයට ගැනීම
+            if (st.paper1 !== undefined || st.paper2 !== undefined || st.total !== undefined) {
+                let total = (st.total !== undefined) 
+                    ? Number(st.total) 
+                    : (Number(st.paper1) || 0) + (Number(st.paper2) || 0);
+
+                st.totalCalculated = total;
+                studentArray.push(st);
+
+                if (total > classHighest) classHighest = total;
+                if (total < classLowest) classLowest = total;
+                totalClassMarks += total;
+            }
         }
 
-        const db = firebase.database();
-        let studentDatabase = {};
-        let classHighest = 0, classLowest = 100, classAvg = 0;
+        if (studentArray.length > 0) {
+            classAvg = (totalClassMarks / studentArray.length).toFixed(1);
 
-        // 2. FETCH REALTIME DATA FROM BOTH NODES (students & grade11_results)
-        function loadAllData() {
-            db.ref().on('value', (snapshot) => {
-                const rootData = snapshot.val() || {};
-                
-                // students සහ grade11_results දෙකෙන් දත්ත ලබාගෙන Merge කිරීම
-                const studentsData = rootData.students || {};
-                const resultsData = rootData.grade11_results || {};
-
-                // Merge objects
-                studentDatabase = Object.assign({}, studentsData, resultsData);
-
-                if (Object.keys(studentDatabase).length > 0) {
-                    calculateClassAnalytics();
-                    showChampionBanner();
-                }
+            // Sort for Ranking
+            studentArray.sort((a, b) => b.totalCalculated - a.totalCalculated);
+            studentArray.forEach((st, index) => {
+                st.rankCalculated = index + 1;
             });
+        } else {
+            classLowest = 0;
+            classAvg = 0;
         }
+    }
 
-        loadAllData();
+    // 4. DISPLAY TOPPER CHAMPION BANNER
+    function showChampionBanner() {
+        let topStudent = null;
+        let maxScore = -1;
 
-        // 3. CALCULATE CLASS STATS (Highest, Lowest, Average, Rank)
-        function calculateClassAnalytics() {
-            let totalClassMarks = 0;
-            let studentArray = [];
-
-            classHighest = 0;
-            classLowest = 100;
-
-            for (let key in studentDatabase) {
-                let st = studentDatabase[key];
-                
-                // Paper 1 හෝ Paper 2 ඇති සිසුන් පමණක් ගණනයට ගැනීම
-                if (st.paper1 !== undefined || st.paper2 !== undefined) {
-                    let total = (Number(st.paper1) || 0) + (Number(st.paper2) || 0);
-                    st.totalCalculated = total;
-                    studentArray.push(st);
-
-                    if (total > classHighest) classHighest = total;
-                    if (total < classLowest) classLowest = total;
-                    totalClassMarks += total;
+        for (let key in studentDatabase) {
+            let st = studentDatabase[key];
+            if (st.paper1 !== undefined || st.paper2 !== undefined || st.total !== undefined) {
+                let total = st.totalCalculated || ((Number(st.paper1) || 0) + (Number(st.paper2) || 0));
+                if (total > maxScore) {
+                    maxScore = total;
+                    topStudent = st;
                 }
             }
-
-            if (studentArray.length > 0) {
-                classAvg = (totalClassMarks / studentArray.length).toFixed(1);
-
-                // Sort for Ranking
-                studentArray.sort((a, b) => b.totalCalculated - a.totalCalculated);
-                studentArray.forEach((st, index) => {
-                    st.rankCalculated = index + 1;
-                });
-            }
         }
 
-        // 4. DISPLAY TOPPER CHAMPION BANNER
-        function showChampionBanner() {
-            let topStudent = null;
-            let maxScore = -1;
+        const champSection = document.getElementById("champion-section");
+        if (topStudent && maxScore > 0 && champSection) {
+            if (document.getElementById("champ-name")) document.getElementById("champ-name").innerText = topStudent.name || "Student";
+            if (document.getElementById("champ-img")) document.getElementById("champ-img").src = topStudent.photo || "logo.png";
+            if (document.getElementById("champ-total")) document.getElementById("champ-total").innerText = maxScore;
+            if (document.getElementById("champ-grade")) document.getElementById("champ-grade").innerText = getGrade(maxScore);
+            champSection.style.display = "block";
+        }
+    }
 
-            for (let key in studentDatabase) {
-                let st = studentDatabase[key];
-                if (st.paper1 !== undefined || st.paper2 !== undefined) {
-                    let total = (Number(st.paper1) || 0) + (Number(st.paper2) || 0);
-                    if (total > maxScore) {
-                        maxScore = total;
-                        topStudent = st;
-                    }
-                }
-            }
+    // 5. SEARCH & RENDER STUDENT RESULT SHEET
+    function fetchStudentResult() {
+        const indexInput = document.getElementById("index-input").value.trim().toUpperCase();
+        const errorMsg = document.getElementById("error-msg");
+        const resultSheet = document.getElementById("result-sheet");
 
-            if (topStudent && maxScore > 0) {
-                document.getElementById("champ-name").innerText = topStudent.name || "Student";
-                document.getElementById("champ-img").src = topStudent.photo || "https://via.placeholder.com/120";
-                document.getElementById("champ-total").innerText = maxScore;
-                document.getElementById("champ-grade").innerText = getGrade(maxScore);
-                document.getElementById("champion-section").style.display = "block";
-            }
+        if (!indexInput) {
+            alert("කරුණාකර Index Number එක ඇතුළත් කරන්න.");
+            return;
         }
 
-        // 5. SEARCH & RENDER STUDENT RESULT SHEET
-        function fetchStudentResult() {
-            const indexInput = document.getElementById("index-input").value.trim().toUpperCase();
-            const errorMsg = document.getElementById("error-msg");
-            const resultSheet = document.getElementById("result-sheet");
+        let foundStudent = null;
 
-            let foundStudent = null;
+        // 1. Direct Search with Key
+        if (studentDatabase[indexInput]) {
+            foundStudent = studentDatabase[indexInput];
+        } else {
+            // 2. Fallback Search inside Object Fields
             for (let key in studentDatabase) {
-                if (key.toUpperCase() === indexInput || (studentDatabase[key].index && studentDatabase[key].index.toUpperCase() === indexInput)) {
-                    foundStudent = studentDatabase[key];
+                const st = studentDatabase[key];
+                if ((st.index && st.index.toString().toUpperCase() === indexInput) || key === indexInput) {
+                    foundStudent = st;
                     break;
                 }
             }
+        }
 
-            if (foundStudent && (foundStudent.paper1 !== undefined || foundStudent.paper2 !== undefined)) {
-                errorMsg.style.display = "none";
-                
-                const p1 = Number(foundStudent.paper1) || 0;
-                const p2 = Number(foundStudent.paper2) || 0;
-                const totalMarks = p1 + p2;
-                const grade = getGrade(totalMarks);
+        if (foundStudent && (foundStudent.paper1 !== undefined || foundStudent.paper2 !== undefined || foundStudent.total !== undefined)) {
+            if (errorMsg) errorMsg.style.display = "none";
+            
+            const p1 = Number(foundStudent.paper1) || 0;
+            const p2 = Number(foundStudent.paper2) || 0;
+            const totalMarks = (foundStudent.total !== undefined) ? Number(foundStudent.total) : (p1 + p2);
+            const grade = getGrade(totalMarks);
 
-                document.getElementById("st-name").innerText = foundStudent.name || "Student";
-                document.getElementById("st-index").innerText = `INDEX: ${indexInput}`;
-                document.getElementById("st-photo").src = foundStudent.photo || "https://via.placeholder.com/110";
-                document.getElementById("st-p1").innerText = p1;
-                document.getElementById("st-p2").innerText = p2;
-                document.getElementById("st-total").innerText = totalMarks;
-                
-                const gradeElement = document.getElementById("st-grade");
+            if (document.getElementById("st-name")) document.getElementById("st-name").innerText = foundStudent.name || "Student";
+            if (document.getElementById("st-index")) document.getElementById("st-index").innerText = `INDEX: ${indexInput}`;
+            if (document.getElementById("st-photo")) document.getElementById("st-photo").src = foundStudent.photo || "logo.png";
+            if (document.getElementById("st-p1")) document.getElementById("st-p1").innerText = p1;
+            if (document.getElementById("st-p2")) document.getElementById("st-p2").innerText = p2;
+            if (document.getElementById("st-total")) document.getElementById("st-total").innerText = totalMarks;
+            
+            const gradeElement = document.getElementById("st-grade");
+            if (gradeElement) {
                 gradeElement.innerText = grade;
                 gradeElement.className = `grade-pill grade-${grade}`;
-
-                document.getElementById("st-rank").innerText = `#${foundStudent.rankCalculated || 1}`;
-                document.getElementById("cls-highest").innerText = classHighest;
-                document.getElementById("cls-avg").innerText = classAvg;
-                document.getElementById("cls-lowest").innerText = classLowest;
-
-                // History data check
-                let historyData = foundStudent.history;
-                if (!Array.isArray(historyData) || historyData.length === 0) {
-                    historyData = [totalMarks];
-                }
-
-                // Render History Graph & AI Feedback
-                renderSVGGraph(historyData);
-                generateAIFeedback(p1, p2, totalMarks, grade);
-
-                resultSheet.style.display = "block";
-            } else {
-                resultSheet.style.display = "none";
-                errorMsg.style.display = "block";
-            }
-        }
-
-        function getGrade(marks) {
-            if (marks >= 75) return "A";
-            if (marks >= 65) return "B";
-            if (marks >= 55) return "C";
-            if (marks >= 35) return "S";
-            return "W";
-        }
-
-        // 6. AUTOMATED AI ADVISOR ENGINE
-        function generateAIFeedback(p1, p2, total, grade) {
-            let advice = "";
-            if (grade === "A") {
-                advice = "🔥 **විශිෂ්ට සාමාර්ථයකි!** ඔබගේ MCQ සහ Essay සාමාර්ථ දෙකම ඉහළ මට්ටමක පවතී. O/L විභාගයේදී 'A' සාමාර්ථය ස්ථිර කරගැනීමට පසුගිය ප්‍රශ්න පත්‍ර (Past Papers) වැඩි වැඩියෙන් ලියා කාල කළමනාකරණය තවදුරටත් පුහුණු වන්න.";
-            } else if (p1 < 25 && p2 > 35) {
-                advice = "⚠️ **Paper I (MCQ) අවධානය යොමු කරන්න:** ඔබගේ දෙවන ප්‍රශ්න පත්‍රය හොඳ මට්ටමක තිබුණද MCQ ලකුණු අඩුයි. කෙටි ප්‍රශ්න සහ තාක්ෂණික වචන (Keywords) නැවත පාඩම් කර MCQ Paper 5 කටවත් පිළිතුරු ලියන්න.";
-            } else if (p2 < 30 && p1 > 30) {
-                advice = "⚠️ **Paper II (Essay) අවධානය යොමු කරන්න:** structured essay ප්‍රශ්න වලට පිළිතුරු ලිවීමේදී Structured Flow එක සහ Diagram (Structure Chart, Flowcharts) ඇඳීම පුහුණු වන්න.";
-            } else {
-                advice = "💪 **තවදුරටත් උත්සාහ කරන්න:** O/L විභාගයට පෙර 'A' සාමාර්ථයකට ළඟාවීමට නම් දිනපතා පැයක් ICT විෂය වෙනුවෙන් වෙන් කර Past Paper ප්‍රශ්න විසඳන්න. අඩු පාඩු ඇති කොටස් ගුරුවරයාගෙන් අසා පැහැදිලි කරගන්න.";
-            }
-            document.getElementById("ai-advice-text").innerHTML = advice;
-        }
-
-        // 7. RENDER SVG GRAPH FOR PROGRESS HISTORY
-        function renderSVGGraph(historyArray) {
-            const totalPoints = historyArray.length;
-            let svgContent = `
-                <svg class="svg-chart" viewBox="0 0 300 160">
-                    <line x1="40" y1="20" x2="280" y2="20" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4"/>
-                    <line x1="40" y1="80" x2="280" y2="80" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4"/>
-                    <line x1="40" y1="140" x2="280" y2="140" stroke="rgba(255,255,255,0.2)"/>
-            `;
-
-            let points = [];
-            historyArray.forEach((mark, idx) => {
-                let x = totalPoints > 1 ? 50 + idx * (220 / (totalPoints - 1)) : 160;
-                let y = 140 - (mark * 1.1);
-                points.push({x, y, mark});
-                svgContent += `<text x="${x}" y="155" fill="#00f0ff" font-size="9" text-anchor="middle">Term ${idx + 1}</text>`;
-            });
-
-            if (points.length > 1) {
-                const linePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
-                svgContent += `<path d="${linePath}" fill="none" stroke="#00f0ff" stroke-width="3"/>`;
             }
 
-            points.forEach(p => {
-                svgContent += `<circle cx="${p.x}" cy="${p.y}" r="5" fill="#ffb703"/>`;
-                svgContent += `<text x="${p.x}" y="${p.y - 8}" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">${p.mark}</text>`;
-            });
+            if (document.getElementById("st-rank")) document.getElementById("st-rank").innerText = `#${foundStudent.rankCalculated || 1}`;
+            if (document.getElementById("cls-highest")) document.getElementById("cls-highest").innerText = classHighest;
+            if (document.getElementById("cls-avg")) document.getElementById("cls-avg").innerText = classAvg;
+            if (document.getElementById("cls-lowest")) document.getElementById("cls-lowest").innerText = classLowest;
 
-            svgContent += `</svg>`;
-            document.getElementById("graph-wrapper").innerHTML = svgContent;
+            // History Data Processing
+            let historyData = foundStudent.history;
+            if (!Array.isArray(historyData) || historyData.length === 0) {
+                historyData = [totalMarks];
+            }
+
+            renderSVGGraph(historyData);
+            generateAIFeedback(p1, p2, totalMarks, grade);
+
+            if (resultSheet) resultSheet.style.display = "block";
+        } else {
+            if (resultSheet) resultSheet.style.display = "none";
+            if (errorMsg) errorMsg.style.display = "block";
         }
-    </script>
+    }
+
+    function getGrade(marks) {
+        if (marks >= 75) return "A";
+        if (marks >= 65) return "B";
+        if (marks >= 55) return "C";
+        if (marks >= 35) return "S";
+        return "W";
+    }
+
+    // 6. AUTOMATED AI ADVISOR ENGINE
+    function generateAIFeedback(p1, p2, total, grade) {
+        let advice = "";
+        if (grade === "A") {
+            advice = "🔥 <strong>විශිෂ්ට සාමාර්ථයකි!</strong> ඔබගේ MCQ සහ Essay සාමාර්ථ දෙකම ඉහළ මට්ටමක පවතී. O/L විභාගයේදී 'A' සාමාර්ථය ස්ථිර කරගැනීමට පසුගිය ප්‍රශ්න පත්‍ර (Past Papers) වැඩි වැඩියෙන් ලියා කාල කළමනාකරණය තවදුරටත් පුහුණු වන්න.";
+        } else if (p1 < 25 && p2 > 35) {
+            advice = "⚠️ <strong>Paper I (MCQ) අවධානය යොමු කරන්න:</strong> ඔබගේ දෙවන ප්‍රශ්න පත්‍රය හොඳ මට්ටමක තිබුණද MCQ ලකුණු අඩුයි. කෙටි ප්‍රශ්න සහ තාක්ෂණික වචන (Keywords) නැවත පාඩම් කර MCQ Paper 5 කටවත් පිළිතුරු ලියන්න.";
+        } else if (p2 < 30 && p1 > 30) {
+            advice = "⚠️ <strong>Paper II (Essay) අවධානය යොමු කරන්න:</strong> Structured Essay ප්‍රශ්න වලට පිළිතුරු ලිවීමේදී Flowchart සහ Diagrams ඇඳීම තවදුරටත් පුහුණු වන්න.";
+        } else {
+            advice = "💪 <strong>තවදුරටත් උත්සාහ කරන්න:</strong> O/L විභාගයට පෙර 'A' සාමාර්ථයකට ළඟාවීමට නම් දිනපතා පැයක් ICT විෂය වෙනුවෙන් වෙන් කර Past Paper ප්‍රශ්න විසඳන්න. අඩු පාඩු ඇති කොටස් ගුරුවරයාගෙන් අසා පැහැදිලි කරගන්න.";
+        }
+        
+        const adviceElem = document.getElementById("ai-advice-text");
+        if (adviceElem) adviceElem.innerHTML = advice;
+    }
+
+    // 7. RENDER SVG GRAPH FOR PROGRESS HISTORY
+    function renderSVGGraph(historyArray) {
+        const totalPoints = historyArray.length;
+        let svgContent = `
+            <svg class="svg-chart" viewBox="0 0 300 160">
+                <line x1="40" y1="20" x2="280" y2="20" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4"/>
+                <line x1="40" y1="80" x2="280" y2="80" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4"/>
+                <line x1="40" y1="140" x2="280" y2="140" stroke="rgba(255,255,255,0.2)"/>
+        `;
+
+        let points = [];
+        historyArray.forEach((mark, idx) => {
+            let x = totalPoints > 1 ? 50 + idx * (220 / (totalPoints - 1)) : 160;
+            let y = 140 - (mark * 1.1);
+            points.push({x, y, mark});
+            svgContent += `<text x="${x}" y="155" fill="#00f0ff" font-size="9" text-anchor="middle">Term ${idx + 1}</text>`;
+        });
+
+        if (points.length > 1) {
+            const linePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+            svgContent += `<path d="${linePath}" fill="none" stroke="#00f0ff" stroke-width="3"/>`;
+        }
+
+        points.forEach(p => {
+            svgContent += `<circle cx="${p.x}" cy="${p.y}" r="5" fill="#ffb703"/>`;
+            svgContent += `<text x="${p.x}" y="${p.y - 8}" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">${p.mark}</text>`;
+        });
+
+        svgContent += `</svg>`;
+        const graphWrapper = document.getElementById("graph-wrapper");
+        if (graphWrapper) graphWrapper.innerHTML = svgContent;
+    }
+</script>
 </body>
 </html>
