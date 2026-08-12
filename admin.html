@@ -401,43 +401,51 @@
         }
 
         // 💾 5. Save Exam Data Logic
-        function saveExamData(e) {
-            e.preventDefault();
+function saveExamData(e) {
+    e.preventDefault();
 
-            const studentId = document.getElementById('e_studentId').value.trim().toUpperCase();
-            const name = document.getElementById('e_studentName').value.trim();
-            const paper1 = Number(document.getElementById('e_paper1').value || 0);
-            const paper2 = Number(document.getElementById('e_paper2').value || 0);
-            const historyInput = document.getElementById('e_studentHistory').value.trim();
+    const studentId = document.getElementById('e_studentId').value.trim().toUpperCase();
+    const name = document.getElementById('e_studentName').value.trim();
+    const paper1 = Number(document.getElementById('e_paper1').value || 0);
+    const paper2 = Number(document.getElementById('e_paper2').value || 0);
+    const historyInput = document.getElementById('e_studentHistory').value.trim();
 
-            let historyArray = [];
-            if (historyInput !== "") {
-                historyArray = historyInput.split(',').map(num => Number(num.trim())).filter(val => !isNaN(val));
-            }
-            const totalCurrent = paper1 + paper2;
-            historyArray.push(totalCurrent);
+    let historyArray = [];
+    if (historyInput !== "") {
+        historyArray = historyInput.split(',').map(num => Number(num.trim())).filter(val => !isNaN(val));
+    }
+    const totalCurrent = paper1 + paper2;
+    historyArray.push(totalCurrent);
 
-            showStatus("Firebase එකට Exam Data Save වෙමින් පවතියි...", "#ffa502");
+    showStatus("Firebase එකට Exam Data Save වෙමින් පවතියි...", "#ffa502");
 
-            const examPayload = {
-                index: studentId,
-                name: name,
-                paper1: paper1,
-                paper2: paper2,
-                history: historyArray
-            };
+    const examPayload = {
+        index: studentId,
+        name: name,
+        paper1: paper1,
+        paper2: paper2,
+        history: historyArray
+    };
 
-            // Save to both nodes
-            db.ref('students/' + studentId).update(examPayload);
-            db.ref('grade11_results/' + studentId).update(examPayload, (error) => {
-                if (error) {
-                    showStatus("❌ ලකුණු සුරැකීම අසාර්ථකයි: " + error.message, "#ff4757");
-                } else {
-                    showStatus("📊 Exam Marks සාර්ථකව Auto-Save වුණා!", "#2ed573");
-                    document.getElementById('examForm').reset();
-                }
-            });
+    // Nodes දෙකටම එකවර Update කිරීම
+    let updates = {};
+    updates['students/' + studentId + '/index'] = studentId;
+    updates['students/' + studentId + '/name'] = name;
+    updates['students/' + studentId + '/paper1'] = paper1;
+    updates['students/' + studentId + '/paper2'] = paper2;
+    updates['students/' + studentId + '/history'] = historyArray;
+
+    updates['grade11_results/' + studentId] = examPayload;
+
+    db.ref().update(updates, (error) => {
+        if (error) {
+            showStatus("❌ ලකුණු සුරැකීම අසාර්ථකයි: " + error.message, "#ff4757");
+        } else {
+            showStatus("📊 Exam Marks සාර්ථකව Nodes දෙකටම Save වුණා!", "#2ed573");
+            document.getElementById('examForm').reset();
         }
+    });
+}
 
         function showStatus(text, color) {
             const statusMsg = document.getElementById('statusMessage');
