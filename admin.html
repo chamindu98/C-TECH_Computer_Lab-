@@ -403,7 +403,7 @@
 
             showStatus("Firebase එකට Birthday Data Save වෙමින් පවතියි...", "#ffa502");
 
-            db.ref('student_birthdays/' + studentId).set({
+            db.ref('students/' + studentId).set({
                 index: studentId,
                 name: name,
                 dob: dob,
@@ -438,7 +438,7 @@
 
             showStatus("Firebase එකට Exam Data Save වෙමින් පවතියි...", "#ffa502");
 
-            db.ref('exam_results/' + studentId).set({
+            db.ref('grade11_results/' + studentId).set({
                 index: studentId,
                 name: name,
                 paper1: paper1,
