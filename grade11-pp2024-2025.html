@@ -425,104 +425,112 @@
         }
     }
 
-    // 4. DISPLAY TOPPER CHAMPION BANNER
-    function showChampionBanner() {
-        let topStudent = null;
-        let maxScore = -1;
+   // 4. DISPLAY TOPPER CHAMPION BANNER (With Safe Fallback Image)
+function showChampionBanner() {
+    let topStudent = null;
+    let maxScore = -1;
 
-        for (let key in studentDatabase) {
-            let st = studentDatabase[key];
-            let total = st.totalCalculated || ((Number(st.paper1) || 0) + (Number(st.paper2) || 0));
-            if (total > maxScore && total > 0) {
-                maxScore = total;
-                topStudent = st;
-            }
-        }
-
-        const champSection = document.getElementById("champion-section");
-        if (topStudent && champSection) {
-            if (document.getElementById("champ-name")) document.getElementById("champ-name").innerText = topStudent.name || "Student";
-            if (document.getElementById("champ-img")) document.getElementById("champ-img").src = topStudent.photo || "https://via.placeholder.com/120";
-            if (document.getElementById("champ-total")) document.getElementById("champ-total").innerText = maxScore;
-            if (document.getElementById("champ-grade")) document.getElementById("champ-grade").innerText = getGrade(maxScore);
-            champSection.style.display = "block";
+    for (let key in studentDatabase) {
+        let st = studentDatabase[key];
+        let total = st.totalCalculated || ((Number(st.paper1) || 0) + (Number(st.paper2) || 0));
+        if (total > maxScore && total > 0) {
+            maxScore = total;
+            topStudent = st;
         }
     }
 
-    // 5. SEARCH & RENDER STUDENT RESULT SHEET BY INDEX
-    function fetchStudentResult() {
-        const inputElem = document.getElementById("index-input");
-        if (!inputElem) {
-            alert("HTML එකේ id='index-input' සහිත input box එකක් නැත!");
-            return;
-        }
+    const champSection = document.getElementById("champion-section");
+    if (topStudent && champSection) {
+        if (document.getElementById("champ-name")) document.getElementById("champ-name").innerText = topStudent.name || "Student";
+        
+        // Broken image URL වෙනුවට safe default image එකක්
+        const defaultImg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='%23ffb703'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>";
+        if (document.getElementById("champ-img")) document.getElementById("champ-img").src = topStudent.photo || defaultImg;
+        
+        if (document.getElementById("champ-total")) document.getElementById("champ-total").innerText = maxScore;
+        if (document.getElementById("champ-grade")) document.getElementById("champ-grade").innerText = getGrade(maxScore);
+        champSection.style.display = "block";
+    }
+}
 
-        const indexInput = inputElem.value.trim().toUpperCase();
-        const errorMsg = document.getElementById("error-msg");
-        const resultSheet = document.getElementById("result-sheet");
+// 5. SMART SEARCH BY INDEX NUMBER (Ignores Hyphens and Spaces)
+function fetchStudentResult() {
+    const inputElem = document.getElementById("index-input");
+    if (!inputElem) return;
 
-        if (!indexInput) {
-            alert("කරුණාකර Index Number එක ඇතුළත් කරන්න.");
-            return;
-        }
+    // Raw user input
+    const rawInput = inputElem.value.trim().toUpperCase();
+    
+    // Hyphens (-), Spaces, Underscores සියල්ල අයින් කළ Clean Input එක
+    const cleanInput = rawInput.replace(/[-_ ]/g, "");
 
-        let foundStudent = null;
+    const errorMsg = document.getElementById("error-msg");
+    const resultSheet = document.getElementById("result-sheet");
 
-        // Direct Index Key Match
-        if (studentDatabase[indexInput]) {
-            foundStudent = studentDatabase[indexInput];
-        } else {
-            // Field Inside Search (If Key isn't Index)
-            for (let key in studentDatabase) {
-                const st = studentDatabase[key];
-                if (key === indexInput || (st.index && st.index.toString().trim().toUpperCase() === indexInput)) {
-                    foundStudent = st;
-                    break;
-                }
-            }
-        }
+    if (!rawInput) {
+        alert("කරුණාකර Index Number එක ඇතුළත් කරන්න.");
+        return;
+    }
 
-        if (foundStudent) {
-            if (errorMsg) errorMsg.style.display = "none";
-            
-            const p1 = Number(foundStudent.paper1) || 0;
-            const p2 = Number(foundStudent.paper2) || 0;
-            const totalMarks = (foundStudent.total !== undefined) ? Number(foundStudent.total) : (p1 + p2);
-            const grade = getGrade(totalMarks);
+    let foundStudent = null;
 
-            if (document.getElementById("st-name")) document.getElementById("st-name").innerText = foundStudent.name || "Student";
-            if (document.getElementById("st-index")) document.getElementById("st-index").innerText = `INDEX: ${indexInput}`;
-            if (document.getElementById("st-photo")) document.getElementById("st-photo").src = foundStudent.photo || "https://via.placeholder.com/110";
-            if (document.getElementById("st-p1")) document.getElementById("st-p1").innerText = p1;
-            if (document.getElementById("st-p2")) document.getElementById("st-p2").innerText = p2;
-            if (document.getElementById("st-total")) document.getElementById("st-total").innerText = totalMarks;
-            
-            const gradeElement = document.getElementById("st-grade");
-            if (gradeElement) {
-                gradeElement.innerText = grade;
-                gradeElement.className = `grade-pill grade-${grade}`;
-            }
+    // Database එකේ ඇති සියලුම Keys පරීක්ෂා කිරීම (Smart Match)
+    for (let key in studentDatabase) {
+        const cleanKey = key.replace(/[-_ ]/g, "").toUpperCase();
+        const st = studentDatabase[key];
+        const stIndexClean = st.index ? st.index.toString().replace(/[-_ ]/g, "").toUpperCase() : "";
 
-            if (document.getElementById("st-rank")) document.getElementById("st-rank").innerText = `#${foundStudent.rankCalculated || 1}`;
-            if (document.getElementById("cls-highest")) document.getElementById("cls-highest").innerText = classHighest;
-            if (document.getElementById("cls-avg")) document.getElementById("cls-avg").innerText = classAvg;
-            if (document.getElementById("cls-lowest")) document.getElementById("cls-lowest").innerText = classLowest;
-
-            // History Data check
-            let historyData = foundStudent.history;
-            if (!Array.isArray(historyData) || historyData.length === 0) {
-                historyData = [totalMarks];
-            }
-
-            renderSVGGraph(historyData);
-            generateAIFeedback(p1, p2, totalMarks, grade);
-
-            if (resultSheet) resultSheet.style.display = "block";
-        } else {
-            if (resultSheet) resultSheet.style.display = "none";
-            if (errorMsg) errorMsg.style.display = "block";
+        // 1. Key එක කෙලින්ම Match වීම (උදා: EXP101 == EXP-101)
+        // 2. Object එක ඇතුළේ ඇති index field එක Match වීම
+        if (cleanKey === cleanInput || stIndexClean === cleanInput) {
+            foundStudent = st;
+            break;
         }
     }
+
+    if (foundStudent) {
+        if (errorMsg) errorMsg.style.display = "none";
+        
+        const p1 = Number(foundStudent.paper1) || 0;
+        const p2 = Number(foundStudent.paper2) || 0;
+        const totalMarks = (foundStudent.total !== undefined) ? Number(foundStudent.total) : (p1 + p2);
+        const grade = getGrade(totalMarks);
+
+        const defaultImg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='%23ffb703'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>";
+
+        if (document.getElementById("st-name")) document.getElementById("st-name").innerText = foundStudent.name || "Student";
+        if (document.getElementById("st-index")) document.getElementById("st-index").innerText = `INDEX: ${rawInput}`;
+        if (document.getElementById("st-photo")) document.getElementById("st-photo").src = foundStudent.photo || defaultImg;
+        if (document.getElementById("st-p1")) document.getElementById("st-p1").innerText = p1;
+        if (document.getElementById("st-p2")) document.getElementById("st-p2").innerText = p2;
+        if (document.getElementById("st-total")) document.getElementById("st-total").innerText = totalMarks;
+        
+        const gradeElement = document.getElementById("st-grade");
+        if (gradeElement) {
+            gradeElement.innerText = grade;
+            gradeElement.className = `grade-pill grade-${grade}`;
+        }
+
+        if (document.getElementById("st-rank")) document.getElementById("st-rank").innerText = `#${foundStudent.rankCalculated || 1}`;
+        if (document.getElementById("cls-highest")) document.getElementById("cls-highest").innerText = classHighest;
+        if (document.getElementById("cls-avg")) document.getElementById("cls-avg").innerText = classAvg;
+        if (document.getElementById("cls-lowest")) document.getElementById("cls-lowest").innerText = classLowest;
+
+        // History Data check
+        let historyData = foundStudent.history;
+        if (!Array.isArray(historyData) || historyData.length === 0) {
+            historyData = [totalMarks];
+        }
+
+        renderSVGGraph(historyData);
+        generateAIFeedback(p1, p2, totalMarks, grade);
+
+        if (resultSheet) resultSheet.style.display = "block";
+    } else {
+        if (resultSheet) resultSheet.style.display = "none";
+        if (errorMsg) errorMsg.style.display = "block";
+    }
+}
 
     function getGrade(marks) {
         if (marks >= 75) return "A";
