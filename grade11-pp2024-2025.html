@@ -328,7 +328,7 @@
 
     </div>
 
-   <script>
+  <script>
     // 1. FIREBASE CONFIGURATION
     const firebaseConfig = {
         databaseURL: "https://ctech-counter-default-rtdb.firebaseio.com/"
@@ -342,55 +342,52 @@
     let studentDatabase = {};
     let classHighest = 0, classLowest = 100, classAvg = 0;
 
-   // 📥 2. FETCH REALTIME DATA FROM SPECIFIC NODES (Fixes Permission Denied Error)
-function loadAllData() {
-    let studentsData = {};
-    let resultsData = {};
+    // 2. FETCH DATA FROM 'students' AND 'grade11_results' NODES DIRECTLY
+    function loadAllData() {
+        let studentsData = {};
+        let resultsData = {};
 
-    // Helper function to combine data and update UI
-    function mergeAndProcess() {
-        studentDatabase = {};
+        function mergeAndProcess() {
+            studentDatabase = {};
 
-        // Merge 'students'
-        Object.keys(studentsData).forEach(key => {
-            const cleanKey = key.trim().toUpperCase();
-            studentDatabase[cleanKey] = { ...studentsData[key] };
-        });
+            // 1. Merge 'students'
+            Object.keys(studentsData).forEach(key => {
+                const cleanKey = key.trim().toUpperCase();
+                studentDatabase[cleanKey] = { ...studentsData[key] };
+            });
 
-        // Merge 'grade11_results'
-        Object.keys(resultsData).forEach(key => {
-            const cleanKey = key.trim().toUpperCase();
-            if (studentDatabase[cleanKey]) {
-                studentDatabase[cleanKey] = { ...studentDatabase[cleanKey], ...resultsData[key] };
-            } else {
-                studentDatabase[cleanKey] = { ...resultsData[key] };
+            // 2. Merge 'grade11_results'
+            Object.keys(resultsData).forEach(key => {
+                const cleanKey = key.trim().toUpperCase();
+                if (studentDatabase[cleanKey]) {
+                    studentDatabase[cleanKey] = { ...studentDatabase[cleanKey], ...resultsData[key] };
+                } else {
+                    studentDatabase[cleanKey] = { ...resultsData[key] };
+                }
+            });
+
+            console.log("Merged Database Successfully Loaded:", studentDatabase);
+
+            if (Object.keys(studentDatabase).length > 0) {
+                calculateClassAnalytics();
+                showChampionBanner();
             }
-        });
-
-        console.log("Merged Student Database:", studentDatabase);
-
-        if (Object.keys(studentDatabase).length > 0) {
-            calculateClassAnalytics();
-            showChampionBanner();
         }
+
+        // 'students' node එකෙන් දත්ත ලබා ගැනීම
+        db.ref('students').on('value', (snapshot) => {
+            studentsData = snapshot.val() || {};
+            mergeAndProcess();
+        }, (err) => console.error("Students Read Error:", err));
+
+        // 'grade11_results' node එකෙන් දත්ත ලබා ගැනීම
+        db.ref('grade11_results').on('value', (snapshot) => {
+            resultsData = snapshot.val() || {};
+            mergeAndProcess();
+        }, (err) => console.error("Results Read Error:", err));
     }
 
-    // 1. Fetch 'students' node separately
-    db.ref('students').on('value', (snapshot) => {
-        studentsData = snapshot.val() || {};
-        mergeAndProcess();
-    }, (error) => {
-        console.error("Students Read Error:", error);
-    });
-
-    // 2. Fetch 'grade11_results' node separately
-    db.ref('grade11_results').on('value', (snapshot) => {
-        resultsData = snapshot.val() || {};
-        mergeAndProcess();
-    }, (error) => {
-        console.error("Grade 11 Results Read Error:", error);
-    });
-}
+    loadAllData();
 
     // 3. CALCULATE CLASS STATS (Highest, Lowest, Average, Rank)
     function calculateClassAnalytics() {
@@ -403,7 +400,6 @@ function loadAllData() {
         for (let key in studentDatabase) {
             let st = studentDatabase[key];
             
-            // Paper 1 හෝ Paper 2 හෝ Total ඇති සිසුන් ගණනයට ගැනීම
             if (st.paper1 !== undefined || st.paper2 !== undefined || st.total !== undefined) {
                 let total = (st.total !== undefined) 
                     ? Number(st.total) 
@@ -426,9 +422,6 @@ function loadAllData() {
             studentArray.forEach((st, index) => {
                 st.rankCalculated = index + 1;
             });
-        } else {
-            classLowest = 0;
-            classAvg = 0;
         }
     }
 
@@ -439,28 +432,32 @@ function loadAllData() {
 
         for (let key in studentDatabase) {
             let st = studentDatabase[key];
-            if (st.paper1 !== undefined || st.paper2 !== undefined || st.total !== undefined) {
-                let total = st.totalCalculated || ((Number(st.paper1) || 0) + (Number(st.paper2) || 0));
-                if (total > maxScore) {
-                    maxScore = total;
-                    topStudent = st;
-                }
+            let total = st.totalCalculated || ((Number(st.paper1) || 0) + (Number(st.paper2) || 0));
+            if (total > maxScore && total > 0) {
+                maxScore = total;
+                topStudent = st;
             }
         }
 
         const champSection = document.getElementById("champion-section");
-        if (topStudent && maxScore > 0 && champSection) {
+        if (topStudent && champSection) {
             if (document.getElementById("champ-name")) document.getElementById("champ-name").innerText = topStudent.name || "Student";
-            if (document.getElementById("champ-img")) document.getElementById("champ-img").src = topStudent.photo || "logo.png";
+            if (document.getElementById("champ-img")) document.getElementById("champ-img").src = topStudent.photo || "https://via.placeholder.com/120";
             if (document.getElementById("champ-total")) document.getElementById("champ-total").innerText = maxScore;
             if (document.getElementById("champ-grade")) document.getElementById("champ-grade").innerText = getGrade(maxScore);
             champSection.style.display = "block";
         }
     }
 
-    // 5. SEARCH & RENDER STUDENT RESULT SHEET
+    // 5. SEARCH & RENDER STUDENT RESULT SHEET BY INDEX
     function fetchStudentResult() {
-        const indexInput = document.getElementById("index-input").value.trim().toUpperCase();
+        const inputElem = document.getElementById("index-input");
+        if (!inputElem) {
+            alert("HTML එකේ id='index-input' සහිත input box එකක් නැත!");
+            return;
+        }
+
+        const indexInput = inputElem.value.trim().toUpperCase();
         const errorMsg = document.getElementById("error-msg");
         const resultSheet = document.getElementById("result-sheet");
 
@@ -471,21 +468,21 @@ function loadAllData() {
 
         let foundStudent = null;
 
-        // 1. Direct Search with Key
+        // Direct Index Key Match
         if (studentDatabase[indexInput]) {
             foundStudent = studentDatabase[indexInput];
         } else {
-            // 2. Fallback Search inside Object Fields
+            // Field Inside Search (If Key isn't Index)
             for (let key in studentDatabase) {
                 const st = studentDatabase[key];
-                if ((st.index && st.index.toString().toUpperCase() === indexInput) || key === indexInput) {
+                if (key === indexInput || (st.index && st.index.toString().trim().toUpperCase() === indexInput)) {
                     foundStudent = st;
                     break;
                 }
             }
         }
 
-        if (foundStudent && (foundStudent.paper1 !== undefined || foundStudent.paper2 !== undefined || foundStudent.total !== undefined)) {
+        if (foundStudent) {
             if (errorMsg) errorMsg.style.display = "none";
             
             const p1 = Number(foundStudent.paper1) || 0;
@@ -495,7 +492,7 @@ function loadAllData() {
 
             if (document.getElementById("st-name")) document.getElementById("st-name").innerText = foundStudent.name || "Student";
             if (document.getElementById("st-index")) document.getElementById("st-index").innerText = `INDEX: ${indexInput}`;
-            if (document.getElementById("st-photo")) document.getElementById("st-photo").src = foundStudent.photo || "logo.png";
+            if (document.getElementById("st-photo")) document.getElementById("st-photo").src = foundStudent.photo || "https://via.placeholder.com/110";
             if (document.getElementById("st-p1")) document.getElementById("st-p1").innerText = p1;
             if (document.getElementById("st-p2")) document.getElementById("st-p2").innerText = p2;
             if (document.getElementById("st-total")) document.getElementById("st-total").innerText = totalMarks;
@@ -511,7 +508,7 @@ function loadAllData() {
             if (document.getElementById("cls-avg")) document.getElementById("cls-avg").innerText = classAvg;
             if (document.getElementById("cls-lowest")) document.getElementById("cls-lowest").innerText = classLowest;
 
-            // History Data Processing
+            // History Data check
             let historyData = foundStudent.history;
             if (!Array.isArray(historyData) || historyData.length === 0) {
                 historyData = [totalMarks];
@@ -543,7 +540,7 @@ function loadAllData() {
         } else if (p1 < 25 && p2 > 35) {
             advice = "⚠️ <strong>Paper I (MCQ) අවධානය යොමු කරන්න:</strong> ඔබගේ දෙවන ප්‍රශ්න පත්‍රය හොඳ මට්ටමක තිබුණද MCQ ලකුණු අඩුයි. කෙටි ප්‍රශ්න සහ තාක්ෂණික වචන (Keywords) නැවත පාඩම් කර MCQ Paper 5 කටවත් පිළිතුරු ලියන්න.";
         } else if (p2 < 30 && p1 > 30) {
-            advice = "⚠️ <strong>Paper II (Essay) අවධානය යොමු කරන්න:</strong> Structured Essay ප්‍රශ්න වලට පිළිතුරු ලිවීමේදී Flowchart සහ Diagrams ඇඳීම තවදුරටත් පුහුණු වන්න.";
+            advice = "⚠️ <strong>Paper II (Essay) අවධානය යොමු කරන්න:</strong> structured essay ප්‍රශ්න වලට පිළිතුරු ලිවීමේදී Structured Flow එක සහ Diagram (Structure Chart, Flowcharts) ඇඳීම පුහුණු වන්න.";
         } else {
             advice = "💪 <strong>තවදුරටත් උත්සාහ කරන්න:</strong> O/L විභාගයට පෙර 'A' සාමාර්ථයකට ළඟාවීමට නම් දිනපතා පැයක් ICT විෂය වෙනුවෙන් වෙන් කර Past Paper ප්‍රශ්න විසඳන්න. අඩු පාඩු ඇති කොටස් ගුරුවරයාගෙන් අසා පැහැදිලි කරගන්න.";
         }
