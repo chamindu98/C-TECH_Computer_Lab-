@@ -342,45 +342,55 @@
     let studentDatabase = {};
     let classHighest = 0, classLowest = 100, classAvg = 0;
 
-    // 2. FETCH REALTIME DATA FROM BOTH NODES (students & grade11_results)
-    function loadAllData() {
-        db.ref().on('value', (snapshot) => {
-            const rootData = snapshot.val() || {};
-            
-            const studentsData = rootData.students || {};
-            const resultsData = rootData.grade11_results || {};
+   // 📥 2. FETCH REALTIME DATA FROM SPECIFIC NODES (Fixes Permission Denied Error)
+function loadAllData() {
+    let studentsData = {};
+    let resultsData = {};
 
-            studentDatabase = {};
+    // Helper function to combine data and update UI
+    function mergeAndProcess() {
+        studentDatabase = {};
 
-            // A) මුලින්ම 'students' Node එකේ දත්ත එකතු කිරීම
-            for (let id in studentsData) {
-                const keyUpper = id.toUpperCase();
-                studentDatabase[keyUpper] = { ...studentsData[id] };
-            }
-
-            // B) 'grade11_results' Node එකේ දත්ත Merge කිරීම (Overwrite නොවී එකතු වේ)
-            for (let id in resultsData) {
-                const keyUpper = id.toUpperCase();
-                if (studentDatabase[keyUpper]) {
-                    studentDatabase[keyUpper] = { 
-                        ...studentDatabase[keyUpper], 
-                        ...resultsData[id] 
-                    };
-                } else {
-                    studentDatabase[keyUpper] = { ...resultsData[id] };
-                }
-            }
-
-            if (Object.keys(studentDatabase).length > 0) {
-                calculateClassAnalytics();
-                showChampionBanner();
-            }
-        }, (error) => {
-            console.error("Firebase Read Error:", error);
+        // Merge 'students'
+        Object.keys(studentsData).forEach(key => {
+            const cleanKey = key.trim().toUpperCase();
+            studentDatabase[cleanKey] = { ...studentsData[key] };
         });
+
+        // Merge 'grade11_results'
+        Object.keys(resultsData).forEach(key => {
+            const cleanKey = key.trim().toUpperCase();
+            if (studentDatabase[cleanKey]) {
+                studentDatabase[cleanKey] = { ...studentDatabase[cleanKey], ...resultsData[key] };
+            } else {
+                studentDatabase[cleanKey] = { ...resultsData[key] };
+            }
+        });
+
+        console.log("Merged Student Database:", studentDatabase);
+
+        if (Object.keys(studentDatabase).length > 0) {
+            calculateClassAnalytics();
+            showChampionBanner();
+        }
     }
 
-    loadAllData();
+    // 1. Fetch 'students' node separately
+    db.ref('students').on('value', (snapshot) => {
+        studentsData = snapshot.val() || {};
+        mergeAndProcess();
+    }, (error) => {
+        console.error("Students Read Error:", error);
+    });
+
+    // 2. Fetch 'grade11_results' node separately
+    db.ref('grade11_results').on('value', (snapshot) => {
+        resultsData = snapshot.val() || {};
+        mergeAndProcess();
+    }, (error) => {
+        console.error("Grade 11 Results Read Error:", error);
+    });
+}
 
     // 3. CALCULATE CLASS STATS (Highest, Lowest, Average, Rank)
     function calculateClassAnalytics() {
