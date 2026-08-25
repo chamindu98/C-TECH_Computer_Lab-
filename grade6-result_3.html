@@ -15,6 +15,7 @@
             --success: #10b981;
             --danger: #ef4444;
             --gold: #f59e0b;
+            --gold-bright: #ffd700;
         }
 
         * { 
@@ -32,6 +33,7 @@
             background-image: radial-gradient(at 0% 0%, rgba(0, 164, 228, 0.12) 0px, transparent 50%),
                               radial-gradient(at 100% 100%, rgba(255, 115, 0, 0.08) 0px, transparent 50%);
             background-attachment: fixed;
+            overflow-x: hidden;
         }
 
         .portal-container {
@@ -86,34 +88,101 @@
             font-size: 0.9rem;
         }
 
-        /* 🏆 Champion Banner */
+        /* 🏆 Golden Animated Champions Banner */
         .champion-banner {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(255, 115, 0, 0.15));
-            border: 2px dashed var(--gold);
-            border-radius: 16px;
-            padding: 25px;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(255, 215, 0, 0.15), rgba(255, 115, 0, 0.2));
+            background-size: 200% 200%;
+            animation: goldenGlow 6s ease infinite alternate;
+            border: 2px solid var(--gold-bright);
+            border-radius: 20px;
+            padding: 30px 20px;
             margin-bottom: 25px;
             text-align: center;
             position: relative;
-            box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+            box-shadow: 0 0 35px rgba(245, 158, 11, 0.4);
             display: none;
+            overflow: hidden;
         }
 
-        .champion-badge { font-size: 3rem; margin-bottom: 5px; display: inline-block; }
-        
-        /* 📸 Champion Photo Styles */
+        @keyframes goldenGlow {
+            0% { background-position: 0% 50%; box-shadow: 0 0 25px rgba(245, 158, 11, 0.3); }
+            50% { background-position: 100% 50%; box-shadow: 0 0 45px rgba(255, 215, 0, 0.6); }
+            100% { background-position: 0% 50%; box-shadow: 0 0 25px rgba(245, 158, 11, 0.3); }
+        }
+
+        .champion-badge-icon { 
+            font-size: 3.5rem; 
+            margin-bottom: 5px; 
+            display: inline-block; 
+            animation: pulseCrown 2s infinite alternate; 
+        }
+
+        @keyframes pulseCrown {
+            0% { transform: scale(1) rotate(-5deg); }
+            100% { transform: scale(1.15) rotate(5deg); }
+        }
+
+        .champion-header-title {
+            color: var(--gold-bright);
+            font-weight: 900;
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+        }
+
+        .champion-wish {
+            font-size: 1.15rem;
+            color: #ffffff;
+            max-width: 750px;
+            margin: 15px auto 25px auto;
+            line-height: 1.6;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+        }
+
+        /* Co-Champions Layout Grid */
+        .champions-grid {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            gap: 25px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .champion-card {
+            background: rgba(11, 19, 43, 0.85);
+            border: 2px solid var(--gold);
+            border-radius: 16px;
+            padding: 20px;
+            flex: 1;
+            min-width: 280px;
+            max-width: 420px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            position: relative;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .champion-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold-bright);
+            box-shadow: 0 12px 30px rgba(255, 215, 0, 0.4);
+        }
+
         .champion-photo-container {
-            width: 130px;
-            height: 130px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
-            border: 4px solid var(--gold);
-            margin: 15px auto;
+            border: 4px solid var(--gold-bright);
+            margin: 0 auto 15px auto;
             overflow: hidden;
-            box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.6);
             background: var(--card-bg);
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
         }
 
         .champion-photo {
@@ -123,21 +192,27 @@
         }
 
         .champion-placeholder-avatar {
-            font-size: 4rem;
+            font-size: 3.5rem;
         }
 
-        .champion-name { font-size: 1.8rem; font-weight: 800; color: #fff; text-shadow: 0 0 8px var(--gold); margin: 5px 0; }
-        .champion-wish { font-size: 1.1rem; color: var(--text-light); max-width: 600px; margin: 0 auto 10px auto; }
-        
+        .champion-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 0 0 10px var(--gold-bright);
+            margin-bottom: 10px;
+        }
+
         .champion-stats {
             display: inline-flex;
-            gap: 20px;
-            background: rgba(0,0,0,0.3);
-            padding: 8px 20px;
+            gap: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px 18px;
             border-radius: 30px;
-            border: 1px solid rgba(245, 158, 11, 0.3);
+            border: 1px solid rgba(245, 158, 11, 0.4);
             font-weight: bold;
-            color: var(--gold);
+            color: var(--gold-bright);
+            font-size: 0.95rem;
         }
 
         /* Search Section */
@@ -284,12 +359,8 @@
 
         .no-data { text-align: center; color: var(--danger); padding: 15px; font-weight: bold; }
 
-        /* 🛠️ Mobile Rows Display Configuration */
         .mobile-row-layout { display: none; }
 
-        /* =======================================================
-           📱 MOBILE RESPONSIVE UI ARCHITECTURE
-           ======================================================= */
         @media (max-width: 650px) {
             .desktop-cell { display: none !important; }
             
@@ -401,22 +472,17 @@
             <div class="class-badge" id="class-title-badge">GRADE 06 - RESULTS SHEET</div>
         </div>
 
-        <!-- 🏆 Champion Banner with Student Photo Container -->
+        <!-- 🏆 Animated Champion Banner for Single or Co-Champions -->
         <div id="champion-post" class="champion-banner">
-            <span class="champion-badge">👑</span>
-            <div style="color: var(--gold); font-weight: bold; font-size: 0.9rem; letter-spacing: 2px;">TOP PERFORMANCE CONGRATULATIONS</div>
+            <span class="champion-badge-icon">👑</span>
+            <div class="champion-header-title" id="champ-header-title">TOP PERFORMANCE CONGRATULATIONS</div>
             
-            <!-- 📸 පලවෙනියගේ Photo එක පෙන්වන තැන -->
-            <div class="champion-photo-container">
-                <img id="champ-photo" src="" alt="Champion Student" class="champion-photo" style="display: none;">
-                <span id="champ-avatar-placeholder" class="champion-placeholder-avatar">👨‍🎓</span>
+            <div class="champion-wish" id="champ-wish">
+                100% ක් පූර්ණ ලකුණු ලබාගනිමින් පන්තියේ ප්‍රථම ස්ථානය සමව දිනාගත් ඔබ දෙදෙනාගේම විශිෂ්ට කුසලතාවයට C-TECH වෙතින් උණුසුම් සුභ පැතුම්! 🌟
             </div>
 
-            <div class="champion-name" id="champ-name">ළමයාගේ නම</div>
-            <div class="champion-wish" id="champ-wish">පන්තියේ ප්‍රථම ස්ථානය ලබා ගනිමින් විශිෂ්ට දක්ෂතා දැක්වූ ඔබ හට C-TECH වෙතින් උණුසුම් සුභ පැතුම්!</div>
-            <div class="champion-stats">
-                <span>Total Marks: <span id="champ-total" style="color:#fff;">0</span></span>
-                <span>Grade: <span id="champ-grade" style="color:#fff;">A</span></span>
+            <div class="champions-grid" id="champions-grid-container">
+                <!-- Dynamic Champion Cards render here -->
             </div>
         </div>
 
@@ -448,35 +514,35 @@
                 <tbody id="results-table-body"></tbody>
             </table>
         </div>
-         <br>
+        <br>
         <a href="index.html" class="back-btn">← ආපසු (Home)</a>
     </div>
 
     <script>
-        // 🌟 'photo' කියන කොටසට සිසුවාගේ පින්තූරයේ Link එක හෝ File Name එක (eg: "images/sanara.jpg") ඇතුලත් කරන්න.
+        // 🌟 ලකුණු 100 ලබාගත් සිසුන් දෙදෙනා Dinuja Amasha සහ Gayuka Senul ලෙස යාවත්කාලීන කර ඇත.
         const studentData = [
+            { name: "Dinuja Amasha", papers: [15, 85], history: [84.5,100,92], photo: "dinuja.jpeg" },
+            { name: "Gayuka Senul", papers: [15, 85], history: [80.5,96,98], photo: "gayuka.jpeg" },
+            { name: "Anup Ransara", papers: [15, 72], history: [75,0,78.5], photo: "" },
+            { name: "Nilesha Ranundi", papers: [12, 65], history: [69,59,67], photo: "nilesha.jpeg" },
             { name: "Sanara Wathsadi", papers: [12, 60], history: [33,64,59], photo: "sanara.jpeg" },
+            { name: "Nethmi Thinaya", papers: [12, 56], history: [66,50.5,58], photo: "" },
+            { name: "Sahindi Uhansa", papers: [9, 54], history: [42,60.5,66], photo: "" },
+            { name: "Dinupama Sankamali", papers: [15, 52], history: [0,63,66], photo: "" },
+            { name: "Thinuthi Senaya", papers: [15, 47], history: [80,0,69], photo: "thinuthi.jpeg" },
+            { name: "Abiru Manumitha", papers: [15, 46], history: [0,88,70], photo: "" },
+            { name: "Hehansa Methmina", papers: [36, 38], history: [0], photo: "" },
+            { name: "Biguni Nimsara", papers: [36, 32], history: [0], photo: "" },
+            { name: "Wishmika Gagun", papers: [20, 16.5], history: [0], photo: "" },
+            { name: "Nawya Tharudeneth", papers: [12, 19], history: [54,0,0], photo: "" },
+            { name: "Tamasha Thathsarani", papers: [9, 19], history: [42,0,16], photo: "" },
+            { name: "Mohomad Arham", papers: [9, 15], history: [14,0,32], photo: "" },
+            { name: "Sadasi Savindya", papers: [9, 6], history: [0,54,36], photo: "" },
             { name: "Miheli Ranudima", papers: [0, 0], history: [69,76,61], photo: "" },
             { name: "Ranuk Lakshitha", papers: [0, 0], history: [61,94,62], photo: "" },
-            { name: "Abiru Manumitha", papers: [15, 46], history: [0,88,70], photo: "" },
-            { name: "Dinupama Sankamali", papers: [15, 52], history: [0,63,66], photo: "" },
-            { name: "Anup Ransara", papers: [15, 72], history: [75,0,78.5], photo: "" },
-            { name: "Dinuja Amasha", papers: [15, 85], history: [84.5,100,92], photo: "dinuja.jpeg" },
-            { name: "Thinuthi Senaya", papers: [15, 47], history: [80,0,69], photo: "thinuthi.jpeg" },
             { name: "Gihansa Danuddara", papers: [0, 0], history: [69,86,76.5], photo: "" },
-            { name: "Gayuka Senul", papers: [15, 85], history: [80.5,96,98], photo: "gayuka.jpeg" },
-            { name: "Nethmi Thinaya", papers: [12, 56], history: [66,50.5,58], photo: "" },
-            { name: "Mohomad Arham", papers: [9, 15], history: [14,0,32], photo: "" },
             { name: "Pahan Prabu Dewmina", papers: [0, 0], history: [60.5,68,56], photo: "" },
-            { name: "Nawya Tharudeneth", papers: [12, 19], history: [54,0,0], photo: "" },
-            { name: "Sahindi Uhansa", papers: [9, 54], history: [42,60.5,66], photo: "" },
-            { name: "Nilesha Ranundi", papers: [12, 65], history: [69,59,67], photo: "nilesha.jpeg" },
             { name: "Sayuri Amaya", papers: [0, 0], history: [56,70,68.5], photo: "sayuri.jpeg" },
-            { name: "Tamasha Thathsarani", papers: [9, 19], history: [42,0,16], photo: "" },
-            { name: "Sadasi Savindya", papers: [9, 6], history: [0,54,36], photo: "" },
-            { name: "Biguni Nimsara", papers: [36, 32], history: [0], photo: "" },
-            { name: "Hehansa Methmina", papers: [36, 38], history: [0], photo: "" },
-            { name: "Wishmika Gagun", papers: [20, 16.5], history: [0], photo: "" },
             { name: "Dulakshi ", papers: [0, 0], history: [0], photo: "" },
             { name: "Sanuri", papers: [0, 0], history: [0], photo: "" }
         ];
@@ -582,25 +648,43 @@
         function generateChampionPost() {
             if(studentData.length === 0) return;
             
-            // ලකුණු අනුව sorting වී ඇති නිසා සැමවිටම 0 වෙනි ස්ථානයේ සිටින්නේ ප්‍රථමයා ය.
-            const champion = studentData[0]; 
+            const topScore = studentData[0].total;
+            const champions = studentData.filter(s => s.total === topScore);
             
-            document.getElementById("champ-name").innerText = champion.name;
-            document.getElementById("champ-total").innerText = champion.total;
-            document.getElementById("champ-grade").innerText = champion.grade;
-            
-            const imgElement = document.getElementById("champ-photo");
-            const placeholderElement = document.getElementById("champ-avatar-placeholder");
+            const gridContainer = document.getElementById("champions-grid-container");
+            const headerTitle = document.getElementById("champ-header-title");
+            const wishText = document.getElementById("champ-wish");
 
-            // පින්තූරයක් ඇතුලත් කර තිබේදැයි පරික්ෂා කිරීම
-            if(champion.photo && champion.photo.trim() !== "") {
-                imgElement.src = champion.photo;
-                imgElement.style.display = "block";
-                placeholderElement.style.display = "none";
+            gridContainer.innerHTML = "";
+
+            if (champions.length > 1) {
+                headerTitle.innerText = "🏆 JOINT CLASS CHAMPIONS (CO-CHAMPIONS) 🏆";
+                wishText.innerText = `${topScore}% ක් පූර්ණ ලකුණු ලබාගනිමින් පන්තියේ ප්‍රථම ස්ථානය සමව දිනාගත් ඔබ දෙදෙනාගේම විශිෂ්ට කුසලතාවයට C-TECH වෙතින් උණුසුම් සුභ පැතුම්! 🌟`;
             } else {
-                imgElement.style.display = "none";
-                placeholderElement.style.display = "block";
+                headerTitle.innerText = "👑 TOP PERFORMANCE CONGRATULATIONS 👑";
+                wishText.innerText = `පන්තියේ ප්‍රථම ස්ථානය ලබා ගනිමින් විශිෂ්ට දක්ෂතා දැක්වූ ඔබ හට C-TECH වෙතින් උණුසුම් සුභ පැතුම්!`;
             }
+
+            champions.forEach(champ => {
+                const photoSrc = (champ.photo && champ.photo.trim() !== "") ? champ.photo : "";
+                const photoHtml = photoSrc ? 
+                    `<img src="${photoSrc}" alt="${champ.name}" class="champion-photo">` :
+                    `<span class="champion-placeholder-avatar">👨‍🎓</span>`;
+
+                const card = document.createElement("div");
+                card.className = "champion-card";
+                card.innerHTML = `
+                    <div class="champion-photo-container">
+                        ${photoHtml}
+                    </div>
+                    <div class="champion-name">${champ.name}</div>
+                    <div class="champion-stats">
+                        <span>Total Marks: <span style="color:#fff;">${champ.total}</span></span>
+                        <span>Grade: <span style="color:#fff;">${champ.grade}</span></span>
+                    </div>
+                `;
+                gridContainer.appendChild(card);
+            });
 
             document.getElementById("champion-post").style.display = "block";
         }
