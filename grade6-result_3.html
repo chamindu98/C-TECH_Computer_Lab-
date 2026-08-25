@@ -8,21 +8,22 @@
         :root {
             --light-blue: #00a4e4; 
             --orange: #ff7300; 
-            --dark-bg: #0b132b; 
-            --card-bg: #1c2541; 
+            --dark-bg: #070c1b; 
+            --card-bg: rgba(28, 37, 65, 0.7); 
             --text-light: #f4f7f6;
             --text-muted: #a0aec0;
             --success: #10b981;
             --danger: #ef4444;
             --gold: #f59e0b;
             --gold-bright: #ffd700;
+            --gold-glow: rgba(255, 215, 0, 0.6);
         }
 
         * { 
             margin: 0; 
             padding: 0; 
             box-sizing: border-box; 
-            font-family: 'Segoe UI', system-ui, sans-serif; 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
         }
 
         body {
@@ -30,8 +31,10 @@
             color: var(--text-light);
             line-height: 1.5;
             padding: 15px;
-            background-image: radial-gradient(at 0% 0%, rgba(0, 164, 228, 0.12) 0px, transparent 50%),
-                              radial-gradient(at 100% 100%, rgba(255, 115, 0, 0.08) 0px, transparent 50%);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 164, 228, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(255, 115, 0, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(11, 19, 43, 0.8) 0%, var(--dark-bg) 100%);
             background-attachment: fixed;
             overflow-x: hidden;
         }
@@ -40,149 +43,212 @@
             width: 100%;
             max-width: 1100px;
             margin: 10px auto;
+            position: relative;
+            z-index: 2;
         }
 
-        /* Top Header Board */
+        /* 🚀 TOP HEADER BOARD WITH NEON WAVE BORDER */
         .portal-header {
             background: linear-gradient(135deg, rgba(28, 37, 65, 0.85), rgba(11, 19, 43, 0.95));
-            border: 1px solid rgba(0, 164, 228, 0.3);
-            border-radius: 16px;
-            padding: 20px;
+            border-radius: 20px;
+            padding: 25px 20px;
             text-align: center;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(0, 164, 228, 0.1);
             position: relative;
+            backdrop-filter: blur(10px);
             overflow: hidden;
         }
 
         .portal-header::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 4px;
-            background: linear-gradient(90deg, var(--light-blue), var(--orange));
+            top: 0; left: -100%; width: 100%; height: 4px;
+            background: linear-gradient(90deg, transparent, var(--light-blue), var(--orange), transparent);
+            animation: borderSlide 4s linear infinite;
+        }
+
+        @keyframes borderSlide {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
 
         .portal-title {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #fff;
-            text-shadow: 0 0 10px rgba(0, 164, 228, 0.5);
-            letter-spacing: 1px;
+            font-size: 2.2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 30%, var(--light-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 25px rgba(0, 164, 228, 0.4);
+            letter-spacing: 1.5px;
+            animation: titlePulse 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes titlePulse {
+            0% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(0, 164, 228, 0.3)); }
+            100% { transform: scale(1.01); filter: drop-shadow(0 0 20px rgba(0, 164, 228, 0.7)); }
         }
 
         .portal-subtitle {
             font-size: 1rem;
             color: var(--text-muted);
-            margin-top: 5px;
+            margin-top: 6px;
+            letter-spacing: 0.5px;
         }
 
         .class-badge {
             display: inline-block;
-            background: rgba(255, 115, 0, 0.15);
+            background: rgba(255, 115, 0, 0.12);
             border: 1px solid var(--orange);
             color: var(--orange);
-            padding: 4px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            margin-top: 10px;
-            font-size: 0.9rem;
+            padding: 5px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            margin-top: 12px;
+            font-size: 0.85rem;
+            box-shadow: 0 0 15px rgba(255, 115, 0, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        /* 🏆 Golden Animated Champions Banner */
+        /* 🏆 ULTRA-CREATIVE GOLDEN CHAMPION BANNER WITH CANVAS PARTICLES */
         .champion-banner {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(255, 215, 0, 0.15), rgba(255, 115, 0, 0.2));
-            background-size: 200% 200%;
-            animation: goldenGlow 6s ease infinite alternate;
-            border: 2px solid var(--gold-bright);
-            border-radius: 20px;
-            padding: 30px 20px;
-            margin-bottom: 25px;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(20, 25, 45, 0.9), rgba(255, 115, 0, 0.15));
+            border-radius: 24px;
+            padding: 35px 20px;
+            margin-bottom: 35px;
             text-align: center;
             position: relative;
-            box-shadow: 0 0 35px rgba(245, 158, 11, 0.4);
+            box-shadow: 0 0 40px rgba(245, 158, 11, 0.25), inset 0 0 30px rgba(255, 215, 0, 0.1);
             display: none;
             overflow: hidden;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            backdrop-filter: blur(12px);
         }
 
-        @keyframes goldenGlow {
-            0% { background-position: 0% 50%; box-shadow: 0 0 25px rgba(245, 158, 11, 0.3); }
-            50% { background-position: 100% 50%; box-shadow: 0 0 45px rgba(255, 215, 0, 0.6); }
-            100% { background-position: 0% 50%; box-shadow: 0 0 25px rgba(245, 158, 11, 0.3); }
+        /* Canvas Overlay for Floating Particles */
+        #particles-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .banner-content-wrap {
+            position: relative;
+            z-index: 2;
         }
 
         .champion-badge-icon { 
-            font-size: 3.5rem; 
+            font-size: 3.8rem; 
             margin-bottom: 5px; 
             display: inline-block; 
-            animation: pulseCrown 2s infinite alternate; 
+            animation: floatTrophy 3s ease-in-out infinite alternate;
+            filter: drop-shadow(0 10px 15px rgba(255, 215, 0, 0.5));
         }
 
-        @keyframes pulseCrown {
-            0% { transform: scale(1) rotate(-5deg); }
-            100% { transform: scale(1.15) rotate(5deg); }
+        @keyframes floatTrophy {
+            0% { transform: translateY(0) rotate(-4deg); }
+            100% { transform: translateY(-12px) rotate(4deg); }
         }
 
         .champion-header-title {
-            color: var(--gold-bright);
+            background: linear-gradient(90deg, #fff, var(--gold-bright), #fff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             font-weight: 900;
-            font-size: 1.1rem;
+            font-size: 1.25rem;
             letter-spacing: 3px;
             text-transform: uppercase;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+            animation: shineText 4s linear infinite;
+        }
+
+        @keyframes shineText {
+            to { background-position: 200% center; }
         }
 
         .champion-wish {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             color: #ffffff;
             max-width: 750px;
             margin: 15px auto 25px auto;
             line-height: 1.6;
             font-weight: 600;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
         }
 
-        /* Co-Champions Layout Grid */
+        /* 3D Dynamic Co-Champions Layout Grid */
         .champions-grid {
             display: flex;
             justify-content: center;
             align-items: stretch;
             gap: 25px;
             flex-wrap: wrap;
-            margin-top: 15px;
+            margin-top: 20px;
         }
 
         .champion-card {
             background: rgba(11, 19, 43, 0.85);
-            border: 2px solid var(--gold);
-            border-radius: 16px;
-            padding: 20px;
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            border-radius: 20px;
+            padding: 25px 20px;
             flex: 1;
             min-width: 280px;
-            max-width: 420px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            max-width: 380px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
             position: relative;
-            transition: transform 0.3s ease, border-color 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, border-color 0.4s ease;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        /* Card Ambient Lighting Effect */
+        .champion-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,215,0,0.15) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+
+        .champion-card:hover::before {
+            opacity: 1;
         }
 
         .champion-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-10px) scale(1.02);
             border-color: var(--gold-bright);
-            box-shadow: 0 12px 30px rgba(255, 215, 0, 0.4);
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.35);
         }
 
         .champion-photo-container {
-            width: 120px;
-            height: 120px;
+            width: 125px;
+            height: 125px;
             border-radius: 50%;
-            border: 4px solid var(--gold-bright);
+            border: 3px solid var(--gold-bright);
             margin: 0 auto 15px auto;
             overflow: hidden;
-            box-shadow: 0 0 20px rgba(245, 158, 11, 0.6);
+            box-shadow: 0 0 25px var(--gold-glow);
             background: var(--card-bg);
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
+            animation: avatarPulse 2.5s infinite alternate;
+        }
+
+        @keyframes avatarPulse {
+            0% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); }
+            100% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.8); }
         }
 
         .champion-photo {
@@ -192,109 +258,125 @@
         }
 
         .champion-placeholder-avatar {
-            font-size: 3.5rem;
+            font-size: 3.8rem;
         }
 
         .champion-name {
-            font-size: 1.5rem;
+            font-size: 1.45rem;
             font-weight: 800;
             color: #fff;
-            text-shadow: 0 0 10px var(--gold-bright);
-            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            margin-bottom: 12px;
         }
 
         .champion-stats {
             display: inline-flex;
-            gap: 15px;
-            background: rgba(0, 0, 0, 0.5);
+            gap: 12px;
+            background: rgba(0, 0, 0, 0.6);
             padding: 8px 18px;
             border-radius: 30px;
-            border: 1px solid rgba(245, 158, 11, 0.4);
-            font-weight: bold;
+            border: 1px solid rgba(245, 158, 11, 0.5);
+            font-weight: 700;
             color: var(--gold-bright);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
         }
 
-        /* Search Section */
+        /* 🔍 SEARCH & DASHBOARD SECTION */
         .search-section {
             background: var(--card-bg);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            padding: 22px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
         }
 
         .search-title {
             font-size: 1.1rem;
             color: var(--light-blue);
-            margin-bottom: 12px;
-            font-weight: 600;
+            margin-bottom: 14px;
+            font-weight: 700;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .search-box { display: flex; gap: 10px; }
+        .search-box { display: flex; gap: 10px; position: relative; }
         .search-input {
             flex-grow: 1;
-            background: rgba(11, 19, 43, 0.8);
+            background: rgba(11, 19, 43, 0.85);
             border: 1px solid rgba(0, 164, 228, 0.4);
-            border-radius: 8px;
-            padding: 12px;
+            border-radius: 12px;
+            padding: 14px 18px;
             color: #fff;
             font-size: 1rem;
             outline: none;
-            transition: 0.3s;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
         }
 
         .search-input:focus {
             border-color: var(--orange);
-            box-shadow: 0 0 10px rgba(255, 115, 0, 0.2);
+            box-shadow: 0 0 20px rgba(255, 115, 0, 0.3), inset 0 2px 4px rgba(0,0,0,0.4);
         }
 
-        /* Analytics Panel */
+        /* 📈 ANALYTICS PANEL WITH GRAPH ANIMATION */
         .analytics-panel {
-            margin-top: 20px;
-            background: rgba(11, 19, 43, 0.6);
-            border: 1px solid rgba(0, 164, 228, 0.2);
-            border-radius: 10px;
-            padding: 15px;
+            margin-top: 22px;
+            background: rgba(11, 19, 43, 0.75);
+            border: 1px solid rgba(0, 164, 228, 0.3);
+            border-radius: 14px;
+            padding: 20px;
             display: none;
+            animation: fadeIn 0.4s cubic-bezier(0.39, 0.575, 0.565, 1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .back-btn { margin-top: 15px; background-color: rgba(0, 164, 228, 0.1); border: 1px solid var(--light-blue); color: var(--light-blue); padding: 12px 24px; font-weight: bold; border-radius: 6px; cursor: pointer; text-decoration: none; display: inline-block; transition: 0.3s; }
-        .back-btn:hover { background-color: var(--light-blue); color: #0b132b; transform: translateX(-4px); }
-
-        @media (max-width: 768px) {
-            .analytics-grid { grid-template-columns: 1fr; }
-        }
-
-        .student-info-summary { display: flex; flex-direction: column; justify-content: center; gap: 8px; }
-        .stat-line { font-size: 1.05rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
+        
+        .student-info-summary { display: flex; flex-direction: column; justify-content: center; gap: 10px; }
+        .stat-line { font-size: 1.05rem; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px; }
         .stat-line span { color: var(--light-blue); font-weight: bold; }
 
         .chart-frame {
-            background: #0b132b;
+            background: #080d1e;
             border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
+            border-radius: 12px;
             padding: 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
         }
 
-        .chart-title { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px; align-self: flex-start; }
+        .chart-title { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px; align-self: flex-start; font-weight: 600; }
         .svg-chart { width: 100%; height: 160px; }
 
-        /* 📋 Results Section */
+        /* SVG Line Path Draw Animation */
+        .chart-line-path {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: dash 2s ease-out forwards;
+        }
+
+        @keyframes dash {
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* 📋 RESULTS TABLE & CARDS SECTION */
         .results-container {
             background: var(--card-bg);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            backdrop-filter: blur(10px);
             overflow-x: auto;
         }
 
@@ -302,32 +384,35 @@
         .results-table th {
             background-color: rgba(0, 164, 228, 0.15);
             color: var(--light-blue);
-            padding: 12px 15px;
-            font-weight: 600;
+            padding: 14px 16px;
+            font-weight: 700;
             border-bottom: 2px solid rgba(0, 164, 228, 0.3);
             font-size: 0.95rem;
+            letter-spacing: 0.5px;
         }
 
         .results-table td {
-            padding: 12px 15px;
+            padding: 14px 16px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             font-size: 0.95rem;
+            transition: background-color 0.2s ease;
         }
 
-        .results-table tr:hover { background-color: rgba(255, 255, 255, 0.02); }
+        .results-table tr:hover td { background-color: rgba(255, 255, 255, 0.04); }
         .results-table tr.rank-1 td { color: var(--gold); font-weight: bold; }
 
-        /* Badges & Pills */
+        /* BADGES & PILLS WITH GLOW EFFECTS */
         .badge-pos {
             display: inline-block;
-            padding: 3px 8px;
-            border-radius: 6px;
+            padding: 4px 10px;
+            border-radius: 8px;
             font-weight: bold;
             font-size: 0.85rem;
             background: rgba(255,255,255,0.08);
             color: var(--text-light);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-        .badge-pos.pos-1 { background: var(--gold); color: #000; }
+        .badge-pos.pos-1 { background: linear-gradient(135deg, var(--gold), var(--gold-bright)); color: #000; box-shadow: 0 0 12px var(--gold-glow); }
         .badge-pos.pos-2 { background: #e2e8f0; color: #000; }
         .badge-pos.pos-3 { background: #cd7f32; color: #fff; }
 
@@ -335,21 +420,22 @@
             background: rgba(0, 164, 228, 0.15);
             border: 1px solid var(--light-blue);
             color: #fff;
-            padding: 5px 12px;
-            border-radius: 6px;
+            padding: 6px 14px;
+            border-radius: 8px;
             font-weight: 800;
             font-size: 1.05rem;
             display: inline-block;
+            box-shadow: 0 0 10px rgba(0, 164, 228, 0.2);
         }
 
         .grade-pill {
             display: inline-block;
-            padding: 4px 12px;
-            border-radius: 6px;
+            padding: 4px 14px;
+            border-radius: 8px;
             font-weight: 900;
-            font-size: 1rem;
+            font-size: 0.95rem;
             text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
         }
         .grade-A { background: var(--success); color: #000; }
         .grade-B { background: var(--light-blue); color: #000; }
@@ -357,23 +443,44 @@
         .grade-S { background: var(--orange); color: #fff; }
         .grade-W { background: var(--danger); color: #fff; }
 
+        .back-btn { 
+            margin-top: 20px; 
+            background: rgba(0, 164, 228, 0.1); 
+            border: 1px solid var(--light-blue); 
+            color: var(--light-blue); 
+            padding: 12px 28px; 
+            font-weight: bold; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            text-decoration: none; 
+            display: inline-block; 
+            transition: all 0.3s ease; 
+        }
+        .back-btn:hover { 
+            background-color: var(--light-blue); 
+            color: #0b132b; 
+            transform: translateX(-5px); 
+            box-shadow: 0 0 20px rgba(0, 164, 228, 0.4);
+        }
+
         .no-data { text-align: center; color: var(--danger); padding: 15px; font-weight: bold; }
 
         .mobile-row-layout { display: none; }
 
+        @media (max-width: 768px) {
+            .analytics-grid { grid-template-columns: 1fr; }
+        }
+
         @media (max-width: 650px) {
             .desktop-cell { display: none !important; }
             
-            .results-table thead, .results-table th { 
-                display: block; 
-                width: 100%;
-            }
+            .results-table thead, .results-table th { display: block; width: 100%; }
             .results-table th {
                 text-align: center;
                 font-size: 1.1rem;
-                border-radius: 8px;
+                border-radius: 10px;
                 margin-bottom: 15px;
-                padding: 10px;
+                padding: 12px;
             }
             
             .results-table, .results-table tbody, .results-table tr, .results-table td { 
@@ -383,10 +490,10 @@
 
             .results-table tr {
                 background: rgba(255,255,255,0.02);
-                border: 1px solid rgba(255,255,255,0.05);
-                border-radius: 10px;
-                padding: 12px;
-                margin-bottom: 12px;
+                border: 1px solid rgba(255,255,255,0.08);
+                border-radius: 12px;
+                padding: 14px;
+                margin-bottom: 14px;
             }
 
             .mobile-row-layout { display: block; }
@@ -426,8 +533,8 @@
                 margin-top: 12px;
                 padding-top: 12px;
                 border-top: 1px dashed rgba(255,255,255,0.1);
-                background: rgba(0,0,0,0.15);
-                border-radius: 6px;
+                background: rgba(0,0,0,0.2);
+                border-radius: 8px;
                 padding: 10px;
             }
 
@@ -437,22 +544,15 @@
                 gap: 8px;
             }
 
-            .detail-item {
-                font-size: 0.85rem;
-                color: var(--text-muted);
-            }
-            .detail-item span {
-                color: #fff;
-                font-weight: bold;
-                font-family: monospace;
-            }
+            .detail-item { font-size: 0.85rem; color: var(--text-muted); }
+            .detail-item span { color: #fff; font-weight: bold; font-family: monospace; }
 
             .expand-btn {
-                background: rgba(255, 255, 255, 0.05);
-                border: 1px solid rgba(255, 255, 255, 0.1);
+                background: rgba(255, 255, 255, 0.08);
+                border: 1px solid rgba(255, 255, 255, 0.15);
                 color: var(--light-blue);
-                padding: 4px 8px;
-                border-radius: 4px;
+                padding: 5px 10px;
+                border-radius: 6px;
                 font-size: 0.8rem;
                 font-weight: bold;
                 cursor: pointer;
@@ -472,17 +572,21 @@
             <div class="class-badge" id="class-title-badge">GRADE 06 - RESULTS SHEET</div>
         </div>
 
-        <!-- 🏆 Animated Champion Banner for Single or Co-Champions -->
+        <!-- 🏆 ULTRA-CREATIVE GOLDEN CHAMPION BANNER -->
         <div id="champion-post" class="champion-banner">
-            <span class="champion-badge-icon">👑</span>
-            <div class="champion-header-title" id="champ-header-title">TOP PERFORMANCE CONGRATULATIONS</div>
+            <canvas id="particles-canvas"></canvas>
             
-            <div class="champion-wish" id="champ-wish">
-                100% ක් පූර්ණ ලකුණු ලබාගනිමින් පන්තියේ ප්‍රථම ස්ථානය සමව දිනාගත් ඔබ දෙදෙනාගේම විශිෂ්ට කුසලතාවයට C-TECH වෙතින් උණුසුම් සුභ පැතුම්! 🌟
-            </div>
+            <div class="banner-content-wrap">
+                <span class="champion-badge-icon">👑</span>
+                <div class="champion-header-title" id="champ-header-title">TOP PERFORMANCE CONGRATULATIONS</div>
+                
+                <div class="champion-wish" id="champ-wish">
+                    100% ක් පූර්ණ ලකුණු ලබාගනිමින් පන්තියේ ප්‍රථම ස්ථානය සමව දිනාගත් ඔබ දෙදෙනාගේම විශිෂ්ට කුසලතාවයට C-TECH වෙතින් උණුසුම් සුභ පැතුම්! 🌟
+                </div>
 
-            <div class="champions-grid" id="champions-grid-container">
-                <!-- Dynamic Champion Cards render here -->
+                <div class="champions-grid" id="champions-grid-container">
+                    <!-- Dynamic Champion Cards render here -->
+                </div>
             </div>
         </div>
 
@@ -519,7 +623,6 @@
     </div>
 
     <script>
-        // 🌟 ලකුණු 100 ලබාගත් සිසුන් දෙදෙනා Dinuja Amasha සහ Gayuka Senul ලෙස යාවත්කාලීන කර ඇත.
         const studentData = [
             { name: "Dinuja Amasha", papers: [15, 85], history: [84.5,100,92], photo: "dinuja.jpeg" },
             { name: "Gayuka Senul", papers: [15, 85], history: [80.5,96,98], photo: "gayuka.jpeg" },
@@ -687,6 +790,7 @@
             });
 
             document.getElementById("champion-post").style.display = "block";
+            initParticles(); // Trigger Golden Particle Animation
         }
 
         function generateIndividualAnalytics() {
@@ -737,8 +841,8 @@
 
                 if (pointsCoordinates.length > 1) {
                     const linePath = pointsCoordinates.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
-                    svgContent += `<path d="${linePath}" fill="none" stroke="rgba(0, 164, 228, 0.2)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>`;
-                    svgContent += `<path d="${linePath}" fill="none" stroke="#00a4e4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
+                    svgContent += `<path class="chart-line-path" d="${linePath}" fill="none" stroke="rgba(0, 164, 228, 0.3)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>`;
+                    svgContent += `<path class="chart-line-path" d="${linePath}" fill="none" stroke="#00a4e4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
                 }
 
                 pointsCoordinates.forEach(p => {
@@ -760,6 +864,57 @@
                 document.getElementById("an-grade").innerText = "-";
                 document.getElementById("svg-graph-wrapper").innerHTML = "<p class='no-data'>ඇතුලත් කල නම නිවැරදිදැයි නැවත පරීක්ෂා කරන්න.</p>";
             }
+        }
+
+        /* 🌟 CANVAS PARTICLES SYSTEM FOR CHAMPIONS BANNER */
+        function initParticles() {
+            const canvas = document.getElementById('particles-canvas');
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const parent = canvas.parentElement;
+
+            canvas.width = parent.offsetWidth;
+            canvas.height = parent.offsetHeight;
+
+            const particlesArr = [];
+            const numberOfParticles = 35;
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 3 + 1;
+                    this.speedY = Math.random() * 1 + 0.3;
+                    this.opacity = Math.random() * 0.7 + 0.3;
+                }
+                update() {
+                    this.y -= this.speedY;
+                    if (this.y < 0) {
+                        this.y = canvas.height;
+                        this.x = Math.random() * canvas.width;
+                    }
+                }
+                draw() {
+                    ctx.fillStyle = `rgba(255, 215, 0, ${this.opacity})`;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArr.push(new Particle());
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particlesArr.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
         }
 
         window.onload = function() {
