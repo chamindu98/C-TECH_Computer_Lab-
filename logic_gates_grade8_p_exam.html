@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 8 Logic Gates Practical Examination</title>
+<style>
+  :root {
+    --primary-color: #00f2fe;
+    --secondary-color: #4facfe;
+    --accent-color: #00ffcc;
+    --bg-gradient: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%);
+    --card-bg: rgba(30, 41, 59, 0.7);
+    --card-border: rgba(255, 255, 255, 0.15);
+    --text-color: #f8fafc;
+    --text-muted: #94a3b8;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg-gradient);
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    overflow-x: hidden;
+  }
+
+  .exam-container {
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--card-border);
+    border-radius: 24px;
+    padding: 40px 30px;
+    max-width: 750px;
+    width: 100%;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 242, 254, 0.15);
+    text-align: center;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 6px 18px;
+    background: rgba(0, 242, 254, 0.12);
+    color: var(--primary-color);
+    border: 1px solid rgba(0, 242, 254, 0.4);
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 800;
+    background: linear-gradient(to right, #00f2fe, #4facfe, #00ffcc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+  }
+
+  p.subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 30px;
+    line-height: 1.6;
+  }
+
+  /* ---------------- REALISTIC 3D DICE STYLING ---------------- */
+  .dice-area {
+    perspective: 1000px;
+    margin: 40px auto;
+    height: 100px;
+    width: 100px;
+  }
+
+  .dice {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 1.8s cubic-bezier(0.2, 0.85, 0.25, 1);
+    cursor: pointer;
+  }
+
+  .dice-face {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(145deg, #ffffff, #e6e6e6);
+    border-radius: 18px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2), inset 0 0 2px rgba(255, 255, 255, 0.8), 0 0 15px rgba(0, 0, 0, 0.5);
+    display: grid;
+    grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+    padding: 12px;
+    box-sizing: border-box;
+    border: 1px solid #d1d5db;
+  }
+
+  /* Realistic Dots Inside Dice */
+  .dot {
+    display: block;
+    width: 14px;
+    height: 14px;
+    background: radial-gradient(circle at 30% 30%, #334155, #0f172a);
+    border-radius: 50%;
+    align-self: center;
+    justify-self: center;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.6), 0 1px 1px rgba(255,255,255,0.8);
+  }
+
+  /* Dice Dot Positions */
+  .front  { transform: rotateY(0deg) translateZ(50px); }
+  .back   { transform: rotateY(180deg) translateZ(50px); }
+  .right  { transform: rotateY(90deg) translateZ(50px); }
+  .left   { transform: rotateY(-90deg) translateZ(50px); }
+  .top    { transform: rotateX(90deg) translateZ(50px); }
+  .bottom { transform: rotateX(-90deg) translateZ(50px); }
+
+  /* Grid Layout for Dots */
+  .f-1 .dot:nth-child(1) { grid-area: 2 / 2; background: radial-gradient(circle at 30% 30%, #ef4444, #991b1b); } /* Red center dot */
+  
+  .f-2 .dot:nth-child(1) { grid-area: 1 / 1; }
+  .f-2 .dot:nth-child(2) { grid-area: 3 / 3; }
+
+  .f-3 .dot:nth-child(1) { grid-area: 1 / 1; }
+  .f-3 .dot:nth-child(2) { grid-area: 2 / 2; }
+  .f-3 .dot:nth-child(3) { grid-area: 3 / 3; }
+
+  .f-4 .dot:nth-child(1) { grid-area: 1 / 1; }
+  .f-4 .dot:nth-child(2) { grid-area: 1 / 3; }
+  .f-4 .dot:nth-child(3) { grid-area: 3 / 1; }
+  .f-4 .dot:nth-child(4) { grid-area: 3 / 3; }
+
+  .f-5 .dot:nth-child(1) { grid-area: 1 / 1; }
+  .f-5 .dot:nth-child(2) { grid-area: 1 / 3; }
+  .f-5 .dot:nth-child(3) { grid-area: 2 / 2; }
+  .f-5 .dot:nth-child(4) { grid-area: 3 / 1; }
+  .f-5 .dot:nth-child(5) { grid-area: 3 / 3; }
+
+  .f-6 .dot:nth-child(1) { grid-area: 1 / 1; }
+  .f-6 .dot:nth-child(2) { grid-area: 1 / 3; }
+  .f-6 .dot:nth-child(3) { grid-area: 2 / 1; }
+  .f-6 .dot:nth-child(4) { grid-area: 2 / 3; }
+  .f-6 .dot:nth-child(5) { grid-area: 3 / 1; }
+  .f-6 .dot:nth-child(6) { grid-area: 3 / 3; }
+
+  /* Button Styling */
+  .roll-btn {
+    background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+    color: #090d16;
+    border: none;
+    padding: 14px 38px;
+    font-size: 15px;
+    font-weight: 800;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 25px rgba(0, 242, 254, 0.4);
+    transition: all 0.3s ease;
+  }
+
+  .roll-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 30px rgba(0, 242, 254, 0.6);
+  }
+
+  .roll-btn:disabled {
+    background: #334155;
+    color: #64748b;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
+
+  /* Question Box Styling */
+  .question-box {
+    margin-top: 35px;
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid var(--card-border);
+    border-left: 5px solid var(--accent-color);
+    padding: 25px;
+    border-radius: 16px;
+    text-align: left;
+    display: none;
+    animation: fadeInUp 0.5s ease-in-out forwards;
+  }
+
+  .question-title {
+    color: var(--accent-color);
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .expression-card {
+    background: rgba(0, 242, 254, 0.05);
+    border: 1px solid rgba(0, 242, 254, 0.2);
+    padding: 15px;
+    border-radius: 12px;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+    color: #00ffcc;
+    text-align: center;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    box-shadow: inset 0 0 10px rgba(0, 242, 254, 0.1);
+  }
+
+  .section-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-top: 15px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .task-list {
+    margin-left: 20px;
+    font-size: 14px;
+    color: #cbd5e1;
+    margin-bottom: 20px;
+  }
+
+  .task-list li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+
+  /* Truth Table Styling */
+  .truth-table-container {
+    overflow-x: auto;
+    margin-top: 10px;
+  }
+
+  .truth-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .truth-table th, .truth-table td {
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .truth-table th {
+    background: rgba(0, 242, 254, 0.15);
+    color: var(--accent-color);
+  }
+
+  .truth-table td.output-cell {
+    background: rgba(0, 242, 254, 0.05);
+    font-weight: bold;
+    color: var(--primary-color);
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="exam-container">
+  <span class="badge">ICT Practical Exam - Grade 8</span>
+  <h1>තාර්කික ද්වාර ප්‍රායෝගික පරීක්ෂණය</h1>
+  <p class="subtitle">දාදු කැටය කැරකවීමෙන් ඔබට හිමිවන ප්‍රකාශනය (Logic Expression) සඳහා Logic Simulator එක භාවිතයෙන් තාර්කික පරිපථය ඇඳ Truth Table එක සම්පූර්ණ කරන්න.</p>
+
+  <!-- 3D Realistic Dice -->
+  <div class="dice-area" onclick="rollDice()">
+    <div class="dice" id="dice">
+      <!-- Front (1) -->
+      <div class="dice-face front f-1"><span class="dot"></span></div>
+      <!-- Back (6) -->
+      <div class="dice-face back f-6">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      </div>
+      <!-- Right (3) -->
+      <div class="dice-face right f-3">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      </div>
+      <!-- Left (4) -->
+      <div class="dice-face left f-4">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      </div>
+      <!-- Top (5) -->
+      <div class="dice-face top f-5">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      </div>
+      <!-- Bottom (2) -->
+      <div class="dice-face bottom f-2">
+        <span class="dot"></span><span class="dot"></span>
+      </div>
+    </div>
+  </div>
+
+  <button class="roll-btn" id="rollBtn" onclick="rollDice()">ප්‍රශ්නයක් ලබාගැනීමට කැරකවන්න</button>
+
+  <div class="question-box" id="questionBox">
+    <div class="question-title" id="qTitle">ප්‍රශ්න අංකය: -</div>
+    
+    <div class="section-label">ලබා දී ඇති තාර්කික ප්‍රකාශනය (Logic Expression):</div>
+    <div class="expression-card" id="qExpression"></div>
+    
+    <div class="section-label">ප්‍රායෝගික කාර්යයන් (Practical Tasks):</div>
+    <ul class="task-list" id="qTasks">
+      <li>මූලික තාර්කික ද්වාර (AND, OR, NOT) පමණක් භාවිත කරමින් ඉහත ප්‍රකාශනයට අදාළ තාර්කික පරිපථය Logic Simulator මෘදුකාංගය තුළ නිර්මාණය කරන්න.</li>
+      <li>පරිපථයේ Inputs වෙනස් කරමින් Output (Z) වල අගයන් නිරීක්ෂණය කරන්න.</li>
+      <li>පහත දැක්වෙන සත්‍යතා වගුව (Truth Table) ඔබේ උත්තර පත්‍රයේ ඇඳ Output (Z) තීරුව සම්පූර්ණ කරන්න.</li>
+    </ul>
+
+    <div class="section-label">සම්පූර්ණ කළ යුතු සත්‍යතා වගුව (Truth Table):</div>
+    <div class="truth-table-container" id="qTableContainer"></div>
+  </div>
+</div>
+
+<script>
+  // 6 Questions using ONLY Basic Gates: AND (.), OR (+), NOT (')
+  const questions = {
+    1: {
+      title: "ප්‍රශ්න අංක 01: මූලික ද්වාර භාවිත පරිපථ නිර්මාණය",
+      expression: "Z = (A . B)' + (A + B)",
+      tableHeader: ["A", "B", "Z"],
+      tableRows: [
+        ["0", "0", "?"],
+        ["0", "1", "?"],
+        ["1", "0", "?"],
+        ["1", "1", "?"]
+      ]
+    },
+    2: {
+      title: "ප්‍රශ්න අංක 02: මූලික ද්වාර භාවිත පරිපථ නිර්මාණය",
+      expression: "Z = (A' + B) . (A . B')",
+      tableHeader: ["A", "B", "Z"],
+      tableRows: [
+        ["0", "0", "?"],
+        ["0", "1", "?"],
+        ["1", "0", "?"],
+        ["1", "1", "?"]
+      ]
+    },
+    3: {
+      title: "ප්‍රශ්න අංක 03: මූලික ද්වාර භාවිත පරිපථ නිර්මාණය",
+      expression: "Z = (A + B)' . (A' + B')",
+      tableHeader: ["A", "B", "Z"],
+      tableRows: [
+        ["0", "0", "?"],
+        ["0", "1", "?"],
+        ["1", "0", "?"],
+        ["1", "1", "?"]
+      ]
+    },
+    4: {
+      title: "ප්‍රශ්න අංක 04: මූලික ද්වාර භාවිත පරිපථ නිර්මාණය",
+      expression: "Z = (A' . B') + (A . B)",
+      tableHeader: ["A", "B", "Z"],
+      tableRows: [
+        ["0", "0", "?"],
+        ["0", "1", "?"],
+        ["1", "0", "?"],
+        ["1", "1", "?"]
+      ]
+    },
+    5: {
+      title: "ප්‍රශ්න අංක 05: මූලික ද්වාර භාවිත පරිපථ නිර්මාණය",
+      expression: "Z = ((A + B) . A')'",
+      tableHeader: ["A", "B", "Z"],
+      tableRows: [
+        ["0", "0", "?"],
+        ["0", "1", "?"],
+        ["1", "0", "?"],
+        ["1", "1", "?"]
+      ]
+    },
+    6: {
+      title: "ප්‍රශ්න අංක 06: මූලික ද්වාර භාවිත පරිපථ නිර්මාණය",
+      expression: "Z = (A . B . C) + (A' + B')",
+      tableHeader: ["A", "B", "C", "Z"],
+      tableRows: [
+        ["0", "0", "0", "?"],
+        ["0", "1", "1", "?"],
+        ["1", "0", "1", "?"],
+        ["1", "1", "0", "?"],
+        ["1", "1", "1", "?"]
+      ]
+    }
+  };
+
+  function rollDice() {
+    const dice = document.getElementById('dice');
+    const rollBtn = document.getElementById('rollBtn');
+    const questionBox = document.getElementById('questionBox');
+
+    rollBtn.disabled = true;
+    questionBox.style.display = 'none';
+
+    // Generate random number between 1 and 6
+    const randomNumber = Math.floor(Math.random() * 6) + 1;
+
+    // Define 3D rotation angles for exact dice faces
+    const rotations = {
+      1: { x: 0, y: 0 },
+      2: { x: 90, y: 0 },
+      3: { x: 0, y: -90 },
+      4: { x: 0, y: 90 },
+      5: { x: -90, y: 0 },
+      6: { x: 0, y: 180 }
+    };
+
+    // Realistic multi-spin rotations
+    const extraSpinsX = (Math.floor(Math.random() * 3) + 4) * 360;
+    const extraSpinsY = (Math.floor(Math.random() * 3) + 4) * 360;
+
+    const targetRot = rotations[randomNumber];
+    const finalX = targetRot.x + extraSpinsX;
+    const finalY = targetRot.y + extraSpinsY;
+
+    dice.style.transform = `rotateX(${finalX}deg) rotateY(${finalY}deg)`;
+
+    // Wait for rolling animation to end (1.8s)
+    setTimeout(() => {
+      displayQuestion(randomNumber);
+      rollBtn.disabled = false;
+    }, 1800);
+  }
+
+  function displayQuestion(num) {
+    const qData = questions[num];
+    document.getElementById('qTitle').innerText = qData.title;
+    document.getElementById('qExpression').innerText = qData.expression;
+
+    // Render Dynamic Truth Table
+    const tableContainer = document.getElementById('qTableContainer');
+    let tableHTML = '<table class="truth-table"><thead><tr>';
+    
+    qData.tableHeader.forEach(header => {
+      tableHTML += `<th>${header}</th>`;
+    });
+    tableHTML += '</tr></thead><tbody>';
+
+    qData.tableRows.forEach(row => {
+      tableHTML += '<tr>';
+      row.forEach((cell, index) => {
+        const isOutput = index === row.length - 1;
+        tableHTML += `<td class="${isOutput ? 'output-cell' : ''}">${cell}</td>`;
+      });
+      tableHTML += '</tr>';
+    });
+    tableHTML += '</tbody></table>';
+
+    tableContainer.innerHTML = tableHTML;
+    document.getElementById('questionBox').style.display = 'block';
+  }
+</script>
+
+</body>
+</html>
