@@ -4,16 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>C-TECH | Online Spoken English Portal</title>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-SJQXVN5TLP"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-SJQXVN5TLP');
-</script>
     <link rel="icon" type="image/png" href="favicon.png">
+    
+    <!-- Google Tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJQXVN5TLP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-SJQXVN5TLP');
+    </script>
+
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
@@ -208,21 +210,21 @@
             border: 0;
         }
 
-        /* Dynamic Moving Watermark */
+        /* Static Watermark */
         #watermark {
             position: absolute;
+            bottom: 12px;
+            right: 12px;
             color: rgba(255, 255, 255, 0.45);
-            font-size: 0.8rem;
-            font-weight: 600;
+            font-size: 0.75rem;
+            font-weight: 500;
             z-index: 10;
             pointer-events: none;
             user-select: none;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 4px 10px;
-            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 3px 8px;
+            border-radius: 6px;
             backdrop-filter: blur(4px);
-            transition: all 1.2s ease-in-out;
-            word-break: break-all;
         }
 
         /* 📚 Class Days Playlist Sidebar */
@@ -348,10 +350,6 @@
             .btn-logout {
                 width: 100%;
             }
-            #watermark {
-                font-size: 0.7rem;
-                padding: 3px 8px;
-            }
         }
     </style>
 </head>
@@ -394,11 +392,11 @@
             <!-- Left Side: Video Player -->
             <div>
                 <div class="video-wrapper">
-                    <!-- Dynamic Watermark -->
+                    <!-- Static Watermark -->
                     <div id="watermark">Authenticating...</div>
                     
-                    <!-- YouTube Unlisted Video Embed -->
-                    <iframe id="course-video" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <!-- YouTube Embed Player with Fullscreen Permission -->
+                    <iframe id="course-video" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe>
                 </div>
                 <div class="current-video-title" id="now-playing-title">Loading...</div>
             </div>
@@ -409,7 +407,7 @@
                     <i class="fa-solid fa-list-check"></i> පන්ති දින ලැයිස්තුව
                 </div>
                 <div id="playlist-items">
-                    <!-- Dynamic Videos will load here via JavaScript -->
+                    <!-- Dynamic Videos will load here -->
                 </div>
             </div>
         </div>
@@ -444,7 +442,7 @@
       day: "Day 01",
       title: "Introduction & Basic Greetings",
       date: "Day 01 Lesson",
-      url: "https://www.youtube-nocookie.com/embed/Ydtbhoi3sw2I&list=PLj5u8nIyDXTDek3Z8se8Y0UZ7gv3QUSZI?rel=0&modestbranding=1"
+      url: "https://www.youtube-nocookie.com/embed/YOUR_YOUTUBE_VIDEO_ID_1?rel=0&modestbranding=1"
     },
     {
       day: "Day 02",
@@ -562,19 +560,12 @@
     document.getElementById('course-video').src = "";
   }
 
-  // 9. MOVING WATERMARK FUNCTION
+  // 9. STATIC WATERMARK FUNCTION
   function startWatermark(userEmail) {
     const watermark = document.getElementById('watermark');
-    if(!watermark) return;
-    
-    watermark.innerText = userEmail;
-
-    setInterval(() => {
-      const top = Math.floor(Math.random() * 70) + 10;
-      const left = Math.floor(Math.random() * 50) + 10;
-      watermark.style.top = top + '%';
-      watermark.style.left = left + '%';
-    }, 2500);
+    if(watermark) {
+      watermark.innerText = userEmail;
+    }
   }
 </script>
 
