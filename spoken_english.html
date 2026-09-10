@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C-TECH | Online Spoken English Portal</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            color: #fff;
+        }
+
+        /* Glassmorphism Card Container */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px 25px;
+            width: 100%;
+            max-width: 950px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        /* Top Navigation Header */
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .back-home-btn {
+            color: #38bdf8;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s ease;
+        }
+
+        .back-home-btn:hover {
+            color: #818cf8;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .box {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+
+        .active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Login Form Styling */
+        .login-box {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 14px 14px 45px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #0284c7, #6366f1);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .video-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .btn-logout {
+            background: linear-gradient(90deg, #ef4444, #dc2626);
+            width: auto;
+            padding: 10px 25px;
+        }
+
+        .error-msg {
+            color: #f87171;
+            font-size: 0.85rem;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        /* 🎬 Video & Playlist Layout */
+        .portal-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        /* Secure Video Container */
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: #000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* Dynamic Moving Watermark */
+        #watermark {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.45);
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 10;
+            pointer-events: none;
+            user-select: none;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 4px 10px;
+            border-radius: 15px;
+            backdrop-filter: blur(4px);
+            transition: all 1.2s ease-in-out;
+            word-break: break-all;
+        }
+
+        /* 📚 Class Days Playlist Sidebar */
+        .playlist-container {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .playlist-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #38bdf8;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 8px;
+        }
+
+        .video-item {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .video-item:hover {
+            background: rgba(56, 189, 248, 0.2);
+            border-color: #38bdf8;
+        }
+
+        .video-item.active-video {
+            background: linear-gradient(90deg, rgba(2, 132, 199, 0.4), rgba(99, 102, 241, 0.4));
+            border-color: #38bdf8;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+        }
+
+        .video-item h4 {
+            font-size: 0.9rem;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .video-item p {
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        .current-video-title {
+            margin-top: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #38bdf8;
+        }
+
+        .student-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .student-info span {
+            color: #38bdf8;
+            font-weight: 600;
+            word-break: break-all;
+        }
+
+        /* Scrollbar Styling */
+        .playlist-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .playlist-container::-webkit-scrollbar-thumb {
+            background: rgba(56, 189, 248, 0.4);
+            border-radius: 10px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .portal-layout {
+                grid-template-columns: 1fr;
+            }
+            .playlist-container {
+                max-height: 250px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .glass-card {
+                padding: 20px 15px;
+                border-radius: 15px;
+            }
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            .header p {
+                font-size: 0.85rem;
+            }
+            .student-info {
+                font-size: 0.85rem;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .video-footer {
+                justify-content: center;
+            }
+            .btn-logout {
+                width: 100%;
+            }
+            #watermark {
+                font-size: 0.7rem;
+                padding: 3px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="glass-card">
+    <div class="nav-header">
+        <a href="index.html" class="back-home-btn">
+            <i class="fa-solid fa-arrow-left"></i> Home පිටුවට
+        </a>
+    </div>
+
+    <div class="header">
+        <h1>C-TECH ACADEMY</h1>
+        <p>Online Spoken English Course Portal</p>
+    </div>
+
+    <!-- LOGIN BOX -->
+    <div id="login-box" class="box login-box active">
+        <div class="input-group">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="email" placeholder="ඔබගේ Email ලිපිනය" required>
+        </div>
+        <div class="input-group">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="password" placeholder="මුරපදය (Password)" required>
+        </div>
+        <button class="btn" onclick="login()">Sign In to Watch</button>
+        <div id="error-msg" class="error-msg"></div>
+    </div>
+
+    <!-- VIDEO PLAYER & PLAYLIST BOX -->
+    <div id="video-box" class="box">
+        <div class="student-info">
+            <div><i class="fa-solid fa-user-check"></i> Welcome, <span id="user-display-email">Student</span></div>
+            <span style="font-size: 0.8rem; color: #a3e635;"><i class="fa-solid fa-shield-halved"></i> Protected Stream</span>
+        </div>
+
+        <div class="portal-layout">
+            <!-- Left Side: Video Player -->
+            <div>
+                <div class="video-wrapper">
+                    <!-- Dynamic Watermark -->
+                    <div id="watermark">Authenticating...</div>
+                    
+                    <!-- YouTube Unlisted Video Embed -->
+                    <iframe id="course-video" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="current-video-title" id="now-playing-title">Loading...</div>
+            </div>
+
+            <!-- Right Side: Class Days Playlist -->
+            <div class="playlist-container">
+                <div class="playlist-title">
+                    <i class="fa-solid fa-list-check"></i> පන්ති දින ලැයිස්තුව
+                </div>
+                <div id="playlist-items">
+                    <!-- Dynamic Videos will load here via JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <div class="video-footer">
+            <button class="btn btn-logout" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+        </div>
+    </div>
+</div>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script>
+  // 1. FIREBASE CONFIGURATION
+  const firebaseConfig = {
+    apiKey: "AIzaSyAtfTwhOmDOLAxxTdXQKwaMNthLMpRgBjQ",
+    authDomain: "ctech-counter.firebaseapp.com",
+    projectId: "ctech-counter",
+    storageBucket: "ctech-counter.firebasestorage.app",
+    messagingSenderId: "892307263196",
+    appId: "1:892307263196:web:bf443261191503be652e19"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  // 2. 🎬 CLASS DAYS VIDEO LIST
+  const videoList = [
+    {
+      day: "Day 01",
+      title: "Introduction & Basic Greetings",
+      date: "Day 01 Lesson",
+      url: "https://www.youtube-nocookie.com/embed/YOUR_YOUTUBE_VIDEO_ID_1?rel=0&modestbranding=1"
+    },
+    {
+      day: "Day 02",
+      title: "Daily Routines & Present Tense",
+      date: "Day 02 Lesson",
+      url: "https://www.youtube-nocookie.com/embed/YOUR_YOUTUBE_VIDEO_ID_2?rel=0&modestbranding=1"
+    },
+    {
+      day: "Day 03",
+      title: "How to Ask Questions & Answers",
+      date: "Day 03 Lesson",
+      url: "https://www.youtube-nocookie.com/embed/YOUR_YOUTUBE_VIDEO_ID_3?rel=0&modestbranding=1"
+    }
+  ];
+
+  // 3. PAGE LOAD - SESSION CHECK
+  window.onload = function() {
+    const savedUser = localStorage.getItem('spoken_student_logged');
+    if (savedUser) {
+        showVideoPortal(savedUser);
+    }
+  };
+
+  // 4. LOGIN FUNCTION (Database Verification)
+  function login() {
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const errorMsg = document.getElementById('error-msg');
+
+    if (!email || !password) {
+        errorMsg.innerText = "කරුණාකර Email සහ Password ඇතුළත් කරන්න.";
+        return;
+    }
+
+    errorMsg.innerText = "පරීක්ෂා කරමින් පවතී...";
+
+    // Realtime Database හි spoken_english_students node එක පරීක්ෂා කිරීම
+    db.ref('spoken_english_students').once('value', (snapshot) => {
+        let isAuthenticated = false;
+        let loggedInUserEmail = "";
+
+        snapshot.forEach((childSnapshot) => {
+            const student = childSnapshot.val();
+            if (student.email === email && student.password === password) {
+                isAuthenticated = true;
+                loggedInUserEmail = student.email;
+            }
+        });
+
+        if (isAuthenticated) {
+            errorMsg.innerText = "";
+            localStorage.setItem('spoken_student_logged', loggedInUserEmail);
+            showVideoPortal(loggedInUserEmail);
+        } else {
+            errorMsg.innerText = "ඇතුළත් කළ Email හෝ Password වැරදියි!";
+        }
+    }).catch((error) => {
+        errorMsg.innerText = "දත්ත සම්බන්ධතාවයේ දෝෂයක්. නැවත උත්සාහ කරන්න.";
+    });
+  }
+
+  // 5. SHOW VIDEO PORTAL
+  function showVideoPortal(userEmail) {
+    document.getElementById('login-box').classList.remove('active');
+    document.getElementById('video-box').classList.add('active');
+    document.getElementById('user-display-email').innerText = userEmail;
+
+    renderPlaylist();
+    if(videoList.length > 0) {
+        playVideo(0);
+    }
+    startWatermark(userEmail);
+  }
+
+  // 6. RENDER PLAYLIST FUNCTION
+  function renderPlaylist() {
+    const container = document.getElementById('playlist-items');
+    container.innerHTML = "";
+
+    videoList.forEach((item, index) => {
+      container.innerHTML += `
+        <div class="video-item" id="video-item-${index}" onclick="playVideo(${index})">
+            <h4><i class="fa-solid fa-circle-play"></i> ${item.day} - ${item.title}</h4>
+            <p><i class="fa-regular fa-clock"></i> ${item.date}</p>
+        </div>
+      `;
+    });
+  }
+
+  // 7. PLAY SELECTED VIDEO
+  function playVideo(index) {
+    const selected = videoList[index];
+    document.getElementById('course-video').src = selected.url;
+    document.getElementById('now-playing-title').innerText = `${selected.day} - ${selected.title}`;
+
+    document.querySelectorAll('.video-item').forEach(el => el.classList.remove('active-video'));
+    const currentItem = document.getElementById(`video-item-${index}`);
+    if(currentItem) currentItem.classList.add('active-video');
+  }
+
+  // 8. LOGOUT FUNCTION
+  function logout() {
+    localStorage.removeItem('spoken_student_logged');
+    document.getElementById('video-box').classList.remove('active');
+    document.getElementById('login-box').classList.add('active');
+    document.getElementById('course-video').src = "";
+  }
+
+  // 9. MOVING WATERMARK FUNCTION
+  function startWatermark(userEmail) {
+    const watermark = document.getElementById('watermark');
+    watermark.innerText = userEmail;
+
+    setInterval(() => {
+      const top = Math.floor(Math.random() * 70) + 10;
+      const left = Math.floor(Math.random() * 50) + 10;
+      watermark.style.top = top + '%';
+      watermark.style.left = left + '%';
+    }, 2500);
+  }
+</script>
+
+</body>
+</html>
