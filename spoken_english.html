@@ -438,25 +438,19 @@
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
-  // 2. 🎬 CLASS DAYS VIDEO LIST
+  // 2. CLASS DAYS VIDEO LIST
   const videoList = [
     {
       day: "Day 01",
       title: "Introduction & Basic Greetings",
       date: "Day 01 Lesson",
-      url: "https://www.youtube-nocookie.com/embed/dtbhoi3sw2I&list=PLj5u8nIyDXTDek3Z8se8Y0UZ7gv3QUSZI?rel=0&modestbranding=1"
+      url: "https://www.youtube-nocookie.com/embed/YOUR_YOUTUBE_VIDEO_ID_1?rel=0&modestbranding=1"
     },
     {
       day: "Day 02",
       title: "Daily Routines & Present Tense",
       date: "Day 02 Lesson",
       url: "https://www.youtube-nocookie.com/embed/YOUR_YOUTUBE_VIDEO_ID_2?rel=0&modestbranding=1"
-    },
-    {
-      day: "Day 03",
-      title: "How to Ask Questions & Answers",
-      date: "Day 03 Lesson",
-      url: "https://www.youtube-nocookie.com/embed/YOUR_YOUTUBE_VIDEO_ID_3?rel=0&modestbranding=1"
     }
   ];
 
@@ -468,34 +462,37 @@
     }
   };
 
-  // 4. LOGIN FUNCTION (Database Verification)
+  // 4. LOGIN FUNCTION
   function login() {
-    const email = document.getElementById('email').value.trim().toLowerCase();
-    const password = document.getElementById('password').value.trim();
+    const emailInput = document.getElementById('email').value.trim().toLowerCase();
+    const passwordInput = document.getElementById('password').value.trim();
     const errorMsg = document.getElementById('error-msg');
 
-    if (!email || !password) {
+    if (!emailInput || !passwordInput) {
         errorMsg.innerText = "කරුණාකර Email සහ Password ඇතුළත් කරන්න.";
         return;
     }
 
     errorMsg.innerText = "පරීක්ෂා කරමින් පවතී...";
 
-    db.ref('spoken_english_students').once('value', (snapshot) => {
-        let isAuthenticated = false;
-        let loggedInUserEmail = "";
-
+    db.ref('spoken_english_students').once('value')
+    .then((snapshot) => {
         if (!snapshot.exists()) {
-            errorMsg.innerText = "Database එකෙහි සිසුන්ගේ දත්ත හමු නොවීය!";
+            errorMsg.innerText = "Database එකෙහි දත්ත හමු නොවීය!";
             return;
         }
 
+        let isAuthenticated = false;
+        let loggedInUserEmail = "";
+
         snapshot.forEach((childSnapshot) => {
             const student = childSnapshot.val();
-            
-            // Email සහ Password Trim කර සසඳයි
+
             if (student && student.email && student.password) {
-                if (student.email.trim().toLowerCase() === email && student.password.toString().trim() === password) {
+                const dbEmail = String(student.email).trim().toLowerCase();
+                const dbPassword = String(student.password).trim();
+
+                if (dbEmail === emailInput && dbPassword === passwordInput) {
                     isAuthenticated = true;
                     loggedInUserEmail = student.email;
                 }
@@ -509,33 +506,10 @@
         } else {
             errorMsg.innerText = "ඇතුළත් කළ Email හෝ Password වැරදියි!";
         }
-    }).catch((error) => {
-        console.error(error);
-        errorMsg.innerText = "දත්ත සම්බන්ධතාවයේ දෝෂයක්: " + error.message;
-    });
-}
-    // Realtime Database හි spoken_english_students node එක පරීක්ෂා කිරීම
-    db.ref('spoken_english_students').once('value', (snapshot) => {
-        let isAuthenticated = false;
-        let loggedInUserEmail = "";
-
-        snapshot.forEach((childSnapshot) => {
-            const student = childSnapshot.val();
-            if (student.email === email && student.password === password) {
-                isAuthenticated = true;
-                loggedInUserEmail = student.email;
-            }
-        });
-
-        if (isAuthenticated) {
-            errorMsg.innerText = "";
-            localStorage.setItem('spoken_student_logged', loggedInUserEmail);
-            showVideoPortal(loggedInUserEmail);
-        } else {
-            errorMsg.innerText = "ඇතුළත් කළ Email හෝ Password වැරදියි!";
-        }
-    }).catch((error) => {
-        errorMsg.innerText = "දත්ත සම්බන්ධතාවයේ දෝෂයක්. නැවත උත්සාහ කරන්න.";
+    })
+    .catch((error) => {
+        console.error("Firebase Error:", error);
+        errorMsg.innerText = "දත්ත සම්බන්ධතාවයේ දෝෂයක් සිදුවිය.";
     });
   }
 
@@ -555,6 +529,8 @@
   // 6. RENDER PLAYLIST FUNCTION
   function renderPlaylist() {
     const container = document.getElementById('playlist-items');
+    if(!container) return;
+    
     container.innerHTML = "";
 
     videoList.forEach((item, index) => {
@@ -589,6 +565,8 @@
   // 9. MOVING WATERMARK FUNCTION
   function startWatermark(userEmail) {
     const watermark = document.getElementById('watermark');
+    if(!watermark) return;
+    
     watermark.innerText = userEmail;
 
     setInterval(() => {
