@@ -615,9 +615,13 @@
 
     videoList.forEach((item, index) => {
       container.innerHTML += `
-        <div class="video-item" id="video-item-${index}" onclick="playVideo(${index})">
+         <div class="video-item" id="video-item-${index}" onclick="playVideo(${index})">
             <h4><i class="fa-solid fa-circle-play"></i> ${item.day} - ${item.title}</h4>
             <p><i class="fa-regular fa-clock"></i> ${item.date}</p>
+            <div class="item-actions">
+                ${pdfBtnHTML}
+                ${assignBtnHTML}
+            </div>
         </div>
       `;
     });
