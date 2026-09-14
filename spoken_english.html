@@ -156,6 +156,11 @@
             font-weight: 600;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
         }
 
         .btn:hover {
@@ -210,22 +215,21 @@
             border: 0;
         }
 
-        /* Static Watermark (වම් පස ඉහළට) */
-#watermark {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 0.75rem;
-    font-weight: 500;
-    z-index: 10;
-    pointer-events: none; /* Mouse clicks වලට බාධා නොවන ලෙස */
-    user-select: none;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 4px 10px;
-    border-radius: 6px;
-    backdrop-filter: blur(4px);
-
+        /* Static Watermark */
+        #watermark {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.75rem;
+            font-weight: 500;
+            z-index: 10;
+            pointer-events: none;
+            user-select: none;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 4px 10px;
+            border-radius: 6px;
+            backdrop-filter: blur(4px);
         }
 
         /* 📚 Class Days Playlist Sidebar */
@@ -234,7 +238,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 15px;
             padding: 15px;
-            max-height: 400px;
+            max-height: 500px;
             overflow-y: auto;
         }
 
@@ -255,7 +259,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 10px;
             padding: 12px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
         }
@@ -280,6 +284,63 @@
         .video-item p {
             font-size: 0.75rem;
             color: #94a3b8;
+            margin-bottom: 8px;
+        }
+
+        /* Materials & Action Buttons */
+        .item-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .btn-material {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            border-radius: 6px;
+            background: rgba(56, 189, 248, 0.2);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.2s;
+        }
+
+        .btn-material:hover {
+            background: #38bdf8;
+            color: #0f172a;
+        }
+
+        /* 📤 Assignment Upload Box */
+        .upload-section {
+            margin-top: 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .upload-section h3 {
+            font-size: 1.1rem;
+            color: #38bdf8;
+            margin-bottom: 8px;
+        }
+
+        .upload-section p {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 15px;
+        }
+
+        .btn-upload {
+            background: linear-gradient(90deg, #10b981, #059669);
+            width: auto;
+            display: inline-flex;
+            padding: 10px 20px;
         }
 
         .current-video-title {
@@ -322,7 +383,7 @@
                 grid-template-columns: 1fr;
             }
             .playlist-container {
-                max-height: 250px;
+                max-height: 350px;
             }
         }
 
@@ -402,15 +463,25 @@
                 <div class="current-video-title" id="now-playing-title">Loading...</div>
             </div>
 
-            <!-- Right Side: Class Days Playlist -->
+            <!-- Right Side: Class Days Playlist & Materials -->
             <div class="playlist-container">
                 <div class="playlist-title">
-                    <i class="fa-solid fa-list-check"></i> පන්ති දින ලැයිස්තුව
+                    <i class="fa-solid fa-list-check"></i> පන්ති දින හා නිබන්ධන
                 </div>
                 <div id="playlist-items">
                     <!-- Dynamic Videos will load here -->
                 </div>
             </div>
+        </div>
+
+        <!-- 📤 ASSIGNMENT UPLOAD SECTION -->
+        <div class="upload-section">
+            <h3><i class="fa-solid fa-cloud-arrow-up"></i> Assignments Upload කිරීම</h3>
+            <p>ඔබගේ සම්පූර්ණ කරන ලද Assignment / ගෙදර වැඩ පහත Button එක ක්ලික් කර Upload කරන්න.</p>
+            <!-- ** මෙහි ඇති Href එකට ඔබගේ Google Form / Google Drive Folder Link එක යොදන්න ** -->
+            <a href="https://drive.google.com" target="_blank" class="btn btn-upload">
+                <i class="fa-brands fa-google-drive"></i> Upload Assignment Here
+            </a>
         </div>
 
         <div class="video-footer">
@@ -449,13 +520,17 @@
       day: "Day 02",
       title: "Be verbs",
       date: "06-09-2026",
-      url: "https://www.youtube.com/embed/LHyHL-vjMVM?rel=0&modestbranding=1"
+      url: "https://www.youtube.com/embed/LHyHL-vjMVM?rel=0&modestbranding=1",
+      pdfUrl: "https://drive.google.com/drive/folders/1kg4SHnjNmf5K8KJ1403tD8rCy8EQStDr?usp=drive_link", // Lecture Material Link
+      assignmentUrl: "https://drive.google.com/file/d/EXAMPLE_ASSIGNMENT_1/view" // Homework Link
     },
       {
       day: "Day 03",
       title: "Sentences Patterns",
       date: "10-09-2026",
-      url: "https://www.youtube.com/embed/sNpB4j1Gmwg?rel=0&modestbranding=1"
+      url: "https://www.youtube.com/embed/sNpB4j1Gmwg?rel=0&modestbranding=1",
+      pdfUrl: "https://drive.google.com/drive/folders/1kg4SHnjNmf5K8KJ1403tD8rCy8EQStDr?usp=drive_link", // Lecture Material Link
+      assignmentUrl: "https://drive.google.com/file/d/EXAMPLE_ASSIGNMENT_1/view" // Homework Link
     }
   ];
 
