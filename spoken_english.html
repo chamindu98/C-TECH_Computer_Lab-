@@ -508,7 +508,8 @@
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
-  // 2. CLASS DAYS VIDEO LIST
+  // 2. CLASS DAYS VIDEO & MATERIAL LIST
+  // මෙතන pdfUrl සහ assignmentUrl එකට ඔබගේ අදාළ Google Drive Links ලබා දෙන්න.
   const videoList = [
     {
       day: "Day 01",
@@ -522,15 +523,15 @@
       date: "06-09-2026",
       url: "https://www.youtube.com/embed/LHyHL-vjMVM?rel=0&modestbranding=1",
       pdfUrl: "https://drive.google.com/drive/folders/1kg4SHnjNmf5K8KJ1403tD8rCy8EQStDr?usp=drive_link", // Lecture Material Link
-      assignmentUrl: "https://drive.google.com/file/d/EXAMPLE_ASSIGNMENT_1/view" // Homework Link
+      assignmentUrl: "https://drive.google.com/file/d/EXAMPLE_ASSIGNMENT_1/view" // Homework Link // නැත්නම් හිස්ව තබන්න
     },
-      {
+    {
       day: "Day 03",
       title: "Sentences Patterns",
       date: "10-09-2026",
       url: "https://www.youtube.com/embed/sNpB4j1Gmwg?rel=0&modestbranding=1",
-      pdfUrl: "https://drive.google.com/drive/folders/1kg4SHnjNmf5K8KJ1403tD8rCy8EQStDr?usp=drive_link", // Lecture Material Link
-      assignmentUrl: "https://drive.google.com/file/d/EXAMPLE_ASSIGNMENT_1/view" // Homework Link
+      pdfUrl: "https://drive.google.com/file/d/EXAMPLE_PDF_3/view",
+      assignmentUrl: ""
     }
   ];
 
@@ -614,8 +615,11 @@
     container.innerHTML = "";
 
     videoList.forEach((item, index) => {
+      let pdfBtnHTML = item.pdfUrl ? `<a href="${item.pdfUrl}" target="_blank" class="btn-material" onclick="event.stopPropagation();"><i class="fa-solid fa-file-pdf"></i> Note PDF</a>` : '';
+      let assignBtnHTML = item.assignmentUrl ? `<a href="${item.assignmentUrl}" target="_blank" class="btn-material" onclick="event.stopPropagation();"><i class="fa-solid fa-pen-to-square"></i> Assignment</a>` : '';
+
       container.innerHTML += `
-         <div class="video-item" id="video-item-${index}" onclick="playVideo(${index})">
+        <div class="video-item" id="video-item-${index}" onclick="playVideo(${index})">
             <h4><i class="fa-solid fa-circle-play"></i> ${item.day} - ${item.title}</h4>
             <p><i class="fa-regular fa-clock"></i> ${item.date}</p>
             <div class="item-actions">
@@ -642,7 +646,7 @@
   function logout() {
     localStorage.removeItem('spoken_student_logged');
     document.getElementById('video-box').classList.remove('active');
-    document.getElementById('login-box').classList.add('active');
+    document.getElementById('login-box').classList.active ? null : document.getElementById('login-box').classList.add('active');
     document.getElementById('course-video').src = "";
   }
 
