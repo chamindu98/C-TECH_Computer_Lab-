@@ -509,28 +509,29 @@
   const db = firebase.database();
 
   // 2. CLASS DAYS VIDEO & MATERIAL LIST
-  // මෙතන pdfUrl සහ assignmentUrl එකට ඔබගේ අදාළ Google Drive Links ලබා දෙන්න.
   const videoList = [
     {
       day: "Day 01",
       title: "Firstday Seminar",
       date: "02-09-2026",
-      url: "https://www.youtube.com/embed/Su_-CXR9VQo?rel=0&modestbranding=1&fs=1"
+      url: "https://www.youtube.com/embed/Su_-CXR9VQo?rel=0&modestbranding=1&fs=1",
+      pdfUrl: "",
+      assignmentUrl: ""
     },
     {
       day: "Day 02",
       title: "Be verbs",
       date: "06-09-2026",
       url: "https://www.youtube.com/embed/LHyHL-vjMVM?rel=0&modestbranding=1",
-      pdfUrl: "https://drive.google.com/drive/folders/1kg4SHnjNmf5K8KJ1403tD8rCy8EQStDr?usp=drive_link", // Lecture Material Link
-      assignmentUrl: "" // Homework Link // නැත්නම් හිස්ව තබන්න
+      pdfUrl: "https://drive.google.com/drive/folders/1kg4SHnjNmf5K8KJ1403tD8rCy8EQStDr?usp=drive_link",
+      assignmentUrl: ""
     },
     {
       day: "Day 03",
       title: "Sentences Patterns",
       date: "10-09-2026",
       url: "https://www.youtube.com/embed/sNpB4j1Gmwg?rel=0&modestbranding=1",
-      pdfUrl: "https://drive.google.com/drive/folders/1kg4SHnjNmf5K8KJ1403tD8rCy8EQStDr?usp=drive_link"",
+      pdfUrl: "https://drive.google.com/drive/folders/1kg4SHnjNmf5K8KJ1403tD8rCy8EQStDr?usp=drive_link",
       assignmentUrl: ""
     }
   ];
@@ -642,8 +643,7 @@
     if(currentItem) currentItem.classList.add('active-video');
   }
 
-  
- // 8. LOGOUT FUNCTION
+  // 8. LOGOUT FUNCTION (Fixed line 533)
   function logout() {
     localStorage.removeItem('spoken_student_logged');
     document.getElementById('video-box').classList.remove('active');
