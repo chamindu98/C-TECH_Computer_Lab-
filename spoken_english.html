@@ -458,7 +458,7 @@
                     <div id="watermark">Authenticating...</div>
                     
                     <!-- YouTube Embed Player with Fullscreen Permission -->
-                    <iframe id="course-video" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe>
+                   <iframe id="course-video" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
                 <div class="current-video-title" id="now-playing-title">Loading...</div>
             </div>
@@ -642,11 +642,12 @@
     if(currentItem) currentItem.classList.add('active-video');
   }
 
-  // 8. LOGOUT FUNCTION
+  
+ // 8. LOGOUT FUNCTION
   function logout() {
     localStorage.removeItem('spoken_student_logged');
     document.getElementById('video-box').classList.remove('active');
-    document.getElementById('login-box').classList.active ? null : document.getElementById('login-box').classList.add('active');
+    document.getElementById('login-box').classList.add('active');
     document.getElementById('course-video').src = "";
   }
 
