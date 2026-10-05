@@ -2,1025 +2,701 @@
 <html lang="si">
 <head>
     <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>C-TECH Computer Lab & Education Institute</title>
     <link rel="icon" type="image/png" href="favicon.png">
     
     <link rel="apple-touch-icon" sizes="180x180" href="favicon.png">
     <style>
-        /* CSS Root වර්ණ - ලෝගෝ එකට අනුව */
-        :root {
-            --primary-blue: #004d80;
-            --light-blue: #00a4e4;
-            --orange: #ff7300;
-            --dark-bg: #0b132b;
-            --card-bg: #1c2541;
-            --text-light: #f4f7f6;
-        }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
+/* =========================================================
+   C-TECH FUTURISTIC UI SYSTEM
+   Purpose: Modern, child-friendly, premium technology look.
+   Everything is kept inside this single HTML file.
+   ========================================================= */
 
-        body {
-            /* IT Related Technology Background */
-            background-color: var(--dark-bg);
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(0, 164, 228, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(255, 115, 0, 0.1) 0px, transparent 50%),
-                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-            background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
-            color: var(--text-light);
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-            min-height: 100vh;
-        }
-
-        /* ප්‍රධාන ආකෘතිය */
-        .web-container {
-            width: 100%;
-            max-width: 1100px;
-            background-color: rgba(28, 37, 65, 0.85);
-            backdrop-filter: blur(10px);
-            border: 2px solid var(--light-blue);
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 0 30px rgba(0, 164, 228, 0.3);
-        }
-
-        /* 1. ප්‍රධාන ශීර්ෂය (Header Section) */
-        header {
-            background: linear-gradient(135deg, rgba(11,19,43,0.9) 0%, rgba(28,37,65,0.9) 100%);
-            text-align: center;
-            padding: 40px 20px;
-            border-bottom: 2px solid var(--light-blue);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-        }
-
-       /* ලෝගෝ එක රඳවන බහාලුම (Container) */
-.logo-container {
-    width: 140px;
-    height: 140px;
-    background-color: white;
-    border-radius: 50%; /* බාහිර කොටුව සම්පූර්ණයෙන්ම රවුම් කරයි */
-    padding: 3px; /* සුදු පාට Border එකක් වගේ ලස්සනට පෙනීමට */
-    box-shadow: 0 0 20px var(--light-blue);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden; /* රවුමෙන් පිටත යන සියලුම කොටස් ඉවත් කරයි */
-    border: 2px solid var(--light-blue);
+/* ---------- 01. Design Tokens / Global Variables ---------- */
+:root{
+    --bg:#050816;
+    --bg-2:#080d1f;
+    --panel:rgba(10,18,40,.72);
+    --panel-strong:rgba(13,24,52,.92);
+    --line:rgba(93,226,255,.18);
+    --cyan:#42e8ff;
+    --blue:#4b7bff;
+    --violet:#9b5cff;
+    --pink:#ff4ecd;
+    --orange:#ff8a3d;
+    --green:#55f2a4;
+    --text:#f7fbff;
+    --muted:#9aa9c7;
+    --shadow:0 25px 80px rgba(0,0,0,.42);
+    --glow:0 0 35px rgba(66,232,255,.18);
+    --radius:24px;
 }
 
-/* ලෝගෝ ඉමේජ් එක රවුමට කැපී පෙනෙන කොටස */
-.logo-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* රූපය විකෘති නොවී රවුම ඇතුලතටම සෙට් කරයි */
-    border-radius: 50%; /* ඉමේජ් එකේ සුදු කොන් හතරම රවුමට කපා දමයි */
+/* ---------- 02. Reset / Base ---------- */
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    min-height:100vh;
+    color:var(--text);
+    font-family:"Noto Sans Sinhala","Segoe UI",system-ui,sans-serif;
+    overflow-x:hidden;
+    background:
+        radial-gradient(circle at 15% 10%,rgba(66,232,255,.12),transparent 25%),
+        radial-gradient(circle at 85% 20%,rgba(155,92,255,.13),transparent 25%),
+        radial-gradient(circle at 50% 100%,rgba(255,78,205,.08),transparent 28%),
+        linear-gradient(135deg,var(--bg),var(--bg-2) 55%,#04050d);
 }
 
-        header h1 {
-            font-size: 2.3rem;
-            color: #fff;
-            text-shadow: 0 0 10px var(--light-blue);
-        }
-
-        header p {
-            font-size: 1.1rem;
-            color: var(--light-blue);
-            font-weight: 500;
-        }
-
-        /* 2. මෙනු තීරුව (Navigation Tabs) */
-        /* ප්‍රධාන ටැබ් තීරුව Flexbox මඟින් සමානව බෙදා වෙන් කිරීම */
-.main-tab-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #1c2541; /* කාඩ් වල පසුබිම් වර්ණය */
-    border: 1px solid #00a4e4; /* ලයිට් බ්ලූ බෝඩර් එක */
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 25px;
+/* ---------- 03. Animated Cyber Grid Background ---------- */
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:-3;
+    opacity:.28;
+    background-image:
+        linear-gradient(rgba(66,232,255,.045) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(66,232,255,.045) 1px,transparent 1px);
+    background-size:48px 48px;
+    mask-image:linear-gradient(to bottom,black,transparent 90%);
+    animation:gridMove 22s linear infinite;
+}
+@keyframes gridMove{
+    from{transform:translateY(0)}
+    to{transform:translateY(48px)}
 }
 
-/* ටැබ් බටන් සහ ලින්ක්ස් සඳහා පොදු හැඩගැන්වීම් */
-.main-tab-bar .tab-btn {
-    flex: 1;
-    text-align: center;
-    padding: 15px 20px;
-    background: none;
-    border: none;
-    color: #f4f7f6;
-    font-size: 1rem;
-    font-weight: 600;
-    text-decoration: none; /* Underline සම්පූර්ණයෙන්ම ඉවත් කරයි */
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border-right: 1px solid rgba(0, 164, 228, 0.2); /* ටැබ් අතර මැදින් වැටෙන සියුම් ඉර */
+/* ---------- 04. Ambient Light Orbs ---------- */
+body::after{
+    content:"";
+    position:fixed;
+    width:520px;
+    height:520px;
+    left:-220px;
+    top:25%;
+    border-radius:50%;
+    pointer-events:none;
+    z-index:-2;
+    background:radial-gradient(circle,rgba(66,232,255,.13),transparent 68%);
+    filter:blur(20px);
+    animation:orbFloat 10s ease-in-out infinite alternate;
+}
+@keyframes orbFloat{
+    from{transform:translate3d(0,-20px,0) scale(1)}
+    to{transform:translate3d(180px,80px,0) scale(1.15)}
 }
 
-/* අවසාන ටැබ් එකේ දකුණු පස ඉර ඉවත් කිරීම */
-.main-tab-bar .tab-btn:last-child {
-    border-right: none;
+/* ---------- 05. Main Application Shell ---------- */
+.web-container{
+    position:relative;
+    width:min(1400px,calc(100% - 28px));
+    margin:20px auto;
+    overflow:hidden;
+    border:1px solid rgba(66,232,255,.22);
+    border-radius:32px;
+    background:linear-gradient(145deg,rgba(8,15,34,.9),rgba(8,12,27,.74));
+    box-shadow:var(--shadow),0 0 90px rgba(66,232,255,.08);
+    backdrop-filter:blur(22px);
+    -webkit-backdrop-filter:blur(22px);
+}
+.web-container::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    border-radius:32px;
+    background:linear-gradient(120deg,rgba(66,232,255,.12),transparent 25%,transparent 72%,rgba(155,92,255,.12));
+    opacity:.8;
 }
 
-/* මවුස් එක උඩට අරන් යද්දී වෙනස් වන ආකාරය (Hover Effect) */
-.main-tab-bar .tab-btn:hover {
-    background-color: rgba(0, 164, 228, 0.15);
-    color: #00a4e4;
+/* ---------- 06. Header / Hero Area ---------- */
+header{
+    position:relative;
+    min-height:700px;
+    padding:72px 38px 55px;
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:18px;
+    overflow:hidden;
+    border-bottom:1px solid var(--line);
+    background:
+        radial-gradient(circle at 50% 0%,rgba(66,232,255,.13),transparent 38%),
+        linear-gradient(180deg,rgba(9,20,45,.82),rgba(5,9,23,.45));
+}
+header::before{
+    content:"";
+    position:absolute;
+    width:760px;
+    height:760px;
+    border:1px solid rgba(66,232,255,.08);
+    border-radius:50%;
+    top:-440px;
+    left:50%;
+    transform:translateX(-50%);
+    box-shadow:0 0 0 70px rgba(66,232,255,.015),0 0 0 140px rgba(155,92,255,.012);
+}
+header::after{
+    content:"C-TECH // SMART LEARNING // 2026";
+    position:absolute;
+    top:20px;
+    left:28px;
+    font:700 10px/1 "Courier New",monospace;
+    letter-spacing:3px;
+    color:rgba(66,232,255,.5);
 }
 
-/* දැනට Active වී ඇති (Home) ටැබ් එකේ පෙනුම */
-.main-tab-bar .tab-btn.active {
-    background-color: #00a4e4; /* තැඹිලි වර්ණය */
-    color: #ffffff;
-    font-weight: bold;
-    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.2);
+/* ---------- 07. Main Logo ---------- */
+.logo-container{
+    position:relative;
+    width:158px;
+    height:158px;
+    padding:5px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(145deg,#fff,#eafcff);
+    border:2px solid var(--cyan);
+    box-shadow:0 0 0 8px rgba(66,232,255,.035),0 0 45px rgba(66,232,255,.45);
+    z-index:2;
+    animation:logoPulse 4s ease-in-out infinite;
 }
-        /* Tab පිටු සඟවා තැබීම සහ පෙන්වීම */
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active-tab {
-            display: grid;
-        }
-
-        /* 3. ප්‍රධාන අන්තර්ගතය සහ පැති තීරුව */
-        .main-content {
-            grid-template-columns: 3fr 1.2fr;
-        }
-
-        /* වම්පස ශ්‍රේණි කොටස් */
-        .grades-section {
-            padding: 25px;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            align-content: start;
-        }
-        /* වෙනත් HTML පිටුවකට යන ලින්ක් එක CSS වලින් හැඩගැන්වීම */
-        .grade-page-link {
-            text-decoration: none; /* යටින් වැටෙන ඉර (Underline) ඉවත් කරයි */
-            color: inherit;
-            display: block; /* මුළු කාඩ් එකම ලින්ක් එකක් බවට පත් කරයි */
-        }
-        .grade-card {
-            background: linear-gradient(135deg, #1c2541 0%, #223055 100%);
-            border: 2px solid rgba(0, 164, 228, 0.4);
-            border-radius: 12px;
-            padding: 35px 20px;
-            text-align: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #fff;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-
-        .grade-card:hover {
-            border-color: var(--orange);
-            box-shadow: 0 0 15px rgba(255, 115, 0, 0.6);
-            transform: scale(1.03);
-            color: var(--orange);
-        }
-
-        /* දකුණුපස පැති තීරුව (Sidebar) */
-        .sidebar {
-            border-left: 2px solid var(--light-blue);
-            display: flex;
-            flex-direction: column;
-            background-color: rgba(11, 19, 43, 0.5);
-        }
-
-        .sidebar-box {
-            padding: 25px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        .sidebar-box.top {
-            border-bottom: 2px solid var(--light-blue);
-        }
-
-        .sidebar-box h3 {
-            color: var(--orange);
-            margin-bottom: 12px;
-            font-size: 1.3rem;
-            text-shadow: 0 0 5px rgba(255,115,0,0.3);
-        }
-
-        /* අභ්‍යන්තර පිටු සඳහා පොදු විලාසිතා */
-        .inner-page {
-            padding: 30px;
-            width: 100%;
-        }
-
-        .inner-page h2 {
-            color: var(--light-blue);
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--light-blue);
-            padding-bottom: 10px;
-        }
-
-        /* ඩවුන්ලෝඩ් කාඩ් පත් (Download Cards) */
-        .download-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            width: 100%;
-        }
-
-        .download-card {
-            background-color: var(--card-bg);
-            border-left: 5px solid var(--orange);
-            padding: 20px;
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            gap: 15px;
-        }
-
-        .download-btn {
-            background-color: var(--orange);
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            text-align: center;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background 0.2s;
-            cursor: pointer;
-        }
-
-        .download-btn:hover {
-            background-color: #e06600;
-        }
-
-        /* Mobile Phone සඳහා Layout සකස් කිරීම */
-       /* Screen එකේ පළල පික්සල් 600 ට වඩා අඩු ෆෝන් සඳහා පමණක් ක්‍රියාත්මක වේ */
-        /* 🏆 O/L Results Card Styling */
-.results-container {
-    max-width: 750px;
-    margin: 25px auto;
-    padding: 20px;
-    background: rgba(28, 37, 65, 0.6);
-    border: 1px dashed rgba(0, 164, 228, 0.4);
-    border-radius: 12px;
-    backdrop-filter: blur(5px);
+.logo-container::before,
+.logo-container::after{
+    content:"";
+    position:absolute;
+    inset:-15px;
+    border:1px solid rgba(66,232,255,.25);
+    border-radius:50%;
+    animation:spinRing 12s linear infinite;
 }
-
-.results-heading {
-    font-size: 1.15rem;
-    color: #fff;
-    margin-bottom: 15px;
-    font-weight: 500;
-    letter-spacing: 0.5px;
+.logo-container::after{
+    inset:-28px;
+    border-color:rgba(155,92,255,.16);
+    animation-direction:reverse;
+    animation-duration:18s;
 }
-
-.results-stats {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap; /* ජංගම දුරකථන තිරවලදී පේළි ගැසීම පාලනය කරයි */
+.logo-container img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border-radius:50%;
 }
-
-.stat-box {
-    background: rgba(11, 19, 43, 0.9);
-    border-radius: 8px;
-    padding: 10px 20px;
-    min-width: 130px;
-    flex: 1;
-    max-width: 160px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    transition: transform 0.3s ease;
+@keyframes logoPulse{
+    0%,100%{transform:translateY(0);box-shadow:0 0 0 8px rgba(66,232,255,.035),0 0 40px rgba(66,232,255,.35)}
+    50%{transform:translateY(-8px);box-shadow:0 0 0 14px rgba(66,232,255,.025),0 0 65px rgba(155,92,255,.45)}
 }
+@keyframes spinRing{to{transform:rotate(360deg)}}
 
-.stat-box:hover {
-    transform: translateY(-3px);
+/* ---------- 08. Hero Typography ---------- */
+header h1{
+    position:relative;
+    z-index:2;
+    max-width:900px;
+    margin-top:12px;
+    font-size:clamp(2rem,5vw,4.2rem);
+    line-height:1.05;
+    font-weight:900;
+    letter-spacing:-1.5px;
+    background:linear-gradient(90deg,#fff 10%,var(--cyan) 48%,#fff 85%);
+    background-size:220% auto;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    animation:textShimmer 5s linear infinite;
 }
-
-.stat-number {
-    display: block;
-    font-size: 1.8rem;
-    font-weight: bold;
-    line-height: 1.2;
+header h3{
+    position:relative;
+    z-index:2;
+    color:var(--muted);
+    font-size:clamp(.95rem,2vw,1.25rem);
+    font-weight:600;
 }
+@keyframes textShimmer{to{background-position:-220% center}}
 
-.stat-label {
-    display: block;
-    font-size: 0.8rem;
-    color: #a0aec0;
-    margin-top: 5px;
+/* ---------- 09. Smart ICT Brand Block ---------- */
+.brand-identity-container-v2{
+    position:relative;
+    z-index:2;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+    margin:10px auto 2px;
 }
-
-/* 🏆 O/L Results Card Styling */
-.results-container {
-    max-width: 800px;
-    margin: 30px auto;
-    padding: 25px;
-    background: rgba(28, 37, 65, 0.75);
-    border: 1px dashed rgba(0, 164, 228, 0.5);
-    border-radius: 16px;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+.logo-circle-wrapper{
+    width:88px;
+    height:88px;
+    padding:5px;
+    background:#fff;
+    border:2px solid var(--orange);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 0 30px rgba(255,138,61,.28);
+    transition:.35s ease;
 }
-
-.results-heading {
-    font-size: 1.25rem;
-    color: #fff;
-    margin-bottom: 20px;
-    font-weight: bold;
-    letter-spacing: 0.5px;
-    text-shadow: 0 0 8px rgba(0, 164, 228, 0.3);
+.logo-circle-wrapper:hover{transform:rotate(8deg) scale(1.08);box-shadow:0 0 45px rgba(255,138,61,.5)}
+.brand-logo-v2{width:100%;height:100%;object-fit:contain;border-radius:50%}
+.brand-text-v2{
+    font-size:1.1rem;
+    font-weight:900;
+    letter-spacing:2px;
+    text-transform:uppercase;
 }
+.cyan-text{color:var(--cyan);text-shadow:0 0 16px rgba(66,232,255,.5)}
+.orange-text{color:var(--orange);text-shadow:0 0 16px rgba(255,138,61,.35)}
+.dash{color:#64708a;margin:0 7px}
 
-/* 👥 සිසුන් ගණන පෙන්වන Box එක */
-.students-count-badge {
-    background: rgba(255, 115, 0, 0.1);
-    border: 1px solid rgba(255, 115, 0, 0.3);
-    padding: 12px 20px;
-    border-radius: 30px;
-    font-size: 1.1rem;
-    color: #f4f7f6;
-    margin-bottom: 25px;
-    display: inline-block;
-    font-weight: 500;
+/* ---------- 10. Results / Achievement Panel ---------- */
+.results-container{
+    position:relative;
+    z-index:2;
+    width:min(900px,100%);
+    margin:22px auto;
+    padding:24px;
+    border:1px solid rgba(66,232,255,.16);
+    border-radius:var(--radius);
+    background:linear-gradient(135deg,rgba(15,27,58,.7),rgba(8,14,30,.78));
+    box-shadow:0 20px 50px rgba(0,0,0,.24);
 }
-
-.highlight-count {
-    color: #ff7300; /* Orange Color */
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-left: 5px;
-    text-shadow: 0 0 10px rgba(255, 115, 0, 0.4);
+.results-container::before{
+    content:"RESULTS // PERFORMANCE";
+    position:absolute;
+    top:12px;
+    right:18px;
+    font:700 8px "Courier New",monospace;
+    letter-spacing:2px;
+    color:rgba(66,232,255,.35);
 }
-
-.results-stats {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
+.results-heading{
+    margin-bottom:18px;
+    color:#fff;
+    font-size:1.15rem;
+    font-weight:800;
 }
-
-.stat-box {
-    background: rgba(11, 19, 43, 0.95);
-    border-radius: 12px;
-    padding: 15px 25px;
-    min-width: 145px;
-    flex: 1;
-    max-width: 180px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-    transition: all 0.3s ease;
+.students-count-badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:9px 18px;
+    margin-bottom:18px;
+    border:1px solid rgba(255,138,61,.22);
+    border-radius:999px;
+    background:rgba(255,138,61,.06);
+    color:#dce7fa;
 }
-
-.stat-box:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0, 164, 228, 0.2);
+.highlight-count{color:var(--orange);font-size:1.45rem;font-weight:900;margin-left:6px}
+.results-stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
 }
-
-/* 🔢 ලොකු ඉලක්කම් (100%, 07, 01) */
-.stat-number {
-    display: block;
-    font-size: 2.2rem; /* ප්‍රමාණය වැඩි කරන ලදී */
-    font-weight: 800;
-    line-height: 1.1;
+.stat-box{
+    position:relative;
+    min-width:0;
+    max-width:none;
+    padding:18px 12px;
+    border:1px solid rgba(255,255,255,.07);
+    border-radius:18px;
+    background:rgba(4,9,22,.72);
+    box-shadow:inset 0 1px rgba(255,255,255,.04);
+    transition:.35s ease;
 }
+.stat-box:hover{transform:translateY(-7px);border-color:rgba(66,232,255,.3)}
+.stat-number{display:block;font-size:2rem;font-weight:950;line-height:1}
+.stat-label,.stat-label-large{display:block;margin-top:8px;font-size:.78rem;color:var(--muted)}
+.stat-label-large{font-weight:800}
+.pass-rate{border-bottom:2px solid var(--green)} .pass-rate .stat-number{color:var(--green)}
+.grade-a{border-bottom:2px solid var(--orange)} .grade-a .stat-number,.grade-a .stat-label-large{color:var(--orange)}
+.grade-b{border-bottom:2px solid var(--cyan)} .grade-b .stat-number,.grade-b .stat-label-large{color:var(--cyan)}
+.grade-c{border-bottom:2px solid #dbe6ff} .grade-c .stat-number,.grade-c .stat-label-large{color:#dbe6ff}
 
-/* 🔤 සාමාන්‍ය ලේබල් */
-.stat-label {
-    display: block;
-    font-size: 0.85rem;
-    color: #a0aec0;
-    margin-top: 8px;
+/* ---------- 11. O/L Countdown ---------- */
+.countdown-card{
+    position:relative;
+    z-index:2;
+    width:min(900px,100%);
+    padding:28px;
+    margin-top:8px;
+    border:1px solid rgba(66,232,255,.2);
+    border-radius:var(--radius);
+    background:linear-gradient(145deg,rgba(6,17,37,.84),rgba(15,9,38,.72));
+    box-shadow:0 0 60px rgba(66,232,255,.08);
+    overflow:hidden;
 }
+.countdown-card::before{
+    content:"";
+    position:absolute;
+    width:240px;height:240px;
+    right:-120px;top:-120px;
+    border-radius:50%;
+    background:radial-gradient(circle,rgba(155,92,255,.25),transparent 70%);
+}
+.badge{
+    display:inline-flex;
+    padding:7px 14px;
+    border:1px solid rgba(66,232,255,.25);
+    border-radius:999px;
+    color:var(--cyan);
+    background:rgba(66,232,255,.06);
+    font:800 .72rem "Courier New",monospace;
+    letter-spacing:2px;
+}
+.countdown-title{margin:13px 0 6px;color:#fff;font-size:clamp(1.3rem,3vw,2rem);font-weight:900}
+.countdown-subtitle{color:var(--muted);font-size:.92rem}
+.timer-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin-top:22px;
+}
+.time-box{
+    position:relative;
+    padding:18px 10px;
+    border:1px solid rgba(66,232,255,.18);
+    border-radius:18px;
+    background:rgba(1,7,19,.78);
+    overflow:hidden;
+    transition:.35s ease;
+}
+.time-box::after{
+    content:"";
+    position:absolute;
+    left:-30%;right:-30%;bottom:-55%;
+    height:100%;
+    background:radial-gradient(ellipse,rgba(66,232,255,.13),transparent 68%);
+}
+.time-box:hover{transform:translateY(-5px);border-color:var(--cyan);box-shadow:0 0 30px rgba(66,232,255,.12)}
+.number{
+    position:relative;
+    z-index:1;
+    font:900 clamp(2rem,5vw,3.4rem)/1 "Courier New",monospace;
+    color:var(--cyan);
+    text-shadow:0 0 22px rgba(66,232,255,.55);
+}
+.label{position:relative;z-index:1;color:var(--muted);font-size:.72rem;font-weight:700;letter-spacing:.5px}
+.footer-note{margin-top:18px;color:var(--cyan);font-size:.84rem}
 
-/* 🔤 A, B, C අකුරු කැපී පෙනෙන ලේබලය */
-.stat-label-large {
-    display: block;
-    font-size: 1.05rem; /* අකුරු ලොකු කරන ලදී */
-    font-weight: bold;
-    margin-top: 8px;
+/* ---------- 12. Navigation ---------- */
+.main-tab-bar{
+    position:sticky;
+    top:12px;
+    z-index:100;
+    width:min(1050px,calc(100% - 30px));
+    margin:18px auto;
+    padding:7px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:6px;
+    border:1px solid rgba(66,232,255,.16);
+    border-radius:18px;
+    background:rgba(6,12,28,.76);
+    backdrop-filter:blur(18px);
+    box-shadow:0 14px 40px rgba(0,0,0,.25);
+}
+.main-tab-bar .tab-btn{
+    position:relative;
+    padding:13px 10px;
+    border:1px solid transparent;
+    border-radius:13px;
+    background:transparent;
+    color:#aebbd4;
+    text-align:center;
+    text-decoration:none;
+    font-weight:800;
+    transition:.3s ease;
+}
+.main-tab-bar .tab-btn:hover{
+    color:#fff;
+    background:rgba(66,232,255,.07);
+    border-color:rgba(66,232,255,.15);
+    transform:translateY(-2px);
+}
+.main-tab-bar .tab-btn.active{
+    color:#03101a;
+    background:linear-gradient(135deg,var(--cyan),#7af2ff);
+    box-shadow:0 0 25px rgba(66,232,255,.28);
 }
 
-/* 🎨 වර්ණ ගැන්වීම් */
-.pass-rate { border-bottom: 4px solid #4ade80; }
-.pass-rate .stat-number { color: #4ade80; }
+/* ---------- 13. Main Content ---------- */
+.main-content{
+    display:grid;
+    grid-template-columns:minmax(0,1.55fr) minmax(300px,.8fr);
+    gap:0;
+}
+.grades-section{
+    padding:30px;
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:16px;
+}
+.grades-section>a{display:block;perspective:1000px}
+.grade-card{
+    position:relative;
+    min-height:135px;
+    padding:28px 18px;
+    display:flex;
+    align-items:flex-end;
+    justify-content:flex-start;
+    text-align:left;
+    overflow:hidden;
+    border:1px solid rgba(66,232,255,.13);
+    border-radius:22px;
+    color:#fff;
+    font-size:1.3rem;
+    font-weight:900;
+    letter-spacing:.2px;
+    background:
+        linear-gradient(145deg,rgba(16,31,67,.94),rgba(8,15,35,.94));
+    box-shadow:0 15px 35px rgba(0,0,0,.22);
+    transition:transform .4s cubic-bezier(.2,.8,.2,1),border-color .3s,box-shadow .3s;
+}
+.grade-card::before{
+    content:"";
+    position:absolute;
+    width:130px;height:130px;
+    right:-35px;top:-45px;
+    border-radius:50%;
+    background:radial-gradient(circle,rgba(66,232,255,.2),transparent 68%);
+    transition:.5s ease;
+}
+.grade-card::after{
+    content:"↗";
+    position:absolute;
+    top:17px;right:20px;
+    color:rgba(66,232,255,.5);
+    font-size:1.4rem;
+}
+.grade-card:hover{
+    transform:translateY(-8px) rotateX(2deg) rotateY(-2deg);
+    border-color:rgba(66,232,255,.55);
+    box-shadow:0 24px 55px rgba(0,0,0,.38),0 0 30px rgba(66,232,255,.12);
+}
+.grade-card:hover::before{transform:scale(1.6);background:radial-gradient(circle,rgba(155,92,255,.25),transparent 68%)}
+.grades-section>a:nth-child(3n) .grade-card{border-color:rgba(155,92,255,.15)}
+.grades-section>a:nth-child(3n) .grade-card:hover{border-color:rgba(155,92,255,.55)}
+.grades-section>a:nth-child(4n) .grade-card{border-color:rgba(255,138,61,.13)}
+.grades-section>a:nth-child(4n) .grade-card:hover{border-color:rgba(255,138,61,.5)}
 
-.grade-a { border-bottom: 4px solid #ff7300; }
-.grade-a .stat-number { color: #ff7300; }
-.grade-a .stat-label-large { color: #ff7300; } /* A අකුර Orange */
+/* ---------- 14. Sidebar / News / Birthday ---------- */
+.sidebar{
+    border-left:1px solid var(--line);
+    background:rgba(3,8,20,.35);
+}
+.sidebar-box{
+    padding:28px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+}
+.sidebar-box.top{border-bottom:1px solid var(--line)}
+.sidebar-box h3{margin-bottom:10px;color:#fff;font-size:1.08rem}
+.sidebar-box p{color:var(--muted);line-height:1.7;font-size:.9rem}
+.sidebar-split-container{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+    width:100%;
+}
+.news-section,.birthday-section{display:flex;flex-direction:column;align-items:center;width:100%}
+.news-banner{
+    width:100%;
+    max-width:220px;
+    margin-top:12px;
+    border-radius:15px;
+    border:1px solid rgba(66,232,255,.2);
+    box-shadow:0 15px 35px rgba(0,0,0,.25);
+}
+.birthday-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:12px;
+    width:100%;
+    margin-top:10px;
+}
+.bday-card{
+    position:relative;
+    padding:16px;
+    border:1px solid rgba(255,78,205,.22);
+    border-radius:20px;
+    background:linear-gradient(145deg,rgba(48,18,55,.62),rgba(11,20,45,.72));
+    box-shadow:0 15px 35px rgba(0,0,0,.25);
+    animation:bdayFloat 4s ease-in-out infinite alternate;
+}
+@keyframes bdayFloat{to{transform:translateY(-4px)}}
+.bday-photo-frame{
+    width:74px;height:74px;
+    margin:0 auto 10px;
+    padding:3px;
+    border-radius:50%;
+    background:linear-gradient(135deg,var(--pink),var(--orange),var(--cyan));
+    box-shadow:0 0 24px rgba(255,78,205,.25);
+}
+.bday-photo-frame img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.bday-name{font-size:1rem;font-weight:900}
+.bday-wish-quote{margin:7px 0 12px;color:#c6d1e7;font-size:.78rem;line-height:1.5;font-style:italic}
+.wish-btn{
+    border:0;
+    padding:9px 15px;
+    border-radius:999px;
+    color:#fff;
+    font-weight:800;
+    cursor:pointer;
+    background:linear-gradient(135deg,#ff3c9d,#ff7a45);
+    box-shadow:0 8px 25px rgba(255,78,205,.2);
+    transition:.25s ease;
+}
+.wish-btn:hover{transform:translateY(-2px) scale(1.03)}
+.wish-count-tag{margin-top:8px;color:var(--cyan);font-size:.72rem;font-weight:700}
 
-.grade-b { border-bottom: 4px solid #00a4e4; }
-.grade-b .stat-number { color: #00a4e4; }
-.grade-b .stat-label-large { color: #00a4e4; } /* B අකුර Blue */
+/* ---------- 15. Birthday Modal ---------- */
+.bday-modal-overlay{
+    position:fixed;
+    inset:0;
+    z-index:9999;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:rgba(1,4,14,.78);
+    backdrop-filter:blur(14px);
+    animation:fadeIn .3s ease;
+}
+.bday-modal-content{
+    position:relative;
+    width:min(500px,100%);
+    padding:25px;
+    border:1px solid rgba(66,232,255,.25);
+    border-radius:28px;
+    background:linear-gradient(145deg,rgba(15,28,59,.96),rgba(21,10,40,.94));
+    box-shadow:0 30px 100px rgba(0,0,0,.6),0 0 50px rgba(66,232,255,.1);
+    animation:popIn .45s cubic-bezier(.175,.885,.32,1.275);
+}
+.bday-modal-close{
+    position:absolute;
+    top:12px;right:12px;
+    width:36px;height:36px;
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:50%;
+    color:#fff;
+    background:rgba(255,255,255,.07);
+    font-size:24px;
+    cursor:pointer;
+    z-index:2;
+}
+.bday-modal-close:hover{background:#ff456e;transform:rotate(90deg)}
+@keyframes popIn{from{transform:scale(.82);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.firecracker-particle{position:fixed;pointer-events:none;width:7px;height:7px;border-radius:50%;z-index:10001;animation:explode .8s ease-out forwards}
+@keyframes explode{to{transform:translate(var(--dx),var(--dy)) scale(0);opacity:0}}
 
-.grade-c { border-bottom: 4px solid #e2e8f0; }
-.grade-c .stat-number { color: #e2e8f0; }
-.grade-c .stat-label-large { color: #e2e8f0; } /* C අකුර Silver/White */
+/* ---------- 16. Visitor Counter ---------- */
+.counter-box{
+    position:relative;
+    margin:22px 30px !important;
+    padding:20px !important;
+    border:1px solid rgba(66,232,255,.14) !important;
+    border-radius:20px !important;
+    background:linear-gradient(145deg,rgba(12,24,50,.7),rgba(5,11,27,.75)) !important;
+    box-shadow:0 15px 35px rgba(0,0,0,.2);
+}
+.counter-box h4{color:var(--muted) !important;font-size:.82rem}
+#total-visitors{color:var(--cyan) !important;text-shadow:0 0 20px rgba(66,232,255,.55) !important}
 
+/* ---------- 17. Footer ---------- */
+footer{
+    position:relative;
+    margin-top:15px;
+    padding:24px !important;
+    border-top:1px solid rgba(66,232,255,.08);
+    color:#64718c;
+}
+footer p{font-size:.8rem}
+footer a{color:#536079 !important;transition:.25s}
+footer a:hover{color:var(--cyan) !important}
 
-        /* 🌐 Brand Identity Section Styling */
-.brand-identity-container {
-    text-align: center;
-    margin: 25px auto;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
+/* ---------- 18. Scroll Reveal Animation ---------- */
+.reveal{
+    opacity:0;
+    transform:translateY(25px);
+    transition:opacity .7s ease,transform .7s ease;
+}
+.reveal.revealed{opacity:1;transform:none}
+
+/* ---------- 19. Mouse Spotlight ---------- */
+.mouse-glow{
+    position:fixed;
+    width:260px;height:260px;
+    left:0;top:0;
+    border-radius:50%;
+    pointer-events:none;
+    z-index:9990;
+    background:radial-gradient(circle,rgba(66,232,255,.10),transparent 68%);
+    transform:translate(-50%,-50%);
+    mix-blend-mode:screen;
 }
 
-/* 🖼️ Logo Wrapper with Neon Border & Glow */
-.logo-wrapper {
-    background: #ffffff; /* ලෝගෝ එකේ පසුබිම සුදු නිසා කැපී පෙනීමට */
-    padding: 10px;
-    border-radius: 16px;
-    box-shadow: 0 0 20px rgba(0, 164, 228, 0.4); /* Dark Cyan Glow */
-    border: 2px solid var(--light-blue);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.4s ease;
-    max-width: 280px; /* ලෝගෝ එකේ ප්‍රමාණය සීමා කිරීම */
+/* ---------- 20. Responsive Design ---------- */
+@media(max-width:900px){
+    header{min-height:auto;padding:62px 22px 42px}
+    .main-content{grid-template-columns:1fr}
+    .sidebar{border-left:0;border-top:1px solid var(--line)}
+    .grades-section{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:650px){
+    .web-container{width:calc(100% - 12px);margin:6px auto;border-radius:22px}
+    header{padding:52px 15px 32px}
+    header::after{font-size:7px;left:15px;top:14px}
+    .logo-container{width:125px;height:125px}
+    .results-container,.countdown-card{padding:18px}
+    .results-stats{grid-template-columns:repeat(2,1fr)}
+    .timer-grid{grid-template-columns:repeat(2,1fr)}
+    .main-tab-bar{position:relative;top:auto;width:calc(100% - 18px);grid-template-columns:repeat(2,1fr)}
+    .grades-section{padding:18px;gap:12px}
+    .grade-card{min-height:112px;padding:22px 15px;font-size:1.05rem}
+    .sidebar-split-container{grid-template-columns:1fr}
+    .sidebar-box{padding:20px 16px}
+    .counter-box{margin:18px !important}
+}
+@media(max-width:390px){
+    .results-stats{gap:8px}
+    .stat-box{padding:15px 7px}
+    .stat-number{font-size:1.65rem}
+    .grade-card{min-height:100px}
 }
 
-.logo-wrapper:hover {
-    transform: scale(1.03);
-    box-shadow: 0 0 25px rgba(255, 115, 0, 0.6); /* Hover කළ විට Orange Glow */
-    border-color: var(--orange);
-}
-
-.brand-logo {
-    width: 100%;
-    height: auto;
-    display: block;
-    border-radius: 8px;
-}
-
-/* ✍️ Creative Text Styling */
-.brand-text-glow {
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: #00a4e4; /* C-TECH Light Blue */
-    letter-spacing: 1px;
-    text-shadow: 0 0 10px rgba(0, 164, 228, 0.3);
-    font-family: 'Segoe UI', system-ui, sans-serif;
-    margin-top: 5px;
-}
-
-.orange-text {
-    color: #ff7300; /* C-TECH Orange */
-    text-shadow: 0 0 10px rgba(255, 115, 0, 0.3);
-}
-        /* 🌐 Smart ICT Section v2 */
-.brand-identity-container-v2 {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin: 20px auto;
-    padding: 0;
-}
-
-/* ⚪ වෘත්තාකාර කුඩා ලෝගෝ ආවරණය (Circular Dynamic Wrapper) */
-.logo-circle-wrapper {
-    width: 140px;          /* ලෝගෝ එකේ ප්‍රමාණය සැලකිය යුතු ලෙස කුඩා කරන ලදී */
-    height: 140px;
-    background: #ffffff;
-    border-radius: 50%;    /* කොටු හැඩය වෙනුවට රවුම් හැඩයක් ලබා දීම */
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;      /* සුදු පසුබිම රවුමෙන් පිටතට යාම වළකයි */
-    border: 3px solid #00a4e4;
-    box-shadow: 0 0 15px rgba(0, 164, 228, 0.5);
-    transition: all 0.3s ease-in-out;
-}
-
-/* Object-fit මඟින් සුදු පසුබිම ස්වයංක්‍රීයව කපා හැරේ (Crop) */
-.brand-logo-v2 {
-    width: 105%;
-    height: 105%;
-    object-fit: contain;  /* පින්තූරය විකෘති නොවී රවුම තුළ හැඩගැසේ */
-    border-radius: 50%;
-}
-
-/* Hover Animation */
-.logo-circle-wrapper:hover {
-    transform: scale(1.05) rotate(2deg);
-    border-color: #ff7300;
-    box-shadow: 0 0 25px rgba(255, 115, 0, 0.7);
-}
-
-/* ✍️ Smart Text Layout */
-.brand-text-v2 {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: #ffffff;
-    letter-spacing: 0.5px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-    margin-top: 5px;
-}
-
-.cyan-text { color: #00a4e4; }
-.orange-text { color: #ff7300; }
-.dash { color: #a0aec0; margin: 0 5px; }
-
-        /* Countdown Container */
-        .countdown-container {
-            text-align: center;
-            background: rgba(20, 24, 33, 0.8);
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 0 30px rgba(0, 242, 254, 0.15);
-            border: 1px solid rgba(0, 242, 254, 0.3);
-            backdrop-filter: blur(10px);
-        }
-
-        .countdown-title {
-            color: #ffffff;
-            font-size: 1.8rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 30px;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-        }
-
-        .countdown-title span {
-            color: #00f2fe; /* Tech Blue */
-        }
-
-        /* Timer Grid */
-        .timer-grid {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-        }
-
-        /* Individual Time Box */
-        .time-box {
-            background: linear-gradient(145deg, #161b22, #0d1117);
-            border: 2px solid #4facfe;
-            border-radius: 12px;
-            padding: 20px;
-            min-width: 100px;
-            box-shadow: 0 0 15px rgba(79, 172, 254, 0.4);
-            transition: transform 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .time-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0 25px rgba(0, 242, 254, 0.7);
-            border-color: #00f2fe;
-        }
-
-        /* Tech HUD corner lines */
-        .time-box::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 10px; height: 10px;
-            border-top: 2px solid #00f2fe; border-left: 2px solid #00f2fe;
-        }
-
-        .number {
-            font-family: 'Courier New', Courier, monospace; /* Digital/Tech vibe */
-            font-size: 3.5rem;
-            font-weight: bold;
-            color: #00f2fe;
-            text-shadow: 0 0 20px rgba(0, 242, 254, 0.6);
-            line-height: 1;
-            margin-bottom: 5px;
-        }
-
-        .label {
-            color: #8b949e;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-/* Sidebar Layout එක කොටස් 2කට බෙදීම */
-.sidebar-split-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    width: 100%;
-}
-
-.news-section, .birthday-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-
-.news-banner {
-    width: 100%;
-    max-width: 220px;
-    height: auto;
-    border-radius: 8px;
-    margin-top: 10px;
-    border: 1px solid var(--light-blue);
-}
-
-/* Dynamic Birthday Grid (ළමයි 1 හෝ කිහිපදෙනෙක් සිටින විට auto adjust වේ) */
-.birthday-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 15px;
-    width: 100%;
-    margin-top: 10px;
-}
-
-/* Canva Dynamic Style Card */
-.bday-card {
-    background: linear-gradient(135deg, rgba(255,115,0,0.15) 0%, rgba(0,164,228,0.2) 100%);
-    border: 2px solid var(--light-blue);
-    border-radius: 16px;
-    padding: 15px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 0 15px rgba(0, 164, 228, 0.2);
-    animation: pulseGlow 3s infinite alternate;
-}
-
-@keyframes pulseGlow {
-    0% { box-shadow: 0 0 10px rgba(0,164,228,0.3); }
-    100% { box-shadow: 0 0 20px rgba(255,115,0,0.6); }
-}
-
-/* Birthday Frame Image */
-.bday-photo-frame {
-    width: 90px;
-    height: 90px;
-    margin: 0 auto 10px auto;
-    border-radius: 50%;
-    padding: 4px;
-    background: linear-gradient(45deg, var(--orange), var(--light-blue));
-    box-shadow: 0 0 12px rgba(255, 115, 0, 0.8);
-}
-
-.bday-photo-frame img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-}
-
-.bday-name {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #fff;
-    margin-bottom: 5px;
-}
-
-.bday-wish-quote {
-    font-size: 0.82rem;
-    color: #e2e8f0;
-    line-height: 1.3;
-    margin-bottom: 12px;
-    font-style: italic;
-}
-
-/* Wish Button & Counter Style */
-.wish-btn {
-    background: linear-gradient(45deg, #ff7300, #ff4500);
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-weight: bold;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    box-shadow: 0 4px 10px rgba(255, 115, 0, 0.4);
-}
-
-.wish-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px rgba(255, 115, 0, 0.8);
-}
-
-.wish-btn:active {
-    transform: scale(0.95);
-}
-
-.wish-count-tag {
-    font-size: 0.8rem;
-    color: var(--light-blue);
-    margin-top: 6px;
-    font-weight: 600;
-}
-
-        /* Modal Background Overlay */
-.bday-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(8px);
-  z-index: 9999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  animation: fadeIn 0.4s ease-out;
-}
-
-/* Modal Box */
-.bday-modal-content {
-  position: relative;
-  max-width: 90%;
-  width: 450px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-  text-align: center;
-  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-/* Close Button */
-.bday-modal-close {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  color: #fff;
-  font-size: 24px;
-  font-weight: bold;
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: 0.3s ease;
-  z-index: 10000;
-}
-
-.bday-modal-close:hover {
-  background: #ff4757;
-  transform: scale(1.1);
-}
-
-/* Modal Open Animation */
-@keyframes popIn {
-  from { transform: scale(0.7); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* Firecracker Particles (CSS-based Animation) */
-.firecracker-particle {
-  position: fixed;
-  pointer-events: none;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  z-index: 10001;
-  animation: explode 0.8s ease-out forwards;
-}
-
-@keyframes explode {
-  0% { transform: translate(0, 0) scale(1); opacity: 1; }
-  100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
-}
-
-/* Mobile Responsiveness */
-
-  /* Main Container with Glowing Border */
-        .countdown-card {
-            background: rgba(16, 22, 34, 0.85);
-            border: 1px solid rgba(0, 242, 254, 0.3);
-            border-radius: 20px;
-            padding: 40px 30px;
-            text-align: center;
-            max-width: 650px;
-            width: 100%;
-            box-shadow: 0 0 40px rgba(0, 242, 254, 0.15), inset 0 0 15px rgba(0, 242, 254, 0.05);
-            backdrop-filter: blur(12px);
-            position: relative;
-        }
-
-        /* Top Tag */
-        .badge {
-            display: inline-block;
-            background: linear-gradient(90deg, #ff0844, #ffb199);
-            color: #fff;
-            font-size: 0.8rem;
-            font-weight: bold;
-            padding: 6px 16px;
-            border-radius: 50px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 15px;
-            box-shadow: 0 0 15px rgba(255, 8, 68, 0.5);
-        }
-
-        /* Heading Style */
-        .countdown-title {
-            color: #ffffff;
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin: 0 0 10px 0;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-        }
-
-        .countdown-subtitle {
-            color: #8a99ad;
-            font-size: 0.95rem;
-            margin-bottom: 35px;
-        }
-
-        /* Grid for Time Boxes */
-        .timer-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-        }
-
-        /* Individual Box */
-        .time-box {
-            background: linear-gradient(160deg, #131a26, #0a0d14);
-            border: 1.5px solid #00f2fe;
-            border-radius: 14px;
-            padding: 20px 10px;
-            position: relative;
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .time-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0 25px rgba(0, 242, 254, 0.6);
-            border-color: #4facfe;
-        }
-
-        /* Tech corner accents */
-        .time-box::before {
-            content: '';
-            position: absolute;
-            top: -2px; left: -2px;
-            width: 8px; height: 8px;
-            border-top: 2px solid #ff0844;
-            border-left: 2px solid #ff0844;
-            border-top-left-radius: 14px;
-        }
-
-        .number {
-            font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 3rem;
-            font-weight: bold;
-            color: #00f2fe;
-            text-shadow: 0 0 15px rgba(0, 242, 254, 0.7);
-            line-height: 1;
-            margin-bottom: 8px;
-        }
-
-        .label {
-            color: #a0aec0;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Motivational Message */
-        .footer-note {
-            margin-top: 30px;
-            color: #00f2fe;
-            font-size: 0.9rem;
-            font-style: italic;
-            letter-spacing: 0.5px;
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 550px) {
-            .timer-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-            }
-            .number { font-size: 2.3rem; }
-            .countdown-title { font-size: 1.4rem; }
-            .countdown-card { padding: 30px 20px; }
-        }     
-           
-
-
-
-
-@media screen and (max-width: 600px) {
-    /* ටැබ් බාර් එක පේළි 2කට ලස්සනට බෙදා වෙන් කිරීම */
-    .main-tab-bar {
-        display: flex;
-        flex-wrap: wrap; /* ඉඩ මදි නම් ඉතිරි ටැබ් පල්ලෙහා පේළියට ගනී */
-        border-radius: 8px;
-    }
-
-    /* හැම ටැබ් බටන් එකකටම 50% ක පළලක් ලබා දී කොටු 4ක් ලෙස සකස් කිරීම */
-    .main-tab-bar .tab-btn {
-        flex: unset;
-        width: 50%; /* පේළියකට ටැබ් 2 බැගින් පේළි 2ක් සාදයි */
-        box-sizing: border-box;
-        padding: 12px 10px; /* ෆෝන් එකට ගැලපෙන පරිදි පෑඩින් අඩු කිරීම */
-        font-size: 0.95rem; /* අකුරු සියුම්ව කුඩා කිරීම */
-        border-right: 1px solid rgba(0, 164, 228, 0.2);
-        border-bottom: 1px solid rgba(0, 164, 228, 0.2); /* පේළි දෙක අතර මැදින් වැටෙන ඉර */
-    }
-
-    /* දකුණු පස සහ පතුලේ බෝඩර්ස් නිවැරදිව පාලනය කිරීම */
-    .main-tab-bar .tab-btn:nth-child(2n) {
-        border-right: none; /* දෙවැනි සහ සිව්වැනි ටැබ් වල දකුණු ඉර අයින් කරයි */
-    }
-
-    .main-tab-bar .tab-btn:nth-child(3),
-    .main-tab-bar .tab-btn:nth-child(4) {
-        border-bottom: none; /* පල්ලෙහා පේළියේ තියෙන ටැබ් වල යට ඉර අයින් කරයි */
-    }
-    
-    /* ලෝගෝ එක සහ මාතෘකා මොබයිල් එකට ගැලපෙන සේ කුඩා කිරීම */
-    .logo-container .main-logo {
-        width: 90px;
-        height: 90px;
-    }
-    .logo-container .main-title {
-        font-size: 2rem;
-    }
-    .logo-container .main-subtitle {
-        font-size: 1rem;
-    }
-    .logo-container .tagline {
-        font-size: 0.85rem;
-    }
-    
-    .results-stats {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-    }
-    .stat-box {
-        max-width: 100%;
-        padding: 12px 15px;
-    }
-    .stat-number { font-size: 1.8rem; }
-    .stat-label-large { font-size: 0.95rem; }
-    .students-count-badge { font-size: 0.95rem; width: 100%; border-radius: 12px; }
-    .highlight-count { font-size: 1.3rem; }
-
-    .logo-circle-wrapper {
-        width: 110px;
-        height: 110px;
-        padding: 8px;
-    }
-    .brand-text-v2 {
-        font-size: 1.05rem;
-    }
-     .timer-grid { gap: 10px; }
-            .time-box { min-width: 70px; padding: 15px 10px; }
-            .number { font-size: 2.2rem; }
-            .label { font-size: 0.7rem; }
-            .countdown-title { font-size: 1.3rem; }
-
-         .sidebar-split-container {
-        grid-template-columns: 1fr; /* Mobile එකේදී එක පිට එක පෙනෙන සේ */
+/* ---------- 21. Accessibility / Reduced Motion ---------- */
+@media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{
+        animation-duration:.01ms !important;
+        animation-iteration-count:1 !important;
+        scroll-behavior:auto !important;
+        transition-duration:.01ms !important;
     }
 }
+
     </style>
 </head>
 <body>
+    <!-- =====================================================
+         FUTURISTIC DECORATION LAYER
+         These elements create the animated cyber atmosphere.
+         ===================================================== -->
+    <div class="mouse-glow" id="mouseGlow" aria-hidden="true"></div>
+
 
     <div class="web-container">
 
@@ -1522,5 +1198,103 @@ document.addEventListener('DOMContentLoaded', loadAutomaticBirthdays);
 <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
 <script src="https://files.bpcontent.cloud/2026/07/16/08/20260716082258-ILJPFLD7.js" defer></script>
     
+
+<script>
+/* =========================================================
+   C-TECH FUTURISTIC INTERACTION ENGINE
+   This script adds visual interactions without changing the
+   existing Firebase, countdown or birthday business logic.
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    /* ---------- 01. Add reveal animation to major UI blocks ---------- */
+    const revealTargets = document.querySelectorAll(
+        ".results-container, .countdown-card, .grade-card, .sidebar-box, .counter-box, footer"
+    );
+
+    revealTargets.forEach((element, index) => {
+        /* Mark each element for the scroll-reveal observer. */
+        element.classList.add("reveal");
+        element.style.transitionDelay = `${Math.min(index * 45, 300)}ms`;
+    });
+
+    /* ---------- 02. Observe elements entering the viewport ---------- */
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("revealed");
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12 });
+
+    revealTargets.forEach((element) => revealObserver.observe(element));
+
+    /* ---------- 03. Desktop mouse-following cyan spotlight ---------- */
+    const mouseGlow = document.getElementById("mouseGlow");
+
+    if (mouseGlow && window.matchMedia("(pointer:fine)").matches) {
+        window.addEventListener("mousemove", (event) => {
+            /* Move the glow smoothly toward the cursor position. */
+            mouseGlow.style.left = `${event.clientX}px`;
+            mouseGlow.style.top = `${event.clientY}px`;
+        }, { passive: true });
+    } else if (mouseGlow) {
+        /* Hide the cursor effect on touch devices. */
+        mouseGlow.style.display = "none";
+    }
+
+    /* ---------- 04. Premium 3D tilt for grade cards ---------- */
+    if (window.matchMedia("(pointer:fine)").matches) {
+        document.querySelectorAll(".grade-card").forEach((card) => {
+            card.addEventListener("mousemove", (event) => {
+                const rect = card.getBoundingClientRect();
+                const x = event.clientX - rect.left;
+                const y = event.clientY - rect.top;
+                const rotateY = ((x / rect.width) - 0.5) * 7;
+                const rotateX = ((y / rect.height) - 0.5) * -7;
+
+                /* Apply a subtle 3D movement based on cursor location. */
+                card.style.transform =
+                    `translateY(-8px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+
+            card.addEventListener("mouseleave", () => {
+                /* Return the card to its natural position. */
+                card.style.transform = "";
+            });
+        });
+    }
+
+    /* ---------- 05. Add a small active-navigation indicator ---------- */
+    document.querySelectorAll(".main-tab-bar .tab-btn").forEach((button) => {
+        button.addEventListener("click", () => {
+            document.querySelectorAll(".main-tab-bar .tab-btn").forEach((item) => {
+                item.classList.remove("active");
+            });
+            button.classList.add("active");
+        });
+    });
+
+    /* ---------- 06. Dynamic browser-tab title animation ---------- */
+    const originalTitle = document.title;
+    let titlePulse = false;
+
+    setInterval(() => {
+        /* Alternate a tiny visual cue in the browser tab. */
+        document.title = titlePulse
+            ? originalTitle
+            : "⚡ C-TECH • Smart Learning";
+        titlePulse = !titlePulse;
+    }, 4500);
+});
+
+/* ---------- 07. Add subtle page-entry class after loading ---------- */
+window.addEventListener("load", () => {
+    document.body.classList.add("page-ready");
+});
+</script>
+
 </body>
 </html>
