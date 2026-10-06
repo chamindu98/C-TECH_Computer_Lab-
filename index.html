@@ -396,8 +396,10 @@ header h3{
     width:min(1050px,calc(100% - 30px));
     margin:18px auto;
     padding:7px;
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-wrap:wrap;
     gap:6px;
     border:1px solid rgba(66,232,255,.16);
     border-radius:18px;
@@ -405,7 +407,10 @@ header h3{
     backdrop-filter:blur(18px);
     box-shadow:0 14px 40px rgba(0,0,0,.25);
 }
+
 .main-tab-bar .tab-btn{
+    flex: 1;
+    min-width: 120px;
     position:relative;
     padding:13px 10px;
     border:1px solid transparent;
