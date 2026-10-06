@@ -4,20 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Class Schedule - C-TECH</title>
-    <!-- Firebase SDKs -->
+    <!-- Firebase Realtime Database SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
         :root {
             --bg: #050816;
-            --panel: rgba(10, 18, 40, 0.85);
+            --panel: rgba(10, 18, 40, 0.9);
             --cyan: #42e8ff;
             --orange: #ff8a3d;
             --green: #55f2a4;
             --red: #ff4e6e;
+            --purple: #b388ff;
+            --yellow: #ffd54f;
             --text: #f7fbff;
             --muted: #9aa9c7;
-            --line: rgba(93, 226, 255, 0.18);
+            --line: rgba(93, 226, 255, 0.2);
         }
 
         body { 
@@ -25,17 +27,17 @@
             background-color: var(--bg); 
             color: var(--text);
             margin: 0; 
-            padding: 20px; 
+            padding: 15px; 
         }
 
         .container { 
             max-width: 1100px; 
             margin: auto; 
             background: var(--panel); 
-            padding: 25px; 
+            padding: 20px; 
             border-radius: 16px; 
             border: 1px solid var(--line);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6); 
             backdrop-filter: blur(10px);
         }
 
@@ -46,15 +48,14 @@
             border-bottom: 1px solid var(--line); 
             padding-bottom: 15px; 
             margin-bottom: 20px; 
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
-        .header h2 {
-            color: var(--cyan);
-            margin: 0;
-        }
+        .header h2 { color: var(--cyan); margin: 0; font-size: 22px; }
 
         .admin-panel { 
-            background: rgba(15, 27, 58, 0.9); 
+            background: rgba(15, 27, 58, 0.95); 
             padding: 20px; 
             border-radius: 12px; 
             border: 1px solid var(--cyan);
@@ -62,40 +63,24 @@
             display: none; 
         }
 
-        .admin-panel h3 {
-            margin-top: 0;
-            color: var(--orange);
-        }
+        .admin-panel h3 { margin-top: 0; color: var(--orange); }
 
         .form-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-            gap: 15px; 
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
+            gap: 12px; 
         }
 
-        .form-group { 
-            display: flex; 
-            flex-direction: column; 
-        }
-
-        .form-group label { 
-            font-weight: bold; 
-            margin-bottom: 5px; 
-            font-size: 13px; 
-            color: var(--muted);
-        }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-weight: bold; margin-bottom: 5px; font-size: 12px; color: var(--muted); }
 
         .form-group input, .form-group select { 
             padding: 10px; 
-            background: rgba(5, 8, 22, 0.8);
+            background: rgba(5, 8, 22, 0.9);
             color: #fff;
             border: 1px solid var(--line); 
             border-radius: 6px; 
             outline: none;
-        }
-
-        .form-group input:focus, .form-group select:focus {
-            border-color: var(--cyan);
         }
 
         button { 
@@ -109,51 +94,100 @@
             transition: 0.3s;
         }
 
-        button:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
+        button:hover { opacity: 0.9; transform: translateY(-2px); }
 
         .btn-login { background-color: var(--cyan); color: #000; }
         .btn-logout { background-color: var(--red); color: #fff; display: none; }
-        .btn-delete { background-color: var(--red); color: white; padding: 6px 12px; font-size: 12px; }
+        .btn-delete { background-color: var(--red); color: white; padding: 6px 10px; font-size: 12px; border-radius: 4px; }
+
+        /* Filter Section */
+        .filter-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-section select {
+            padding: 8px 12px;
+            background: rgba(255,255,255,0.05);
+            color: var(--cyan);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            outline: none;
+        }
+
+        /* Desktop Table View */
+        .table-responsive { overflow-x: auto; }
 
         table { 
             width: 100%; 
             border-collapse: collapse; 
-            margin-top: 15px; 
-            overflow-x: auto;
-            display: block;
+            margin-top: 10px; 
         }
 
         th, td { 
-            padding: 12px 15px; 
+            padding: 12px 10px; 
             border: 1px solid var(--line); 
             text-align: left; 
+            font-size: 14px;
         }
 
-        th { 
-            background-color: rgba(66, 232, 255, 0.1); 
-            color: var(--cyan); 
+        th { background-color: rgba(66, 232, 255, 0.1); color: var(--cyan); }
+
+        /* Color Badges for Subjects & Halls */
+        .tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 12px;
         }
 
-        tr:nth-child(even) {
-            background-color: rgba(255, 255, 255, 0.02);
-        }
+        /* Subjects */
+        .subject-ict { background: rgba(66, 232, 255, 0.2); color: var(--cyan); border: 1px solid var(--cyan); }
+        .subject-science { background: rgba(85, 242, 164, 0.2); color: var(--green); border: 1px solid var(--green); }
+        .subject-maths { background: rgba(255, 138, 61, 0.2); color: var(--orange); border: 1px solid var(--orange); }
+        .subject-english { background: rgba(179, 136, 255, 0.2); color: var(--purple); border: 1px solid var(--purple); }
+        .subject-default { background: rgba(255, 255, 255, 0.1); color: var(--text); border: 1px solid var(--muted); }
 
-        .conflict-row { 
-            background-color: rgba(255, 78, 110, 0.2) !important; 
-        }
+        /* Halls */
+        .hall-lab01 { background: #005f73; color: #e9d8a6; }
+        .hall-lab02 { background: #94d2bd; color: #0a9396; }
+        .hall-hall01 { background: #ee9b00; color: #000; }
 
-        .badge { 
-            padding: 4px 8px; 
-            border-radius: 12px; 
-            font-size: 11px; 
-            font-weight: bold; 
-        }
-
+        /* Status Badges */
         .badge-ok { background-color: rgba(85, 242, 164, 0.2); color: var(--green); border: 1px solid var(--green); }
         .badge-conflict { background-color: rgba(255, 78, 110, 0.2); color: var(--red); border: 1px solid var(--red); }
+
+        /* Mobile Card Responsive View */
+        @media (max-width: 768px) {
+            table, thead, tbody, th, td, tr { display: block; }
+            thead { display: none; }
+            
+            tr {
+                background: rgba(255, 255, 255, 0.03);
+                border: 1px solid var(--line);
+                border-radius: 10px;
+                margin-bottom: 15px;
+                padding: 12px;
+            }
+
+            td {
+                border: none;
+                padding: 6px 0;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            td::before {
+                content: attr(data-label);
+                font-weight: bold;
+                color: var(--muted);
+                font-size: 13px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -162,22 +196,22 @@
     <div class="header">
         <h2>🏫 Live Class Schedule</h2>
         <div>
-            <button id="loginBtn" class="btn-login" onclick="loginTeacher()">Teacher Login (ගුරුවරුන්ට)</button>
+            <button id="loginBtn" class="btn-login" onclick="loginTeacher()">Teacher Login</button>
             <button id="logoutBtn" class="btn-logout" onclick="logoutTeacher()">Logout</button>
         </div>
     </div>
 
-    <!-- Teacher Edit Panel -->
+    <!-- Admin Edit Panel -->
     <div id="adminPanel" class="admin-panel">
-        <h3>➕ Add New Class (ගුරුභවතුන්ට පමණයි)</h3>
+        <h3>➕ Add New Class</h3>
         <div class="form-grid">
             <div class="form-group">
-                <label>Class Name:</label>
-                <input type="text" id="className" placeholder="Science">
+                <label>Class / Subject:</label>
+                <input type="text" id="className" placeholder="e.g. Science / ICT">
             </div>
             <div class="form-group">
                 <label>Teacher Name:</label>
-                <input type="text" id="teacherName" placeholder="Mr. Perera">
+                <input type="text" id="teacherName" placeholder="e.g. Mr. Perera">
             </div>
             <div class="form-group">
                 <label>Grade:</label>
@@ -188,8 +222,7 @@
                     <option value="Grade 9">Grade 9</option>
                     <option value="Grade 10">Grade 10</option>
                     <option value="Grade 11">Grade 11</option>
-                    <option value="SP english">Spoken English Course</option>
-                    <option value="EL Course">Electronic Course</option>
+                    <option value="A/L ICT">A/L ICT</option>
                     <option value="Other">Other</option>
                 </select>
             </div>
@@ -228,24 +261,43 @@
     </div>
 
     <!-- Student Schedule View -->
-    <h3 style="color: var(--orange);">📋 Current Time Table (ලයිව් කාලසටහන)</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Class</th>
-                <th>Teacher</th>
-                <th>Grade</th>
-                <th>Day</th>
-                <th>Time</th>
-                <th>Hall</th>
-                <th>Status</th>
-                <th class="action-col" style="display: none;">Action</th>
-            </tr>
-        </thead>
-        <tbody id="scheduleTable">
-            <!-- Live Data Loaded From Database -->
-        </tbody>
-    </table>
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+        <h3 style="color: var(--orange); margin: 5px 0;">📋 Current Time Table</h3>
+        
+        <!-- Filter Controls -->
+        <div class="filter-section">
+            <select id="filterDay" onchange="renderSchedule()">
+                <option value="ALL">All Days</option>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Class / Subject</th>
+                    <th>Teacher</th>
+                    <th>Grade</th>
+                    <th>Day</th>
+                    <th>Time</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    <th class="action-col" style="display: none;">Action</th>
+                </tr>
+            </thead>
+            <tbody id="scheduleTable">
+                <!-- Data dynamically inserted here -->
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script>
@@ -253,39 +305,28 @@
     const firebaseConfig = {
       apiKey: "AIzaSyAtfTwhOmDOLAxxTdXQKwaMNthLMpRgBjQ",
       authDomain: "ctech-counter.firebaseapp.com",
+      databaseURL: "https://ctech-counter-default-rtdb.firebaseio.com",
       projectId: "ctech-counter",
       storageBucket: "ctech-counter.firebasestorage.app",
       messagingSenderId: "892307263196",
       appId: "1:892307263196:web:bf443261191503be652e19"
     };
 
-    // Initialize Firebase & Firestore
     firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+    const db = firebase.database();
 
     let isTeacher = false;
-    // Simple hashed representation for "1234" to prevent easy inspection
-    const PASS_HASH = "81dc9bdb52d04dc20036dbd8313ed055"; // Password: 1234
-
-    function simpleHash(str) {
-        // Simple fallback hashing for basic check
-        let hash = 0;
-        for (let i = 0; i < str.length; i++) {
-            hash = (hash << 5) - hash + str.charCodeAt(i);
-            hash |= 0;
-        }
-        return str === "1234"; // direct verification for security check
-    }
+    let liveSchedule = [];
 
     function loginTeacher() {
-        const password = prompt("ගුරුභවතුන් සඳහා වන මුරපදය (Password) ඇතුළත් කරන්න:");
-        if (password && simpleHash(password)) {
+        const password = prompt("ගුරුභවතුන් සඳහා වන මුරපදය ඇතුළත් කරන්න:");
+        if (password === "1234") {
             isTeacher = true;
             document.getElementById('adminPanel').style.display = 'block';
             document.getElementById('loginBtn').style.display = 'none';
             document.getElementById('logoutBtn').style.display = 'inline-block';
             toggleActionColumn(true);
-            alert("ගුරු ගිණුමට සාර්ථකව පිවිසුණි!");
+            alert("ගුරු ගිණුමට පිවිසුණි!");
         } else if (password !== null) {
             alert("වැරදි මුරපදයකි!");
         }
@@ -305,16 +346,16 @@
         renderSchedule();
     }
 
-    // Load Live Data Realtime from Firestore
-    let liveSchedule = [];
-    db.collection("schedule").onSnapshot((snapshot) => {
+    // Load Live Data from Realtime DB
+    db.ref("schedule").on("value", (snapshot) => {
         liveSchedule = [];
-        snapshot.forEach((doc) => {
-            liveSchedule.push({ id: doc.id, ...doc.data() });
-        });
+        const data = snapshot.val();
+        if (data) {
+            Object.keys(data).forEach((key) => {
+                liveSchedule.push({ id: key, ...data[key] });
+            });
+        }
         renderSchedule();
-    }, (error) => {
-        console.error("Firestore Error: ", error);
     });
 
     function addClassToDatabase() {
@@ -331,49 +372,70 @@
             return;
         }
 
-        db.collection("schedule").add({
+        db.ref("schedule").push({
             className, teacherName, grade, day, startTime, endTime, hall
         }).then(() => {
             alert("පන්තිය සාර්ථකව එකතු විය!");
             clearForm();
-        }).catch((err) => {
-            alert("Error adding document: " + err.message);
         });
     }
 
     function deleteClass(docId) {
         if (confirm("මෙම පන්තිය ඉවත් කිරීමට තහවුරු කරන්න?")) {
-            db.collection("schedule").doc(docId).delete().then(() => {
-                alert("පන්තිය ඉවත් කරන ලදී!");
-            });
+            db.ref("schedule").child(docId).remove();
         }
+    }
+
+    // Helper Function for Subject Colors
+    function getSubjectClass(name) {
+        const s = name.toLowerCase();
+        if (s.includes('ict') || s.includes('computer')) return 'subject-ict';
+        if (s.includes('science') || s.includes('විද්‍යාව')) return 'subject-science';
+        if (s.includes('math') || s.includes('ගණිතය')) return 'subject-maths';
+        if (s.includes('english') || s.includes('ඉංග්‍රීසි')) return 'subject-english';
+        return 'subject-default';
+    }
+
+    // Helper Function for Hall Colors
+    function getHallClass(hall) {
+        const h = hall.toLowerCase().replace(/\s+/g, '');
+        if (h.includes('lab01')) return 'hall-lab01';
+        if (h.includes('lab02')) return 'hall-lab02';
+        return 'hall-hall01';
     }
 
     function renderSchedule() {
         const tbody = document.getElementById('scheduleTable');
+        const filterDay = document.getElementById('filterDay').value;
         tbody.innerHTML = '';
 
-        if (liveSchedule.length === 0) {
+        let filteredList = liveSchedule;
+        if (filterDay !== 'ALL') {
+            filteredList = liveSchedule.filter(item => item.day === filterDay);
+        }
+
+        if (filteredList.length === 0) {
             tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color: var(--muted);">තවම පන්ති ඇතුළත් කර නොමැත.</td></tr>';
             return;
         }
 
-        liveSchedule.forEach((item, index) => {
+        filteredList.forEach((item, index) => {
             const conflicts = checkConflicts(item, index);
             const isConflict = conflicts.length > 0;
+            const subjectStyle = getSubjectClass(item.className);
+            const hallStyle = getHallClass(item.hall);
 
             const tr = document.createElement('tr');
-            if (isConflict) tr.classList.add('conflict-row');
 
             tr.innerHTML = `
-                <td><strong>${item.className}</strong></td>
-                <td>${item.teacherName}</td>
-                <td>${item.grade}</td>
-                <td>${item.day}</td>
-                <td>${item.startTime} - ${item.endTime}</td>
-                <td>${item.hall}</td>
-                <td>${isConflict ? `<span class="badge badge-conflict">⚠️ ${conflicts.join(', ')}</span>` : `<span class="badge badge-ok">✅ OK</span>`}</td>
-                ${isTeacher ? `<td class="action-col"><button class="btn-delete" onclick="deleteClass('${item.id}')">Delete</button></td>` : ''}
+                <td data-label="Class"><span class="tag ${subjectStyle}">${item.className}</span></td>
+                <td data-label="Teacher">${item.teacherName}</td>
+                <td data-label="Grade"><strong style="color:var(--yellow);">${item.grade}</strong></td>
+                <td data-label="Day">${item.day}</td>
+                <td data-label="Time">${item.startTime} - ${item.endTime}</td>
+                <td data-label="Location"><span class="tag ${hallStyle}">${item.hall}</span></td>
+                <td data-label="Status">${isConflict ? `<span class="tag badge-conflict">⚠️ ${conflicts.join(', ')}</span>` : `<span class="tag badge-ok">✅ OK</span>`}</td>
+                ${isTeacher ? `<td data-label="Action" class="action-col"><button class="btn-delete" onclick="deleteClass('${item.id}')">Delete</button></td>` : ''}
             `;
             tbody.appendChild(tr);
         });
