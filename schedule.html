@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Schedule Manager</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+            background: #eef2f5;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        .form-group input, .form-group select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        button {
+            background-color: #27ae60;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #219150;
+        }
+        .alert {
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+            font-weight: bold;
+        }
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #34495e;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .conflict-row {
+            background-color: #ffcccc !important;
+        }
+        .badge {
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: white;
+            font-weight: bold;
+        }
+        .badge-ok { background-color: #27ae60; }
+        .badge-conflict { background-color: #e74c3c; }
+        .btn-delete {
+            background-color: #e74c3c;
+            padding: 5px 10px;
+            font-size: 12px;
+            width: auto;
+        }
+        .btn-delete:hover { background-color: #c0392b; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🏫 Class Schedule Management System</h2>
+
+    <div id="alertBox" class="alert"></div>
+
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Class Name (පන්තියේ නම):</label>
+            <input type="text" id="className" placeholder="e.g. Science">
+        </div>
+        <div class="form-group">
+            <label>Teacher (ගුරුවරයා):</label>
+            <input type="text" id="teacherName" placeholder="e.g. Mr. Perera">
+        </div>
+        <div class="form-group">
+            <label>Grade/Year (ශ්‍රේණිය):</label>
+            <select id="grade">
+                <option value="Grade 6">Grade 6</option>
+                <option value="Grade 7">Grade 7</option>
+                <option value="Grade 8">Grade 8</option>
+                <option value="Grade 9">Grade 9</option>
+                <option value="Grade 10">Grade 10</option>
+                <option value="Grade 11">Grade 11</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Day (දිනය):</label>
+            <select id="day">
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Start Time (ආරම්භක වේලාව):</label>
+            <input type="time" id="startTime">
+        </div>
+        <div class="form-group">
+            <label>End Time (අවසාන වේලාව):</label>
+            <input type="time" id="endTime">
+        </div>
+        <div class="form-group">
+            <label>Hall (ශාලාව):</label>
+            <select id="hall">
+                <option value="Hall 1">Hall 1</option>
+                <option value="Hall 2">Hall 2</option>
+            </select>
+        </div>
+        <div class="form-group" style="justify-content: flex-end;">
+            <button onclick="addClass()">Add Class (පන්තිය ඇතුළත් කරන්න)</button>
+        </div>
+    </div>
+
+    <h3>📋 Current Schedule</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Class Name</th>
+                <th>Teacher</th>
+                <th>Grade</th>
+                <th>Day</th>
+                <th>Time</th>
+                <th>Hall</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="scheduleTable">
+            </tbody>
+    </table>
+</div>
+
+<script>
+    let schedule = [];
+
+    function addClass() {
+        const className = document.getElementById('className').value.trim();
+        const teacherName = document.getElementById('teacherName').value.trim();
+        const grade = document.getElementById('grade').value;
+        const day = document.getElementById('day').value;
+        const startTime = document.getElementById('startTime').value;
+        const endTime = document.getElementById('endTime').value;
+        const hall = document.getElementById('hall').value;
+
+        if (!className || !teacherName || !startTime || !endTime) {
+            showAlert('කරුණාකර සියලුම විස්තර නිවැරදිව ඇතුළත් කරන්න!', 'danger');
+            return;
+        }
+
+        if (startTime >= endTime) {
+            showAlert('අවසාන වේලාව ආරම්භක වේලාවට වඩා වැඩි විය යුතුය!', 'danger');
+            return;
+        }
+
+        const newClass = {
+            id: Date.now(),
+            className,
+            teacherName,
+            grade,
+            day,
+            startTime,
+            endTime,
+            hall
+        };
+
+        schedule.push(newClass);
+        renderTable();
+        clearForm();
+    }
+
+    function deleteClass(id) {
+        schedule = schedule.filter(item => item.id !== id);
+        renderTable();
+    }
+
+    function clearForm() {
+        document.getElementById('className').value = '';
+        document.getElementById('teacherName').value = '';
+        document.getElementById('startTime').value = '';
+        document.getElementById('endTime').value = '';
+    }
+
+    function renderTable() {
+        const tbody = document.getElementById('scheduleTable');
+        tbody.innerHTML = '';
+        let hasGlobalConflict = false;
+
+        schedule.forEach((item, index) => {
+            const conflicts = checkConflicts(item, index);
+            const isConflict = conflicts.length > 0;
+            if (isConflict) hasGlobalConflict = true;
+
+            const tr = document.createElement('tr');
+            if (isConflict) tr.classList.add('conflict-row');
+
+            tr.innerHTML = `
+                <td><strong>${item.className}</strong></td>
+                <td>${item.teacherName}</td>
+                <td>${item.grade}</td>
+                <td>${item.day}</td>
+                <td>${item.startTime} - ${item.endTime}</td>
+                <td><strong>${item.hall}</strong></td>
+                <td>
+                    ${isConflict 
+                        ? `<span class="badge badge-conflict">⚠️ ${conflicts.join(', ')}</span>` 
+                        : `<span class="badge badge-ok">✅ OK</span>`}
+                </td>
+                <td><button class="btn-delete" onclick="deleteClass(${item.id})">Delete</button></td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        if (hasGlobalConflict) {
+            showAlert('⚠️ කාලසටහන තුළ වේලාවන් ගැටීමක් (Conflict) පවතී! රතු පැහැති පේළි පරීක්ෂා කරන්න.', 'danger');
+        } else if (schedule.length > 0) {
+            showAlert('✅ සියලුම පන්ති සාර්ථකව කළමනාකරණය වී ඇත. ගැටීම් නොමැත.', 'success');
+        } else {
+            hideAlert();
+        }
+    }
+
+    function checkConflicts(target, targetIndex) {
+        let conflicts = [];
+
+        schedule.forEach((item, index) => {
+            if (targetIndex === index) return; // Skip self
+
+            if (target.day === item.day) {
+                // Check time overlap: (StartA < EndB) AND (EndA > StartB)
+                const isTimeOverlap = (target.startTime < item.endTime) && (target.endTime > item.startTime);
+
+                if (isTimeOverlap) {
+                    if (target.hall === item.hall) {
+                        conflicts.push('Hall Overlap');
+                    }
+                    if (target.teacherName.toLowerCase() === item.teacherName.toLowerCase()) {
+                        conflicts.push('Teacher Overlap');
+                    }
+                    if (target.grade === item.grade) {
+                        conflicts.push('Grade Overlap');
+                    }
+                }
+            }
+        });
+
+        return [...new Set(conflicts)]; // Return unique conflict messages
+    }
+
+    function showAlert(msg, type) {
+        const alertBox = document.getElementById('alertBox');
+        alertBox.innerText = msg;
+        alertBox.className = `alert alert-${type}`;
+        alertBox.style.display = 'block';
+    }
+
+    function hideAlert() {
+        document.getElementById('alertBox').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
