@@ -11,6 +11,8 @@
             --card-bg: #1c2541;
             --text-light: #f4f7f6;
             --orange: #ff7300;
+            --green: #28a745;
+            --red: #e63946;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
@@ -23,16 +25,16 @@
         .logo-text { font-size: 1.8rem; font-weight: bold; color: #fff; text-shadow: 0 0 10px var(--primary-blue); margin-bottom: 10px; }
         .header-box p { font-size: 0.95rem; color: #a0aec0; }
 
-        /* Subject Navigation Tabs - Responsive Grid for Mobiles */
+        /* Subject Navigation Tabs */
         .subject-tabs { 
             display: grid; 
-            grid-template-columns: repeat(2, 1fr); /* මොබයිල් එකේ පේළියට 2 බැගින් ලස්සනට පෙනේ */
+            grid-template-columns: repeat(2, 1fr); 
             gap: 10px; 
             margin-bottom: 25px; 
         }
         
         @media (min-width: 600px) {
-            .subject-tabs { grid-template-columns: repeat(4, 1fr); } /* පරිගණක තිර සඳහා පේළියට 4ක් */
+            .subject-tabs { grid-template-columns: repeat(4, 1fr); }
         }
 
         .sub-tab { padding: 12px 10px; background: rgba(255,255,255,0.05); border: 1px solid #2e3856; border-radius: 8px; color: #fff; cursor: pointer; font-weight: bold; transition: 0.3s; text-align: center; font-size: 0.9rem; }
@@ -47,7 +49,34 @@
         .resource-card { background: var(--card-bg); border-radius: 12px; padding: 20px; border-left: 4px solid var(--primary-blue); box-shadow: 0 4px 15px rgba(0,0,0,0.2); display: flex; flex-direction: column; justify-content: space-between; }
         .resource-title { font-size: 1rem; font-weight: bold; margin-bottom: 15px; color: #fff; line-height: 1.5; }
         
-        .download-btn { display: block; width: 100%; text-align: center; background: var(--primary-blue); color: #0b132b; padding: 11px; border-radius: 6px; font-weight: bold; text-decoration: none; border: none; cursor: pointer; transition: 0.3s; font-size: 0.95rem; }
+        /* Button Group Styling */
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .view-btn { background: #007bff; color: #fff; }
+        .view-btn:hover { background: #0056b3; }
+
+        .video-btn { background: var(--red); color: #fff; }
+        .video-btn:hover { background: #c52833; }
+
+        .download-btn { background: var(--primary-blue); color: #0b132b; }
         .download-btn:hover { background: var(--orange); color: #fff; }
 
         /* 📢 ADVERTISEMENT POPUP MODAL STYLING */
@@ -71,7 +100,7 @@
 <div class="container">
     <div class="header-box">
         <div class="logo-text">C-TECH EDUCATIONAL PORTAL</div>
-        <p>අනෙකුත් බාහිර විෂයයන් සඳහා වන පේපර් සහ කෙටි සටහන් ලබාගැනීමේ පිටුව</p>
+        <p>අනෙකුත් බාහිර විෂයයන් සඳහා වන පේපර්, කෙටි සටහන් සහ වීඩියෝ ලබාගැනීමේ පිටුව</p>
     </div>
 
     <div class="subject-tabs">
@@ -83,97 +112,132 @@
         <button class="sub-tab" id="tab-buddhist" onclick="switchTab('buddhist')">බුද්ධාගම</button>
     </div>
 
+    <!-- විද්‍යාව -->
     <div id="sec-science" class="subject-section active">
         <div class="grid-container">
-            
             <div class="resource-card">
                 <div class="resource-title">📄 11 ශ්‍රේණිය - විද්‍යාව - දෙවන වාර පරීක්ෂණය ප්‍රශ්න පත්‍රය 03</div>
-                <button class="download-btn" onclick="openAd('g11_t2_sci3.pdf')">Download </button>
+                <div class="button-group">
+                    <button class="btn view-btn" onclick="viewPaper('g11_t2_sci3.pdf')">👁️ View Paper</button>
+                    <button class="btn video-btn" onclick="watchVideo('https://www.youtube.com/embed/YOUR_VIDEO_ID')">▶️ Watch Video</button>
+                    <button class="btn download-btn" onclick="openAd('g11_t2_sci3.pdf')">⬇️ Download Paper</button>
+                </div>
             </div>
             <div class="resource-card">
                 <div class="resource-title">📄 11 ශ්‍රේණිය - විද්‍යාව - දෙවන වාර පරීක්ෂණය ප්‍රශ්න පත්‍රය 04</div>
-                <button class="download-btn" onclick="openAd('g11_t2_sci4.pdf')">Download </button>
+                <div class="button-group">
+                    <button class="btn view-btn" onclick="viewPaper('g11_t2_sci4.pdf')">👁️ View Paper</button>
+                    <button class="btn video-btn" onclick="watchVideo('https://www.youtube.com/embed/YOUR_VIDEO_ID')">▶️ Watch Video</button>
+                    <button class="btn download-btn" onclick="openAd('g11_t2_sci4.pdf')">⬇️ Download Paper</button>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- ගණිතය -->
     <div id="sec-maths" class="subject-section">
         <div class="grid-container">
-            
             <div class="resource-card">
                 <div class="resource-title">📄 11 ශ්‍රේණිය - ගණිතය I, II පත්‍ර 03</div>
-                <button class="download-btn" onclick="openAd('g11_t2_maths3.pdf')">Download Paper</button>
+                <div class="button-group">
+                    <button class="btn view-btn" onclick="viewPaper('g11_t2_maths3.pdf')">👁️ View Paper</button>
+                    <button class="btn video-btn" onclick="watchVideo('https://www.youtube.com/embed/YOUR_VIDEO_ID')">▶️ Watch Video</button>
+                    <button class="btn download-btn" onclick="openAd('g11_t2_maths3.pdf')">⬇️ Download Paper</button>
+                </div>
             </div>
-    
             <div class="resource-card">
                 <div class="resource-title">📄 11 ශ්‍රේණිය - ගණිතය I, II පත්‍ර 04</div>
-                <button class="download-btn" onclick="openAd('g11_t2_maths4.pdf')">Download Paper</button>
+                <div class="button-group">
+                    <button class="btn view-btn" onclick="viewPaper('g11_t2_maths4.pdf')">👁️ View Paper</button>
+                    <button class="btn video-btn" onclick="watchVideo('https://www.youtube.com/embed/YOUR_VIDEO_ID')">▶️ Watch Video</button>
+                    <button class="btn download-btn" onclick="openAd('g11_t2_maths4.pdf')">⬇️ Download Paper</button>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- සිංහල -->
     <div id="sec-sinhala" class="subject-section">
-    <div class="grid-container">
-        
-        <!-- Paper 03 -->
-        <div class="resource-card">
-            <div class="resource-title">📄 11 ශ්‍රේණිය - සිංහල භාෂාව සහ සාහිත්‍යය ප්‍රශ්න පත්‍රය- 03</div>
-            <div class="button-group">
-                <button class="view-btn" onclick="viewPaper('g11_t2_sin3.pdf')">View Paper</button>
-                <button class="download-btn" onclick="openAd('g11_t2_sin3.pdf')">Download Paper</button>
+        <div class="grid-container">
+            <div class="resource-card">
+                <div class="resource-title">📄 11 ශ්‍රේණිය - සිංහල භාෂාව සහ සාහිත්‍යය ප්‍රශ්න පත්‍රය- 03</div>
+                <div class="button-group">
+                    <button class="btn view-btn" onclick="viewPaper('g11_t2_sin3.pdf')">👁️ View Paper</button>
+                    <button class="btn video-btn" onclick="watchVideo('https://www.youtube.com/embed/YOUR_VIDEO_ID')">▶️ Watch Video</button>
+                    <button class="btn download-btn" onclick="openAd('g11_t2_sin3.pdf')">⬇️ Download Paper</button>
+                </div>
+            </div>
+            <div class="resource-card">
+                <div class="resource-title">🗺️ සැළලිහිණි සංදේෂය සියලුම කවි</div>
+                <div class="button-group">
+                    <button class="btn view-btn" onclick="viewPaper('https://salalihini-sandeshaya.vercel.app/map?v=111')">👁️ View Map</button>
+                </div>
             </div>
         </div>
-
-        <!-- Paper 04 -->
-        <div class="resource-card">
-            <div class="resource-title">සැළලිහිණි සංදේෂය සියලුම කවි </div>
-            <div class="button-group">
-                <button class="view-btn" onclick="viewPaper('https://salalihini-sandeshaya.vercel.app/map?v=111')">View Map</button>
-               
-            </div>
-        </div>
-
     </div>
-</div>
 
+    <!-- English -->
     <div id="sec-english" class="subject-section">
         <div class="grid-container">
-           
             <div class="resource-card">
                 <div class="resource-title">📄 11 ශ්‍රේණිය - English paper 03</div>
-                <button class="download-btn" onclick="openAd('g11_t2_eng3.pdf')">Download Paper</button>
+                <div class="button-group">
+                    <button class="btn view-btn" onclick="viewPaper('g11_t2_eng3.pdf')">👁️ View Paper</button>
+                    <button class="btn video-btn" onclick="watchVideo('https://www.youtube.com/embed/YOUR_VIDEO_ID')">▶️ Watch Video</button>
+                    <button class="btn download-btn" onclick="openAd('g11_t2_eng3.pdf')">⬇️ Download Paper</button>
+                </div>
             </div>
             <div class="resource-card">
-                <div class="resource-title">📄 11 ශ්‍රේණිය - English  paper 04</div>
-                <button class="download-btn" onclick="openAd('g11_t2_eng4.pdf')">Download Paper</button>
+                <div class="resource-title">📄 11 ශ්‍රේණිය - English paper 04</div>
+                <div class="button-group">
+                    <button class="btn view-btn" onclick="viewPaper('g11_t2_eng4.pdf')">👁️ View Paper</button>
+                    <button class="btn video-btn" onclick="watchVideo('https://www.youtube.com/embed/YOUR_VIDEO_ID')">▶️ Watch Video</button>
+                    <button class="btn download-btn" onclick="openAd('g11_t2_eng4.pdf')">⬇️ Download Paper</button>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- ඉතිහාසය -->
     <div id="sec-history" class="subject-section">
         <div class="grid-container">
-           
             <div class="resource-card">
                 <div class="resource-title">📄 11 ශ්‍රේණිය - ඉතිහාසය ආදර්ශ ප්‍රශ්න පත්‍රය - 03</div>
-                <button class="download-btn" onclick="openAd('g11_t2_his3.pdf')">Download Paper</button>
+                <div class="button-group">
+                    <button class="btn view-btn" onclick="viewPaper('g11_t2_his3.pdf')">👁️ View Paper</button>
+                    <button class="btn video-btn" onclick="watchVideo('https://www.youtube.com/embed/YOUR_VIDEO_ID')">▶️ Watch Video</button>
+                    <button class="btn download-btn" onclick="openAd('g11_t2_his3.pdf')">⬇️ Download Paper</button>
+                </div>
             </div>
             <div class="resource-card">
                 <div class="resource-title">📄 11 ශ්‍රේණිය - ඉතිහාසය ආදර්ශ ප්‍රශ්න පත්‍රය - 04</div>
-                <button class="download-btn" onclick="openAd('g11_t2_his4.pdf')">Download Paper</button>
+                <div class="button-group">
+                    <button class="btn view-btn" onclick="viewPaper('g11_t2_his4.pdf')">👁️ View Paper</button>
+                    <button class="btn video-btn" onclick="watchVideo('https://www.youtube.com/embed/YOUR_VIDEO_ID')">▶️ Watch Video</button>
+                    <button class="btn download-btn" onclick="openAd('g11_t2_his4.pdf')">⬇️ Download Paper</button>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- බුද්ධාගම -->
     <div id="sec-buddhist" class="subject-section">
         <div class="grid-container">
-           
             <div class="resource-card">
                 <div class="resource-title">📄 11 ශ්‍රේණිය - බුද්ධාගම ආදර්ශ ප්‍රශ්න පත්‍රය - 03</div>
-                <button class="download-btn" onclick="openAd('g11_t2_b3.pdf')">Download Paper</button>
+                <div class="button-group">
+                    <button class="btn view-btn" onclick="viewPaper('g11_t2_b3.pdf')">👁️ View Paper</button>
+                    <button class="btn video-btn" onclick="watchVideo('https://www.youtube.com/embed/YOUR_VIDEO_ID')">▶️ Watch Video</button>
+                    <button class="btn download-btn" onclick="openAd('g11_t2_b3.pdf')">⬇️ Download Paper</button>
+                </div>
             </div>
             <div class="resource-card">
                 <div class="resource-title">📄 11 ශ්‍රේණිය - බුද්ධාගම ආදර්ශ ප්‍රශ්න පත්‍රය - 04</div>
-                <button class="download-btn" onclick="openAd('g11_t2_b4.pdf')">Download Paper</button>
+                <div class="button-group">
+                    <button class="btn view-btn" onclick="viewPaper('g11_t2_b4.pdf')">👁️ View Paper</button>
+                    <button class="btn video-btn" onclick="watchVideo('https://www.youtube.com/embed/YOUR_VIDEO_ID')">▶️ Watch Video</button>
+                    <button class="btn download-btn" onclick="openAd('g11_t2_b4.pdf')">⬇️ Download Paper</button>
+                </div>
             </div>
         </div>
     </div>
@@ -182,36 +246,65 @@
     <a href="index.html" class="back-btn">← ආපසු මුල් පිටුවට (Home)</a>
 </div>
 
+<!-- 📢 ඇඩ් මොඩල් (Ad Modal) -->
 <div class="modal-overlay" id="adModal">
     <div class="modal-box">
         <img src="add.jpg" alt="C-TECH Special Classes" class="ad-image">
-        
         <div class="ad-title">Smart විදියට ICT - ජනිත් ලක්ෂාන්</div>
         <div class="ad-subtitle">06 වසරේ සිට 11 වසර දක්වා </br>සම්බන්ධ වීම සදහා අමතන්න -<B>071 26 75 988</B></div>
-        
         <div class="timer-text" id="popupTimer">ඔබේ ගොනුව සූදානම් වෙමින් පවතී... තත්පර <span id="secs">10</span></div>
         <a href="#" id="finalDownloadLink" class="popup-dl-btn" download onclick="closeModal()">ගොනුව බාගත කරගන්න (Download Now)</a>
     </div>
 </div>
 
+<!-- 🎥 වීඩියෝ පෙන්වන මොඩල් (Video Modal) -->
+<div class="modal-overlay" id="videoModal" style="display:none;">
+    <div class="modal-box" style="max-width: 650px;">
+        <div class="ad-title" style="margin-bottom: 10px;">පාඩමට අදාළ පැහැදිලි කිරීමේ වීඩියෝව</div>
+        <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; margin-bottom: 15px;">
+            <iframe id="videoIframe" src="" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 8px;" allowfullscreen></iframe>
+        </div>
+        <button class="btn download-btn" onclick="closeVideoModal()">වීඩියෝව වසන්න (Close)</button>
+    </div>
+</div>
+
 <script>
-    // 🔄 Tabs මාරු කිරීමේ සරල පද්ධතිය
+    // 🔄 Tabs මාරු කිරීමේ පද්ධතිය
     function switchTab(subjectId) {
-        // සියලුම සෙක්ෂන් සහ ටැබ් අක්‍රීය කරන්න
         const sections = document.querySelectorAll('.subject-section');
         const tabs = document.querySelectorAll('.sub-tab');
         
         sections.forEach(s => s.classList.remove('active'));
         tabs.forEach(t => t.classList.remove('active'));
 
-        // තෝරාගත් සෙක්ෂන් එක පමණක් සක්‍රීය කරන්න
         document.getElementById('sec-' + subjectId).classList.add('active');
         document.getElementById('tab-' + subjectId).classList.add('active');
     }
 
+    // 👁️ PDF එක අලුත් ටැබ් එකකින් පෙන්වීම සඳහා
+    function viewPaper(fileUrl) {
+        window.open(fileUrl, '_blank');
+    }
+
+    // ▶️ වීඩියෝ මොඩල් එක විවෘත කිරීම
+    function watchVideo(videoUrl) {
+        const videoModal = document.getElementById('videoModal');
+        const videoIframe = document.getElementById('videoIframe');
+        videoIframe.src = videoUrl;
+        videoModal.style.display = 'flex';
+    }
+
+    // ❌ වීඩියෝ මොඩල් එක වැසීම (Background එකේ වීඩියෝ ප්ලේ වීම නැවැත්වීමට src හිස් කරයි)
+    function closeVideoModal() {
+        const videoModal = document.getElementById('videoModal');
+        const videoIframe = document.getElementById('videoIframe');
+        videoIframe.src = '';
+        videoModal.style.display = 'none';
+    }
+
     let adInterval = null;
 
-    // 💥 ඇඩ් එක විවෘත කිරීම සහ තත්පර 10 කවුන්ටරය
+    // 💥 ඇඩ් එක විවෘත කිරීම සහ තත්පර 10 කවුන්ටරය (Download සඳහා)
     function openAd(fileUrl) {
         const modal = document.getElementById('adModal');
         const timerText = document.getElementById('popupTimer');
@@ -223,7 +316,7 @@
         secsSpan.innerText = timeLeft;
         timerText.style.display = 'block';
         dlBtn.style.display = 'none';
-        dlBtn.href = fileUrl; // ඩවුන්ලෝඩ් ලින්ක් එක බොත්තමට සම්බන්ධ කිරීම
+        dlBtn.href = fileUrl; 
         
         modal.style.display = 'flex';
 
@@ -235,7 +328,7 @@
             if (timeLeft <= 0) {
                 clearInterval(adInterval);
                 timerText.style.display = 'none';
-                dlBtn.style.display = 'block'; // තත්පර 10 පසු බොත්තම පෙන්වයි
+                dlBtn.style.display = 'block'; 
             }
         }, 1000);
     }
