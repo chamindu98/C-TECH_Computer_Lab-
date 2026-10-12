@@ -1,239 +1,855 @@
+
 <!DOCTYPE html>
 <html lang="si">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>C-TECH - අනෙක් විෂයන් (Other Subjects)</title>
-    <style>
-        :root {
-            --primary-blue: #00a4e4;
-            --dark-bg: #0b132b;
-            --card-bg: #1c2541;
-            --text-light: #f4f7f6;
-            --orange: #ff7300;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080f22">
+<title>C-TECH | Learning Portal</title>
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: var(--dark-bg); color: var(--text-light); padding: 15px; display: flex; justify-content: center; min-height: 100vh; }
-        
-        .container { width: 100%; max-width: 1000px; }
-        
-        /* Header Box */
-        .header-box { background: linear-gradient(135deg, #0b132b, #1c2541); border: 2px solid var(--primary-blue); border-radius: 16px; padding: 25px 15px; text-align: center; margin-bottom: 25px; box-shadow: 0 0 25px rgba(0, 164, 228, 0.15); }
-        .logo-text { font-size: 1.8rem; font-weight: bold; color: #fff; text-shadow: 0 0 10px var(--primary-blue); margin-bottom: 10px; }
-        .header-box p { font-size: 0.95rem; color: #a0aec0; }
+<style>
+:root {
+  --bg:#080f22;
+  --panel:#111d35;
+  --card:#162541;
+  --blue:#29c5ff;
+  --purple:#8174ff;
+  --orange:#ff9847;
+  --text:#f4f7ff;
+  --muted:#a8b6ce;
+  --border:rgba(255,255,255,.1);
+  --green:#42d99a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:"Segoe UI","Noto Sans Sinhala",sans-serif;
+  background:radial-gradient(ellipse at top,#172b4b 0%,var(--bg) 58%);
+  color:var(--text);min-height:100vh;
+}
+button,input{font:inherit}
+button{cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible{
+  outline:3px solid var(--blue);outline-offset:3px
+}
+.container{width:min(1120px,100% - 28px);margin:auto;padding:20px 0 40px}
 
-        /* Subject Navigation Tabs - Responsive Grid for Mobiles */
-        .subject-tabs { 
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr); /* මොබයිල් එකේ පේළියට 2 බැගින් ලස්සනට පෙනේ */
-            gap: 10px; 
-            margin-bottom: 25px; 
-        }
-        
-        @media (min-width: 600px) {
-            .subject-tabs { grid-template-columns: repeat(4, 1fr); } /* පරිගණක තිර සඳහා පේළියට 4ක් */
-        }
+/* Header */
+.hero{
+  position:relative;overflow:hidden;
+  padding:30px 24px;border:1px solid rgba(41,197,255,.35);
+  border-radius:24px;
+  background:linear-gradient(125deg,#152b4c,#11182f 65%,#25204c);
+  margin-bottom:24px;
+}
+.hero:after{
+  content:"";position:absolute;width:230px;height:230px;
+  border-radius:50%;right:-80px;top:-100px;
+  background:rgba(41,197,255,.13);filter:blur(12px)
+}
+.brand{display:flex;align-items:center;gap:12px;position:relative;z-index:1}
+.brand-icon{
+  width:54px;height:54px;display:grid;place-items:center;
+  border-radius:16px;background:linear-gradient(135deg,var(--blue),var(--purple));
+  color:#081225;font-weight:900;font-size:21px;
+  box-shadow:0 0 25px #29c5ff30
+}
+.brand h1{font-size:clamp(18px,4vw,27px);letter-spacing:.4px}
+.brand p{color:var(--muted);font-size:13px;margin-top:5px}
+.hero-copy{position:relative;z-index:1;margin-top:26px}
+.hero-copy h2{font-size:clamp(22px,4vw,32px);line-height:1.5}
+.hero-copy h2 span{color:var(--blue)}
+.hero-copy p{color:var(--muted);margin-top:8px;line-height:1.8}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:17px}
+.pill{padding:7px 12px;border:1px solid var(--border);
+  border-radius:30px;background:#ffffff08;font-size:12px}
 
-        .sub-tab { padding: 12px 10px; background: rgba(255,255,255,0.05); border: 1px solid #2e3856; border-radius: 8px; color: #fff; cursor: pointer; font-weight: bold; transition: 0.3s; text-align: center; font-size: 0.9rem; }
-        .sub-tab.active, .sub-tab:hover { background: var(--primary-blue); color: #0b132b; border-color: var(--primary-blue); }
+/* Search and navigation */
+.search-wrap{margin-bottom:17px}
+.search-box{
+  display:flex;align-items:center;gap:10px;
+  background:var(--panel);border:1px solid var(--border);
+  padding:5px 14px;border-radius:13px
+}
+.search-box span{font-size:20px}
+.search-box input{
+  width:100%;background:transparent;border:0;outline:none;
+  color:white;padding:12px 0;min-width:0
+}
+.search-box input::placeholder{color:#8191ad}
+.tabs{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:9px;margin-bottom:20px
+}
+.tab{
+  padding:13px 7px;border-radius:12px;
+  border:1px solid var(--border);background:#ffffff06;
+  color:var(--muted);font-weight:700;font-size:14px;
+  transition:.2s
+}
+.tab.active,.tab:hover{
+  color:#071426;background:var(--blue);
+  border-color:var(--blue);box-shadow:0 5px 18px #29c5ff20
+}
+.subject-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.subject-tab{
+  padding:10px 15px;border-radius:30px;
+  border:1px solid var(--border);background:var(--panel);
+  color:var(--muted);font-size:13px;font-weight:650
+}
+.subject-tab.active,.subject-tab:hover{
+  color:white;border-color:var(--purple);background:#8174ff24
+}
 
-        /* Resource Content Section */
-        .subject-section { display: none; }
-        .subject-section.active { display: block; }
+/* Section titles */
+.section-head{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:12px;margin:20px 0 15px;flex-wrap:wrap
+}
+.section-head h2{font-size:21px}
+.section-head p{font-size:12px;color:var(--muted);margin-top:5px}
+.count{
+  color:var(--blue);background:#29c5ff13;
+  border:1px solid #29c5ff30;padding:7px 11px;
+  border-radius:20px;font-size:12px
+}
 
-        /* Content Grid */
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .resource-card { background: var(--card-bg); border-radius: 12px; padding: 20px; border-left: 4px solid var(--primary-blue); box-shadow: 0 4px 15px rgba(0,0,0,0.2); display: flex; flex-direction: column; justify-content: space-between; }
-        .resource-title { font-size: 1rem; font-weight: bold; margin-bottom: 15px; color: #fff; line-height: 1.5; }
-        
-        .download-btn { display: block; width: 100%; text-align: center; background: var(--primary-blue); color: #0b132b; padding: 11px; border-radius: 6px; font-weight: bold; text-decoration: none; border: none; cursor: pointer; transition: 0.3s; font-size: 0.95rem; }
-        .download-btn:hover { background: var(--orange); color: #fff; }
+/* Resource cards */
+.grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:15px
+}
+.card{
+  background:linear-gradient(145deg,#182945,#111c32);
+  border:1px solid var(--border);border-radius:17px;
+  padding:19px;display:flex;flex-direction:column;gap:14px;
+  min-width:0;transition:transform .2s,border-color .2s
+}
+.card:hover{transform:translateY(-3px);border-color:#29c5ff70}
+.card-top{display:flex;align-items:flex-start;gap:12px}
+.file-icon{
+  width:46px;height:46px;flex-shrink:0;border-radius:13px;
+  display:grid;place-items:center;background:#29c5ff16;font-size:23px
+}
+.file-icon.video{background:#8174ff22}
+.file-icon.note{background:#42d99a18}
+.card h3{font-size:15px;line-height:1.8;overflow-wrap:anywhere}
+.card .meta{font-size:12px;color:var(--muted);margin-top:6px}
+.card-actions{display:flex;gap:9px;margin-top:auto}
+.btn{
+  border:1px solid transparent;border-radius:10px;
+  padding:11px 12px;font-weight:750;font-size:13px;
+  display:inline-flex;justify-content:center;align-items:center;
+  gap:6px;flex:1;text-decoration:none;min-width:0
+}
+.btn-view{background:#29c5ff;color:#071426}
+.btn-download{background:#ffffff08;color:white;border-color:var(--border)}
+.btn:hover{filter:brightness(1.12)}
+.btn-download:hover{border-color:var(--blue)}
+.empty{
+  grid-column:1/-1;text-align:center;padding:38px 15px;
+  background:var(--panel);border:1px dashed #40506b;
+  border-radius:16px;color:var(--muted);line-height:2
+}
 
-        /* 📢 ADVERTISEMENT POPUP MODAL STYLING */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(5px); padding: 10px; }
-        .modal-box { background: var(--card-bg); border: 2px solid var(--orange); border-radius: 16px; padding: 20px; max-width: 450px; width: 100%; text-align: center; box-shadow: 0 0 35px rgba(255, 115, 0, 0.3); }
-        
-        .ad-image { width: 100%; max-height: 45vh; object-fit: contain; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; }
-        .ad-title { font-size: 1.15rem; font-weight: bold; color: #fff; margin-bottom: 5px; }
-        .ad-subtitle { font-size: 0.9rem; color: #a0aec0; margin-bottom: 15px; }
-        
-        .timer-text { font-size: 1.05rem; color: var(--orange); font-weight: bold; margin-bottom: 5px; }
-        .popup-dl-btn { display: none; width: 100%; background: #28a745; color: white; padding: 12px; border-radius: 6px; font-weight: bold; text-decoration: none; font-size: 1rem; text-align: center; border: none; }
-        
-        /* Back Button */
-        .back-btn { display: inline-block; margin-top: 20px; padding: 12px 24px; border: 1px solid var(--primary-blue); color: var(--primary-blue); text-decoration: none; border-radius: 6px; font-weight: bold; transition: 0.3s; background: transparent; text-align: center; }
-        .back-btn:hover { background: var(--primary-blue); color: #0b132b; }
-    </style>
+/* Video thumbnails */
+.video-thumb{
+  min-height:145px;display:grid;place-items:center;
+  background:linear-gradient(135deg,#24224c,#133b58);
+  border-radius:12px;position:relative;overflow:hidden
+}
+.play-icon{
+  width:54px;height:54px;display:grid;place-items:center;
+  border-radius:50%;background:#ffffffed;color:#141b35;
+  font-size:22px;padding-left:3px;box-shadow:0 0 25px #0005
+}
+.video-thumb:after{
+  content:"VIDEO LESSON";position:absolute;bottom:12px;left:12px;
+  font-size:10px;letter-spacing:1.5px;color:#ffffffbb
+}
+
+/* Modal */
+.modal{
+  display:none;position:fixed;inset:0;z-index:1000;
+  background:#030714ed;backdrop-filter:blur(8px);
+  align-items:center;justify-content:center;padding:14px
+}
+.modal.show{display:flex}
+.modal-box{
+  width:min(850px,100%);max-height:94vh;overflow:auto;
+  background:#111c32;border:1px solid #40516e;
+  border-radius:18px;padding:17px
+}
+.modal-head{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;margin-bottom:14px
+}
+.modal-head h3{font-size:16px;line-height:1.6}
+.close-btn{
+  width:38px;height:38px;flex-shrink:0;border-radius:10px;
+  background:#ffffff10;color:white;border:1px solid var(--border);
+  font-size:22px
+}
+.viewer{
+  width:100%;height:min(68vh,650px);border:0;
+  background:#fff;border-radius:10px
+}
+.video-frame{
+  width:100%;aspect-ratio:16/9;border:0;
+  background:#000;border-radius:10px
+}
+.modal-info{color:var(--muted);font-size:12px;line-height:1.8;margin-top:12px}
+.modal-actions{display:flex;gap:10px;margin-top:14px}
+.ad-box{width:min(430px,100%);text-align:center}
+.ad-image{
+  width:100%;max-height:35vh;object-fit:contain;
+  border-radius:10px;margin-bottom:15px
+}
+.ad-title{font-size:18px;margin:8px 0}
+.ad-copy{color:var(--muted);font-size:13px;line-height:1.9;margin-bottom:16px}
+.timer{color:var(--orange);font-weight:750;margin:12px 0}
+.green-btn{background:#24b87a;color:white}
+.back{
+  display:inline-block;margin-top:25px;padding:12px 18px;
+  color:var(--blue);border:1px solid #29c5ff70;
+  text-decoration:none;border-radius:10px;font-weight:700
+}
+footer{text-align:center;color:#8493ad;font-size:12px;margin-top:30px;line-height:2}
+.hidden{display:none!important}
+
+@media(max-width:600px){
+  .container{width:calc(100% - 22px);padding-top:11px}
+  .hero{padding:22px 17px;border-radius:18px}
+  .brand-icon{width:45px;height:45px}
+  .tabs{gap:7px}
+  .tab{font-size:12px;padding:12px 4px}
+  .subject-tabs{gap:7px}
+  .subject-tab{font-size:12px;padding:9px 11px}
+  .grid{grid-template-columns:1fr;gap:11px}
+  .card{padding:15px}
+  .card-actions .btn{padding:11px 7px;font-size:12px}
+  .modal-box{padding:12px}
+  .modal-actions{flex-direction:column}
+  .viewer{height:67vh}
+}
+@media(min-width:900px){
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;transition:none!important}
+}
+</style>
 </head>
+
 <body>
+<main class="container">
 
-<div class="container">
-    <div class="header-box">
-        <div class="logo-text">C-TECH EDUCATIONAL PORTAL</div>
-        <p>අනෙකුත් බාහිර විෂයයන් සඳහා වන පේපර් සහ කෙටි සටහන් ලබාගැනීමේ පිටුව</p>
+  <header class="hero">
+    <div class="brand">
+      <div class="brand-icon">CT</div>
+      <div>
+        <h1>C-TECH EDUCATIONAL PORTAL</h1>
+        <p>SMART LEARNING • BETTER FUTURE</p>
+      </div>
     </div>
+    <div class="hero-copy">
+      <h2>ඔබේ අධ්‍යාපන ගමනට <span>නව ආරම්භයක්!</span></h2>
+      <p>ප්‍රශ්න පත්‍ර බලන්න, පාඩම් වීඩියෝ නරඹන්න සහ අවශ්‍ය අධ්‍යයන සම්පත් පහසුවෙන් ලබාගන්න.</p>
+      <div class="pills">
+        <span class="pill">📄 ප්‍රශ්න පත්‍ර</span>
+        <span class="pill">🎬 වීඩියෝ පාඩම්</span>
+        <span class="pill">📚 විෂය සම්පත්</span>
+      </div>
+    </div>
+  </header>
 
-    <div class="subject-tabs">
-        <button class="sub-tab active" id="tab-science" onclick="switchTab('science')">විද්‍යාව</button>
-        <button class="sub-tab" id="tab-maths" onclick="switchTab('maths')">ගණිතය</button>
-        <button class="sub-tab" id="tab-sinhala" onclick="switchTab('sinhala')">සිංහල</button>
-        <button class="sub-tab" id="tab-english" onclick="switchTab('english')">English</button>
-        <button class="sub-tab" id="tab-history" onclick="switchTab('history')">ඉතිහාසය</button>
-        <button class="sub-tab" id="tab-buddhist" onclick="switchTab('buddhist')">බුද්ධාගම</button>
-    </div>
+  <div class="search-wrap">
+    <label class="search-box">
+      <span>⌕</span>
+      <input id="searchInput" type="search"
+        placeholder="ප්‍රශ්න පත්‍රයක් හෝ පාඩමක් සොයන්න..."
+        aria-label="සම්පත් සොයන්න">
+    </label>
+  </div>
 
-     <div id="sec-science" class="subject-section active">
-        <div class="grid-container">
-            
-            <div class="resource-card">
-                <div class="resource-title">📄 06 ශ්‍රේණිය - විද්‍යාව- දෙවන වාර පරීක්ෂණය 02</div>
-                <button class="download-btn" onclick="openAd('g6_t2_sci3.pdf')">Download </button>
-            </div>
-            <div class="resource-card">
-                <div class="resource-title">📄 06 ශ්‍රේණිය - විද්‍යාව- දෙවන වාර පරීක්ෂණය 04</div>
-                <button class="download-btn" onclick="openAd('g6_t2_sci4.pdf')">Download </button>
-            </div>
-        </div>
-    </div>
+  <nav class="tabs" aria-label="සම්පත් වර්ග">
+    <button class="tab active" data-view="papers">📄 ප්‍රශ්න පත්‍ර</button>
+    <button class="tab" data-view="videos">🎬 වීඩියෝ පාඩම්</button>
+    <button class="tab" data-view="all">📚 සියලු සම්පත්</button>
+  </nav>
 
-    <div id="sec-maths" class="subject-section">
-        <div class="grid-container">
-            
-            <div class="resource-card">
-                <div class="resource-title">📄 06 ශ්‍රේණිය - ගණිතය I, II පත්‍ර - 03</div>
-                <button class="download-btn" onclick="openAd('g6_t2_maths3.pdf')">Download Paper</button>
-            </div>
-            <div class="resource-card">
-                <div class="resource-title">📄 06 ශ්‍රේණිය - ගණිතය I, II පත්‍ර - 04</div>
-                <button class="download-btn" onclick="openAd('g6_t2_maths4.pdf')">Download Paper</button>
-            </div>
-        </div>
-    </div>
+  <div class="subject-tabs" id="subjectTabs" aria-label="විෂය තෝරන්න"></div>
 
-    <div id="sec-sinhala" class="subject-section">
-        <div class="grid-container">
-            
-             <div class="resource-card">
-                    <div class="resource-title">📄 06 ශ්‍රේණිය - සිංහල භාෂාව සහ සාහිත්‍යය ප්‍රශ්න පත්‍රය - 03</div>
-                    <button class="download-btn" onclick="openAd('g6_t2_sin3.pdf')">Download Paper</button>
-            </div>
-             <div class="resource-card">
-                    <div class="resource-title">📄 06 ශ්‍රේණිය - සිංහල භාෂාව සහ සාහිත්‍යය ප්‍රශ්න පත්‍රය - 04</div>
-                    <button class="download-btn" onclick="openAd('g6_t2_sin4.pdf')">Download Paper</button>
-            </div>
-        </div>
+  <section>
+    <div class="section-head">
+      <div>
+        <h2 id="sectionTitle">📄 ප්‍රශ්න පත්‍ර</h2>
+        <p id="sectionSubtitle">ඔබට අවශ්‍ය ප්‍රශ්න පත්‍රය තෝරාගන්න.</p>
+      </div>
+      <span class="count" id="resultCount">0 සම්පත්</span>
     </div>
+    <div class="grid" id="resourceGrid"></div>
+  </section>
 
-    <div id="sec-english" class="subject-section">
-        <div class="grid-container">
-            
-            <div class="resource-card">
-                <div class="resource-title">📄 06 ශ්‍රේණිය - English - 03</div>
-                <button class="download-btn" onclick="openAd('g6_t2_eng3.pdf')">Download Paper</button>
-            </div>
-            <div class="resource-card">
-                <div class="resource-title">📄 06 ශ්‍රේණිය - English - 04</div>
-                <button class="download-btn" onclick="openAd('g6_t2_eng4.pdf')">Download Paper</button>
-            </div>
-        </div>
-    </div>
-    
-    <div id="sec-history" class="subject-section">
-        <div class="grid-container">
-            
-             <div class="resource-card">
-                <div class="resource-title">📄 06 ශ්‍රේණිය - ඉතිහාසය ආදර්ශ ප්‍රශ්න පත්‍රය - 03</div>
-                <button class="download-btn" onclick="openAd('g6_t2_his3.pdf')">Download Paper</button>
-            </div>
-             <div class="resource-card">
-                <div class="resource-title">📄 06 ශ්‍රේණිය - ඉතිහාසය ආදර්ශ ප්‍රශ්න පත්‍රය - 04</div>
-                <button class="download-btn" onclick="openAd('g6_t2_his4.pdf')">Download Paper</button>
-            </div>
-        </div>
-    </div>
+  <a href="index.html" class="back">← ආපසු මුල් පිටුවට</a>
 
-    <div id="sec-buddhist" class="subject-section">
-        <div class="grid-container">
-            
-            <div class="resource-card">
-                <div class="resource-title">📄 06 ශ්‍රේණිය - බුද්ධාගම  ප්‍රශ්න පත්‍රය - 03</div>
-                <button class="download-btn" onclick="openAd('g6_t2_b3.pdf')">Download Paper</button>
-            </div>
-            <div class="resource-card">
-                <div class="resource-title">📄 06 ශ්‍රේණිය - බුද්ධාගම  ප්‍රශ්න පත්‍රය - 04</div>
-                <button class="download-btn" onclick="openAd('g6_t2_b4.pdf')">Download Paper</button>
-            </div>
-        </div>
+  <footer>
+    C-TECH EDUCATIONAL PORTAL<br>
+    ඉගෙනුමෙන් ඉදිරියටම යමු! 🚀
+  </footer>
+</main>
+
+<!-- PDF / resource viewer -->
+<div class="modal" id="viewModal" role="dialog"
+  aria-modal="true" aria-labelledby="viewTitle">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="viewTitle">සම්පත නරඹන්න</h3>
+      <button class="close-btn" data-close="viewModal"
+        aria-label="වසන්න">×</button>
     </div>
-    <br>
-    <a href="index.html" class="back-btn">← ආපසු මුල් පිටුවට (Home)</a>
+    <div id="viewerContent"></div>
+    <p class="modal-info" id="viewerInfo"></p>
+    <div class="modal-actions" id="viewerActions"></div>
+  </div>
 </div>
 
-<div class="modal-overlay" id="adModal">
-    <div class="modal-box">
-        <img src="add.jpg" alt="C-TECH Special Classes" class="ad-image">
-        
-        <div class="ad-title">Smart විදියට ICT - ජනිත් ලක්ෂාන්</div>
-        <div class="ad-subtitle">06 වසරේ සිට 11 වසර දක්වා </br>සම්බන්ධ වීම සදහා අමතන්න -<B>071 26 75 988</B></div>
-        
-        <div class="timer-text" id="popupTimer">ඔබේ ගොනුව සූදානම් වෙමින් පවතී... තත්පර <span id="secs">10</span></div>
-        <a href="#" id="finalDownloadLink" class="popup-dl-btn" download onclick="closeModal()">ගොනුව බාගත කරගන්න (Download Now)</a>
-    </div>
+<!-- Advertisement before downloading -->
+<div class="modal" id="adModal" role="dialog"
+  aria-modal="true" aria-labelledby="adTitle">
+  <div class="modal-box ad-box">
+    <button class="close-btn" data-close="adModal"
+      style="float:right" aria-label="වසන්න">×</button>
+    <div style="clear:both"></div>
+    <img src="add.jpg" alt="C-TECH ICT පන්ති දැන්වීම"
+      class="ad-image"
+      onerror="this.style.display='none'">
+    <h3 class="ad-title" id="adTitle">Smart විදියට ICT - ජනිත් ලක්ෂාන්</h3>
+    <p class="ad-copy">
+      06 වසරේ සිට 11 වසර දක්වා ICT පන්ති.<br>
+      සම්බන්ධ වීම සඳහා අමතන්න:
+      <strong>071 26 75 988</strong>
+    </p>
+    <p class="timer" id="timerText">
+      ඔබේ ගොනුව සූදානම් වෙමින් පවතී...
+      <span id="secs">10</span>
+    </p>
+    <a id="finalDownload" class="btn green-btn hidden"
+      href="#" download>⬇ ගොනුව බාගත කරගන්න</a>
+  </div>
 </div>
 
 <script>
-    // 🔄 Tabs මාරු කිරීමේ සරල පද්ධතිය
-    function switchTab(subjectId) {
-        // සියලුම සෙක්ෂන් සහ ටැබ් අක්‍රීය කරන්න
-        const sections = document.querySelectorAll('.subject-section');
-        const tabs = document.querySelectorAll('.sub-tab');
-        
-        sections.forEach(s => s.classList.remove('active'));
-        tabs.forEach(t => t.classList.remove('active'));
+"use strict";
 
-        // තෝරාගත් සෙක්ෂන් එක පමණක් සක්‍රීය කරන්න
-        document.getElementById('sec-' + subjectId).classList.add('active');
-        document.getElementById('tab-' + subjectId).classList.add('active');
+/* =====================================================
+   1. RESOURCE DATA
+   PDF ගොනු HTML ගොනුව ඇති ස්ථානයේ හෝ නිවැරදි folder එකක තබන්න.
+   Video සඳහා YouTube ID එක හෝ MP4 URL එක ලබාදෙන්න.
+   ===================================================== */
+
+const subjects = [
+  {id:"all", label:"සියල්ල"},
+  {id:"science", label:"විද්‍යාව"},
+  {id:"maths", label:"ගණිතය"},
+  {id:"sinhala", label:"සිංහල"},
+  {id:"english", label:"English"},
+  {id:"history", label:"ඉතිහාසය"},
+  {id:"buddhist", label:"බුද්ධාගම"}
+];
+
+const resources = [
+  {
+    id:"sci3", type:"paper", subject:"science",
+    title:"06 ශ්‍රේණිය - විද්‍යාව - දෙවන වාර පරීක්ෂණය ප්‍රශ්න පත්‍රය 03",
+    url:"g11_t2_sci3.pdf"
+  },
+  {
+    id:"sci4", type:"paper", subject:"science",
+    title:"06 ශ්‍රේණිය - විද්‍යාව - දෙවන වාර පරීක්ෂණය ප්‍රශ්න පත්‍රය 04",
+    url:"g11_t2_sci4.pdf"
+  },
+  {
+    id:"math3", type:"paper", subject:"maths",
+    title:"06 ශ්‍රේණිය - ගණිතය I, II පත්‍ර 03",
+    url:"g11_t2_maths3.pdf"
+  },
+  {
+    id:"math4", type:"paper", subject:"maths",
+    title:"06 ශ්‍රේණිය - ගණිතය I, II පත්‍ර 04",
+    url:"g11_t2_maths4.pdf"
+  },
+  {
+    id:"sin3", type:"paper", subject:"sinhala",
+    title:"06 ශ්‍රේණිය - සිංහල භාෂාව සහ සාහිත්‍යය ප්‍රශ්න පත්‍රය 03",
+    url:"g11_t2_sin3.pdf"
+  },
+  /*{
+    id:"salalihini", type:"link", subject:"sinhala",
+    title:"සැළලිහිණි සංදේශය - සියලුම කවි සිතියම",
+    url:"https://salalihini-sandeshaya.vercel.app/map?v=111"
+  },*/
+  {
+    id:"eng3", type:"paper", subject:"english",
+    title:"Grade 06 - English Paper 03",
+    url:"g11_t2_eng3.pdf"
+  },
+  {
+    id:"eng4", type:"paper", subject:"english",
+    title:"Grade 06 - English Paper 04",
+    url:"g11_t2_eng4.pdf"
+  },
+  {
+    id:"his3", type:"paper", subject:"history",
+    title:"06 ශ්‍රේණිය - ඉතිහාසය ආදර්ශ ප්‍රශ්න පත්‍රය 03",
+    url:"g11_t2_his3.pdf"
+  },
+  {
+    id:"his4", type:"paper", subject:"history",
+    title:"06 ශ්‍රේණිය - ඉතිහාසය ආදර්ශ ප්‍රශ්න පත්‍රය 04",
+    url:"g11_t2_his4.pdf"
+  },
+  {
+    id:"bud3", type:"paper", subject:"buddhist",
+    title:"06 ශ්‍රේණිය - බුද්ධාගම ආදර්ශ ප්‍රශ්න පත්‍රය 03",
+    url:"g11_t2_b3.pdf"
+  },
+  {
+    id:"bud4", type:"paper", subject:"buddhist",
+    title:"06 ශ්‍රේණිය - බුද්ධාගම ආදර්ශ ප්‍රශ්න පත්‍රය 04",
+    url:"g11_t2_b4.pdf"
+  }
+
+  /*
+   * අලුත් PDF එකක් එකතු කිරීම:
+   *
+   * {
+   *   id:"sci5",
+   *   type:"paper",
+   *   subject:"science",
+   *   title:"11 ශ්‍රේණිය - විද්‍යාව - ප්‍රශ්න පත්‍රය 05",
+   *   url:"g11_t2_sci5.pdf"
+   * },
+   *
+   * අලුත් YouTube වීඩියෝවක්:
+   *
+   * {
+   *   id:"video1",
+   *   type:"video",
+   *   subject:"science",
+   *   title:"විද්‍යාව - පළමු පාඩම",
+   *   provider:"youtube",
+   *   videoId:"YOUR_YOUTUBE_VIDEO_ID"
+   * },
+   *
+   * MP4 වීඩියෝවක්:
+   *
+   * {
+   *   id:"video2",
+   *   type:"video",
+   *   subject:"maths",
+   *   title:"ගණිත වීඩියෝ පාඩම",
+   *   provider:"mp4",
+   *   url:"videos/maths-lesson.mp4"
+   * }
+   */
+];
+
+/* =====================================================
+   2. APP STATE
+   ===================================================== */
+
+let activeView = "papers";
+let activeSubject = "all";
+let searchTerm = "";
+let adInterval = null;
+let pendingDownload = null;
+let previousFocus = null;
+
+const grid = document.getElementById("resourceGrid");
+const searchInput = document.getElementById("searchInput");
+const subjectTabs = document.getElementById("subjectTabs");
+
+/* =====================================================
+   3. SUBJECT FILTERS
+   ===================================================== */
+
+function renderSubjects(){
+  subjectTabs.innerHTML = "";
+
+  subjects.forEach(subject => {
+    const btn = document.createElement("button");
+    btn.className = "subject-tab" +
+      (activeSubject === subject.id ? " active" : "");
+    btn.textContent = subject.label;
+    btn.type = "button";
+
+    btn.addEventListener("click", () => {
+      activeSubject = subject.id;
+      renderSubjects();
+      renderResources();
+    });
+
+    subjectTabs.appendChild(btn);
+  });
+}
+
+function getSubjectName(id){
+  const item = subjects.find(s => s.id === id);
+  return item ? item.label : id;
+}
+
+/* =====================================================
+   4. FILTER AND RENDER RESOURCES
+   ===================================================== */
+
+function getFilteredResources(){
+  return resources.filter(item => {
+    const matchesSubject =
+      activeSubject === "all" || item.subject === activeSubject;
+
+    const matchesSearch =
+      item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      getSubjectName(item.subject).toLowerCase()
+        .includes(searchTerm.toLowerCase());
+
+    let matchesType = true;
+
+    if(activeView === "papers"){
+      matchesType = item.type === "paper";
+    }else if(activeView === "videos"){
+      matchesType = item.type === "video";
     }
 
-    let adInterval = null;
+    return matchesSubject && matchesSearch && matchesType;
+  });
+}
 
-    // 💥 ඇඩ් එක විවෘත කිරීම සහ තත්පර 10 කවුන්ටරය
-    function openAd(fileUrl) {
-        const modal = document.getElementById('adModal');
-        const timerText = document.getElementById('popupTimer');
-        const dlBtn = document.getElementById('finalDownloadLink');
-        const secsSpan = document.getElementById('secs');
-        
-        let timeLeft = 10;
-        
-        secsSpan.innerText = timeLeft;
-        timerText.style.display = 'block';
-        dlBtn.style.display = 'none';
-        dlBtn.href = fileUrl; // ඩවුන්ලෝඩ් ලින්ක් එක බොත්තමට සම්බන්ධ කිරීම
-        
-        modal.style.display = 'flex';
+function renderResources(){
+  const filtered = getFilteredResources();
+  grid.innerHTML = "";
 
-        if (adInterval) clearInterval(adInterval);
-        adInterval = setInterval(() => {
-            timeLeft--;
-            secsSpan.innerText = timeLeft;
-            
-            if (timeLeft <= 0) {
-                clearInterval(adInterval);
-                timerText.style.display = 'none';
-                dlBtn.style.display = 'block'; // තත්පර 10 පසු බොත්තම පෙන්වයි
-            }
-        }, 1000);
+  const titles = {
+    papers:"📄 ප්‍රශ්න පත්‍ර",
+    videos:"🎬 වීඩියෝ පාඩම්",
+    all:"📚 සියලු සම්පත්"
+  };
+
+  document.getElementById("sectionTitle").textContent =
+    titles[activeView];
+
+  document.getElementById("sectionSubtitle").textContent =
+    activeView === "videos"
+      ? "ඔබේ පාඩම තෝරා වීඩියෝව නරඹන්න."
+      : activeView === "papers"
+        ? "ප්‍රශ්න පත්‍රය බලන්න හෝ බාගත කරගන්න."
+        : "සියලුම අධ්‍යයන සම්පත් එකම තැනකින්.";
+
+  document.getElementById("resultCount").textContent =
+    filtered.length + " සම්පත්";
+
+  if(filtered.length === 0){
+    const empty = document.createElement("div");
+    empty.className = "empty";
+    empty.textContent =
+      "🔎 සම්පත් හමු නොවීය. වෙනත් වචනයක් හෝ විෂයක් තෝරා බලන්න.";
+    grid.appendChild(empty);
+    return;
+  }
+
+  filtered.forEach(item => {
+    const card = document.createElement("article");
+    card.className = "card";
+
+    const top = document.createElement("div");
+    top.className = "card-top";
+
+    const icon = document.createElement("div");
+    icon.className = "file-icon" +
+      (item.type === "video" ? " video" :
+       item.type === "paper" ? "" : " note");
+    icon.textContent =
+      item.type === "video" ? "🎬" :
+      item.type === "paper" ? "📄" : "📚";
+
+    const info = document.createElement("div");
+    info.style.minWidth = "0";
+
+    const title = document.createElement("h3");
+    title.textContent = item.title;
+
+    const meta = document.createElement("p");
+    meta.className = "meta";
+    meta.textContent =
+      getSubjectName(item.subject) + " • " +
+      (item.type === "video" ? "වීඩියෝ පාඩම" :
+       item.type === "paper" ? "PDF ප්‍රශ්න පත්‍රය" :
+       "අධ්‍යයන සම්පත");
+
+    info.append(title, meta);
+    top.append(icon, info);
+    card.appendChild(top);
+
+    if(item.type === "video"){
+      const thumb = document.createElement("div");
+      thumb.className = "video-thumb";
+      const play = document.createElement("div");
+      play.className = "play-icon";
+      play.textContent = "▶";
+      thumb.appendChild(play);
+      thumb.setAttribute("aria-label", "වීඩියෝ පාඩම නරඹන්න");
+      thumb.addEventListener("click", () => viewResource(item));
+      thumb.style.cursor = "pointer";
+      card.appendChild(thumb);
     }
 
-    function closeModal() {
-        setTimeout(() => {
-            document.getElementById('adModal').style.display = 'none';
-        }, 500);
+    const actions = document.createElement("div");
+    actions.className = "card-actions";
+
+    const viewBtn = document.createElement("button");
+    viewBtn.type = "button";
+    viewBtn.className = "btn btn-view";
+    viewBtn.textContent =
+      item.type === "video" ? "▶ වීඩියෝව බලන්න" :
+      item.type === "paper" ? "👁 View Paper" : "↗ විවෘත කරන්න";
+    viewBtn.addEventListener("click", () => viewResource(item));
+    actions.appendChild(viewBtn);
+
+    if(item.type === "paper"){
+      const downloadBtn = document.createElement("button");
+      downloadBtn.type = "button";
+      downloadBtn.className = "btn btn-download";
+      downloadBtn.textContent = "⬇ Download";
+      downloadBtn.addEventListener("click", () => openAd(item.url));
+      actions.appendChild(downloadBtn);
     }
+
+    card.appendChild(actions);
+    grid.appendChild(card);
+  });
+}
+
+/* =====================================================
+   5. TAB NAVIGATION
+   ===================================================== */
+
+document.querySelectorAll(".tab").forEach(btn => {
+  btn.addEventListener("click", () => {
+    activeView = btn.dataset.view;
+
+    document.querySelectorAll(".tab").forEach(tab => {
+      tab.classList.toggle("active", tab === btn);
+    });
+
+    renderResources();
+  });
+});
+
+searchInput.addEventListener("input", event => {
+  searchTerm = event.target.value.trim();
+  renderResources();
+});
+
+/* =====================================================
+   6. VIEW PAPER / VIDEO / OTHER RESOURCE
+   ===================================================== */
+
+function openModal(id){
+  previousFocus = document.activeElement;
+  const modal = document.getElementById(id);
+  modal.classList.add("show");
+  document.body.style.overflow = "hidden";
+
+  const close = modal.querySelector("[data-close]");
+  if(close) close.focus();
+}
+
+function closeModal(id){
+  const modal = document.getElementById(id);
+  if(!modal) return;
+
+  modal.classList.remove("show");
+
+  if(!document.querySelector(".modal.show")){
+    document.body.style.overflow = "";
+  }
+
+  if(id === "viewModal"){
+    document.getElementById("viewerContent").innerHTML = "";
+    document.getElementById("viewerActions").innerHTML = "";
+  }
+
+  if(id === "adModal"){
+    stopAdTimer();
+    pendingDownload = null;
+    document.getElementById("finalDownload").classList.add("hidden");
+    document.getElementById("timerText").classList.remove("hidden");
+  }
+
+  if(previousFocus && typeof previousFocus.focus === "function"){
+    previousFocus.focus();
+  }
+}
+
+document.querySelectorAll("[data-close]").forEach(btn => {
+  btn.addEventListener("click", () => closeModal(btn.dataset.close));
+});
+
+document.querySelectorAll(".modal").forEach(modal => {
+  modal.addEventListener("click", event => {
+    if(event.target === modal) closeModal(modal.id);
+  });
+});
+
+document.addEventListener("keydown", event => {
+  if(event.key === "Escape"){
+    const open = document.querySelector(".modal.show");
+    if(open) closeModal(open.id);
+  }
+});
+
+function addActionButton(container, label, callback, className){
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "btn " + className;
+  btn.textContent = label;
+  btn.addEventListener("click", callback);
+  container.appendChild(btn);
+}
+
+function viewResource(item){
+  const modalTitle = document.getElementById("viewTitle");
+  const content = document.getElementById("viewerContent");
+  const info = document.getElementById("viewerInfo");
+  const actions = document.getElementById("viewerActions");
+
+  content.innerHTML = "";
+  actions.innerHTML = "";
+  modalTitle.textContent = item.title;
+  info.textContent = "";
+
+  if(item.type === "paper"){
+    const frame = document.createElement("iframe");
+    frame.className = "viewer";
+    frame.title = item.title;
+    frame.src = item.url;
+    frame.setAttribute("loading", "lazy");
+    content.appendChild(frame);
+
+    info.textContent =
+      "PDF එක මෙහි නොපෙන්වන්නේ නම් පහත බොත්තමෙන් වෙනත් ටැබයක විවෘත කරන්න.";
+
+    addActionButton(actions, "↗ වෙනත් ටැබයක විවෘත කරන්න", () => {
+      window.open(item.url, "_blank", "noopener,noreferrer");
+    }, "btn-view");
+
+    addActionButton(actions, "⬇ Download", () => {
+      closeModal("viewModal");
+      openAd(item.url);
+    }, "btn-download");
+
+  }else if(item.type === "video"){
+    if(item.provider === "youtube" && item.videoId){
+      const frame = document.createElement("iframe");
+      frame.className = "video-frame";
+      frame.title = item.title;
+      frame.src =
+        "https://www.youtube-nocookie.com/embed/" +
+        encodeURIComponent(item.videoId);
+      frame.allow =
+        "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+      frame.allowFullscreen = true;
+      content.appendChild(frame);
+
+    }else if(item.provider === "mp4" && item.url){
+      const video = document.createElement("video");
+      video.className = "video-frame";
+      video.controls = true;
+      video.playsInline = true;
+      video.preload = "metadata";
+
+      const source = document.createElement("source");
+      source.src = item.url;
+      source.type = "video/mp4";
+      video.appendChild(source);
+
+      content.appendChild(video);
+    }else{
+      info.textContent =
+        "මෙම වීඩියෝව සඳහා නිවැරදි YouTube videoId හෝ MP4 URL එක එක් කරන්න.";
+    }
+
+  }else{
+    info.textContent =
+      "මෙම සම්පත නව ටැබයක විවෘත වේ.";
+
+    addActionButton(actions, "↗ සම්පත විවෘත කරන්න", () => {
+      window.open(item.url, "_blank", "noopener,noreferrer");
+    }, "btn-view");
+  }
+
+  openModal("viewModal");
+}
+
+/* =====================================================
+   7. DOWNLOAD AD COUNTDOWN
+   ===================================================== */
+
+function stopAdTimer(){
+  if(adInterval !== null){
+    clearInterval(adInterval);
+    adInterval = null;
+  }
+}
+
+function openAd(fileUrl){
+  stopAdTimer();
+
+  pendingDownload = fileUrl;
+
+  const timerText = document.getElementById("timerText");
+  const downloadLink = document.getElementById("finalDownload");
+  const secs = document.getElementById("secs");
+
+  let timeLeft = 10;
+
+  secs.textContent = timeLeft;
+  timerText.classList.remove("hidden");
+  downloadLink.classList.add("hidden");
+  downloadLink.removeAttribute("href");
+
+  openModal("adModal");
+
+  adInterval = setInterval(() => {
+    timeLeft--;
+    secs.textContent = timeLeft;
+
+    if(timeLeft <= 0){
+      stopAdTimer();
+      timerText.classList.add("hidden");
+
+      downloadLink.href = pendingDownload;
+      downloadLink.classList.remove("hidden");
+      downloadLink.focus();
+    }
+  }, 1000);
+}
+
+document.getElementById("finalDownload").addEventListener("click", event => {
+  if(!pendingDownload){
+    event.preventDefault();
+    return;
+  }
+
+  // බ්‍රවුසරයට බාගත කිරීම ආරම්භ කිරීමට ඉඩ දෙන්න.
+  closeModal("adModal");
+});
+
+/* =====================================================
+   8. INITIALIZE
+   ===================================================== */
+
+renderSubjects();
+renderResources();
 </script>
-
 </body>
 </html>
