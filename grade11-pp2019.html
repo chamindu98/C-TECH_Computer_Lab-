@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade 11 ICT - O/L Official Performance Portal</title>
+    
+    <!-- 🔥 Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <style>
+        :root {
+            --primary-blue: #002b49;
+            --accent-gold: #ffb703;
+            --neon-blue: #00f0ff;
+            --dark-bg: #030712;
+            --card-bg: #0f172a;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --danger: #ef4444;
+            --orange: #f97316;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            line-height: 1.6;
+            padding: 15px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(0, 240, 255, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(255, 183, 3, 0.05) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        .portal-container { max-width: 1000px; margin: 0 auto; }
+
+        /* Header */
+        .portal-header {
+            background: linear-gradient(135deg, #0284c7, #0f172a);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .portal-title { font-size: 2.2rem; font-weight: 900; color: #fff; letter-spacing: 1px; }
+        .portal-subtitle { color: var(--neon-blue); font-size: 1rem; margin-top: 5px; font-weight: 600; }
+
+        /* 🏆 Top Rank Champion Announcement Banner */
+        .champion-card {
+            background: linear-gradient(135deg, rgba(255, 183, 3, 0.15), rgba(15, 23, 42, 0.9));
+            border: 2px solid var(--accent-gold);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 0 25px rgba(255, 183, 3, 0.2);
+            display: none;
+        }
+
+        .champion-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid var(--accent-gold);
+            object-fit: cover;
+            margin: 10px auto;
+            display: block;
+            box-shadow: 0 0 15px var(--accent-gold);
+        }
+
+        /* Search Section */
+        .search-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            max-width: 500px;
+            margin: 15px auto 0 auto;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 14px 18px;
+            border-radius: 10px;
+            border: 2px solid rgba(0, 240, 255, 0.3);
+            background: rgba(3, 7, 18, 0.8);
+            color: #fff;
+            font-size: 1.1rem;
+            outline: none;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .search-input:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 240, 255, 0.3); }
+
+        .search-btn {
+            padding: 14px 28px;
+            background: linear-gradient(90deg, #0284c7, var(--neon-blue));
+            border: none;
+            border-radius: 10px;
+            color: #000;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .search-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 240, 255, 0.4); }
+
+        /* 📄 Official O/L Result Sheet */
+        .result-sheet {
+            background: var(--card-bg);
+            border: 2px solid rgba(0, 240, 255, 0.2);
+            border-radius: 16px;
+            padding: 30px;
+            display: none;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        .student-header-profile {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 2px dashed rgba(255, 255, 255, 0.1);
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+
+        .student-photo {
+            width: 110px;
+            height: 110px;
+            border-radius: 12px;
+            border: 3px solid var(--neon-blue);
+            object-fit: cover;
+            background: #1e293b;
+        }
+
+        .student-details h2 { font-size: 1.6rem; color: #fff; }
+        .student-details p { color: var(--text-muted); font-size: 0.95rem; }
+        .index-tag {
+            display: inline-block;
+            background: rgba(0, 240, 255, 0.15);
+            color: var(--neon-blue);
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            margin-top: 5px;
+            font-family: monospace;
+        }
+
+        /* Results Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: rgba(3, 7, 18, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-card .label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; }
+        .stat-card .value { font-size: 1.5rem; font-weight: 800; color: #fff; margin-top: 5px; }
+
+        .grade-pill {
+            display: inline-block;
+            padding: 4px 15px;
+            border-radius: 6px;
+            font-weight: 900;
+            font-size: 1.2rem;
+        }
+        .grade-A { background: var(--success); color: #000; }
+        .grade-B { background: var(--neon-blue); color: #000; }
+        .grade-C { background: var(--accent-gold); color: #000; }
+        .grade-S { background: var(--orange); color: #fff; }
+        .grade-W { background: var(--danger); color: #fff; }
+
+        /* AI Advisor Box */
+        .ai-advisor-box {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.05), rgba(15, 23, 42, 0.8));
+            border: 1px solid var(--neon-blue);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 25px;
+        }
+
+        .ai-title {
+            color: var(--neon-blue);
+            font-weight: bold;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        /* SVG Graph Frame */
+        .chart-frame {
+            background: rgba(3, 7, 18, 0.8);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .svg-chart { width: 100%; height: 180px; }
+
+        @media (max-width: 600px) {
+            .student-header-profile { flex-direction: column; text-align: center; }
+            .search-box { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="portal-container">
+        
+        <!-- Header -->
+        <div class="portal-header">
+            <div class="portal-title">🎓 O/L ICT PERFORMANCE PORTAL</div>
+            <div class="portal-subtitle">Grade 11 - Term Examination & Progress Analytics</div>
+        </div>
+
+        <!-- 🏆 Top Rank Champion Banner -->
+        <div id="champion-section" class="champion-card">
+            <h3 style="color: var(--accent-gold); letter-spacing: 2px;">👑 CLASS TOPPER ANNOUNCEMENT 👑</h3>
+            <img id="champ-img" src="" class="champion-avatar" alt="Class Champion">
+            <h2 id="champ-name" style="color: #fff; margin-top: 5px;">-</h2>
+            <p style="color: var(--text-light); font-size: 1rem;">පන්තියේ ප්‍රථම ස්ථානය ලබා ගනිමින් විශිෂ්ට දක්ෂතා දැක්වූ ඔබ හට අපගේ උණුසුම් සුභ පැතුම්!</p>
+            <div style="margin-top: 10px; font-weight: bold; color: var(--accent-gold);">
+                Total Marks: <span id="champ-total" style="color:#fff;">-</span> | Grade: <span id="champ-grade" style="color:#fff;">A</span>
+            </div>
+        </div>
+
+        <!-- Search Box -->
+        <div class="search-card">
+            <h3 style="color: var(--text-light);">🔍 විභාග ප්‍රතිඵල පරීක්ෂාව (Enter Index Number)</h3>
+            <div class="search-box">
+                <input type="text" id="index-input" class="search-input" placeholder="EXP-1101">
+                <button class="search-btn" onclick="fetchStudentResult()">SEARCH</button>
+            </div>
+            <p id="error-msg" style="color: var(--danger); margin-top: 10px; display: none; font-weight: bold;">ඇතුළත් කළ Index අංකය සොයාගත නොහැක.</p>
+        </div>
+
+        <!-- Official Result Sheet -->
+        <div id="result-sheet" class="result-sheet">
+            <div class="student-header-profile">
+                <img id="st-photo" src="" class="student-photo" alt="Student Photo">
+                <div class="student-details">
+                    <h2 id="st-name">-</h2>
+                    <p>Grade 11 ICT - Term Examination Result Sheet</p>
+                    <span id="st-index" class="index-tag">INDEX: -</span>
+                </div>
+            </div>
+
+            <!-- Subject Marks & Overall Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="label">Paper I (MCQ)</div>
+                    <div id="st-p1" class="value">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Paper II (Essay)</div>
+                    <div id="st-p2" class="value">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Total Marks</div>
+                    <div id="st-total" class="value" style="color: var(--neon-blue);">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Result Grade</div>
+                    <div style="margin-top: 5px;"><span id="st-grade" class="grade-pill grade-A">-</span></div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Class Rank</div>
+                    <div id="st-rank" class="value" style="color: var(--accent-gold);">-</div>
+                </div>
+            </div>
+
+            <!-- Class Statistics -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="label">Class Highest</div>
+                    <div id="cls-highest" class="value" style="color: var(--success);">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Class Average</div>
+                    <div id="cls-avg" class="value">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Class Lowest</div>
+                    <div id="cls-lowest" class="value" style="color: var(--danger);">-</div>
+                </div>
+            </div>
+
+            <!-- SVG Progress Graph -->
+            <div class="chart-frame">
+                <h4 style="color: var(--text-muted); margin-bottom: 10px;">📈 පසුගිය විභාගවල ලකුණු විශ්ලේෂණය (Progress History)</h4>
+                <div id="graph-wrapper"></div>
+            </div>
+
+            <!-- Automated AI Study Advisor -->
+            <div class="ai-advisor-box">
+                <div class="ai-title">🤖 AI Performance Advisor (විශේෂිත අධ්‍යයන උපදෙස්)</div>
+                <p id="ai-advice-text" style="color: var(--text-light); font-size: 0.95rem;">-</p>
+            </div>
+        </div>
+
+    </div>
+
+  <script>
+    // 1. FIREBASE CONFIGURATION
+    const firebaseConfig = {
+        databaseURL: "https://ctech-counter-default-rtdb.firebaseio.com/"
+    };
+
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+
+    const db = firebase.database();
+    let studentDatabase = {};
+    let classHighest = 0, classLowest = 100, classAvg = 0;
+
+   
+
+    // 2. FETCH DATA FROM 'students' AND 'grade11_results' NODES DIRECTLY
+    function loadAllData() {
+        let studentsData = {};
+        let resultsData = {};
+
+        function mergeAndProcess() {
+            studentDatabase = {};
+
+            // 1. Merge 'students'
+            Object.keys(studentsData).forEach(key => {
+                const cleanKey = key.trim().toUpperCase();
+                studentDatabase[cleanKey] = { ...studentsData[key] };
+            });
+
+            // 2. Merge 'grade11_results'
+            Object.keys(resultsData).forEach(key => {
+                const cleanKey = key.trim().toUpperCase();
+                if (studentDatabase[cleanKey]) {
+                    studentDatabase[cleanKey] = { ...studentDatabase[cleanKey], ...resultsData[key] };
+                } else {
+                    studentDatabase[cleanKey] = { ...resultsData[key] };
+                }
+            });
+
+            console.log("Merged Database Successfully Loaded:", studentDatabase);
+
+            if (Object.keys(studentDatabase).length > 0) {
+                calculateClassAnalytics();
+                showChampionBanner();
+            }
+        }
+
+        // 'students' node එකෙන් දත්ත ලබා ගැනීම
+        db.ref('students').on('value', (snapshot) => {
+            studentsData = snapshot.val() || {};
+            mergeAndProcess();
+        }, (err) => console.error("Students Read Error:", err));
+
+        // 'grade11_results' node එකෙන් දත්ත ලබා ගැනීම
+        db.ref('grade11_results').on('value', (snapshot) => {
+            resultsData = snapshot.val() || {};
+            mergeAndProcess();
+        }, (err) => console.error("Results Read Error:", err));
+    }
+
+    loadAllData();
+
+    // 3. CALCULATE CLASS STATS (Highest, Lowest, Average, Rank)
+    function calculateClassAnalytics() {
+        let totalClassMarks = 0;
+        let studentArray = [];
+
+        classHighest = 0;
+        classLowest = 100;
+
+        for (let key in studentDatabase) {
+            let st = studentDatabase[key];
+            
+            if (st.paper1 !== undefined || st.paper2 !== undefined || st.total !== undefined) {
+                let total = (st.total !== undefined) 
+                    ? Number(st.total) 
+                    : (Number(st.paper1) || 0) + (Number(st.paper2) || 0);
+
+                st.totalCalculated = total;
+                studentArray.push(st);
+
+                if (total > classHighest) classHighest = total;
+                if (total < classLowest) classLowest = total;
+                totalClassMarks += total;
+            }
+        }
+
+        if (studentArray.length > 0) {
+            classAvg = (totalClassMarks / studentArray.length).toFixed(1);
+
+            // Sort for Ranking
+            studentArray.sort((a, b) => b.totalCalculated - a.totalCalculated);
+            studentArray.forEach((st, index) => {
+                st.rankCalculated = index + 1;
+            });
+        }
+    }
+
+   // 4. DISPLAY TOPPER CHAMPION BANNER (With Safe Fallback Image)
+function showChampionBanner() {
+    let topStudent = null;
+    let maxScore = -1;
+
+    for (let key in studentDatabase) {
+        let st = studentDatabase[key];
+        let total = st.totalCalculated || ((Number(st.paper1) || 0) + (Number(st.paper2) || 0));
+        if (total > maxScore && total > 0) {
+            maxScore = total;
+            topStudent = st;
+        }
+    }
+
+    const champSection = document.getElementById("champion-section");
+    if (topStudent && champSection) {
+        if (document.getElementById("champ-name")) document.getElementById("champ-name").innerText = topStudent.name || "Student";
+        
+       // Base URL එක (ඔබේ repo එකේ Image Folder එකට පාර)
+const baseUrl = "https://chamindu98.github.io/C-TECH_Computer_Lab-/";
+
+// 1. Database එකේ photo එකක් සේව් කරලද කියලා බලන්න
+if (foundStudent.photo && foundStudent.photo.trim() !== "") {
+    // ඡායාරූපය තිබේ නම්
+    document.getElementById("st-photo").src = baseUrl + foundStudent.photo;
+} else {
+    // ඡායාරූපයක් සේව් කර නැත්නම් Default Icon එකක් දාන්න
+    document.getElementById("st-photo").src = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
+}
+        if (document.getElementById("champ-total")) document.getElementById("champ-total").innerText = maxScore;
+        if (document.getElementById("champ-grade")) document.getElementById("champ-grade").innerText = getGrade(maxScore);
+        champSection.style.display = "block";
+    }
+}
+
+// 5. SMART SEARCH BY INDEX NUMBER (Ignores Hyphens and Spaces)
+function fetchStudentResult() {
+    const inputElem = document.getElementById("index-input");
+    if (!inputElem) return;
+
+    // Raw user input
+    const rawInput = inputElem.value.trim().toUpperCase();
+    
+    // Hyphens (-), Spaces, Underscores සියල්ල අයින් කළ Clean Input එක
+    const cleanInput = rawInput.replace(/[-_ ]/g, "");
+
+    const errorMsg = document.getElementById("error-msg");
+    const resultSheet = document.getElementById("result-sheet");
+
+    if (!rawInput) {
+        alert("කරුණාකර Index Number එක ඇතුළත් කරන්න.");
+        return;
+    }
+
+    let foundStudent = null;
+
+    // Database එකේ ඇති සියලුම Keys පරීක්ෂා කිරීම (Smart Match)
+    for (let key in studentDatabase) {
+        const cleanKey = key.replace(/[-_ ]/g, "").toUpperCase();
+        const st = studentDatabase[key];
+        const stIndexClean = st.index ? st.index.toString().replace(/[-_ ]/g, "").toUpperCase() : "";
+
+        // 1. Key එක කෙලින්ම Match වීම (උදා: EXP101 == EXP-101)
+        // 2. Object එක ඇතුළේ ඇති index field එක Match වීම
+        if (cleanKey === cleanInput || stIndexClean === cleanInput) {
+            foundStudent = st;
+            break;
+        }
+    }
+
+    if (foundStudent) {
+        if (errorMsg) errorMsg.style.display = "none";
+        
+        const p1 = Number(foundStudent.paper1) || 0;
+        const p2 = Number(foundStudent.paper2) || 0;
+        const totalMarks = (foundStudent.total !== undefined) ? Number(foundStudent.total) : (p1 + p2);
+        const grade = getGrade(totalMarks);
+
+        const defaultImg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='%23ffb703'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>";
+
+        if (document.getElementById("st-name")) document.getElementById("st-name").innerText = foundStudent.name || "Student";
+        if (document.getElementById("st-index")) document.getElementById("st-index").innerText = `INDEX: ${rawInput}`;
+        if (document.getElementById("st-photo")) document.getElementById("st-photo").src = foundStudent.photo || defaultImg;
+        if (document.getElementById("st-p1")) document.getElementById("st-p1").innerText = p1;
+        if (document.getElementById("st-p2")) document.getElementById("st-p2").innerText = p2;
+        if (document.getElementById("st-total")) document.getElementById("st-total").innerText = totalMarks;
+        
+        const gradeElement = document.getElementById("st-grade");
+        if (gradeElement) {
+            gradeElement.innerText = grade;
+            gradeElement.className = `grade-pill grade-${grade}`;
+        }
+
+        if (document.getElementById("st-rank")) document.getElementById("st-rank").innerText = `#${foundStudent.rankCalculated || 1}`;
+        if (document.getElementById("cls-highest")) document.getElementById("cls-highest").innerText = classHighest;
+        if (document.getElementById("cls-avg")) document.getElementById("cls-avg").innerText = classAvg;
+        if (document.getElementById("cls-lowest")) document.getElementById("cls-lowest").innerText = classLowest;
+
+        // History Data check
+        let historyData = foundStudent.history;
+        if (!Array.isArray(historyData) || historyData.length === 0) {
+            historyData = [totalMarks];
+        }
+
+        renderSVGGraph(historyData);
+        generateAIFeedback(p1, p2, totalMarks, grade);
+
+        if (resultSheet) resultSheet.style.display = "block";
+    } else {
+        if (resultSheet) resultSheet.style.display = "none";
+        if (errorMsg) errorMsg.style.display = "block";
+    }
+}
+
+    function getGrade(marks) {
+        if (marks >= 75) return "A";
+        if (marks >= 65) return "B";
+        if (marks >= 55) return "C";
+        if (marks >= 35) return "S";
+        return "W";
+    }
+
+    // 6. AUTOMATED AI ADVISOR ENGINE
+    function generateAIFeedback(p1, p2, total, grade) {
+        let advice = "";
+        if (grade === "A") {
+            advice = "🔥 <strong>විශිෂ්ට සාමාර්ථයකි!</strong> ඔබගේ MCQ සහ Essay සාමාර්ථ දෙකම ඉහළ මට්ටමක පවතී. O/L විභාගයේදී 'A' සාමාර්ථය ස්ථිර කරගැනීමට පසුගිය ප්‍රශ්න පත්‍ර (Past Papers) වැඩි වැඩියෙන් ලියා කාල කළමනාකරණය තවදුරටත් පුහුණු වන්න.";
+        } else if (p1 < 25 && p2 > 35) {
+            advice = "⚠️ <strong>Paper I (MCQ) අවධානය යොමු කරන්න:</strong> ඔබගේ දෙවන ප්‍රශ්න පත්‍රය හොඳ මට්ටමක තිබුණද MCQ ලකුණු අඩුයි. කෙටි ප්‍රශ්න සහ තාක්ෂණික වචන (Keywords) නැවත පාඩම් කර MCQ Paper 5 කටවත් පිළිතුරු ලියන්න.";
+        } else if (p2 < 30 && p1 > 30) {
+            advice = "⚠️ <strong>Paper II (Essay) අවධානය යොමු කරන්න:</strong> structured essay ප්‍රශ්න වලට පිළිතුරු ලිවීමේදී Structured Flow එක සහ Diagram (Structure Chart, Flowcharts) ඇඳීම පුහුණු වන්න.";
+        } else {
+            advice = "💪 <strong>තවදුරටත් උත්සාහ කරන්න:</strong> O/L විභාගයට පෙර 'A' සාමාර්ථයකට ළඟාවීමට නම් දිනපතා පැයක් ICT විෂය වෙනුවෙන් වෙන් කර Past Paper ප්‍රශ්න විසඳන්න. අඩු පාඩු ඇති කොටස් ගුරුවරයාගෙන් අසා පැහැදිලි කරගන්න.";
+        }
+        
+        const adviceElem = document.getElementById("ai-advice-text");
+        if (adviceElem) adviceElem.innerHTML = advice;
+    }
+
+    // 7. RENDER SVG GRAPH FOR PROGRESS HISTORY
+    function renderSVGGraph(historyArray) {
+        const totalPoints = historyArray.length;
+        let svgContent = `
+            <svg class="svg-chart" viewBox="0 0 300 160">
+                <line x1="40" y1="20" x2="280" y2="20" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4"/>
+                <line x1="40" y1="80" x2="280" y2="80" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4"/>
+                <line x1="40" y1="140" x2="280" y2="140" stroke="rgba(255,255,255,0.2)"/>
+        `;
+
+        let points = [];
+        historyArray.forEach((mark, idx) => {
+            let x = totalPoints > 1 ? 50 + idx * (220 / (totalPoints - 1)) : 160;
+            let y = 140 - (mark * 1.1);
+            points.push({x, y, mark});
+            svgContent += `<text x="${x}" y="155" fill="#00f0ff" font-size="9" text-anchor="middle">Term ${idx + 1}</text>`;
+        });
+
+        if (points.length > 1) {
+            const linePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+            svgContent += `<path d="${linePath}" fill="none" stroke="#00f0ff" stroke-width="3"/>`;
+        }
+
+        points.forEach(p => {
+            svgContent += `<circle cx="${p.x}" cy="${p.y}" r="5" fill="#ffb703"/>`;
+            svgContent += `<text x="${p.x}" y="${p.y - 8}" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">${p.mark}</text>`;
+        });
+
+        svgContent += `</svg>`;
+        const graphWrapper = document.getElementById("graph-wrapper");
+        if (graphWrapper) graphWrapper.innerHTML = svgContent;
+    }
+</script>
+</body>
+</html>
