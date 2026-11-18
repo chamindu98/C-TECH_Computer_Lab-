@@ -331,7 +331,7 @@ footer{text-align:center;color:#8493ad;font-size:12px;margin-top:30px;line-heigh
     </p>
     <p class="timer" id="timerText">
       ඔබේ ගොනුව සූදානම් වෙමින් පවතී...
-      <span id="secs">10</span>
+      <span id="secs">05</span>
     </p>
     <a id="finalDownload" class="btn green-btn hidden"
       href="#" download>⬇ ගොනුව බාගත කරගන්න</a>
@@ -815,7 +815,7 @@ function openAd(fileUrl){
   const downloadLink = document.getElementById("finalDownload");
   const secs = document.getElementById("secs");
 
-  let timeLeft = 10;
+  let timeLeft = 5;
 
   secs.textContent = timeLeft;
   timerText.classList.remove("hidden");
