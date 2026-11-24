@@ -447,7 +447,16 @@ const subjects = [
   {id:"sinhala",  label:"සිංහල",     icon:"✍️", desc:"භාෂාව සහ සාහිත්‍යය සම්පත්"},
   {id:"english",  label:"English",    icon:"📘", desc:"Papers and learning materials"},
   {id:"history",  label:"ඉතිහාසය",   icon:"🏛️", desc:"ආදර්ශ ප්‍රශ්න පත්‍ර හා සටහන්"},
-  {id:"buddhist", label:"බුද්ධාගම",  icon:"☸️", desc:"වාර ප්‍රශ්න පත්‍ර හා සම්පත්"}
+  {id:"buddhist", label:"බුද්ධාගම",  icon:"☸️", desc:"වාර ප්‍රශ්න පත්‍ර හා සම්පත්"},
+  { id: "geography", label: "භූගෝල විද්‍යාව",    icon: "🌍", desc: "සිතියම්, පරිසරය සහ වාර ප්‍රශ්න පත්‍ර" },
+  { id: "civil",     label: "පුරවැසි අධ්‍යාපනය", icon: "⚖️", desc: "සමාජය, නීතිය, යුතුකම් සහ පාඩම් සම්පත්" },
+  { id: "music",     label: "සංගීතය",           icon: "🎵", desc: "ස්වර, ගායන/වාදන පාඩම් සහ ප්‍රශ්න පත්‍ර" },
+  { id: "dance",     label: "නැටුම්",            icon: "💃", desc: "නර්තන සම්ප්‍රදාය, තාල සහ පාඩම් සම්පත්" },
+  { id: "art",       label: "චිත්‍ර",             icon: "🎨", desc: "නිර්මාණ, වර්ණ සංයෝජන සහ පාඩම් සම්පත්" },
+  { id: "tamil",     label: "දෙමල",              icon: "🗣️", desc: "දෙමළ භාෂා අභ්‍යාස, ව්‍යාකරණ සහ පේපර්" },
+  { id: "helth",     label: "සෞඛ්‍ය",           icon: "🩺", desc: "ශාරීරික හා මානසික සෞඛ්‍ය පාඩම් හා පේපර්" },
+  { id: "pts",       label: "ප්‍රා.තා.කු",        icon: "🛠️", desc: "ප්‍රායෝගික හා තාක්ෂණික කුසලතා සම්පත්" }
+
 ];
 
 const terms = [
@@ -541,7 +550,104 @@ const resources = [
     id:"bud4", type:"paper", subject:"buddhist", term:"3",
     title:"09 ශ්‍රේණිය - බුද්ධාගම ආදර්ශ ප්‍රශ්න පත්‍රය 02",
     url:"g09_t3_b2.pdf"
+  },
+
+  
+   {
+    id:"geo1", type:"paper", subject:"geography", term:"3",
+    title:"09 ශ්‍රේණිය - භූගෝලවිද්‍යාව ආදර්ශ ප්‍රශ්න පත්‍රය 01",
+    url:"g09_t3_gp1.pdf"
+  },
+   {
+    id:"geo2", type:"paper", subject:"geography", term:"3",
+    title:"09 ශ්‍රේණිය - භූගෝලවිද්‍යාව ආදර්ශ ප්‍රශ්න පත්‍රය 02",
+    url:"g09_t3_gp2.pdf"
+  },
+
+   {
+    id:"hel1", type:"paper", subject:"helth", term:"3",
+    title:"09 ශ්‍රේණිය - සෞඛ්‍ය ආදර්ශ ප්‍රශ්න පත්‍රය 01",
+    url:"g09_t3_hel1.pdf"
+  },
+  {
+    id:"hel2", type:"paper", subject:"helth", term:"3",
+    title:"09 ශ්‍රේණිය - සෞඛ්‍ය ආදර්ශ ප්‍රශ්න පත්‍රය 02",
+    url:"g09_t3_hel2.pdf"
+  },
+
+  
+   {
+    id:"cv1", type:"paper", subject:"civil", term:"3",
+    title:"09 ශ්‍රේණිය - පුරවැසි ආදර්ශ ප්‍රශ්න පත්‍රය 01",
+    url:"g09_t3_cv1.pdf"
+  },
+   {
+    id:"cv2", type:"paper", subject:"civil", term:"3",
+    title:"09 ශ්‍රේණිය - පුරවැසි ආදර්ශ ප්‍රශ්න පත්‍රය 02",
+    url:"g09_t3_cv2.pdf"
+  },
+
+
+   {
+    id:"art1", type:"paper", subject:"art", term:"3",
+    title:"09 ශ්‍රේණිය - චිත්‍ර ආදර්ශ ප්‍රශ්න පත්‍රය 01",
+    url:"g09_t3_art1.pdf"
+  },
+   {
+    id:"art2", type:"paper", subject:"art", term:"3",
+    title:"09 ශ්‍රේණිය - චිත්‍ර ආදර්ශ ප්‍රශ්න පත්‍රය 02",
+    url:"g09_t3_art2.pdf"
+  },
+
+   {
+    id:"mu1", type:"paper", subject:"music", term:"3",
+    title:"09 ශ්‍රේණිය - සංගීතය ආදර්ශ ප්‍රශ්න පත්‍රය 01",
+    url:"g09_t3_mu1.pdf"
+  },
+    {
+    id:"mu2", type:"paper", subject:"music", term:"3",
+    title:"09 ශ්‍රේණිය - සංගීතය ආදර්ශ ප්‍රශ්න පත්‍රය 02",
+    url:"g09_t3_mu2.pdf"
+  },
+
+
+   {
+    id:"pts1", type:"paper", subject:"pts", term:"3",
+    title:"09 ශ්‍රේණිය - ප්‍රා.තා.කූ  ආදර්ශ ප්‍රශ්න පත්‍රය 01",
+    url:"g09_t3_pt1.pdf"
+  },
+   {
+    id:"pts2", type:"paper", subject:"pts", term:"3",
+    title:"09 ශ්‍රේණිය - ප්‍රා.තා.කූ  ආදර්ශ ප්‍රශ්න පත්‍රය 02",
+    url:"g09_t3_pt2.pdf"
+  },
+
+
+   {
+    id:"tamil1", type:"paper", subject:"tamil", term:"3",
+    title:"09 ශ්‍රේණිය - දෙමල ආදර්ශ ප්‍රශ්න පත්‍රය 01",
+    url:"g09_t3_tm1.pdf"
+  },
+  {
+    id:"tamil2", type:"paper", subject:"tamil", term:"3",
+    title:"09 ශ්‍රේණිය - දෙමල ආදර්ශ ප්‍රශ්න පත්‍රය 02",
+    url:"g09_t3_tm2.pdf"
+  },
+
+
+   {
+    id:"dan1", type:"paper", subject:"dance", term:"3",
+    title:"09 ශ්‍රේණිය - නැටුම් ආදර්ශ ප්‍රශ්න පත්‍රය 01",
+    url:"g09_t3_dn1.pdf"
+  },
+   {
+    id:"dan2", type:"paper", subject:"dance", term:"3",
+    title:"09 ශ්‍රේණිය - නැටුම් ආදර්ශ ප්‍රශ්න පත්‍රය 02",
+    url:"g09_t3_dn2.pdf"
   }
+
+
+  
 ];
 
 /* =====================================================
