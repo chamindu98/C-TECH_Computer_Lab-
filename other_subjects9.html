@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="si">
 <head>
@@ -36,10 +35,10 @@ button:focus-visible,a:focus-visible,input:focus-visible{
 /* Header */
 .hero{
   position:relative;overflow:hidden;
-  padding:30px 24px;border:1px solid rgba(41,197,255,.35);
+  padding:28px 24px;border:1px solid rgba(41,197,255,.35);
   border-radius:24px;
   background:linear-gradient(125deg,#152b4c,#11182f 65%,#25204c);
-  margin-bottom:24px;
+  margin-bottom:22px;
 }
 .hero:after{
   content:"";position:absolute;width:230px;height:230px;
@@ -54,21 +53,18 @@ button:focus-visible,a:focus-visible,input:focus-visible{
   box-shadow:0 0 25px #29c5ff30
 }
 .brand h1{font-size:clamp(18px,4vw,27px);letter-spacing:.4px}
-.brand p{color:var(--muted);font-size:13px;margin-top:5px}
-.hero-copy{position:relative;z-index:1;margin-top:26px}
-.hero-copy h2{font-size:clamp(22px,4vw,32px);line-height:1.5}
+.brand p{color:var(--muted);font-size:13px;margin-top:4px}
+.hero-copy{position:relative;z-index:1;margin-top:20px}
+.hero-copy h2{font-size:clamp(21px,3.8vw,30px);line-height:1.45}
 .hero-copy h2 span{color:var(--blue)}
-.hero-copy p{color:var(--muted);margin-top:8px;line-height:1.8}
-.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:17px}
-.pill{padding:7px 12px;border:1px solid var(--border);
-  border-radius:30px;background:#ffffff08;font-size:12px}
+.hero-copy p{color:var(--muted);margin-top:6px;line-height:1.7}
 
-/* Search and navigation */
-.search-wrap{margin-bottom:17px}
+/* Search */
+.search-wrap{margin-bottom:18px}
 .search-box{
   display:flex;align-items:center;gap:10px;
   background:var(--panel);border:1px solid var(--border);
-  padding:5px 14px;border-radius:13px
+  padding:5px 14px;border-radius:14px
 }
 .search-box span{font-size:20px}
 .search-box input{
@@ -76,41 +72,118 @@ button:focus-visible,a:focus-visible,input:focus-visible{
   color:white;padding:12px 0;min-width:0
 }
 .search-box input::placeholder{color:#8191ad}
+
+/* Breadcrumb / Step Navigation */
+.breadcrumb{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  margin-bottom:18px;background:var(--panel);
+  border:1px solid var(--border);padding:10px 14px;border-radius:14px
+}
+.crumb-btn{
+  background:#ffffff08;border:1px solid var(--border);
+  color:var(--text);padding:7px 12px;border-radius:10px;
+  font-size:13px;font-weight:650;transition:.15s
+}
+.crumb-btn:hover:not(:disabled){border-color:var(--blue);color:var(--blue)}
+.crumb-btn.active{
+  background:var(--blue);color:#071426;border-color:var(--blue);font-weight:750
+}
+.crumb-sep{color:var(--muted);font-size:13px}
+
+/* Large Subject Buttons */
+.subject-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+  margin-bottom:24px;
+}
+.subject-card{
+  background:linear-gradient(150deg,#192c4d,#111d34);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:24px 20px;
+  text-align:left;
+  color:var(--text);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  transition:transform .2s,border-color .2s,box-shadow .2s;
+  min-height:142px;
+}
+.subject-card:hover{
+  transform:translateY(-4px);
+  border-color:var(--blue);
+  box-shadow:0 10px 26px rgba(41,197,255,.14);
+}
+.subject-emoji{
+  width:52px;height:52px;border-radius:15px;
+  display:grid;place-items:center;font-size:26px;
+  background:rgba(41,197,255,.14);border:1px solid rgba(41,197,255,.25);
+}
+.subject-card .s-title{font-size:20px;font-weight:800;line-height:1.35}
+.subject-card .s-sub{font-size:13px;color:var(--muted)}
+
+/* Large Term Buttons (3 Terms) */
+.term-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+  margin-bottom:24px;
+}
+.term-card{
+  background:linear-gradient(150deg,#1d234a,#121c34);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:24px 20px;
+  text-align:left;
+  color:var(--text);
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  transition:transform .2s,border-color .2s,box-shadow .2s;
+  min-height:132px;
+}
+.term-card:hover{
+  transform:translateY(-4px);
+  border-color:var(--purple);
+  box-shadow:0 10px 26px rgba(129,116,255,.16);
+}
+.term-badge{
+  align-self:flex-start;
+  font-size:12px;font-weight:750;
+  color:var(--blue);background:rgba(41,197,255,.14);
+  padding:5px 11px;border-radius:999px;
+}
+.term-card .t-title{font-size:20px;font-weight:800;margin-top:4px}
+.term-card .t-sub{font-size:13px;color:var(--muted)}
+
+/* Resource Type Tabs (Papers / Videos / All) */
 .tabs{
   display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:9px;margin-bottom:20px
+  gap:10px;margin-bottom:20px
 }
 .tab{
-  padding:13px 7px;border-radius:12px;
-  border:1px solid var(--border);background:#ffffff06;
-  color:var(--muted);font-weight:700;font-size:14px;
+  padding:14px 10px;border-radius:13px;
+  border:1px solid var(--border);background:#ffffff07;
+  color:var(--muted);font-weight:750;font-size:15px;
   transition:.2s
 }
 .tab.active,.tab:hover{
   color:#071426;background:var(--blue);
-  border-color:var(--blue);box-shadow:0 5px 18px #29c5ff20
-}
-.subject-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
-.subject-tab{
-  padding:10px 15px;border-radius:30px;
-  border:1px solid var(--border);background:var(--panel);
-  color:var(--muted);font-size:13px;font-weight:650
-}
-.subject-tab.active,.subject-tab:hover{
-  color:white;border-color:var(--purple);background:#8174ff24
+  border-color:var(--blue);box-shadow:0 5px 18px #29c5ff25
 }
 
 /* Section titles */
 .section-head{
   display:flex;justify-content:space-between;align-items:center;
-  gap:12px;margin:20px 0 15px;flex-wrap:wrap
+  gap:12px;margin:14px 0 16px;flex-wrap:wrap
 }
 .section-head h2{font-size:21px}
-.section-head p{font-size:12px;color:var(--muted);margin-top:5px}
+.section-head p{font-size:13px;color:var(--muted);margin-top:4px}
 .count{
   color:var(--blue);background:#29c5ff13;
-  border:1px solid #29c5ff30;padding:7px 11px;
-  border-radius:20px;font-size:12px
+  border:1px solid #29c5ff30;padding:7px 12px;
+  border-radius:20px;font-size:12px;font-weight:700
 }
 
 /* Resource cards */
@@ -132,7 +205,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{
 }
 .file-icon.video{background:#8174ff22}
 .file-icon.note{background:#42d99a18}
-.card h3{font-size:15px;line-height:1.8;overflow-wrap:anywhere}
+.card h3{font-size:15px;line-height:1.75;overflow-wrap:anywhere}
 .card .meta{font-size:12px;color:var(--muted);margin-top:6px}
 .card-actions{display:flex;gap:9px;margin-top:auto}
 .btn{
@@ -216,14 +289,17 @@ button:focus-visible,a:focus-visible,input:focus-visible{
 footer{text-align:center;color:#8493ad;font-size:12px;margin-top:30px;line-height:2}
 .hidden{display:none!important}
 
+@media(max-width:820px){
+  .subject-grid,.term-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
 @media(max-width:600px){
   .container{width:calc(100% - 22px);padding-top:11px}
   .hero{padding:22px 17px;border-radius:18px}
   .brand-icon{width:45px;height:45px}
+  .subject-grid,.term-grid{grid-template-columns:1fr;gap:12px}
+  .subject-card,.term-card{padding:18px;min-height:auto}
   .tabs{gap:7px}
-  .tab{font-size:12px;padding:12px 4px}
-  .subject-tabs{gap:7px}
-  .subject-tab{font-size:12px;padding:9px 11px}
+  .tab{font-size:12px;padding:12px 6px}
   .grid{grid-template-columns:1fr;gap:11px}
   .card{padding:15px}
   .card-actions .btn{padding:11px 7px;font-size:12px}
@@ -253,12 +329,7 @@ footer{text-align:center;color:#8493ad;font-size:12px;margin-top:30px;line-heigh
     </div>
     <div class="hero-copy">
       <h2>ඔබේ අධ්‍යාපන ගමනට <span>නව ආරම්භයක්!</span></h2>
-      <p>ප්‍රශ්න පත්‍ර බලන්න, පාඩම් වීඩියෝ නරඹන්න සහ අවශ්‍ය අධ්‍යයන සම්පත් පහසුවෙන් ලබාගන්න.</p>
-      <div class="pills">
-        <span class="pill">📄 ප්‍රශ්න පත්‍ර</span>
-        <span class="pill">🎬 වීඩියෝ පාඩම්</span>
-        <span class="pill">📚 විෂය සම්පත්</span>
-      </div>
+      <p>විෂය තෝරා, වාරය තෝරා ප්‍රශ්න පත්‍ර, වීඩියෝ පාඩම් සහ අනෙකුත් සම්පත් පහසුවෙන් ලබාගන්න.</p>
     </div>
   </header>
 
@@ -266,23 +337,47 @@ footer{text-align:center;color:#8493ad;font-size:12px;margin-top:30px;line-heigh
     <label class="search-box">
       <span>⌕</span>
       <input id="searchInput" type="search"
-        placeholder="ප්‍රශ්න පත්‍රයක් හෝ පාඩමක් සොයන්න..."
+        placeholder="ඕනෑම ප්‍රශ්න පත්‍රයක් හෝ පාඩමක් කෙලින්ම සොයන්න..."
         aria-label="සම්පත් සොයන්න">
     </label>
   </div>
 
-  <nav class="tabs" aria-label="සම්පත් වර්ග">
-    <button class="tab active" data-view="papers">📄 ප්‍රශ්න පත්‍ර</button>
-    <button class="tab" data-view="videos">🎬 වීඩියෝ පාඩම්</button>
-    <button class="tab" data-view="all">📚 සියලු සම්පත්</button>
-  </nav>
+  <!-- Step Navigation Bar -->
+  <nav class="breadcrumb" id="breadcrumb" aria-label="පියවර පාලනය"></nav>
 
-  <div class="subject-tabs" id="subjectTabs" aria-label="විෂය තෝරන්න"></div>
-
-  <section>
+  <!-- Step 1: Large Subject Buttons -->
+  <section id="subjectsSection">
     <div class="section-head">
       <div>
-        <h2 id="sectionTitle">📄 ප්‍රශ්න පත්‍ර</h2>
+        <h2>📚 විෂය තෝරන්න</h2>
+        <p>ඔබට අවශ්‍ය විෂය මත Click කර වාර තේරීමට පිවිසෙන්න.</p>
+      </div>
+    </div>
+    <div class="subject-grid" id="subjectGrid"></div>
+  </section>
+
+  <!-- Step 2: 3 Terms Selection -->
+  <section id="termsSection" class="hidden">
+    <div class="section-head">
+      <div>
+        <h2 id="termHeading">🗓️ වාරය තෝරන්න</h2>
+        <p>අදාළ වාරය තෝරා ප්‍රශ්න පත්‍ර හෝ වීඩියෝ පාඩම් වෙත යන්න.</p>
+      </div>
+    </div>
+    <div class="term-grid" id="termGrid"></div>
+  </section>
+
+  <!-- Step 3: Resource Type + Filtered Items -->
+  <section id="resourcesSection" class="hidden">
+    <nav class="tabs" aria-label="සම්පත් වර්ග">
+      <button class="tab active" data-view="papers">📄 පේපර් (Papers)</button>
+      <button class="tab" data-view="videos">🎬 වීඩියෝ (Videos)</button>
+      <button class="tab" data-view="all">📚 සියලු සම්පත්</button>
+    </nav>
+
+    <div class="section-head">
+      <div>
+        <h2 id="sectionTitle">📄 පේපර්</h2>
         <p id="sectionSubtitle">ඔබට අවශ්‍ය ප්‍රශ්න පත්‍රය තෝරාගන්න.</p>
       </div>
       <span class="count" id="resultCount">0 සම්පත්</span>
@@ -342,219 +437,289 @@ footer{text-align:center;color:#8493ad;font-size:12px;margin-top:30px;line-heigh
 "use strict";
 
 /* =====================================================
-   1. RESOURCE DATA
-   PDF ගොනු HTML ගොනුව ඇති ස්ථානයේ හෝ නිවැරදි folder එකක තබන්න.
-   Video සඳහා YouTube ID එක හෝ MP4 URL එක ලබාදෙන්න.
+1. SUBJECTS, TERMS & RESOURCE DATA
+   term: "1", "2", "3" ලෙස ලබාදෙන්න.
    ===================================================== */
 
 const subjects = [
-  {id:"all", label:"සියල්ල"},
-  {id:"science", label:"විද්‍යාව"},
-  {id:"maths", label:"ගණිතය"},
-  {id:"sinhala", label:"සිංහල"},
-  {id:"english", label:"English"},
-  {id:"history", label:"ඉතිහාසය"},
-  {id:"buddhist", label:"බුද්ධාගම"}
+  {id:"science",  label:"විද්‍යාව",   icon:"🔬", desc:"ප්‍රශ්න පත්‍ර සහ පාඩම් සම්පත්"},
+  {id:"maths",    label:"ගණිතය",     icon:"📐", desc:"I සහ II පත්‍ර හා අභ්‍යාස"},
+  {id:"sinhala",  label:"සිංහල",     icon:"✍️", desc:"භාෂාව සහ සාහිත්‍යය සම්පත්"},
+  {id:"english",  label:"English",    icon:"📘", desc:"Papers and learning materials"},
+  {id:"history",  label:"ඉතිහාසය",   icon:"🏛️", desc:"ආදර්ශ ප්‍රශ්න පත්‍ර හා සටහන්"},
+  {id:"buddhist", label:"බුද්ධාගම",  icon:"☸️", desc:"වාර ප්‍රශ්න පත්‍ර හා සම්පත්"}
+];
+
+const terms = [
+  {id:"1", label:"1 වන වාරය", badge:"TERM 01", desc:"පළමු වාරයේ පේපර්, වීඩියෝ සහ සම්පත්"},
+  {id:"2", label:"2 වන වාරය", badge:"TERM 02", desc:"දෙවන වාරයේ පේපර්, වීඩියෝ සහ සම්පත්"},
+  {id:"3", label:"3 වන වාරය", badge:"TERM 03", desc:"තුන්වන වාරයේ පේපර්, වීඩියෝ සහ සම්පත්"}
 ];
 
 const resources = [
   {
-    id:"sci3", type:"paper", subject:"science",
+    id:"sci3", type:"paper", subject:"science", term:"3",
     title:"09 ශ්‍රේණිය - විද්‍යාව - තුන්වන වාර පරීක්ෂණය ප්‍රශ්න පත්‍රය 01",
     url:"g09_t3_sci1.pdf"
   },
   {
-    id:"sci4", type:"paper", subject:"science",
-    title:"09 ශ්‍රේණිය - විද්‍යාව  තුන්වන වාර පරීක්ෂණය ප්‍රශ්න පත්‍රය 02",
+    id:"sci4", type:"paper", subject:"science", term:"3",
+    title:"09 ශ්‍රේණිය - විද්‍යාව තුන්වන වාර පරීක්ෂණය ප්‍රශ්න පත්‍රය 02",
     url:"g09_t3_sci2.pdf"
   },
   {
-    id:"sci5", type:"paper", subject:"science",
-    title:"09 ශ්‍රේණිය - විද්‍යාව  තුන්වන වාර පරීක්ෂණය ප්‍රශ්න පත්‍ර පොත 01",
+    id:"sci5", type:"paper", subject:"science", term:"3",
+    title:"09 ශ්‍රේණිය - විද්‍යාව තුන්වන වාර පරීක්ෂණය ප්‍රශ්න පත්‍ර පොත 01",
     url:"g09_t3_book1.pdf"
   },
   {
-    id:"sci6", type:"paper", subject:"science",
-    title:"09 ශ්‍රේණිය - විද්‍යාව  තුන්වන වාර පරීක්ෂණය ප්‍රශ්න පත්‍ර පොත 02",
+    id:"sci6", type:"paper", subject:"science", term:"3",
+    title:"09 ශ්‍රේණිය - විද්‍යාව තුන්වන වාර පරීක්ෂණය ප්‍රශ්න පත්‍ර පොත 02",
     url:"g09_t3_book2.pdf"
   },
   {
-    id:"sci7", type:"paper", subject:"science",
-    title:"09 ශ්‍රේණිය - විද්‍යාව  තුන්වන වාර පරීක්ෂණය ප්‍රශ්න පත්‍ර පොත 03",
+    id:"sci7", type:"paper", subject:"science", term:"3",
+    title:"09 ශ්‍රේණිය - විද්‍යාව තුන්වන වාර පරීක්ෂණය ප්‍රශ්න පත්‍ර පොත 03",
     url:"g09_t3_book3.pdf"
   },
-
-  
   {
-    id:"math3", type:"paper", subject:"maths",
+    id:"math3", type:"paper", subject:"maths", term:"3",
     title:"09 ශ්‍රේණිය - ගණිතය I, II පත්‍ර 01",
     url:"g09_t3_maths1.pdf"
   },
   {
-    id:"math4", type:"paper", subject:"maths",
+    id:"math4", type:"paper", subject:"maths", term:"3",
     title:"09 ශ්‍රේණිය - ගණිතය I, II පත්‍ර 02",
     url:"g09_t3_maths2.pdf"
   },
   {
-    id:"math5", type:"paper", subject:"maths",
-    title:"09 ශ්‍රේණිය - ගණිතය ප්‍රශ්න පත්‍ර පොත 01 ",
+    id:"math5", type:"paper", subject:"maths", term:"3",
+    title:"09 ශ්‍රේණිය - ගණිතය ප්‍රශ්න පත්‍ර පොත 01",
     url:"g09_maths_book1.pdf"
   },
   {
-    id:"math6", type:"paper", subject:"maths",
-    title:"09 ශ්‍රේණිය - ගණිතයප්‍රශ්න පත්‍ර පොත 02",
+    id:"math6", type:"paper", subject:"maths", term:"3",
+    title:"09 ශ්‍රේණිය - ගණිතය ප්‍රශ්න පත්‍ර පොත 02",
     url:"g09_maths_book2.pdf"
   },
-
-  
   {
-    id:"sin3", type:"paper", subject:"sinhala",
+    id:"sin3", type:"paper", subject:"sinhala", term:"3",
     title:"09 ශ්‍රේණිය - සිංහල භාෂාව සහ සාහිත්‍යය ප්‍රශ්න පත්‍රය 01",
     url:"g09_t3_sin1.pdf"
   },
   {
-    id:"sin3", type:"paper", subject:"sinhala",
+    id:"sin4", type:"paper", subject:"sinhala", term:"3",
     title:"09 ශ්‍රේණිය - සිංහල භාෂාව සහ සාහිත්‍යය ප්‍රශ්න පත්‍රය 02",
     url:"g09_t3_sin2.pdf"
   },
-  /*{
-    id:"salalihini", type:"link", subject:"sinhala",
-    title:"සැළලිහිණි සංදේශය - සියලුම කවි සිතියම",
-    url:"https://salalihini-sandeshaya.vercel.app/map?v=111"
-  },*/
   {
-    id:"eng3", type:"paper", subject:"english",
+    id:"eng3", type:"paper", subject:"english", term:"3",
     title:"Grade 09 - English Paper 01",
     url:"g09_t3_eng1.pdf"
   },
   {
-    id:"eng4", type:"paper", subject:"english",
+    id:"eng4", type:"paper", subject:"english", term:"3",
     title:"Grade 09 - English Paper 02",
     url:"g09_t3_eng2.pdf"
   },
   {
-    id:"his3", type:"paper", subject:"history",
+    id:"his3", type:"paper", subject:"history", term:"3",
     title:"09 ශ්‍රේණිය - ඉතිහාසය ආදර්ශ ප්‍රශ්න පත්‍රය 01",
     url:"g09_t3_his1.pdf"
   },
   {
-    id:"his4", type:"paper", subject:"history",
+    id:"his4", type:"paper", subject:"history", term:"3",
     title:"09 ශ්‍රේණිය - ඉතිහාසය ආදර්ශ ප්‍රශ්න පත්‍රය 02",
     url:"g09_t3_his2.pdf"
   },
   {
-    id:"bud3", type:"paper", subject:"buddhist",
+    id:"bud3", type:"paper", subject:"buddhist", term:"3",
     title:"09 ශ්‍රේණිය - බුද්ධාගම ආදර්ශ ප්‍රශ්න පත්‍රය 01",
     url:"g09_t3_b1.pdf"
   },
   {
-    id:"bud4", type:"paper", subject:"buddhist",
+    id:"bud4", type:"paper", subject:"buddhist", term:"3",
     title:"09 ශ්‍රේණිය - බුද්ධාගම ආදර්ශ ප්‍රශ්න පත්‍රය 02",
     url:"g09_t3_b2.pdf"
   }
-
-  /*
-   * අලුත් PDF එකක් එකතු කිරීම:
-   *
-   * {
-   *   id:"sci5",
-   *   type:"paper",
-   *   subject:"science",
-   *   title:"11 ශ්‍රේණිය - විද්‍යාව - ප්‍රශ්න පත්‍රය 05",
-   *   url:"g11_t2_sci5.pdf"
-   * },
-   *
-   * අලුත් YouTube වීඩියෝවක්:
-   *
-   * {
-   *   id:"video1",
-   *   type:"video",
-   *   subject:"science",
-   *   title:"විද්‍යාව - පළමු පාඩම",
-   *   provider:"youtube",
-   *   videoId:"YOUR_YOUTUBE_VIDEO_ID"
-   * },
-   *
-   * MP4 වීඩියෝවක්:
-   *
-   * {
-   *   id:"video2",
-   *   type:"video",
-   *   subject:"maths",
-   *   title:"ගණිත වීඩියෝ පාඩම",
-   *   provider:"mp4",
-   *   url:"videos/maths-lesson.mp4"
-   * }
-   */
 ];
 
 /* =====================================================
-   2. APP STATE
+2. APP STATE
+   step: "subjects" | "terms" | "resources"
    ===================================================== */
 
+let currentStep = "subjects";
+let selectedSubject = null;
+let selectedTerm = null;
 let activeView = "papers";
-let activeSubject = "all";
 let searchTerm = "";
 let adInterval = null;
 let pendingDownload = null;
 let previousFocus = null;
 
+const breadcrumb = document.getElementById("breadcrumb");
+const subjectsSection = document.getElementById("subjectsSection");
+const termsSection = document.getElementById("termsSection");
+const resourcesSection = document.getElementById("resourcesSection");
+const subjectGrid = document.getElementById("subjectGrid");
+const termGrid = document.getElementById("termGrid");
 const grid = document.getElementById("resourceGrid");
 const searchInput = document.getElementById("searchInput");
-const subjectTabs = document.getElementById("subjectTabs");
+
+function getSubjectObj(id){
+  return subjects.find(s => s.id === id) || null;
+}
+
+function getTermObj(id){
+  return terms.find(t => t.id === id) || null;
+}
 
 /* =====================================================
-   3. SUBJECT FILTERS
+3. RENDER BREADCRUMB, SUBJECTS & TERMS
    ===================================================== */
 
+function renderBreadcrumb(){
+  breadcrumb.innerHTML = "";
+
+  const homeBtn = document.createElement("button");
+  homeBtn.type = "button";
+  homeBtn.className = "crumb-btn" + (currentStep === "subjects" ? " active" : "");
+  homeBtn.textContent = "🏠 විෂයන්";
+  homeBtn.addEventListener("click", () => {
+    currentStep = "subjects";
+    selectedSubject = null;
+    selectedTerm = null;
+    updateUI();
+  });
+  breadcrumb.appendChild(homeBtn);
+
+  if(selectedSubject){
+    const sep1 = document.createElement("span");
+    sep1.className = "crumb-sep";
+    sep1.textContent = "›";
+    breadcrumb.appendChild(sep1);
+
+    const subj = getSubjectObj(selectedSubject);
+    const subjBtn = document.createElement("button");
+    subjBtn.type = "button";
+    subjBtn.className = "crumb-btn" + (currentStep === "terms" ? " active" : "");
+    subjBtn.textContent = (subj ? subj.icon + " " + subj.label : selectedSubject);
+    subjBtn.addEventListener("click", () => {
+      currentStep = "terms";
+      selectedTerm = null;
+      updateUI();
+    });
+    breadcrumb.appendChild(subjBtn);
+  }
+
+  if(selectedTerm){
+    const sep2 = document.createElement("span");
+    sep2.className = "crumb-sep";
+    sep2.textContent = "›";
+    breadcrumb.appendChild(sep2);
+
+    const termObj = getTermObj(selectedTerm);
+    const termBtn = document.createElement("button");
+    termBtn.type = "button";
+    termBtn.className = "crumb-btn active";
+    termBtn.textContent = termObj ? termObj.label : selectedTerm;
+    breadcrumb.appendChild(termBtn);
+  }
+}
+
 function renderSubjects(){
-  subjectTabs.innerHTML = "";
+  subjectGrid.innerHTML = "";
 
-  subjects.forEach(subject => {
+  subjects.forEach(subj => {
     const btn = document.createElement("button");
-    btn.className = "subject-tab" +
-      (activeSubject === subject.id ? " active" : "");
-    btn.textContent = subject.label;
     btn.type = "button";
+    btn.className = "subject-card";
 
+    const emoji = document.createElement("div");
+    emoji.className = "subject-emoji";
+    emoji.textContent = subj.icon;
+
+    const title = document.createElement("div");
+    title.className = "s-title";
+    title.textContent = subj.label;
+
+    const desc = document.createElement("div");
+    desc.className = "s-sub";
+    desc.textContent = subj.desc;
+
+    btn.append(emoji, title, desc);
     btn.addEventListener("click", () => {
-      activeSubject = subject.id;
-      renderSubjects();
-      renderResources();
+      selectedSubject = subj.id;
+      selectedTerm = null;
+      currentStep = "terms";
+      updateUI();
     });
 
-    subjectTabs.appendChild(btn);
+    subjectGrid.appendChild(btn);
   });
 }
 
-function getSubjectName(id){
-  const item = subjects.find(s => s.id === id);
-  return item ? item.label : id;
+function renderTerms(){
+  termGrid.innerHTML = "";
+  const subj = getSubjectObj(selectedSubject);
+  document.getElementById("termHeading").textContent =
+    (subj ? subj.icon + " " + subj.label + " — " : "") + "වාරය තෝරන්න";
+
+  terms.forEach(term => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "term-card";
+
+    const badge = document.createElement("span");
+    badge.className = "term-badge";
+    badge.textContent = term.badge;
+
+    const title = document.createElement("div");
+    title.className = "t-title";
+    title.textContent = term.label;
+
+    const desc = document.createElement("div");
+    desc.className = "t-sub";
+    desc.textContent = term.desc;
+
+    btn.append(badge, title, desc);
+    btn.addEventListener("click", () => {
+      selectedTerm = term.id;
+      currentStep = "resources";
+      updateUI();
+    });
+
+    termGrid.appendChild(btn);
+  });
 }
 
 /* =====================================================
-   4. FILTER AND RENDER RESOURCES
+4. FILTER AND RENDER RESOURCES
    ===================================================== */
 
 function getFilteredResources(){
   return resources.filter(item => {
-    const matchesSubject =
-      activeSubject === "all" || item.subject === activeSubject;
-
-    const matchesSearch =
+    const matchesSearch = searchTerm.length > 0 && (
       item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      getSubjectName(item.subject).toLowerCase()
-        .includes(searchTerm.toLowerCase());
+      (getSubjectObj(item.subject)?.label || "").toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    if(matchesSearch){
+      return true;
+    }
+
+    const matchesSubject = !selectedSubject || item.subject === selectedSubject;
+    const matchesTerm = !selectedTerm || item.term === selectedTerm;
 
     let matchesType = true;
-
     if(activeView === "papers"){
       matchesType = item.type === "paper";
     }else if(activeView === "videos"){
       matchesType = item.type === "video";
     }
 
-    return matchesSubject && matchesSearch && matchesType;
+    return matchesSubject && matchesTerm && matchesType;
   });
 }
 
@@ -562,21 +727,26 @@ function renderResources(){
   const filtered = getFilteredResources();
   grid.innerHTML = "";
 
+  const subjLabel = getSubjectObj(selectedSubject)?.label || "සියලු විෂය";
+  const termLabel = getTermObj(selectedTerm)?.label || "සියලු වාර";
+
   const titles = {
-    papers:"📄 ප්‍රශ්න පත්‍ර",
-    videos:"🎬 වීඩියෝ පාඩම්",
-    all:"📚 සියලු සම්පත්"
+    papers: "📄 පේපර්",
+    videos: "🎬 වීඩියෝ පාඩම්",
+    all:    "📚 සියලු සම්පත්"
   };
 
   document.getElementById("sectionTitle").textContent =
-    titles[activeView];
+    searchTerm.length > 0
+      ? "🔎 සෙවුම් ප්‍රතිඵල"
+      : `${titles[activeView]} • ${subjLabel} (${termLabel})`;
 
   document.getElementById("sectionSubtitle").textContent =
     activeView === "videos"
       ? "ඔබේ පාඩම තෝරා වීඩියෝව නරඹන්න."
       : activeView === "papers"
         ? "ප්‍රශ්න පත්‍රය බලන්න හෝ බාගත කරගන්න."
-        : "සියලුම අධ්‍යයන සම්පත් එකම තැනකින්.";
+        : "තෝරාගත් විෂය සහ වාරයට අදාළ සියලු සම්පත්.";
 
   document.getElementById("resultCount").textContent =
     filtered.length + " සම්පත්";
@@ -585,7 +755,7 @@ function renderResources(){
     const empty = document.createElement("div");
     empty.className = "empty";
     empty.textContent =
-      "🔎 සම්පත් හමු නොවීය. වෙනත් වචනයක් හෝ විෂයක් තෝරා බලන්න.";
+      "🔎 මෙම තේරීමට අදාළ සම්පත් තවම එකතු කර නොමැත. වෙනත් වර්ගයක් හෝ වාරයක් පරීක්ෂා කරන්න.";
     grid.appendChild(empty);
     return;
   }
@@ -613,8 +783,10 @@ function renderResources(){
 
     const meta = document.createElement("p");
     meta.className = "meta";
+    const sName = getSubjectObj(item.subject)?.label || item.subject;
+    const tName = getTermObj(item.term)?.label || "";
     meta.textContent =
-      getSubjectName(item.subject) + " • " +
+      `${sName}${tName ? " • " + tName : ""} • ` +
       (item.type === "video" ? "වීඩියෝ පාඩම" :
        item.type === "paper" ? "PDF ප්‍රශ්න පත්‍රය" :
        "අධ්‍යයන සම්පත");
@@ -662,8 +834,32 @@ function renderResources(){
   });
 }
 
+function updateUI(){
+  renderBreadcrumb();
+
+  if(searchTerm.length > 0){
+    subjectsSection.classList.add("hidden");
+    termsSection.classList.add("hidden");
+    resourcesSection.classList.remove("hidden");
+    renderResources();
+    return;
+  }
+
+  subjectsSection.classList.toggle("hidden", currentStep !== "subjects");
+  termsSection.classList.toggle("hidden", currentStep !== "terms");
+  resourcesSection.classList.toggle("hidden", currentStep !== "resources");
+
+  if(currentStep === "subjects"){
+    renderSubjects();
+  }else if(currentStep === "terms"){
+    renderTerms();
+  }else if(currentStep === "resources"){
+    renderResources();
+  }
+}
+
 /* =====================================================
-   5. TAB NAVIGATION
+5. TAB NAVIGATION & SEARCH
    ===================================================== */
 
 document.querySelectorAll(".tab").forEach(btn => {
@@ -680,11 +876,11 @@ document.querySelectorAll(".tab").forEach(btn => {
 
 searchInput.addEventListener("input", event => {
   searchTerm = event.target.value.trim();
-  renderResources();
+  updateUI();
 });
 
 /* =====================================================
-   6. VIEW PAPER / VIDEO / OTHER RESOURCE
+6. VIEW PAPER / VIDEO / OTHER RESOURCE
    ===================================================== */
 
 function openModal(id){
@@ -825,7 +1021,7 @@ function viewResource(item){
 }
 
 /* =====================================================
-   7. DOWNLOAD AD COUNTDOWN
+7. DOWNLOAD AD COUNTDOWN
    ===================================================== */
 
 function stopAdTimer(){
@@ -837,7 +1033,6 @@ function stopAdTimer(){
 
 function openAd(fileUrl){
   stopAdTimer();
-
   pendingDownload = fileUrl;
 
   const timerText = document.getElementById("timerText");
@@ -873,17 +1068,14 @@ document.getElementById("finalDownload").addEventListener("click", event => {
     event.preventDefault();
     return;
   }
-
-  // බ්‍රවුසරයට බාගත කිරීම ආරම්භ කිරීමට ඉඩ දෙන්න.
   closeModal("adModal");
 });
 
 /* =====================================================
-   8. INITIALIZE
+8. INITIALIZE
    ===================================================== */
 
-renderSubjects();
-renderResources();
+updateUI();
 </script>
 </body>
 </html>
